@@ -1,0 +1,5 @@
+오시우 2024-09-12 18:14
+npm install react-router-dom
+npm install axios
+npm install sweetalert2
+npm install recoil
