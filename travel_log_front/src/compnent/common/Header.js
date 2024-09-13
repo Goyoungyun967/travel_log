@@ -2,16 +2,16 @@ import { Link } from "react-router-dom";
 import "./header_footer.css";
 const Header = () => {
   return (
-    <header class="header">
+    <header className="header">
       <div>
-        <div class="logo">
+        <div className="logo">
           <Link to="#">Travel Log</Link>
         </div>
-        <nav class="nav">
+        <nav className="nav">
           <ul>
             <li>
               <Link to="#">지역</Link>
-              <ul class="sub-menu">
+              <ul className="sub-menu">
                 <li>
                   <Link to="#">서울</Link>
                 </li>
@@ -74,7 +74,7 @@ const Header = () => {
           </ul>
         </nav>
 
-        <ul class="user-menu">
+        <ul className="user-menu">
           <li>
             <Link to="#">로그인</Link>
           </li>

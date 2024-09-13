@@ -13,7 +13,7 @@
   --gray3: #717171;
   --gray4: #8f8f8f;
   --gray5: #b7b7b7;
-  --gray6: #ccc;
+  --gray6: #eee;
   --gray7: #efefef;
   --gray8: #333;
 
@@ -139,18 +139,24 @@ a {
 }
 .footer > div > p {
   margin: 10px 0px;
+  color: #8d8d8d;
   font-family: ns-b;
-  font-size: 16px;
+  font-size: 13px;
+  padding-top: 10px;
 }
 
 .footer > div > ul {
+  padding-top: 10px;
   list-style-type: none;
   overflow: hidden;
   margin-bottom: 20px;
 }
 .footer > div > ul > li {
+  border-left: 1px solid #ccc;
   float: left;
 }
 .footer > div > ul > li > a {
   padding-right: 20px;
+  font-size: 13px;
+  padding: 35px;
 }
