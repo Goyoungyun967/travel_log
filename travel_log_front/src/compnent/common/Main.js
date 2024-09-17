@@ -2,7 +2,7 @@ import SearchBar from "../lodgment/SearchBar";
 
 const Main = () => {
   return (
-    <div className="content">
+    <div className="section">
       <SearchBar />
     </div>
   );
