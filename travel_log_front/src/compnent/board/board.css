@@ -1,0 +1,7 @@
+.gnIvoe {
+  display: flex;
+  justify-content: space-between;
+}
+.accompany-box span {
+  cursor: pointer;
+}

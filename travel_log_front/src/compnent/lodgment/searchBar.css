@@ -1,8 +1,12 @@
 .lodgment-bar {
   width: 100%;
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  padding: 20px 0; /* 필요에 따라 상하 패딩 추가 */
 }
 .lodgement-search-wrap {
-  width: 80%;
+  width: 100%; /* 부모 요소의 너비에 맞춤 */
+  max-width: 1000px; /* 검색 바의 최대 너비 설정 (옵션) */
 }
 
 .lodgement-search-wrap * {
@@ -10,13 +14,19 @@
   justify-self: center;
   margin: 0 auto;
 }
+.search-form{
+  width: 100%;
+
+}
 .table-wrap {
-  width: 80%;
+  width: 100%; /* 부모 요소의 전체 너비 사용 */
+  max-width: 1000px; /* 디자인 일관성을 유지하기 위한 최대 너비 (옵션) */
   border: 1px solid var(--gray6);
   height: 130px;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  position: absolute;
+  position: relative; /* 내부 요소가 절대 위치를 사용할 수 있도록 설정 */
+  margin: 0 auto; /* 수평 중앙 정렬 */
 }
 .table-wrap {
   margin: 0;
@@ -36,7 +46,8 @@
 }
 
 .search-table {
-  width: 90%;
+  width: 100%;
+
 }
 .search-input {
   box-sizing: border-box;

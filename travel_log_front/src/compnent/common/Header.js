@@ -63,10 +63,10 @@ const Header = () => {
               </ul>
             </li>
             <li>
-              <Link to="#">상품</Link>
+              <Link to="/lodgment/lodgmentList">상품</Link>
             </li>
             <li>
-              <Link to="/board">커뮤니티</Link>
+              <Link to="/board/list">커뮤니티</Link>
             </li>
             <li>
               <Link to="#">고객센터</Link>
