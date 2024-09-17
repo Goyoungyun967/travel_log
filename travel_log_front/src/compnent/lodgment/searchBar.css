@@ -1,0 +1,165 @@
+.lodgment-bar {
+  width: 100%;
+}
+.lodgement-search-wrap {
+  width: 80%;
+}
+
+.lodgement-search-wrap * {
+  text-align: center;
+  justify-self: center;
+  margin: 0 auto;
+}
+.table-wrap {
+  width: 80%;
+  border: 1px solid var(--gray6);
+  height: 130px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: absolute;
+}
+.table-wrap {
+  margin: 0;
+  padding: 0;
+}
+.search-table th {
+  text-align: start;
+  vertical-align: bottom;
+}
+.search {
+  width: 100%;
+  background-color: var(--gray5);
+  height: 50px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.search-table {
+  width: 90%;
+}
+.search-input {
+  box-sizing: border-box;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid black;
+  height: 30px;
+  text-align: left;
+}
+.search-input > div {
+  width: 100%;
+}
+.lodgment-input {
+  width: 100%;
+}
+.date-input {
+  width: 80%;
+}
+.guest-input {
+  width: 80 5;
+}
+.search-left-wrap {
+  display: flex;
+  align-items: center;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
+.search-left-wrap > div {
+  margin: 0;
+  width: 90%;
+  display: flex;
+}
+.search-right-wrap {
+  display: flex;
+  align-items: center;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+.search-icon {
+  margin-left: 10px;
+}
+.search-icon > svg {
+  height: 30px;
+  justify-content: center;
+}
+.lodgment-btn {
+  width: 80px;
+  height: 40px;
+  border-radius: 15px;
+}
+.search-btn-wrap {
+  position: absolute; /* 부모 요소의 하단에 배치하기 위해 absolute 사용 */
+  bottom: -20%; /* 부모 요소의 하단에 붙임 */
+  left: 50%; /* 부모 요소의 수평 중앙에 배치 */
+  transform: translateX(-50%); /* 중앙 정렬 */
+}
+.search-btn-wrap > button {
+  width: 100px;
+  height: 50px;
+  border-radius: 15px;
+  box-sizing: border-box;
+  border: 1px solid var(--gray5);
+  font-size: 18px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+  z-index: 1;
+}
+.search-btn-wrap button:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* 마우스를 올렸을 때의 그림자 */
+  transform: translateY(-1px); /* 약간 떠오르는 효과 */
+}
+.lodgment-popup {
+  margin-left: 12px;
+  box-sizing: border-box;
+  position: absolute;
+  width: 30.5%;
+  top: 84px;
+  border: 1px solid var(--gray5);
+  height: 150px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  left: 6%;
+  background-color: #fff;
+  overflow: hidden;
+  overflow-y: auto;
+}
+.lodgment-popup {
+  gap: 10px;
+}
+.lodgment-popup li {
+  text-align: left;
+  padding-left: 20px;
+  margin-top: 5px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.lodgment-popup li:hover {
+  font-weight: 800;
+}
+
+.guest-popup {
+  box-sizing: border-box;
+  position: absolute;
+  width: 20%;
+  top: 84px;
+  border: 1px solid var(--gray5);
+  height: 60px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  right: 7.5%;
+  background-color: #fff;
+  display: flex;
+}
+.guest-popup > div {
+  margin-top: 15px;
+}
+.middle-search {
+  display: flex;
+  align-items: center;
+}
+.datepicker-wrap {
+  position: absolute;
+  z-index: 1; /* 버튼보다 위에 오도록 설정 */
+  top: 60%;
+}
