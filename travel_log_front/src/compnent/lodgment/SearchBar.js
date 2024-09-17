@@ -83,7 +83,7 @@ const SearchBar = () => {
   return (
     <section className="section lodgment-bar" onClick={handleOutsideClick}>
       <div className="lodgement-search-wrap">
-        <form
+        <form className="search-form"
           onSubmit={(e) => {
             e.preventDefault();
           }}
