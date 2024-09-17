@@ -5,7 +5,7 @@ const Header = () => {
     <header className="header">
       <div>
         <div className="logo">
-          <Link to="#">Travel Log</Link>
+          <Link to="/">Travel Log</Link>
         </div>
         <nav className="nav">
           <ul>
@@ -70,6 +70,14 @@ const Header = () => {
             </li>
             <li>
               <Link to="#">고객센터</Link>
+              <ul className="sub-menu">
+                <li>
+                  <Link to="/faq">자주묻는질문</Link>
+                </li>
+                <li>
+                  <Link to="#">1:1문의</Link>
+                </li>
+              </ul>
             </li>
           </ul>
         </nav>
