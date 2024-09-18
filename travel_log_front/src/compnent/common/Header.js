@@ -84,7 +84,7 @@ const Header = () => {
 
         <ul className="user-menu">
           <li>
-            <Link to="#">로그인</Link>
+            <Link to="Login">로그인</Link>
           </li>
           <li>
             <Link to="#">회원가입</Link>
