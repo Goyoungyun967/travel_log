@@ -1,7 +1,199 @@
-.gnIvoe {
+/*글자 사이즈*/
+.text-medium {
+  font-size: 15px;
+}
+.text-min {
+  font-size: 10px;
+}
+/*시작*/
+.board-list-wrap {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 검색 박스 */
+.search-box-wrap {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* 검색 아이콘  */
+.search-icon {
+  margin-right: 10px;
+  color: #666;
+  font-size: 24px;
+}
+.search-box-wrap {
+  border-bottom: 1px solid var(--gray5);
+}
+/* 검색 입력 */
+.area-search-input {
+  border: none;
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 16px;
+  outline: none;
+  transition: border 0.2s ease-in-out;
+}
+
+/* 검색 입력 필드 포커스 시 */
+.search-input:focus {
+  border-color: #4a90e2; /* 포커스 시 파란색 테두리 */
+}
+
+/* 드롭다운 목록 스타일 */
+.boardArea-popup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  /*창 넓이
+  max-width: 400px;
+  
+  */
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 8px;
+  z-index: 10;
+  list-style-type: none;
+  padding: 0;
+  max-height: 500px; /* 최대 높이 */
+  overflow-y: auto; /* 내용이 넘칠 경우 스크롤 */
+}
+
+/* 드롭다운 항목 스타일 */
+.boardArea-popup li {
+  padding: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+/* 드롭다운 항목 hover 시 */
+.boardArea-popup li:hover {
+  background-color: var(--line5);
+}
+
+/* 동행  */
+.board-box {
+  margin-top: 30px;
+}
+
+/* 동행 제목 */
+.flex-spbetw {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 5px 5px;
+  border-bottom: 2px solid var(--gray5);
 }
-.accompany-box span {
+
+.board-next {
+  color: var(--main4);
+  font-size: 14px;
   cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.board-next:hover {
+  color: var(--main5);
+}
+
+/* 동행 리스트 */
+.width-box {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  cursor: auto;
+  border-radius: 4px;
+  overflow: auto;
+  overscroll-behavior: auto;
+  align-items: start;
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 15px;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  width: 100%;
+}
+.awbcss {
+  position: relative;
+  width: 250px;
+  height: 190px;
+  border-right: 1px solid var(--gray5);
+  border-bottom: 1px solid var(--gray5);
+  border-left: 1px solid var(--gray5);
+  border-image: inherit;
+  border-top: none;
+  border-radius: 10px;
+  user-select: none;
+  align-items: center;
+}
+
+.board-preview-title {
+  padding: 3px;
+}
+/*게시판 리스트 css*/
+.height-box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  align-items: start;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  width: 100%;
+  cursor: pointer;
+}
+.boardList-content {
+  height: 120px;
+  border-bottom: 1px solid var(--gray5);
+  padding-top: 10px;
+}
+.boardList-area {
+  position: absolute;
+  right: 8px;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 3px 3px;
+  background-color: var(--gray6);
+  border-radius: 10px;
+  color: var(--line5);
+}
+.boardList-preview {
+  margin-top: 8px;
+  padding: 7px;
+  width: 99%;
+  height: 200px;
+  border-radius: 10px;
+  border: 1px solid var(--gray5);
+}
+.board-memberIcon {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+.board-regDate {
+  padding-left: 50px;
+}
+.board-preview-content {
+  gap: 8px;
+  padding: 12px;
 }
