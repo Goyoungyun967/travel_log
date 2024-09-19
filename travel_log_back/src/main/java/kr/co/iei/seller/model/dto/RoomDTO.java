@@ -32,4 +32,5 @@ public class RoomDTO {
 	
 	@Schema(description = "객실 사진 리스트",type="List<RoomFileDTO>")
 	private List<RoomFileDTO> fileList;
+	
 }
