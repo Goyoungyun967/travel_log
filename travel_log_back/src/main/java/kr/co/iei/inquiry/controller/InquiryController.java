@@ -58,7 +58,7 @@ public class InquiryController {
 	}
 	
 	@DeleteMapping(value="/{inquiryNo}")
-	@Operation(summary = "1:1 문의 삭제",description = "번호를 받아서 1:1 문의를 db에서 delete 후 저장된 파일 삭제")
+	@Operation(summary = "1:1 문의 삭제",description = "번호를 받아서 db에서 delete 후 저장된 파일 삭제")
 	public ResponseEntity<Boolean> deleteInquiry(@PathVariable int inquiryNo){
 		List<InquiryFileDTO> delFileList = inquiryService.deleteInquiry(inquiryNo);
 		if(delFileList != null) {

@@ -1,0 +1,16 @@
+.faq-section{
+    width: 1200px;
+    flex: 1;
+}
+.faq-wrap{
+    display: flex;
+    align-items: flex-start;
+}
+.faq-side-menu{
+    width: 200px;
+    height: 400px;
+    background-color: #ccc;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
