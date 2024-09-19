@@ -1,0 +1,55 @@
+/*---- 기능 ----*/
+.box-radius {
+  border-radius: 10px;
+}
+.ftl {
+  float: left;
+}
+/*---- 기능 ----*/
+.content {
+  align-items: center;
+}
+.container {
+  width: 1000px;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.seller-lodgment-list .item-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+.seller-lodgment-list .item-wrap .item {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: pink;
+  margin: 10px;
+}
+.seller-lodgment-list > .item-wrap > .item > .item-img {
+  width: 250px;
+  height: 250px;
+  padding: 10px;
+}
+.seller-lodgment-list > .item-wrap > .item > .item-img > img {
+  border-radius: 10px;
+}
+.btn {
+  width: 100px;
+  border-radius: 10px;
+  border: none;
+  padding: 5px;
+}
+.primary {
+  background-color: var(--main5);
+  color: var(--main2);
+}
+
+/*--- 지울거 ---*/
