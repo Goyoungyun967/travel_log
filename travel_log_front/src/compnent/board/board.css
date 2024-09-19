@@ -1,4 +1,5 @@
 /*글자 사이즈*/
+
 .text-medium {
   font-size: 15px;
 }
@@ -94,7 +95,7 @@
   justify-content: space-between;
   align-items: center;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: bolder;
   padding: 5px 5px;
   border-bottom: 2px solid var(--gray5);
 }
@@ -109,8 +110,37 @@
 .board-next:hover {
   color: var(--main5);
 }
+.scrollable-container {
+  overflow: hidden; /* 수평 및 수직 스크롤 비활성화 */
+  width: 100%;
+  padding: 5px 5px;
+}
 
-/* 동행 리스트 */
+.width-box {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  border-radius: 4px;
+  /* overflow-x: hidden; 이 부분을 제거하세요 */
+  overscroll-behavior: contain; /* 스크롤 이벤트가 부모로 전달되지 않도록 설정 */
+  align-items: start;
+  position: relative;
+  flex-wrap: nowrap;
+  gap: 15px;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 100%;
+}
+/* 동행 리스트 
+
+
+.scrollable-container {
+  overflow: hidden;
+  width: 100%;
+  
+  }
+
+
 .width-box {
   display: flex;
   flex-direction: row;
@@ -118,7 +148,10 @@
   cursor: auto;
   border-radius: 4px;
   overflow: auto;
+  
   overscroll-behavior: auto;
+  
+  overscroll-behavior: contain; 스크롤 이벤트가 부모로 전달되지 않도록 설정 
   align-items: start;
   position: relative;
   display: flex;
@@ -128,7 +161,10 @@
   justify-content: flex-start;
   box-sizing: border-box;
   width: 100%;
+
 }
+
+*/
 .awbcss {
   position: relative;
   width: 250px;
@@ -141,6 +177,7 @@
   border-radius: 10px;
   user-select: none;
   align-items: center;
+  cursor: pointer;
 }
 
 .board-preview-title {
@@ -156,11 +193,11 @@
   align-items: start;
   justify-content: flex-start;
   box-sizing: border-box;
-  width: 100%;
+  width: 99%;
   cursor: pointer;
 }
 .boardList-content {
-  height: 120px;
+  height: 140px;
   border-bottom: 1px solid var(--gray5);
   padding-top: 10px;
 }
@@ -173,7 +210,7 @@
   padding: 3px 3px;
   background-color: var(--gray6);
   border-radius: 10px;
-  color: var(--line5);
+  color: var(--gray4);
 }
 .boardList-preview {
   margin-top: 8px;
@@ -195,5 +232,121 @@
 }
 .board-preview-content {
   gap: 8px;
-  padding: 12px;
+  padding: 10px;
+}
+.board-preview-title {
+  display: flex;
+  justify-content: space-between;
+}
+/*썸내일 css*/
+.board-preview-thumb {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  width: 240px;
+  height: 115px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.boardList-preview-thumb {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  width: 100px;
+  height: 80px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+/* 좋아요 / 저장 / 댓글  */
+.like-comment-keep {
+  height: 55px;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+.sub-item {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: 20px;
+  padding: 5px 5px;
+  width: 99%;
+  border-right: 1px solid var(--gray4);
+}
+.sub-item-right {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: 20px;
+  padding: 5px 5px;
+  width: 99%;
+}
+.accompany-write {
+  cursor: pointer;
+  height: 50px;
+  background-color: #00800b;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+.board-write {
+  cursor: pointer;
+  height: 50px;
+  background-color: #00800b;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+.board-write:hover {
+  background-color: #06bb15;
+  transform: translateY(-2px);
+}
+.accompany-write:hover {
+  background-color: #06bb15;
+  transform: translateY(-2px);
+}
+
+/*글 작성*/
+/*
+.write-box {
+  z-index: 100;
+  bottom: 0px;
+  position: fixed;
+  border: 1px solid var(--gray6);
+  margin-top: 8px;
+  border-radius: 10px;
+  height: 55px;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  }
+
+*/
+.board-preview-container {
+  position: relative; /* 자식 요소의 절대 위치를 기준으로 설정 */
+  overflow: hidden; /* 스크롤 숨기기 */
+}
+
+.write-box {
+  border-radius: 10px;
+  position: sticky; /* 스크롤에 따라 위치 고정 */
+  bottom: 0; /* 하단에 위치하게 함 */
+  background-color: white; /* 배경색 흰색 */
+  padding: 10px; /* 패딩 추가 */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* 상단 그림자 */
+  display: flex; /* flexbox 사용 */
+  justify-content: space-between; /* 버튼 간 간격 조정 */
+  margin-top: 10px; /* 위쪽 여백 추가 */
+  z-index: 10; /* 다른 요소 위로 */
 }
