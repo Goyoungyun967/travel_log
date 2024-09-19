@@ -7,7 +7,12 @@
   justify-content: center;
   background-color: #ffffff; /* 카드 배경색 */
   border-radius: 15px; /* 전체 테두리 둥글게 */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* 그림자 추가 */
+  transition: transform 0.3s; /* 확대 효과 추가 */
+}
+
+.select:hover {
+  transform: scale(1.02); /* 마우스 오버 시 확대 효과 */
 }
 
 .general-member,
@@ -24,7 +29,7 @@
   display: flex;
   align-items: center;
   justify-content: center; /* 텍스트 중앙 정렬 */
-  transition: background-color 0.3s, transform 0.3s; /* 부드러운 전환 효과 */
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* 부드러운 전환 효과 */
 }
 
 .general-member:last-child,
@@ -36,6 +41,7 @@
 .seller-member:hover {
   background-color: #36c3fe;
   transform: scale(1.05); /* 마우스 오버 시 확대 효과 */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* 그림자 강조 */
 }
 
 .container {
@@ -43,6 +49,8 @@
   height: 400px; /* 높이 조정 */
   margin: 100px auto;
   padding: 20px; /* 패딩 조정 */
+
+  margin-top: 15px;
   background-color: #ffffff;
   border-radius: 15px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
@@ -50,10 +58,12 @@
   flex-direction: column;
   align-items: center; /* 중앙 정렬 */
 }
+
 .head-login {
   margin-bottom: 20px;
   font-size: 30px;
   color: #333;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* 텍스트 그림자 추가 */
 }
 
 .form {
@@ -89,7 +99,7 @@ input[type="password"] {
 input[type="id"]:focus,
 input[type="password"]:focus {
   border-color: #36c3fe;
-  box-shadow: #6592fe;
+  box-shadow: 0 0 5px rgba(54, 195, 254, 0.5); /* 포커스 시 그림자 추가 */
   outline: none;
 }
 
@@ -101,13 +111,14 @@ input[type="password"]:focus {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s; /* 전환 효과 추가 */
   margin-left: 10px; /* 버튼과 입력 필드 간 간격 */
 }
 
 .login-btn:hover {
   background-color: #6592fe;
   transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 효과 */
 }
 
 .login-btn:active {
@@ -137,15 +148,10 @@ input[type="password"]:focus {
   transform: translateY(-2px); /* 약간 상승 효과 */
 }
 
-.separator {
-  font-size: 16px; /* 구분 기호 스타일 */
-  color: #555; /* 구분 기호 색상 */
-}
-
 .radio-group {
   display: flex;
   justify-content: center; /* 중앙 정렬 */
-  margin-bottom: 20px; /* 로그인 폼과의 간격 */
+  margin-bottom: 0; /* 로그인 폼과의 간격 */
 }
 
 .radio-group .MuiFormControlLabel-root {
@@ -163,7 +169,94 @@ input[type="password"]:focus {
 }
 
 .member-join {
-  font-size: 21px;
-  font-weight: 50px;
+  font-size: 25px;
+  font-weight: bold;
   color: #36c3fe;
+  padding-top: 0px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* 텍스트 그림자 추가 */
+}
+
+.join-content {
+  width: 600px; /* 전체 너비 사용 */
+  padding: 30px; /* 안쪽 여백 */
+  border: 1px solid #ccc; /* 테두리 */
+  border-radius: 10px; /* 모서리 둥글게 */
+  background-color: #ffffff; /* 배경색 */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  box-sizing: border-box; /* 테두리와 패딩을 포함하여 너비 계산 */
+  transition: transform 0.3s; /* 마우스 오버 시 확대 효과 */
+}
+
+.member-join {
+  font-size: 28px; /* 제목 크기 */
+  margin-bottom: 30px; /* 아래 여백 */
+  text-align: center; /* 중앙 정렬 */
+  font-weight: bold; /* 굵게 */
+  color: #333; /* 텍스트 색상 */
+}
+
+.join-wrap {
+  margin: 15px 0; /* 위아래 여백 */
+}
+
+.input-item {
+  display: flex; /* 플렉스박스 사용 */
+  align-items: center; /* 수직 중앙 정렬 */
+  margin-bottom: 20px; /* 아래 여백 */
+}
+
+input[type="text"],
+input[type="password"] {
+  padding: 12px; /* 안쪽 여백 */
+  border: 1px solid #ccc; /* 테두리 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  font-size: 16px; /* 폰트 크기 */
+  outline: none; /* 포커스 시 테두리 제거 */
+  transition: border-color 0.3s, box-shadow 0.3s; /* 테두리 색상 및 그림자 전환 효과 */
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #007bff; /* 포커스 시 테두리 색상 변경 */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 포커스 시 그림자 추가 */
+}
+
+input[type="radio"] {
+  margin-right: 5px; /* 오른쪽 여백 */
+}
+
+.gender-label {
+  margin-right: 15px; /* 오른쪽 여백 */
+  font-weight: 600; /* 굵게 */
+  display: flex; /* 플렉스박스 사용 */
+  align-items: center; /* 수직 중앙 정렬 */
+}
+
+.join-btn {
+  padding: 12px 20px; /* 안쪽 여백 */
+  border: none; /* 테두리 제거 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  background-color: #007bff; /* 배경색 */
+  color: #fff; /* 글자색 */
+  font-size: 16px; /* 폰트 크기 */
+  cursor: pointer; /* 커서 변경 */
+  float: right;
+}
+
+.join-btn:hover {
+  background-color: #0056b3; /* 호버 시 배경색 */
+  transform: translateY(-2px); /* 호버 시 약간 위로 이동 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 효과 */
+}
+
+.join-btn:active {
+  transform: translateY(0); /* 클릭 시 원위치 */
+}
+
+.seller-join {
+  font-size: 28px; /* 제목 크기 */
+  margin-bottom: 30px; /* 아래 여백 */
+  text-align: center; /* 중앙 정렬 */
+  font-weight: bold; /* 굵게 */
+  color: #333; /* 텍스트 색상 */
 }
