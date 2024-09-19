@@ -1,12 +1,16 @@
 import { Route, Routes } from "react-router-dom";
 import SellerLodgmentList from "./SellerLodgmentList";
-
-// 판매자 관련 메인
+import InsertLodgment from "./InsertLodgment";
+import SellerInfo from "./SellerInfo";
 const SellerMain = () => {
   return (
     <Routes>
-      {/* BoardList : 게시글 목록 */}
-      <Route path="sellerLodgmentList" element={<SellerLodgmentList />} />
+      {/* 판매자 메인 - 등록한 호텔 정보 출력 */}
+      <Route path="list" element={<SellerLodgmentList />} />
+      {/* 호텔 등록하기 */}
+      <Route path="insertLodgment" element={<InsertLodgment />} />
+      {/* 판매자 개인정보 조회 */}
+      <Route path="info" element={<SellerInfo />} />
     </Routes>
   );
 };
