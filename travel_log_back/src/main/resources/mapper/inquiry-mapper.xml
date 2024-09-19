@@ -1,5 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.co.iei.inquiry.model.dao.InquiryDao">
-  
+  <select id="getTotalCount" resultType="int">
+  	select count(*) from inquiry i
+  	<trim prefix="where" prefixOverrides="and|or">
+  		<if test="type.equals('member')">
+  			seller_no is null
+  		</if>
+  		<if test="type.equals('seller')">
+  			member_no is null
+  		</if>
+  		<if test="state==1">
+  			and (select count(*) from inquiry_reply where inquiry_no=i.inquiry_no) <![CDATA[<]]> 1 
+  		</if>
+  		<if test="state==2">
+  			and (select count(*) from inquiry_reply where inquiry_no=i.inquiry_no) <![CDATA[>]]> 1
+  		</if>
+  	</trim>
+  </select>
+  <select id="selectInquiryList" resultType="inquiry">
+  	select * from (select rownum as rnum, i2.* from (select inquiry_no,inquiry_title,seller_no,member_no,member_id,to_char(reg_date,'yyyy-mm-dd') as reg_date,representative_name,(select count(*) from inquiry_reply where inquiry_no=i.inquiry_no) from inquiry i left join member using (member_no) left join seller using (seller_no)
+  		<trim prefix="where" prefixOverrides="and|or">
+  			<if test="type.equals('member')">
+  			seller_no is null
+  		</if>
+  		<if test="type.equals('seller')">
+  			member_no is null
+  		</if>
+  		<if test="state==1">
+  			and (select count(*) from inquiry_reply where inquiry_no=i.inquiry_no) <![CDATA[<]]> 1 
+  		</if>
+  		<if test="state==2">
+  			and (select count(*) from inquiry_reply where inquiry_no=i.inquiry_no) <![CDATA[>]]> 1
+  		</if>
+  		</trim>
+  		order by 1 desc
+  	)i2) where rnum between #{start} and #{end}
+  </select>
+  <insert id="insertInquiry">
+  	insert into inquiry values (inquiry_seq.nextval, #{inquiryTitle},#{inquiryContent},
+  	<choose>
+  		<when test="sellerNo==0">
+  			null
+  		</when>
+  		<otherwise>
+  			#{sellerNo}
+  		</otherwise>
+  	</choose>
+  	,
+  	<choose>
+  		<when test="memberNo==0">
+  			null
+  		</when>
+  		<otherwise>
+  			#{memberNo}
+  		</otherwise>
+  	</choose>
+  	,sysdate
+  	)
+  	<selectKey order="AFTER" resultType="int" keyProperty="inquiryNo">
+  		select max(inquiry_no) from inquiry
+  	</selectKey>
+  </insert>
+  <insert id="insertInquiryFile">
+  	insert into inquiry_file values(inquiry_file_seq.nextval,#{inquiryNo},#{filename},#{filepath})
+  </insert>
+  <delete id="deleteInquiry">
+  	delete from inquiry where inquiry_no = #{inquiryNo}
+  </delete>
+  <insert id="insertInquiryReply">
+  	insert into inquiry_reply values(inquiry_reply_seq.nextval,#{inquiryNo},#{inquiryReplyContent},sysdate)
+  </insert>
+  <select id="selectOneInquiry" resultType="inquiry">
+  	select inquiry_no,inquiry_title,inquiry_content,seller_no,member_no,member_id,to_char(reg_date,'yyyy-mm-dd') as reg_date,representative_name from inquiry left join member using (member_no) left join seller using (seller_no) where inquiry_no = #{inquiryNo}
+  </select>
+  <select id="selectInquiryFileList" resultType="inquiryFile">
+  	select * from inquiry_file where inquiry_no=#{inquiryNo}
+  </select>
+  <select id="selectInquiryReply" resultType="inquiryReply">
+  	select inquiry_reply_no,inquiry_reply_content,to_char(reg_date,'yyyy-mm-dd') as reg_date where inquiry_no=#{inquiryNo}
+  </select>
 </mapper>
