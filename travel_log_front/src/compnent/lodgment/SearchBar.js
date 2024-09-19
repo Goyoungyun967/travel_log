@@ -10,11 +10,21 @@ import "react-datepicker/dist/react-datepicker.css"; // 달력 css
 import dayjs from "dayjs";
 import { format } from "date-fns";
 import Swal from "sweetalert2";
+import { PortableWifiOff } from "@mui/icons-material";
 
-const SearchBar = () => {
-  const [lodgement, setLodgement] = useState("");
-  const [guest, setGuest] = useState(2);
-  const [lodgementSearch, setLodgementSearch] = useState([
+const SearchBar = (props) => {
+  const lodgment = props.lodgment;
+  const setLodgment = props.setLodgment;
+  const guest = props.guest;
+  const setGuest = props.setGuest;
+  const startDate = props.startDate;
+  const setStartDate = props.setStartDate;
+  const endDate = props.endDate;
+  const setEndDate = props.setEndDate;
+  const startDay = props.startDay;
+  const endDay = props.endDay;
+  const onClick = props.onClick;
+  const [lodgmentSearch, setLodgmentSearch] = useState([
     { title: "서울" },
     { title: "인천" },
     { title: "서울" },
@@ -25,13 +35,6 @@ const SearchBar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [guestDropdownOpen, setGuestDropdownOpen] = useState(false);
   const [dateDropdownOpen, setDateDropdownOpen] = useState(false);
-
-  //const today = dayjs().toDate();
-  const startDay = dayjs().add(1, "day").toDate();
-  const endDay = dayjs().add(2, "day").toDate();
-
-  const [startDate, setStartDate] = useState(startDay);
-  const [endDate, setEndDate] = useState(endDay);
 
   const onChange = (dates) => {
     const [start, end] = dates;
@@ -56,9 +59,9 @@ const SearchBar = () => {
   const formattedStartDate = startDate ? format(startDate, "yyyy-MM-dd") : "";
   const formattedEndDate = endDate ? format(endDate, "yyyy-MM-dd") : "";
 
-  const lodgementChange = (e) => {
+  const lodgmentChange = (e) => {
     const value = e.target.value;
-    setLodgement(value);
+    setLodgment(value);
     setDropdownOpen(value.length > 0);
   };
 
@@ -83,13 +86,14 @@ const SearchBar = () => {
   return (
     <section className="section lodgment-bar" onClick={handleOutsideClick}>
       <div className="lodgement-search-wrap">
-        <form className="search-form"
+        <form
+          className="search-form"
           onSubmit={(e) => {
             e.preventDefault();
           }}
         >
-          <div className="table-wrap">
-            <table className="search-table">
+          <div className="lodgment-table-wrap">
+            <table className="lodgment-search-table">
               <thead>
                 <tr style={{ height: "30px" }}>
                   <th style={{ width: "30%" }}>여행지</th>
@@ -100,7 +104,7 @@ const SearchBar = () => {
               <tbody>
                 <tr>
                   <td>
-                    <div className="search-left-wrap search">
+                    <div className="search-left-wrap search-lodgment">
                       <div
                         onClick={(e) => {
                           e.stopPropagation();
@@ -119,16 +123,16 @@ const SearchBar = () => {
                           className="search-input lodgment-input"
                           type="text"
                           placeholder="여행지, 숙소 검색"
-                          value={lodgement}
-                          onChange={lodgementChange}
+                          value={lodgment}
+                          onChange={lodgmentChange}
                         />
                         {dropdownOpen && (
                           <ul className="lodgment-popup">
-                            {lodgementSearch.map((search, i) => (
+                            {lodgmentSearch.map((search, i) => (
                               <SearchList
                                 key={i}
                                 search={search}
-                                setLodgement={setLodgement}
+                                setLodgment={setLodgment}
                               />
                             ))}
                           </ul>
@@ -137,7 +141,7 @@ const SearchBar = () => {
                     </div>
                   </td>
                   <td>
-                    <div className="search middle-search">
+                    <div className="search-lodgment middle-search">
                       <CalendarMonthIcon />
                       <input
                         className="search-input date-input"
@@ -176,7 +180,7 @@ const SearchBar = () => {
                     </div>
                   </td>
                   <td>
-                    <div className="search-right-wrap search">
+                    <div className="search-right-wrap search-lodgment">
                       <PersonIcon />
                       <input
                         className="search-input guest-input"
@@ -226,7 +230,7 @@ const SearchBar = () => {
               </tbody>
             </table>
             <div className="search-btn-wrap">
-              <button>숙소 검색</button>
+              <button onClick={onClick}>숙소 검색</button>
             </div>
           </div>
         </form>
@@ -237,11 +241,11 @@ const SearchBar = () => {
 
 const SearchList = (props) => {
   const searchTitle = props.search.title;
-  const setLodgement = props.setLodgement;
+  const setLodgment = props.setLodgment;
   return (
     <li
       onClick={() => {
-        setLodgement(searchTitle);
+        setLodgment(searchTitle);
       }}
     >
       {searchTitle}

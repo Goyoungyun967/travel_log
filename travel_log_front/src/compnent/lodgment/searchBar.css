@@ -14,11 +14,10 @@
   justify-self: center;
   margin: 0 auto;
 }
-.search-form{
+.search-form {
   width: 100%;
-
 }
-.table-wrap {
+.lodgment-table-wrap {
   width: 100%; /* 부모 요소의 전체 너비 사용 */
   max-width: 1000px; /* 디자인 일관성을 유지하기 위한 최대 너비 (옵션) */
   border: 1px solid var(--gray6);
@@ -32,11 +31,11 @@
   margin: 0;
   padding: 0;
 }
-.search-table th {
+.lodgment-search-table th {
   text-align: start;
   vertical-align: bottom;
 }
-.search {
+.search-lodgment {
   width: 100%;
   background-color: var(--gray5);
   height: 50px;
@@ -47,7 +46,6 @@
 
 .search-table {
   width: 100%;
-
 }
 .search-input {
   box-sizing: border-box;

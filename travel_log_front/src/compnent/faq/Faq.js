@@ -1,10 +1,11 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Faq = () => {
-    const [faqList, setFaqList] = useState([]);
+    const backServer = process.env.REACT_APP_BACK_SERVER;
+    const [faqList, setFaqList] = useState([]);    
     return (
-        <section class="faq-section">
+        <section className="faq-section">
             <div className="faq-warp">
                 
             </div>

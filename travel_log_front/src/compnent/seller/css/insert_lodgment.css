@@ -1,0 +1,132 @@
+/*---- 기능 ----*/
+.box-radius {
+  border-radius: 10px;
+}
+.ftl {
+  float: left;
+}
+/*---- 기능 ----*/
+.box-wrap {
+  border: 1px solid #ccc;
+  padding: 30px;
+  width: 800px;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.box-wrap > input {
+  border-radius: 0px;
+}
+.box-img {
+  width: 300px;
+  height: 300px;
+  background-color: pink;
+}
+.image {
+  width: 300px;
+}
+.image > img {
+  width: 150px;
+  float: left;
+}
+.input-item {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-top: 10px;
+  flex-direction: column;
+}
+.input-item > .input-title {
+  margin-right: 10px;
+  width: 600px;
+}
+.input > input {
+  border-radius: 0px;
+  border: none;
+  border-bottom: 2px solid #ddd;
+}
+.Q > button {
+  margin-right: 50px;
+}
+.Q > button:nth-child(3) {
+  background-color: red;
+}
+.box-notice {
+  margin-top: 20px;
+  width: 750px;
+}
+.btn {
+  margin-top: 25px;
+  width: 100px;
+  border-radius: 10px;
+  border: none;
+  padding: 5px;
+}
+.primary {
+  background-color: var(--main5);
+  color: var(--main2);
+}
+
+.search-hotel {
+  border: 1px solid #ccc;
+  width: 300px;
+  height: 300px;
+}
+.search-hotel > .input {
+  text-align: center;
+  padding: 10px;
+}
+.search-hotel > .input > input {
+  width: 200px;
+  border-radius: 0px;
+  margin-right: 10px;
+}
+.search {
+  width: 50px;
+}
+input:focus {
+  outline: none; /* 기본 outline 제거 */
+  box-shadow: none; /* 기본 box-shadow 제거 */
+}
+.msg {
+  float: left;
+  padding: 3px 10px;
+  color: red;
+  font-size: 11px;
+}
+.search-item-wrap {
+  margin: 10px;
+  background-color: yellow;
+  width: 280px;
+  height: 200px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.search-item-wrap > .search-item {
+  width: 250px;
+  margin: 10px 5px;
+  border: 1px solid #ccc;
+}
+.search-item-wrap > .search-item:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+.search-item > .item-title {
+  padding: 3px;
+  font-weight: bold;
+}
+.search-item > .item-addr {
+  padding: 3px;
+  font-size: 12px;
+}
+/*------- 지울 거 ------*/
+.addr {
+  background-color: #ccc;
+  width: 600px;
+  height: 300px;
+}
+.toast {
+  color: red;
+  background-color: #ccc;
+  width: 750px;
+  height: 300px;
+}

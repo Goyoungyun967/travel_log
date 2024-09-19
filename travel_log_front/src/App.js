@@ -10,11 +10,12 @@ import Login from "./compnent/member/Login";
 import Select from "./compnent/member/Select";
 import MemberJoin from "./compnent/member/MemberJoin";
 import SellerJoin from "./compnent/member/SellerJoin";
+import SellerMain from "./compnent/seller/SellerMain";
 
 function App() {
   return (
     <div className="wrap">
-      <Header></Header>
+      <Header />
       <main className="content">
         <Routes>
           <Route path="/" element={<Main />} />
@@ -25,9 +26,10 @@ function App() {
           <Route path="/select" element={<Select />} />
           <Route path="/select/memberJoin" element={<MemberJoin />} />
           <Route path="/select/sellerJoin" element={<SellerJoin />} />
+          <Route path="/seller/*" element={<SellerMain />} />
         </Routes>
       </main>
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 }

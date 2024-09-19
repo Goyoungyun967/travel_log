@@ -18,7 +18,7 @@ public class InquiryFileDTO {
 	@Schema(description = "1대1문의 번호",type = "int")
 	private int inquiryNo;
 	@Schema(description = "파일 이름",type = "String")
-	private String fileName;
+	private String filename;
 	@Schema(description = "파일 경로",type = "String")
 	private String filepath;
 }
