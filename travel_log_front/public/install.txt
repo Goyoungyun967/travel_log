@@ -20,5 +20,3 @@ npm install date-fns
 마수빈 2024-09-19 14:46 (주소 찾기 api)
 npm install react-daum-postcode
 
-윤희수 2024-09-19 15:14
-npm install recoil 

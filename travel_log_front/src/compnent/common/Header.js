@@ -87,7 +87,7 @@ const Header = () => {
             <Link to="Login">로그인</Link>
           </li>
           <li>
-            <Link to="#">회원가입</Link>
+            <Link to="Select">회원가입</Link>
           </li>
         </ul>
       </div>
