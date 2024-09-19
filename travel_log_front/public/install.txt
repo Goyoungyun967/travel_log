@@ -17,8 +17,5 @@ npm install react-datepicker date-fns
 npm install dayjs
 npm install date-fns
 
-윤희수 2024-09-19 10:02
-npm install @mui/joy  //삭제 해야함 
-
 윤희수 2024-09-19 15:14
 npm install recoil 
