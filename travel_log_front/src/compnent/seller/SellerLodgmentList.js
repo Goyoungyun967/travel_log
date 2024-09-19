@@ -19,7 +19,7 @@ const SellerLodgmentList = () => {
 
   // 판매자 메인
   return (
-    <div className="contanier">
+    <div className="contanier seller-lodgment-list">
       {/* {isLogin? 현재 로그인이 되어있으면 으로 처리해야함 */}
       <Link to={`/seller/insertLodgment`} className="btn primary">
         등록하기

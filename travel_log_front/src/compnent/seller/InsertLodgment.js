@@ -20,7 +20,7 @@ const InsertLodgment = () => {
   };
   const search = () => {};
   return (
-    <div className="contanier">
+    <div className="contanier insert-lodgment">
       <form>
         <div className="box-wrap box-radius">
           <div className="box">

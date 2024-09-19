@@ -48,7 +48,7 @@
   margin-right: 50px;
 }
 .Q > button:nth-child(3) {
-  background-color: rgb(255, 0, 0);
+  background-color: red;
 }
 .box-notice {
   margin-top: 20px;

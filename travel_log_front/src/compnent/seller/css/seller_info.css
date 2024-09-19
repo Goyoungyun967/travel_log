@@ -1,0 +1,54 @@
+/*---- 기능 ----*/
+.box-radius {
+  border-radius: 10px;
+}
+.ftl {
+  float: left;
+}
+/*---- 기능 ----*/
+.box-wrap {
+  border: 1px solid #ccc;
+  padding: 30px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.seller-info > .box-wrap {
+  flex-direction: column;
+}
+.seller-info > .box-wrap > h3 {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.seller-info {
+  display: flex;
+  align-items: center;
+  padding-bottom: 20px;
+  justify-content: center;
+}
+.seller-info > .item-wrap > .item {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 30px 0;
+}
+.seller-info > .item-wrap > .item > h3 {
+  width: 200px;
+}
+
+.btn {
+  margin-top: 25px;
+  width: 100px;
+  border-radius: 10px;
+  border: none;
+  padding: 5px;
+  align-self: flex-end;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.primary {
+  background-color: var(--main5);
+  color: var(--main2);
+}
