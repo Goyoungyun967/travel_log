@@ -104,7 +104,7 @@ const SearchBar = (props) => {
               <tbody>
                 <tr>
                   <td>
-                    <div className="search-left-wrap search">
+                    <div className="search-left-wrap search-lodgment">
                       <div
                         onClick={(e) => {
                           e.stopPropagation();
@@ -141,7 +141,7 @@ const SearchBar = (props) => {
                     </div>
                   </td>
                   <td>
-                    <div className="search middle-search">
+                    <div className="search-lodgment middle-search">
                       <CalendarMonthIcon />
                       <input
                         className="search-input date-input"
@@ -180,7 +180,7 @@ const SearchBar = (props) => {
                     </div>
                   </td>
                   <td>
-                    <div className="search-right-wrap search">
+                    <div className="search-right-wrap search-lodgment">
                       <PersonIcon />
                       <input
                         className="search-input guest-input"
