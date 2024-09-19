@@ -1,0 +1,65 @@
+/*---- 기능 ----*/
+.box-radius {
+  border-radius: 10px;
+}
+.ftl {
+  float: left;
+}
+/*---- 기능 ----*/
+.box-wrap {
+  border: 1px solid #ccc;
+  padding: 30px;
+  width: 500px;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.image {
+  width: 200px;
+}
+.image > img {
+  width: 150px;
+  float: left;
+}
+.input-item {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-top: 10px;
+}
+.input-item > .input-title {
+  margin-right: 10px;
+  width: 80px;
+}
+.input > input {
+  border: none;
+  width: 200px;
+  border-bottom: 2px solid #ddd;
+}
+
+.box-notice {
+  margin-top: 20px;
+  width: 450px;
+}
+.btn {
+  margin-top: 25px;
+  width: 100px;
+  border-radius: 10px;
+  border: none;
+  padding: 5px;
+}
+.primary {
+  background-color: var(--main5);
+  color: var(--main2);
+}
+/*------- 지울 거 ------*/
+.addr {
+  background-color: #ccc;
+  width: 300px;
+  height: 100px;
+}
+.toast {
+  color: red;
+  background-color: #ccc;
+  width: 450px;
+  height: 300px;
+}

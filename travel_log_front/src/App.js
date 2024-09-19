@@ -7,11 +7,12 @@ import Faq from "./compnent/faq/Faq";
 import LodgmentMain from "./compnent/lodgment/LodgmentMain";
 import Login from "./compnent/member/Login";
 import Join from "./compnent/member/Join";
+import SellerMain from "./compnent/seller/SellerMain";
 
 function App() {
   return (
     <div className="wrap">
-      <Header></Header>
+      <Header />
       <main className="content">
         <Routes>
           <Route path="/" element={<Main />} />
@@ -20,9 +21,10 @@ function App() {
           <Route path="/lodgment/*" element={<LodgmentMain />} />
           <Route path="/login" element={<Login />} />
           <Route path="/join" element={<Join />} />
+          <Route path="/seller/*" element={<SellerMain />} />
         </Routes>
       </main>
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 }
