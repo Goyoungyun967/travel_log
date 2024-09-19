@@ -21,7 +21,7 @@ const SellerLodgmentList = () => {
   return (
     <div className="contanier">
       {/* {isLogin? 현재 로그인이 되어있으면 으로 처리해야함 */}
-      <Link to={`${backServer}/seller/insertLodgment`} className="btn primary">
+      <Link to={`/seller/insertLodgment`} className="btn primary">
         등록하기
       </Link>
 
