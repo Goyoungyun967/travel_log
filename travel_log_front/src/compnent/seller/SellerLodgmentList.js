@@ -47,6 +47,7 @@ const ListItem = (props) => {
       <div className="item-tx">
         <h5>{list.lodgmentAddr}</h5>
         <span>{list.lodgmentStarGrade}</span>
+        <span>성급</span>
         <h3>{list.lodgmentName}</h3>
         <button className="btn primary">호텔 수정</button>
       </div>

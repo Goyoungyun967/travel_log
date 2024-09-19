@@ -19,7 +19,7 @@ public class SellerService {
 	}
 
 	public MemberDTO selectOneSeller(int sellerNo) {
-		// TODO Auto-generated method stub
+//		SellerDTO로 바꿔야함
 		return null;
 	}
 }

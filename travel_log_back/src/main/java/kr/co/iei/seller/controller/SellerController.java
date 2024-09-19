@@ -33,8 +33,7 @@ public class SellerController {
 		return ResponseEntity.ok(list);
 	}
 	
-	
-	
+	// 기존 호텔 조회 <= 집 코드랑 합치기
 	
 	// 판매자 정보 조회
 	// public ResponseEntity<판매자DTO> selectOneSeller(@RequestHeader("Authorization") String token){ => 토큰 사용해서 조회
