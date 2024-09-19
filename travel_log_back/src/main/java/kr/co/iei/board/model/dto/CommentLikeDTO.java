@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Schema(description = "게시판 좋아요 객체")
-public class BoardLikeDTO {
+@Schema(description = "댓글 좋아요 객체")
+public class CommentLikeDTO {
+	private int commentNo;
 	private int memberNo;
-	private int boardNo;
 
 }
