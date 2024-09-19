@@ -1,0 +1,90 @@
+.lodgement-search-wrap {
+  width: 100%;
+}
+.lodgment-search-wrap {
+  display: flex;
+  justify-items: center;
+  margin-top: 50px;
+}
+.price-text-wrap {
+  margin-top: 30px;
+  margin-left: 10px;
+  margin-bottom: 20px;
+}
+.lodgment-info-text {
+  font-size: 20px;
+  margin-bottom: 5px;
+  margin-top: 20px;
+}
+.max-num {
+  text-align: right;
+  margin-right: 100%;
+}
+.choose-price-wrap {
+  border-bottom: 3px solid var(--main1);
+  height: 200px;
+}
+.lodgment-price-max {
+  width: 100%;
+  text-align: left;
+}
+.lodgment-star-range {
+  height: 100px;
+  border-bottom: 3px solid var(--main1);
+  margin-top: 20px;
+}
+
+.start-range-wrap {
+  margin-top: 10px;
+}
+.lodgment-service-wrap {
+  height: 150px;
+  border-bottom: 3px solid var(--main1);
+}
+.lodgment-price-range {
+  width: 100%; /* 부모 요소의 너비를 100%로 설정 */
+  display: flex; /* flexbox 사용 */
+  justify-content: space-between; /* 왼쪽과 오른쪽으로 요소 배치 */
+  align-items: center; /* 수직 정렬 */
+}
+
+.lodgment-price-range div {
+  flex: 1; /* 각 div가 동일한 비율로 공간을 차지하도록 설정 */
+}
+
+.lodgment-price-max {
+  text-align: right; /* 오른쪽 정렬 */
+}
+
+.lodgment-info-wrap {
+  display: flex; /* flexbox 사용 */
+  flex-direction: column; /* 버튼들을 수직으로 나열 */
+  text-align: center;
+  justify-items: center;
+  flex-grow: 1;
+}
+
+.lodgment-type-select {
+  display: flex; /* flexbox 사용 */
+  justify-content: center; /* 버튼들을 중앙에 배치 */
+}
+
+.lodgment-type-select button {
+  margin: 0 10px; /* 버튼 간의 여백 */
+  width: 200px;
+  background-color: #fff;
+  color: var(--main1);
+  border-bottom: 3px solid var(--line2);
+  cursor: pointer;
+}
+.lodgment-type-select button:hover {
+  background-color: var(--main5);
+  transform: translateY(-2px);
+}
+
+.lodgment-type-select button:active {
+  transform: translateY(0);
+}
+.lodgment-info-wrap {
+  margin-top: 20px;
+}
