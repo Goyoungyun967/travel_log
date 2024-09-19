@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Alias(value = "board")
+@Alias(value = "boerdLike")
 @Schema(description = "게시판 좋아요 객체")
 public class BoardLikeDTO {
 	private int memberNo;

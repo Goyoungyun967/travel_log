@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import "./board.css"; // 게시판 css
 import SearchIcon from "@mui/icons-material/Search"; // 검색 아이콘 import
 import PersonIcon from "@mui/icons-material/Person"; //맴버 아이콘
+import PageNavi from "../utils/PageNavi"; //페이지 네비
+import { Link } from "react-router-dom";
 
 const BoardList = () => {
+  const backServer = process.env.REACT_APP_BACK_SERVER;
   const [boardList, setBoardList] = useState([]);
   const [accompanyList, setAccompanyList] = useState([]);
   const [areaSearch, setAreaSearch] = useState([
@@ -28,6 +31,9 @@ const BoardList = () => {
   const [searchInput, setSearchInput] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const scrollContainerRef = useRef(null);
+  //페이지
+  const [reqPage, setReqPage] = useState(1);
+  const [pi, setPi] = useState({});
   //스크롤
   const isMouseDownRef = useRef(false);
   const startXRef = useRef(0);
@@ -128,6 +134,7 @@ const BoardList = () => {
                 </div>
               </div>
             </div>
+
             <div className="board-preview-list awbcss">
               <div className="board-preview-thumb"></div>
               <div className="board-preview-content">
@@ -285,12 +292,12 @@ const BoardList = () => {
         </div>
       </div>
       <div className="write-box">
-        <button className="accompany-write sub-item">
+        <Link to="/board/accompanyWrite" className="accompany-write sub-item">
           동행 게시판 글 작성
-        </button>
-        <button className="board-write sub-item-right">
+        </Link>
+        <Link to="/board/boardWrite" className="board-write sub-item-right">
           여행 게시판 글 작성
-        </button>
+        </Link>
       </div>
     </div>
   );
