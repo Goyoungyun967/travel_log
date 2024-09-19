@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Alias(value="room")
-@Schema(description="객실 객체")
+@Alias(value="lodgment")
+@Schema(description="객실 정보")
 public class RoomDTO {
 	@Schema(description = "객실 번호",type="int")
 	private int roomNo;
@@ -29,7 +29,6 @@ public class RoomDTO {
 	private int roomPrice;
 	@Schema(description = "객실 정보",type="String")
 	private String roomInfo;
-	
 	@Schema(description = "객실 사진 리스트",type="List<RoomFileDTO>")
 	private List<RoomFileDTO> fileList;
 	
