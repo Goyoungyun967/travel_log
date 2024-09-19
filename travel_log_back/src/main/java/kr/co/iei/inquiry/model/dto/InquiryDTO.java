@@ -15,18 +15,24 @@ import lombok.NoArgsConstructor;
 @Alias(value="inquiry")
 @Schema(description = "1대1문의 객체")
 public class InquiryDTO {
-	@Schema(description = "1대1문의 번호",type = "int")
-	private int inquiryNO;
-	@Schema(description = "1대1문의 제목",type = "String")
+	@Schema(description = "1대1 문의 번호",type = "int")
+	private int inquiryNo;
+	@Schema(description = "1대1 문의 제목",type = "String")
 	private String inquiryTitle;
-	@Schema(description = "1대1문의 내용",type = "String")
+	@Schema(description = "1대1 문의 내용",type = "String")
 	private String inquiryContent;
-	@Schema(description = "1대1문의한 판매자번호",type = "int")
+	@Schema(description = "1대1 문의한 판매자번호",type = "int")
 	private int sellerNo;
-	@Schema(description = "1대1문의한 회원번호",type = "int")
+	@Schema(description = "1대1 문의한 판매자이름",type = "String")
+	private String representativeName;
+	@Schema(description = "1대1 문의한 회원번호",type = "int")
 	private int memberNo;
-	@Schema(description = "1대1문의 파일리스트",type = "List")
+	@Schema(description = "1대1 문의한 회원아이디",type = "String")
+	private String memberId;
+	@Schema(description = "1대1 문의 작성일")
+	private String regDate;
+	@Schema(description = "1대1 문의 파일리스트",type = "List")
 	private List inquiryFileList;
-	@Schema(description = "1대1문의 답변",type = "InquiryReplyDTO")
+	@Schema(description = "1대1 문의 답변",type = "InquiryReplyDTO")
 	private InquiryReplyDTO inquiryReply;
 }

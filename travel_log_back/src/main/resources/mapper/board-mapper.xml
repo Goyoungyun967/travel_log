@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.co.iei.board.model.dao.BoardDao">
+	<select id="totalCount" resultType="int">
+		SELECT COUNT(*) FROM board WHERE board_type = #{boardType}
+	</select>
+	<select id="selectBoardList" resultType="board">
+	select * from
+		(select rownum as rnum, sb.* from
+			(SELECT 
+			    b.board_title,
+			    b.board_content,
+			    b.board_area,
+			    b.reg_date,
+			    b.board_thumb,
+			    (SELECT COUNT(*) FROM board_like bl WHERE bl.board_no = b.board_no) AS like_count,
+			    (SELECT COUNT(*) FROM board_keep bk WHERE bk.board_no = b.board_no) AS keep_count,
+			    (SELECT COUNT(*) FROM board_comment bc WHERE bc.board_no = b.board_no) AS report_count,
+			    (select member_IMAGE from member m where m.member_no = b.member_no) as member_IMAGE,
+			    (select MEMBER_NICKNAME from member m where m.member_no = b.member_no) as member_NICKNAME
+			FROM 
+    			board b 
+    		where board_type=#{boardType}) 
+    			sb)
+    where rnum BETWEEN #{start} and #{end}
+	</select>
   
 </mapper>
