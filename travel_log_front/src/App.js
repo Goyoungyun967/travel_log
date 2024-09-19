@@ -6,7 +6,10 @@ import BoardMain from "./compnent/board/BoardMain";
 import Faq from "./compnent/faq/Faq";
 import LodgmentMain from "./compnent/lodgment/LodgmentMain";
 import Login from "./compnent/member/Login";
-import Join from "./compnent/member/Join";
+
+import Select from "./compnent/member/Select";
+import MemberJoin from "./compnent/member/MemberJoin";
+import SellerJoin from "./compnent/member/SellerJoin";
 
 function App() {
   return (
@@ -19,7 +22,9 @@ function App() {
           <Route path="/faq/*" element={<Faq />} />
           <Route path="/lodgment/*" element={<LodgmentMain />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/join" element={<Join />} />
+          <Route path="/select" element={<Select />} />
+          <Route path="/select/memberJoin" element={<MemberJoin />} />
+          <Route path="/select/sellerJoin" element={<SellerJoin />} />
         </Routes>
       </main>
       <Footer></Footer>
