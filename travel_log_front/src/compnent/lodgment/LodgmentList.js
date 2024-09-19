@@ -9,12 +9,18 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
+import axios from "axios";
+import { Backspace } from "@mui/icons-material";
 
 const LodgmentList = () => {
+  const BackServer = process.env.REACT_APP_BACK_SERVER;
+  console.log(BackServer);
+  //메인에서 검색해서 들어올 경우, 검색 정보 저장
   const { state } = useLocation();
   const startDay = dayjs().add(1, "day").toDate();
   const endDay = dayjs().add(2, "day").toDate();
 
+  //state 에서 넘어온 정보가 있을 경우 , 없을 경우들어갈 기본 정보
   const [lodgment, setLodgment] = useState(
     state && state.lodgment ? state.lodgment : ""
   );
@@ -25,8 +31,6 @@ const LodgmentList = () => {
   const [endDate, setEndDate] = useState(
     state && state.endDate ? state.endDate : endDay
   );
-
-  console.log(state);
   //가격 슬라이더의 초기값
   const [value, setValue] = useState([0, 500000]);
 
@@ -43,11 +47,27 @@ const LodgmentList = () => {
   //별점초기화 값
   const [starValue, setStarValue] = useState(5);
 
-  //서비스 버튼
+  //정렬 버튼
   const [radioBtn, setRadioBtn] = useState("null");
   const radioChange = (e) => {
     setRadioBtn(e.target.value);
   };
+  //서비스태그
+  //select *from service_tag ;
+  const [serviceTag, setServiceTag] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`${BackServer}/lodgment/service`)
+      .then((res) => {
+        //console.log(res);
+        setServiceTag(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  //console.log(serviceTag);
   //console.log("value[0] :" + value[0]);
   //console.log("value[1] :" + value[1]);
 
