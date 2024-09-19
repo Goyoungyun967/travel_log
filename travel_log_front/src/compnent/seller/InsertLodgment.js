@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./css/insert_lodgment.css";
+import DaumPostcode from "react-daum-postcode";
 
 const InsertLodgment = () => {
+  // YES 나 NO를 누르면 search-hotel이 보이거나 안보이게 하기
   const [isVisible, setIsVisible] = useState(false);
   const yesHotel = () => {
     setIsVisible(true);
   };
   const noHotel = () => {
     setIsVisible(false);
+  };
+  const addrApi = () => {
+    // setIsPostcodeVisible(true);
+  };
+  const addrComplete = (data) => {
+    console.log(data); // 선택한 주소 데이터를 처리
+    // setIsPostcodeVisible(false); // 주소 선택 후 컴포넌트를 숨기려면 사용
   };
   const search = () => {};
   return (
@@ -71,7 +80,12 @@ const InsertLodgment = () => {
                 </div>
               </div>
               <div className="input-item">
-                <div className="addr">주소 API 들어가는 곳</div>
+                <div className="addr-api">
+                  <button type="button" className=" btn primary">
+                    주소찾기
+                  </button>
+                  <DaumPostcode />
+                </div>
               </div>
               <div className="input-item">
                 <div className="input-title">
