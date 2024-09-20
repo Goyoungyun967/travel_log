@@ -81,7 +81,11 @@ const InsertLodgment = () => {
   };
   return (
     <div className="contanier insert-lodgment">
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
         <div className="box-wrap box-radius">
           <div className="box">
             <div className="box-img">
