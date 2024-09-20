@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import SellerLodgmentList from "./SellerLodgmentList";
 import InsertLodgment from "./InsertLodgment";
 import SellerInfo from "./SellerInfo";
+import InsertRoom from "./InsertRoom";
 const SellerMain = () => {
   return (
     <Routes>
@@ -11,6 +12,8 @@ const SellerMain = () => {
       <Route path="insertLodgment" element={<InsertLodgment />} />
       {/* 판매자 개인정보 조회 */}
       <Route path="info" element={<SellerInfo />} />
+      {/* 호텔 객실 등록하기 */}
+      <Route path="insertRoom" element={<InsertRoom />} />
     </Routes>
   );
 };

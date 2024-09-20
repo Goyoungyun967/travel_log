@@ -1,13 +1,30 @@
 package kr.co.iei.member.model.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import kr.co.iei.member.model.dao.MemberDao;
+import kr.co.iei.member.model.dto.MemberDTO;
 
 @Service
 public class MemberService {
 	
 	@Autowired
-	private MemberDao memberdao;
+	private MemberDao memberDao;
+	
+	@Autowired
+	private BCryptPasswordEncoder encoder;
+
+	public int checkId(String memberId) {
+		int result = memberDao.checkId(memberId);
+		return result;
+	}
+
+	public int insertMember(MemberDTO member) {
+		String encPw = encoder.encode(member.getMemberPw());
+		member.setMemberPw(encPw);
+		int result = memberDao.insertMember(member);
+		return result;
+	}
 }

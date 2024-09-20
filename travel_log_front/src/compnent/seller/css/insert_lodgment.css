@@ -20,7 +20,12 @@
 .box-img {
   width: 300px;
   height: 400px;
-  background-color: pink;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.box-img > img {
+  width: 250px;
 }
 .image {
   width: 300px;
@@ -80,31 +85,35 @@
 }
 .search-hotel > .input > input {
   width: 200px;
-  margin-right: 10px;
 }
 .search-hotel .search {
   width: 50px;
 }
+.insert-lodgment-item > .input-item {
+  margin-top: 10px;
+}
+.insert-lodgment-item > .input-item > .input-title {
+  font-weight: bold;
+}
+.insert-lodgment-item > .lodgment-type {
+  margin-top: 20px;
+}
+.insert-lodgment-item > .lodgment-type > .input-title {
+  font-weight: bold;
+}
 .insert-lodgment-item > .input-item > .input > input {
-  background-color: pink;
   border: none;
   border-radius: 0px;
   border-bottom: 2px solid #ccc;
   width: 200px;
 }
-input:focus {
-  outline: none; /* 기본 outline 제거 */
-  box-shadow: none; /* 기본 box-shadow 제거 */
+#lodgmentName {
+  font-size: 20px;
+  width: 500px;
 }
-.msg {
-  float: left;
-  padding: 3px 10px;
-  color: red;
-  font-size: 11px;
-}
+
 .search-item-wrap {
   margin: 10px;
-  background-color: yellow;
   width: 280px;
   height: 200px;
   overflow: scroll;
@@ -130,15 +139,37 @@ input:focus {
 .lodgment-type > .input > label {
   margin-left: 30px;
 }
-/*------- 지울 거 ------*/
-.addr {
-  background-color: #ccc;
-  width: 600px;
-  height: 300px;
+.addr-block {
+  display: flex;
 }
-.toast {
-  color: red;
-  background-color: #ccc;
+.addr-block > .addr-search-api {
+  display: block;
+  width: 400px;
+}
+.addr-block > .addr-api-input {
+  width: 300px;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  margin-left: 20px;
+}
+.addr-block > .addr-api-input > label {
+  margin-top: 50px;
+}
+.addr-block > .addr-api-input > input {
+  font-size: 16px;
+  width: 250px;
+  margin-top: 15px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+}
+.insertLodgmentBtn {
+  margin-top: 30px;
+}
+
+.editor {
+  display: flex;
+  justify-content: center;
   width: 750px;
-  height: 300px;
+  height: 500px;
 }

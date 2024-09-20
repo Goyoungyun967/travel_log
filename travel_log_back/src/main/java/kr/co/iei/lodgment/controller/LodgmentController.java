@@ -25,7 +25,6 @@ public class LodgmentController {
 	
 	@GetMapping(value = "/service")
 	public ResponseEntity<List> serviceList(){
-		//System.out.println("여기 있땅");
 		List list = lodgmentService.serviceList();
 		return ResponseEntity.ok(list);
 	}

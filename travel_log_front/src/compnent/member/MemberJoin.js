@@ -4,9 +4,13 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import { useState } from "react";
+import axios from "axios";
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MemberJoin = () => {
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
   const [member, setMember] = useState({
     memberId: "",
     memberPw: "",
@@ -16,8 +20,38 @@ const MemberJoin = () => {
     memberAddr: "",
     memberEmail: "",
     memberNickname: "",
+    memberEmailId: "",
   });
 
+  //아이디 중복체크 결과에따라서 바뀔 state
+  //0 : 아직 입력하지 않은 상테,
+  //1 : 정규표현식,중복체크 모두 통과한 경우
+  //2 : 정규표현식을 만족하지 못한 상태
+  //3 :  아이디가 중복인경우
+  const [idCheck, setIdCheck] = useState(0);
+  const checkId = () => {
+    //아이디 유효성 검사
+    //1. 정규표현식 감사
+    //2. 정규표현식 검사 성공하면,db에 중복체크
+    const idReg = /^[a-zA-Z0-9]{4,8}$/;
+    if (!idReg.test(member.memberId)) {
+      setIdCheck(2);
+    } else {
+      axios
+        .get(`${backServer}/member/memberId/${member.memberId}/check-id`)
+        .then((res) => {
+          console.log(res);
+          if (res.data === 1) {
+            setIdCheck(3);
+          } else if (res.data === 0) {
+            setIdCheck(1);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
   console.log(member);
   const changeMember = (e) => {
     const name = e.target.name;
@@ -27,12 +61,54 @@ const MemberJoin = () => {
   const changeMemberPwRe = (e) => {
     setMemberPwRe(e.target.value);
   };
+
+  const pwMessage = useRef(null);
+  const checkPw = () => {
+    pwMessage.current.classList.remove("valid");
+    pwMessage.current.classList.remove("invalid");
+    if (member.memberPw === memberPwRe) {
+      pwMessage.current.classList.add("valid");
+      pwMessage.current.innerText = "비밀번호가 일치합니다 . ";
+    } else {
+      pwMessage.current.classList.add("invalid");
+      pwMessage.current.innerText = "비밀번호가 일치하지 않습니다 .";
+    }
+  };
+
+  const join = () => {
+    if (idCheck === 1 && pwMessage.current.classList.contains("valid")) {
+      member.memberEmail = member.memberEmailId + "@" + member.memberEmail;
+      axios
+        .post(`${backServer}/member`, member)
+        .then((res) => {
+          console.log(res);
+          navigate("/login");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  const sendEmail = () => {
+    member.memberEmail = member.memberEmailId + "@" + member.memberEmail;
+    axios
+      .get(`${backServer}/sendEmail/memberEmail/${member.memberEmail}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <section className="join-content">
       <div className="member-join">일반회원가입</div>
       <div className="join-wrap">
         <label htmlFor="memberId">아이디</label>
       </div>
+      <p className={"id"}></p>
       <div className="input-item">
         <input
           type="text"
@@ -40,8 +116,23 @@ const MemberJoin = () => {
           id="memberId"
           value={member.memberId}
           onChange={changeMember}
+          onBlur={checkId}
         ></input>
       </div>
+      <p
+        className={
+          "idCheck-msg" +
+          (idCheck === 0 ? "" : idCheck === 1 ? " valid" : " invalid")
+        }
+      >
+        {idCheck === 0
+          ? ""
+          : idCheck === 1
+          ? "사용가능한 아이디입니다."
+          : idCheck === 2
+          ? "아이디는 영어 대/소문자 숫자로 4~8글자 입니다."
+          : "이미 사용중인 아이디입니다."}
+      </p>
       <div className="join-wrap">
         <label htmlFor="memberPw" className="join-password">
           비밀번호
@@ -66,8 +157,10 @@ const MemberJoin = () => {
           id="memberPwRe"
           value={memberPwRe}
           onChange={changeMemberPwRe}
+          onBlur={checkPw}
         ></input>
       </div>
+      <p className="pwCheck-msg" ref={pwMessage}></p>
       <div className="join-wrap">
         <label htmlFor="memberNickname">닉네임</label>
       </div>
@@ -83,24 +176,28 @@ const MemberJoin = () => {
 
       <div className="join-wrap">
         <label htmlFor="memberGender">성별</label>
-      </div>
 
-      <div className="gender-input-item">
-        <div className="radio-group">
-          <FormControl>
-            <RadioGroup row defaultValue="female" name="radio-buttons-group">
-              <FormControlLabel
-                value="member"
-                control={<Radio />}
-                label="남자"
-              />
-              <FormControlLabel
-                value="seller"
-                control={<Radio />}
-                label="여자"
-              />
-            </RadioGroup>
-          </FormControl>
+        <div className="gender-input-item">
+          <div className="radio-group">
+            <FormControl>
+              <RadioGroup row defaultValue="female" name="radio-buttons-group">
+                <FormControlLabel
+                  value="m"
+                  control={<Radio />}
+                  label="남자"
+                  name="memberGender"
+                  onChange={changeMember}
+                />
+                <FormControlLabel
+                  value="f"
+                  control={<Radio />}
+                  label="여자"
+                  name="memberGender"
+                  onChange={changeMember}
+                />
+              </RadioGroup>
+            </FormControl>
+          </div>
         </div>
       </div>
 
@@ -143,16 +240,52 @@ const MemberJoin = () => {
       <div className="join-wrap">
         <label htmlFor="memberEmail">이메일</label>
       </div>
-      <div className="input-item">
+      <div className="email-input">
         <input
           type="text"
+          name="memberEmailId"
+          value={member.memberEmailId}
+          onChange={changeMember}
+          className="email-input-item"
+        ></input>
+        <span className="email-mark" style={{ color: "#0056b3" }}>
+          @
+        </span>
+        <input
+          type="text"
+          className="email-input-item"
           name="memberEmail"
-          id="memberEmail"
           value={member.memberEmail}
           onChange={changeMember}
         ></input>
+        <select
+          name="domain"
+          className="email-domain"
+          onChange={(e) => {
+            if (e.target.value === "self-input") {
+              e.target.previousSibling.disabled = false;
+              member.memberEmail = "";
+              setMember({ ...member });
+            } else {
+              e.target.previousSibling.disabled = true;
+              setMember({ ...member, memberEmail: e.target.value });
+            }
+          }}
+        >
+          <option value="naver.com">naver.com</option>
+          <option value="gmail.com">gmail.com</option>
+          <option value="daum.net">daum.net</option>
+          <option value="yahoo.com">yahoo.com</option>
+          <option value="hotmail.com">hotmail.com</option>
+          <option value="self-input" selected>
+            직접입력
+          </option>
+        </select>
+        <button type="button" className="email-btn" onClick={sendEmail}>
+          인증하기
+        </button>
       </div>
-      <button type="button" className="join-btn">
+      <button type="button" className="join-btn" onClick={join}>
         회원가입 완료
       </button>
     </section>

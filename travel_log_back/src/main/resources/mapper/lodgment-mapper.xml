@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.co.iei.seller.model.dao.SellerDao">
+ 	<!-- 등록한 호텔 조회 -->
  	<select id="selectLodgmentList" resultType="lodgmentStorage">
  		select * from LODGMENT_STORAGE where seller_no=#{sellerNo}
  	</select>
@@ -10,5 +11,11 @@
 		select * from HOTEL_XLSX
 		where X_LODGMENT_NAME like '%'||#{searchInfo}||'%'
 		or X_LODGMENT_ADDR like '%'||#{searchInfo}||'%'
+	</select>
+	
+	<!-- 해당 호텔 조회 -->
+	<select id="selectOneLodgment" resultType="lodgmentStorage">
+		select * from lodgment_storage
+		where lodgment_no = #{lodgmentNo}
 	</select>
 </mapper>
