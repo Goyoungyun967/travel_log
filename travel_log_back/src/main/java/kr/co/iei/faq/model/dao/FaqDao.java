@@ -19,4 +19,8 @@ public interface FaqDao {
 
 	int deleteFaq(int faqNo);
 
+	List selectFaqTypeList();
+
+	String[] selectFaqCategory();
+
 }

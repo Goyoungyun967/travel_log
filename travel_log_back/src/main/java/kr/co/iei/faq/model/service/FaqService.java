@@ -1,6 +1,8 @@
 package kr.co.iei.faq.model.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,5 +42,15 @@ public class FaqService {
 	public int deleteFaq(int faqNo) {
 		int result = faqDao.deleteFaq(faqNo);
 		return result;
+	}
+
+	public Map selectFaqTypeList() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		String[] category = faqDao.selectFaqCategory();
+		List list = faqDao.selectFaqTypeList();
+		map.put("category", category);
+		map.put("list", list);
+		
+		return map;
 	}
 }

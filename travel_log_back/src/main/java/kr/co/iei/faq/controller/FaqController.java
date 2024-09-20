@@ -1,6 +1,7 @@
 package kr.co.iei.faq.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,13 @@ public class FaqController {
 	@Autowired
 	private FaqService faqService;
 	
-	@GetMapping(value="/{faqType}")
+	@GetMapping(value="/faqType")
+	public ResponseEntity<Map> getFaqType(){
+		Map map = faqService.selectFaqTypeList();
+		return ResponseEntity.ok(map);
+	}
+	
+	@GetMapping(value="/faqList/{faqType}")
 	@Operation(summary = "faq리스트 조회",description = "타입을 받아서 faq리스트 조회")
 	public ResponseEntity<List> getFaqList(@PathVariable String faqType){
 		List list = faqService.selectFaqList(faqType);
