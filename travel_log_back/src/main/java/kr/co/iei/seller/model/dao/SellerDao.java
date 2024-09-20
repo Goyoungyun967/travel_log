@@ -9,4 +9,6 @@ public interface SellerDao {
 
 	List selectLodgmentList(int sellerNo);
 
+	List selectXlsxHotelInfo(String searchInfo);
+
 }

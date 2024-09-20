@@ -1,3 +1,9 @@
+import {
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
 import { useState } from "react";
 
 const MemberJoin = () => {
@@ -51,9 +57,7 @@ const MemberJoin = () => {
         ></input>
       </div>
       <div className="join-wrap">
-        <label htmlFor="memberPwRe" className="join-password">
-          비밀번호확인
-        </label>
+        <label htmlFor="memberPwRe">비밀번호확인</label>
       </div>
       <div className="input-item">
         <input
@@ -76,34 +80,30 @@ const MemberJoin = () => {
           onChange={changeMember}
         ></input>
       </div>
+
       <div className="join-wrap">
         <label htmlFor="memberGender">성별</label>
       </div>
-      <div className="input-item">
-        <label className="gender-label">
-          <input
-            type="radio"
-            name="memberGender"
-            id="male"
-            value={"m"}
-            onChange={changeMember}
-            className="gender-input"
-          />
-          남자
-        </label>
 
-        <label className="gender-label">
-          <input
-            type="radio"
-            name="memberGender"
-            id="female"
-            value={"f"}
-            onChange={changeMember}
-            className="gender-input"
-          />
-          여자
-        </label>
+      <div className="gender-input-item">
+        <div className="radio-group">
+          <FormControl>
+            <RadioGroup row defaultValue="female" name="radio-buttons-group">
+              <FormControlLabel
+                value="member"
+                control={<Radio />}
+                label="남자"
+              />
+              <FormControlLabel
+                value="seller"
+                control={<Radio />}
+                label="여자"
+              />
+            </RadioGroup>
+          </FormControl>
+        </div>
       </div>
+
       <div className="join-wrap">
         <label htmlFor="memberAge">나이</label>
       </div>

@@ -4,4 +4,11 @@
  	<select id="selectLodgmentList" resultType="lodgmentStorage">
  		select * from LODGMENT_STORAGE where seller_no=#{sellerNo}
  	</select>
+ 	
+ 	<!-- 기존 호텔 검색 - 이름이나 주소에 해당 단어 섞여 있으면 조회 (리스트) -->
+	<select id="selectXlsxHotelInfo" resultType="hotelXlsx">
+		select * from HOTEL_XLSX
+		where X_LODGMENT_NAME like '%'||#{searchInfo}||'%'
+		or X_LODGMENT_ADDR like '%'||#{searchInfo}||'%'
+	</select>
 </mapper>

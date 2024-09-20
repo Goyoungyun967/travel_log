@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Select = () => {
   return (
-    <div className="select">
+    <div className="select-join">
       <Link to="memberJoin" className="general-member">
         일반회원
       </Link>
