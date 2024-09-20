@@ -1,0 +1,66 @@
+.lodgment-payment-info-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  width: 90%;
+  margin: 0 auto;
+}
+.lodgment-payment-info-wrap div {
+  flex: 1 1 600px;
+}
+.lodgment-payment-img {
+  width: 60%;
+  height: 100%;
+  margin-left: 10px;
+}
+.lodgment-payment-img img {
+  width: 100%;
+  border-radius: 5px;
+}
+.lodgment-payment-detail-wrap {
+  width: 60%;
+}
+
+.lodgment-payment-detail {
+  width: 100%;
+  margin-left: 50px;
+  margin-top: 60px;
+}
+.lodgment-payment-detail tr {
+  margin-top: 10px;
+}
+.lodgment-payment-info {
+  margin-top: 50px;
+}
+.payment-user-info-wrap {
+  margin: 0 auto;
+  margin-top: 50px;
+  width: 80%;
+  border: 3px solid var(--gray6);
+  border-radius: 15px;
+}
+.text-paymentName-info {
+  text-align: center;
+}
+.payment-user-info-wrap ul {
+  margin: 0;
+  padding: 0;
+}
+.payment-user-info-wrap li {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.payment-input {
+  width: 100%;
+  border-radius: 10px;
+  height: 50px;
+  margin-bottom: 20px;
+}
+.payment-textarea {
+  width: 100%;
+  height: 60px;
+  border-radius: 10px;
+  resize: none;
+}
+.payment-user-info-wrap > ul:last-child {
+  margin-bottom: 30px;
+}
