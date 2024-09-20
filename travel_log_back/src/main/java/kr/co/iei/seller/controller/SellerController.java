@@ -62,6 +62,7 @@ public class SellerController {
 		return ResponseEntity.ok(ls);
 	}
 	
+	
 	// 판매자 정보 조회
 	// public ResponseEntity<판매자DTO> selectOneSeller(@RequestHeader("Authorization") String token){ => 토큰 사용해서 조회
 	@GetMapping
