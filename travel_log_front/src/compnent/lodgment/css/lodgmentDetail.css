@@ -1,0 +1,58 @@
+.lodgment-detail-img {
+  width: 90%;
+  margin: 0 auto;
+}
+.lodgment-detail-img img {
+  width: 100%;
+  border-radius: 10px;
+}
+.lodgment-detail-info {
+  padding-left: 80px;
+  padding-right: 80px;
+}
+.lodgment-detail-info table {
+  margin-top: 20px;
+  width: 100%;
+}
+.lodgment-detail-info tr {
+  height: 40px;
+  font-size: 18px;
+}
+
+.member-rating {
+  text-align: right;
+}
+.lodgment-detail-name {
+  font-size: 24px;
+  font-weight: 900;
+}
+.lodgment-detail-map-wrap {
+  width: 100%;
+  margin-top: 50px;
+}
+.lodgment-detail-map {
+  width: 100%;
+  margin: 0 auto;
+  width: 90%;
+}
+.lodgment-loom-type-wrap {
+  margin: 50px;
+}
+.lodgment-loom-type {
+  margin: 0 auto;
+  width: 90%;
+  height: 100%;
+  border: 3px solid var(--gray6);
+  border-radius: 15px;
+}
+.lodgment-loom-table {
+  width: 100%;
+}
+.lodgment-loom-type-img {
+  width: 100%;
+}
+.lodgment-loom-type-img img {
+  min-width: 100%;
+  width: 80%;
+  border-radius: 15px;
+}

@@ -14,7 +14,8 @@ import { Backspace } from "@mui/icons-material";
 
 const LodgmentList = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
-  console.log(BackServer);
+  //호텔 / 리조트 / 펜션으로 검색할 경우
+  const [lodgementType, setLodgmentType] = useState("");
   //메인에서 검색해서 들어올 경우, 검색 정보 저장
   const { state } = useLocation();
   const startDay = dayjs().add(1, "day").toDate();
@@ -93,7 +94,7 @@ const LodgmentList = () => {
               <div className="lodgment-info-text">가격</div>
               <div className="lodgment-sellprice-info">1박 기준</div>
             </div>
-            <Box sx={{ width: 280 }}>
+            <Box sx={{ width: "100%" }}>
               <Slider
                 value={value} // 슬라이더의 현재 값
                 onChange={handleChange} // 슬라이더 값 변화 시 호출
@@ -130,10 +131,18 @@ const LodgmentList = () => {
           </div>
           <div className="lodgment-service-wrap">
             <div className="lodgment-info-text">서비스</div>
-            <div>서비스요소들~~~~</div>
+            <div className="lodgment-service-box">
+              {serviceTag.map((service, i) => {
+                return (
+                  <button key={"service=" + i} className="lodgment-service">
+                    {service}
+                  </button>
+                );
+              })}
+            </div>
           </div>
           <div className="radio-lodgment-wrap">
-            <div className="lodgment-info-text">정렬</div>
+            <div className="lodgment-info-text"></div>
             <div className="lodgment-radio">
               <RadioGroup
                 aria-labelledby="demo-controlled-radio-buttons-group"
@@ -164,18 +173,23 @@ const LodgmentList = () => {
           <div className="lodgment-type-select">
             <button type="button">호텔</button>
             <button type="button">리조트</button>
-            <button type="button"> 펜션</button>
+            <button type="button">펜션</button>
           </div>
           <div className="lodgment-info-wrap">
-            <LegdmentInfo />
+            <LegdmentInfo lodgment={lodgment} />
           </div>
         </div>
       </div>
     </section>
   );
 };
-const LegdmentInfo = () => {
-  return <div>정보 정보</div>;
+const LegdmentInfo = (props) => {
+  const lodgment = props.lodgment;
+  return (
+    <>
+      <div>{lodgment === "" ? "여행지를 입력해주세요." : ""}</div>
+    </>
+  );
 };
 
 export default LodgmentList;

@@ -1,0 +1,111 @@
+.room_box-wrap {
+  border: 1px solid #ccc;
+  padding: 30px;
+  width: 700px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.room_box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.hotel_info {
+  width: 700px;
+  display: flex;
+  border-bottom: 1px solid #333;
+}
+.hotel_info > .lod_title {
+  width: 400px;
+}
+.hotel_info > .lod_title h3 {
+  width: 100%;
+  white-space: nowrap; /* 줄 바꿈 방지 */
+  overflow: hidden; /* 넘치는 부분 숨김 */
+  text-overflow: ellipsis; /* 넘치는 부분 생략 표시 (...) */
+}
+.hotel_info > .image > img {
+  margin: 20px;
+  margin-top: 0;
+  width: 250px;
+}
+.room_box > h5 {
+  padding: 10px;
+  color: #ccc;
+}
+.photo {
+  padding: 10px;
+}
+
+.input-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+.input-item {
+  padding: 25px;
+  display: flex;
+  flex-wrap: nowrap;
+  margin-top: 10px;
+  width: 300px;
+}
+.input-item > .input-title {
+  margin-right: 10px;
+  width: 80px;
+}
+.room_price > input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.input > input {
+  border: none;
+  width: 200px;
+  border-bottom: 2px solid #ddd;
+}
+.room_info_add > .input-wrap > .input-item {
+  width: 300px;
+}
+.hash-tag {
+  width: 650px;
+}
+.hash-tag > h3 {
+  padding: 10px;
+}
+
+.hash-tag > .tag > input {
+  font-size: 10px;
+  margin: 2px;
+  border: none;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+}
+.hash-tag > .tag > input:hover {
+  background-color: skyblue;
+  cursor: pointer;
+}
+.tag input[type="button"].active {
+  background-color: skyblue;
+  color: white;
+  border-color: skyblue;
+}
+.room_info_add > .input-wrap > .box-notice {
+  margin-top: 20px;
+  width: 450px;
+}
+.btn {
+  margin-top: 25px;
+  width: 100px;
+  border-radius: 10px;
+  border: none;
+  padding: 5px;
+}
+.primary {
+  background-color: var(--main5);
+  color: var(--main2);
+}
+/*------- 지울 거 ------*/
+.photo_add {
+  background-color: #ccc;
+}
