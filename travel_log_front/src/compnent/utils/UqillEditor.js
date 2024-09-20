@@ -1,7 +1,19 @@
 import { useRef } from "react";
 import ReactQuill from "react-quill";
-const UqillEditor = () => {
-  const quillRef = useRef(null);
+
+const UqillEditor = (props) => {
+  // 보여줄 내용
+  const boardContent = props.boardContent;
+  // 수정할 내용
+  const setBoardContent = props.setBoardContent;
+  const editorRef = useRef(null);
+
+  // 값이 바뀔때 마다 set
+  const changeValue = () => {
+    const editorData = editorRef.current.getInstance().getHTML();
+    setBoardContent(editorData);
+  };
+
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, false] }],
@@ -14,11 +26,17 @@ const UqillEditor = () => {
   };
   return (
     <>
-      <ReactQuill
-        ref={quillRef}
-        style={{ width: "700px", height: "400px" }}
-        modules={modules}
-      />
+      {boardContent || boardContent === "" ? (
+        <ReactQuill
+          ref={editorRef}
+          value={boardContent}
+          onChange={setBoardContent}
+          style={{ width: "700px", height: "400px" }}
+          modules={modules}
+        />
+      ) : (
+        ""
+      )}
     </>
   );
 };

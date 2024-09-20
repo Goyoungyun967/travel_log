@@ -166,13 +166,10 @@
 .insertLodgmentBtn {
   margin-top: 30px;
 }
-/*------- 지울 거 ------*/
-.addr {
-  background-color: #ccc;
-  width: 600px;
-  height: 300px;
-}
+
 .editor {
+  display: flex;
+  justify-content: center;
   width: 750px;
-  height: 400px;
+  height: 500px;
 }

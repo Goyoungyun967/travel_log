@@ -8,7 +8,10 @@ const InsertLodgment = () => {
   // 보내줄 data
   const [hotelInof, sethotelInfo] = useState({});
   console.log(hotelInof);
-
+  const [boardContent, setBoardContent] = useState(
+    "<h2>숙소 공지사항</h2><p><br></p><p><br></p><h2>숙소 정보</h2><p><br></p><p><br></p><h2>주차장 정보</h2><h5><br></h5>"
+  );
+  console.log(boardContent);
   //호텔 명
   const [hotelName, setHotelName] = useState("");
   // const []
@@ -298,9 +301,12 @@ const InsertLodgment = () => {
             </div>
           </div>
           <div className="box box-notice">
-            <h5>공지사항</h5>
+            <h3>공지사항</h3>
             <div className="editor">
-              <UqillEditor />
+              <UqillEditor
+                boardContent={boardContent}
+                setBoardContent={setBoardContent}
+              />
             </div>
           </div>
           <button className="insertLodgmentBtn btn primary">등록하기</button>
