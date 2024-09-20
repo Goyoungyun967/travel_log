@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "./css/insert_lodgment.css";
 import axios from "axios";
 import DaumPostcode from "react-daum-postcode";
+import UqillEditor from "../utils/UqillEditor";
 
 const InsertLodgment = () => {
   // 보내줄 data
@@ -298,9 +299,11 @@ const InsertLodgment = () => {
           </div>
           <div className="box box-notice">
             <h5>공지사항</h5>
-            <div className="editor">에디터 들어갈 자리</div>
+            <div className="editor">
+              <UqillEditor />
+            </div>
           </div>
-          <button className="btn primary">등록하기</button>
+          <button className="insertLodgmentBtn btn primary">등록하기</button>
         </div>
       </form>
     </div>

@@ -163,6 +163,9 @@
   border: none;
   border-bottom: 2px solid #ccc;
 }
+.insertLodgmentBtn {
+  margin-top: 30px;
+}
 /*------- 지울 거 ------*/
 .addr {
   background-color: #ccc;
@@ -170,8 +173,6 @@
   height: 300px;
 }
 .editor {
-  color: red;
-  background-color: #ccc;
   width: 750px;
-  height: 300px;
+  height: 400px;
 }
