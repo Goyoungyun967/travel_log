@@ -1,0 +1,109 @@
+.room_box-wrap {
+  border: 1px solid #ccc;
+  padding: 30px;
+  width: 700px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.room_box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.hotel_info {
+  display: flex;
+  height: 200px;
+  border-bottom: 1px solid #333;
+}
+.image {
+  margin-right: 80px;
+}
+.image > img {
+  width: 200px;
+}
+.room_box > h5 {
+  padding: 10px;
+  color: #ccc;
+}
+.photo {
+  padding: 10px;
+}
+
+.input-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+.input-item {
+  padding: 25px;
+  display: flex;
+  flex-wrap: nowrap;
+  margin-top: 10px;
+  width: 300px;
+}
+.input-item > .input-title {
+  margin-right: 10px;
+  width: 80px;
+}
+.input > input {
+  border: none;
+  width: 200px;
+  border-bottom: 2px solid #ddd;
+}
+.room_info_add > .input-wrap > .input-item {
+  width: 300px;
+}
+.hash-tag {
+  width: 650px;
+}
+.hash-tag > h3 {
+  padding: 10px;
+}
+
+.hash-tag > .tag > input {
+  font-size: 10px;
+  margin: 2px;
+  border: none;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+}
+.hash-tag > .tag > input:hover {
+  background-color: skyblue;
+  cursor: pointer;
+}
+.tag input[type="button"].active {
+  background-color: skyblue;
+  color: white;
+  border-color: skyblue;
+}
+.room_info_add > .input-wrap > .box-notice {
+  margin-top: 20px;
+  width: 450px;
+}
+.btn {
+  margin-top: 25px;
+  width: 100px;
+  border-radius: 10px;
+  border: none;
+  padding: 5px;
+}
+.primary {
+  background-color: var(--main5);
+  color: var(--main2);
+}
+/*------- 지울 거 ------*/
+.hotel_info {
+  background-color: #eee;
+  color: red;
+}
+.photo_add {
+  background-color: #ccc;
+}
+.toast {
+  color: red;
+  background-color: #ccc;
+  width: 700px;
+  height: 300px;
+}
