@@ -4,6 +4,14 @@ import axios from "axios";
 import DaumPostcode from "react-daum-postcode";
 
 const InsertLodgment = () => {
+  // 보내줄 data
+  const [hotelInof, sethotelInfo] = useState({});
+  console.log(hotelInof);
+
+  //호텔 명
+  const [hotelName, setHotelName] = useState("");
+  // const []
+
   // back으로 보내는 이미지
   const [lodgmentImg, setLodgmentImg] = useState(null);
   // 미리보기용 이미지
@@ -41,7 +49,7 @@ const InsertLodgment = () => {
   };
 
   // 호텔 타입 저장
-  const [lodgmentType, setLodgmentType] = useState(1);
+  const [lodgmentType, setLodgmentType] = useState(1); // -------
 
   // 선택된 호텔 타입의 value 값을 저장
   const lodgmentTypeChange = (e) => {
@@ -49,13 +57,16 @@ const InsertLodgment = () => {
   };
 
   // 기존 호텔 검색
+  const [hotelList, setHotelList] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const searchInputChange = (e) => {
     setSearchInput(e.target.value);
+  };
+  const search = () => {
     axios
       .get(`${backServer}/seller/xlsxLodgment/${searchInput}`)
       .then((res) => {
-        console.log(res);
+        setHotelList(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -140,26 +151,20 @@ const InsertLodgment = () => {
                   value={searchInput}
                   onChange={searchInputChange}
                 />
+                <button type="button" onClick={search}>
+                  <div className="material-icons">search</div>
+                </button>
               </div>
               <div className="search-item-wrap">
-                <div className="search-item">
-                  <div className="item-title">000호텔</div>
-                  <div className="item-addr">
-                    주소주소주소주소주소주소주소주소주소주소
-                  </div>
-                </div>
-                <div className="search-item">
-                  <div className="item-title">000호텔</div>
-                  <div className="item-addr">
-                    주소주소주소주소주소주소주소주소주소주소
-                  </div>
-                </div>
-                <div className="search-item">
-                  <div className="item-title">000호텔</div>
-                  <div className="item-addr">
-                    주소주소주소주소주소주소주소주소주소주소
-                  </div>
-                </div>
+                {hotelList.map((hotel, i) => {
+                  return (
+                    <SearchHotelList
+                      key={"hotel-" + i}
+                      sethotelInfo={sethotelInfo}
+                      hotel={hotel}
+                    />
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -192,9 +197,19 @@ const InsertLodgment = () => {
                     </div>
                     <div className="addr-api-input">
                       <label htmlFor="addrCode">우편번호</label>
-                      <input type="text" id="addrText" value={zoneCode} />
+                      <input
+                        type="text"
+                        id="addrCode"
+                        value={zoneCode}
+                        onChange={(e) => setZoneCode(e.target.value)}
+                      />
                       <label htmlFor="addrText">주소</label>
-                      <input type="text" id="addrText" value={address} />
+                      <input
+                        type="text"
+                        id="addrText"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                      />
                       <label htmlFor="addrDeText">상세 주소</label>
                       <input
                         type="text"
@@ -288,6 +303,21 @@ const InsertLodgment = () => {
           <button className="btn primary">등록하기</button>
         </div>
       </form>
+    </div>
+  );
+};
+
+// 기존 호텔
+const SearchHotelList = (props) => {
+  const hotel = props.hotel;
+  const sethotelInof = props.sethotelInfo;
+  const inputHotelInfo = () => {
+    sethotelInof(hotel);
+  };
+  return (
+    <div className="search-item" onClick={inputHotelInfo}>
+      <div className="item-title">{hotel.xlodgmentName}</div>
+      <div className="item-addr">{hotel.xlodgmentAddr}</div>
     </div>
   );
 };

@@ -102,7 +102,6 @@
   font-weight: bold;
 }
 .insert-lodgment-item > .input-item > .input > input {
-  background-color: pink;
   border: none;
   border-radius: 0px;
   border-bottom: 2px solid #ccc;
@@ -115,7 +114,6 @@
 
 .search-item-wrap {
   margin: 10px;
-  background-color: yellow;
   width: 280px;
   height: 200px;
   overflow: scroll;
