@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dao.SellerDao;
+import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 
 @Service
 public class SellerService {
@@ -29,6 +30,12 @@ public class SellerService {
 	public MemberDTO selectOneSeller(int sellerNo) {
 //		SellerDTO로 바꿔야함
 		return null;
+	}
+
+	// 호텔 정보 출력
+	public LodgmentStorageDTO selectOneLodgment(int lodgmentNo) {
+		LodgmentStorageDTO ls = sellerDao.selectOneLodgment(lodgmentNo);
+		return ls;
 	}
 
 
