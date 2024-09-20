@@ -18,6 +18,7 @@ public class MemberDTO {
 	private int memberAge;
 	private String memberGender;
 	private String memberPhone;
+	private String memberAddr;
 	private String memberEmail;
 	private String enrollDate;
 	private int memberLevel;

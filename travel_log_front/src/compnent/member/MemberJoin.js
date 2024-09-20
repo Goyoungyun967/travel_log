@@ -20,7 +20,9 @@ const MemberJoin = () => {
     memberAddr: "",
     memberEmail: "",
     memberNickname: "",
+    memberEmailId: "",
   });
+
   //아이디 중복체크 결과에따라서 바뀔 state
   //0 : 아직 입력하지 않은 상테,
   //1 : 정규표현식,중복체크 모두 통과한 경우
@@ -75,6 +77,7 @@ const MemberJoin = () => {
 
   const join = () => {
     if (idCheck === 1 && pwMessage.current.classList.contains("valid")) {
+      member.memberEmail = member.memberEmailId + "@" + member.memberEmail;
       axios
         .post(`${backServer}/member`, member)
         .then((res) => {
@@ -86,6 +89,19 @@ const MemberJoin = () => {
         });
     }
   };
+
+  const sendEmail = () => {
+    member.memberEmail = member.memberEmailId + "@" + member.memberEmail;
+    axios
+      .get(`${backServer}/sendEmail/memberEmail/${member.memberEmail}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <section className="join-content">
       <div className="member-join">일반회원가입</div>
@@ -224,16 +240,52 @@ const MemberJoin = () => {
       <div className="join-wrap">
         <label htmlFor="memberEmail">이메일</label>
       </div>
-      <div className="input-item">
+      <div className="email-input">
         <input
           type="text"
+          name="memberEmailId"
+          value={member.memberEmailId}
+          onChange={changeMember}
+          className="email-input-item"
+        ></input>
+        <span className="email-mark" style={{ color: "#0056b3" }}>
+          @
+        </span>
+        <input
+          type="text"
+          className="email-input-item"
           name="memberEmail"
-          id="memberEmail"
           value={member.memberEmail}
           onChange={changeMember}
         ></input>
+        <select
+          name="domain"
+          className="email-domain"
+          onChange={(e) => {
+            if (e.target.value === "self-input") {
+              e.target.previousSibling.disabled = false;
+              member.memberEmail = "";
+              setMember({ ...member });
+            } else {
+              e.target.previousSibling.disabled = true;
+              setMember({ ...member, memberEmail: e.target.value });
+            }
+          }}
+        >
+          <option value="naver.com">naver.com</option>
+          <option value="gmail.com">gmail.com</option>
+          <option value="daum.net">daum.net</option>
+          <option value="yahoo.com">yahoo.com</option>
+          <option value="hotmail.com">hotmail.com</option>
+          <option value="self-input" selected>
+            직접입력
+          </option>
+        </select>
+        <button type="button" className="email-btn" onClick={sendEmail}>
+          인증하기
+        </button>
       </div>
-      <button type="button" className="join-btn">
+      <button type="button" className="join-btn" onClick={join}>
         회원가입 완료
       </button>
     </section>
