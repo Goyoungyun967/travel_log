@@ -350,3 +350,16 @@
   margin-top: 10px; /* 위쪽 여백 추가 */
   z-index: 10; /* 다른 요소 위로 */
 }
+/*
+여행 게시판 글 작성
+*/
+.write-content-wrap {
+  border-radius: 20px;
+  border: 1px solid var(--gray5);
+  height: 100vh;
+}
+.write-page-title {
+  text-align: center;
+  margin: 20px;
+  border-bottom: 1px solid var(--gray6);
+}
