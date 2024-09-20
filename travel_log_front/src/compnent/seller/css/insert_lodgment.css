@@ -85,6 +85,18 @@
 .search-hotel .search {
   width: 50px;
 }
+.insert-lodgment-item > .input-item {
+  margin-top: 10px;
+}
+.insert-lodgment-item > .input-item > .input-title {
+  font-weight: bold;
+}
+.insert-lodgment-item > .lodgment-type {
+  margin-top: 20px;
+}
+.insert-lodgment-item > .lodgment-type > .input-title {
+  font-weight: bold;
+}
 .insert-lodgment-item > .input-item > .input > input {
   background-color: pink;
   border: none;
@@ -92,9 +104,9 @@
   border-bottom: 2px solid #ccc;
   width: 200px;
 }
-.lodgment-type input:focus {
-  outline: none; /* 기본 outline 제거 */
-  box-shadow: none; /* 기본 box-shadow 제거 */
+#lodgmentName {
+  font-size: 20px;
+  width: 500px;
 }
 .msg {
   float: left;
