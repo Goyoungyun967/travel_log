@@ -20,7 +20,12 @@
 .box-img {
   width: 300px;
   height: 400px;
-  background-color: pink;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.box-img > img {
+  width: 250px;
 }
 .image {
   width: 300px;
@@ -80,7 +85,6 @@
 }
 .search-hotel > .input > input {
   width: 200px;
-  margin-right: 10px;
 }
 .search-hotel .search {
   width: 50px;
@@ -108,12 +112,7 @@
   font-size: 20px;
   width: 500px;
 }
-.msg {
-  float: left;
-  padding: 3px 10px;
-  color: red;
-  font-size: 11px;
-}
+
 .search-item-wrap {
   margin: 10px;
   background-color: yellow;
@@ -142,13 +141,37 @@
 .lodgment-type > .input > label {
   margin-left: 30px;
 }
+.addr-block {
+  display: flex;
+}
+.addr-block > .addr-search-api {
+  display: block;
+  width: 400px;
+}
+.addr-block > .addr-api-input {
+  width: 300px;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  margin-left: 20px;
+}
+.addr-block > .addr-api-input > label {
+  margin-top: 50px;
+}
+.addr-block > .addr-api-input > input {
+  font-size: 16px;
+  width: 250px;
+  margin-top: 15px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+}
 /*------- 지울 거 ------*/
 .addr {
   background-color: #ccc;
   width: 600px;
   height: 300px;
 }
-.toast {
+.editor {
   color: red;
   background-color: #ccc;
   width: 750px;
