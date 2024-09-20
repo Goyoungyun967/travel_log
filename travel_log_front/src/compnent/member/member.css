@@ -204,8 +204,7 @@
   margin-bottom: 20px; /* 아래 여백 */
 }
 
-.input-item input[type="text"],
-.input-item input[type="password"] {
+.join-content .input-item input {
   padding: 12px; /* 안쪽 여백 */
   border: 1px solid #ccc; /* 테두리 */
   border-radius: 5px; /* 모서리 둥글게 */
@@ -213,8 +212,7 @@
   outline: none; /* 포커스 시 테두리 제거 */
   transition: border-color 0.3s, box-shadow 0.3s; /* 테두리 색상 및 그림자 전환 효과 */
 }
-.input-item input[type="text"]:focus,
-.input-item input[type="password"]:focus {
+.join-content .input-item input:focus {
   border-color: #007bff; /* 포커스 시 테두리 색상 변경 */
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 포커스 시 그림자 추가 */
 }
