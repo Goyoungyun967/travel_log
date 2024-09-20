@@ -25,6 +25,7 @@ const BoardList = () => {
     { title: "경북" },
     { title: "경남" },
     { title: "전북" },
+    { title: "전북" },
     { title: "제주" },
   ]);
 
