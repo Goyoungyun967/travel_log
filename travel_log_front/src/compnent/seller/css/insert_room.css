@@ -13,15 +13,23 @@
   justify-content: center;
 }
 .hotel_info {
+  width: 700px;
   display: flex;
-  height: 200px;
   border-bottom: 1px solid #333;
 }
-.image {
-  margin-right: 80px;
+.hotel_info > .lod_title {
+  width: 400px;
 }
-.image > img {
-  width: 200px;
+.hotel_info > .lod_title h3 {
+  width: 100%;
+  white-space: nowrap; /* 줄 바꿈 방지 */
+  overflow: hidden; /* 넘치는 부분 숨김 */
+  text-overflow: ellipsis; /* 넘치는 부분 생략 표시 (...) */
+}
+.hotel_info > .image > img {
+  margin: 20px;
+  margin-top: 0;
+  width: 250px;
 }
 .room_box > h5 {
   padding: 10px;
@@ -45,6 +53,10 @@
 .input-item > .input-title {
   margin-right: 10px;
   width: 80px;
+}
+.room_price > input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 .input > input {
   border: none;
@@ -94,16 +106,6 @@
   color: var(--main2);
 }
 /*------- 지울 거 ------*/
-.hotel_info {
-  background-color: #eee;
-  color: red;
-}
 .photo_add {
   background-color: #ccc;
-}
-.toast {
-  color: red;
-  background-color: #ccc;
-  width: 700px;
-  height: 300px;
 }

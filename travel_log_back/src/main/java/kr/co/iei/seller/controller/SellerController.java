@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.member.model.dto.MemberDTO;
+import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.service.SellerService;
 
 @CrossOrigin("*")
@@ -54,7 +55,12 @@ public class SellerController {
 	
 	
 	// 해당 호텔 정보
-	@Operation(summary = "호텔 정보")
+	@Operation(summary = "호텔 정보", description = "호텔 정보 출력")
+	@GetMapping(value="/lodgmentInfo/{lodgmentNo}")
+	public ResponseEntity<LodgmentStorageDTO> selectOneLodgment(@PathVariable int lodgmentNo){
+		LodgmentStorageDTO ls = sellerService.selectOneLodgment(lodgmentNo);
+		return ResponseEntity.ok(ls);
+	}
 	
 	// 판매자 정보 조회
 	// public ResponseEntity<판매자DTO> selectOneSeller(@RequestHeader("Authorization") String token){ => 토큰 사용해서 조회
