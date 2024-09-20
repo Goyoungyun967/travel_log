@@ -21,6 +21,32 @@ const BoardFrm = (props) => {
   //썸네일 미리보기용 state(데이터 전송을 안할꺼임)
   const [boardImg, setBoardImg] = useState(null);
   //썸네일 이미지 첨부파일이 변경되면 동작할 함수
+  //지역 선택
+  const [areaSearch, setAreaSearch] = useState([
+    { title: "서울" },
+    { title: "경기" },
+    { title: "부산" },
+    { title: "대구" },
+    { title: "인천" },
+    { title: "대전" },
+    { title: "광주" },
+    { title: "울산" },
+    { title: "세종" },
+    { title: "강원" },
+    { title: "충북" },
+    { title: "충남" },
+    { title: "경북" },
+    { title: "경남" },
+    { title: "전북" },
+    { title: "전북" },
+    { title: "제주" },
+  ]);
+  const [selectedArea, setSelectedArea] = useState("");
+
+  const handleChange = (event) => {
+    setSelectedArea(event.target.value);
+  };
+  //-------------------------------------------
   const changeThumbnail = (e) => {
     //요소들이 겹쳐있는 상태에서 해당 요소를 선택할때는 currentTarget(target을 사용하면 여러요소가 한번에 작용)
 
@@ -60,7 +86,6 @@ const BoardFrm = (props) => {
   console.log(showBoardFile);
   return (
     <div>
-      <div className="board-thumb-wrap"></div>
       <div className="board-info-wrap">
         <table className="board-tbl">
           <tbody>
@@ -78,6 +103,63 @@ const BoardFrm = (props) => {
                     onChange={setBoardTitle}
                   />
                 </div>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <label htmlFor="boardTitle">Thumbnail</label>
+              </th>
+              <td>
+                <div className="board-thumb-wrap">
+                  {boardImg ? (
+                    <img
+                      src={boardImg}
+                      onClick={() => {
+                        thumbnailRef.current.click();
+                      }}
+                    />
+                  ) : boardThumb ? (
+                    <img
+                      src={`${backServer}/board/thumb/${boardThumb}`}
+                      onClick={() => {
+                        thumbnailRef.current.click();
+                      }}
+                    />
+                  ) : (
+                    <img
+                      src="/image/lodgment_default_img.png"
+                      onClick={() => {
+                        thumbnailRef.current.click();
+                      }}
+                    ></img>
+                  )}
+                  <input
+                    ref={thumbnailRef}
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={changeThumbnail}
+                  ></input>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <label htmlFor="area-select">지역 선택</label>
+              </th>
+              <td>
+                <select
+                  id="area-select"
+                  value={selectedArea}
+                  onChange={handleChange}
+                >
+                  <option value="">-- 선택하세요 --</option>
+                  {areaSearch.map((area, index) => (
+                    <option key={index} value={area.title}>
+                      {area.title}
+                    </option>
+                  ))}
+                </select>
               </td>
             </tr>
             <tr>

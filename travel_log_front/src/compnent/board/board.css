@@ -408,6 +408,23 @@
 .board-tbl th {
   border: 1px solid var(--gray6);
 }
+/*지역 선택*/
+#area-select {
+  width: 100%; /* 드롭다운의 너비를 셀에 맞춤 */
+  padding: 10px; /* 패딩 추가 */
+  border: 1px solid #ccc; /* 테두리 색상 */
+  border-radius: 10px;
+  font-size: 16px; /* 글자 크기 */
+  background-color: #fff; /* 배경색 */
+  cursor: pointer; /* 포인터 변경 */
+}
+
+#area-select:focus {
+  border-color: #007bff; /* 포커스 시 테두리 색상 */
+  outline: none; /* 기본 아웃라인 제거 */
+  border-radius: 10px;
+}
+/*input item*/
 .input-item input {
   width: 100%; /* 입력 필드 너비 100% */
   padding: 8px; /* 패딩 */
@@ -418,4 +435,34 @@
 
 .input-item input:focus {
   outline: none; /* 포커스 시 윤곽선 제거 */
+}
+/*썸네일*/
+.board-thumb-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+}
+
+.board-thumb-wrap img {
+  width: 200px; /* 썸네일 이미지의 너비 */
+  height: 190px; /* 썸네일 이미지의 높이 */
+  object-fit: cover; /* 이미지 비율 유지 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  cursor: pointer; /* 클릭할 수 있다는 표시 */
+  transition: transform 0.3s; /* 부드러운 확대 효과 */
+}
+
+.board-thumb-wrap img:hover {
+  transform: scale(1.05); /* 마우스 오버 시 확대 */
+}
+
+.board-thumb-wrap input[type="file"] {
+  display: none; /* 파일 입력 숨기기 */
+}
+
+.board-thumb-label {
+  margin-top: 10px; /* 아래쪽 여백 */
+  font-size: 14px; /* 폰트 크기 */
+  color: #888; /* 회색 글자 색 */
 }
