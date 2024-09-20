@@ -260,3 +260,18 @@
   font-weight: bold; /* 굵게 */
   color: #333; /* 텍스트 색상 */
 }
+
+.idCheck-msg {
+  font-size: 15px;
+  padding-top: 5px;
+}
+
+.valid {
+  color: #0056b3; /* 사용 가능한 아이디는 파란색 */
+  padding-top: 5px;
+  font-size: 15px;
+}
+
+.invalid {
+  color: crimson; /* 나머지는 빨간색 */
+}
