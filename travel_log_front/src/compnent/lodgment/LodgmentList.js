@@ -39,9 +39,10 @@ const LodgmentList = () => {
     setValue(newValue);
   };
 
-  //1000단위로 설정
+  //1,000단위 설정
+  //가격이 1,000 으로 표시된다
   const numberFormat = (num) => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // 천 단위 포맷
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //정규식 천 단위 포맷
   };
 
   //별점초기화 값
@@ -99,7 +100,7 @@ const LodgmentList = () => {
                 aria-labelledby="range-slider" // 슬라이더 설명
                 max={500000} // 최대값
                 min={0} // 최소값
-                step={10000} // 이동 단위
+                step={1000} // 가격 이동 단위
               />
             </Box>
             <div className="lodgment-price-range">

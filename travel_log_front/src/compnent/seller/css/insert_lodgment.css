@@ -92,10 +92,7 @@
   border-bottom: 2px solid #ccc;
   width: 200px;
 }
-input:focus {
-  outline: none; /* 기본 outline 제거 */
-  box-shadow: none; /* 기본 box-shadow 제거 */
-}
+
 .msg {
   float: left;
   padding: 3px 10px;
