@@ -30,8 +30,10 @@
   outline: 0;
   list-style-type: none;
 }
+
 a {
-  text-decoration: none;
+  color: inherit !important; /* 부모 색상으로 설정 (강제) */
+  text-decoration: none !important; /* 언더라인 제거 (강제) */
 }
 .wrap {
   min-height: 121vh;

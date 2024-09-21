@@ -14,7 +14,8 @@ import { Backspace } from "@mui/icons-material";
 
 const LodgmentList = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
-  console.log(BackServer);
+  //호텔 / 리조트 / 펜션으로 검색할 경우
+  const [lodgementType, setLodgmentType] = useState("");
   //메인에서 검색해서 들어올 경우, 검색 정보 저장
   const { state } = useLocation();
   const startDay = dayjs().add(1, "day").toDate();
@@ -39,9 +40,10 @@ const LodgmentList = () => {
     setValue(newValue);
   };
 
-  //1000단위로 설정
+  //1,000단위 설정
+  //가격이 1,000 으로 표시된다
   const numberFormat = (num) => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // 천 단위 포맷
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //정규식 천 단위 포맷
   };
 
   //별점초기화 값
@@ -92,14 +94,14 @@ const LodgmentList = () => {
               <div className="lodgment-info-text">가격</div>
               <div className="lodgment-sellprice-info">1박 기준</div>
             </div>
-            <Box sx={{ width: 280 }}>
+            <Box sx={{ width: "100%" }}>
               <Slider
                 value={value} // 슬라이더의 현재 값
                 onChange={handleChange} // 슬라이더 값 변화 시 호출
                 aria-labelledby="range-slider" // 슬라이더 설명
                 max={500000} // 최대값
                 min={0} // 최소값
-                step={10000} // 이동 단위
+                step={1000} // 가격 이동 단위
               />
             </Box>
             <div className="lodgment-price-range">
@@ -129,10 +131,18 @@ const LodgmentList = () => {
           </div>
           <div className="lodgment-service-wrap">
             <div className="lodgment-info-text">서비스</div>
-            <div>서비스요소들~~~~</div>
+            <div className="lodgment-service-box">
+              {serviceTag.map((service, i) => {
+                return (
+                  <button key={"service=" + i} className="lodgment-service">
+                    {service}
+                  </button>
+                );
+              })}
+            </div>
           </div>
           <div className="radio-lodgment-wrap">
-            <div className="lodgment-info-text">정렬</div>
+            <div className="lodgment-info-text"></div>
             <div className="lodgment-radio">
               <RadioGroup
                 aria-labelledby="demo-controlled-radio-buttons-group"
@@ -163,18 +173,23 @@ const LodgmentList = () => {
           <div className="lodgment-type-select">
             <button type="button">호텔</button>
             <button type="button">리조트</button>
-            <button type="button"> 펜션</button>
+            <button type="button">펜션</button>
           </div>
           <div className="lodgment-info-wrap">
-            <LegdmentInfo />
+            <LegdmentInfo lodgment={lodgment} />
           </div>
         </div>
       </div>
     </section>
   );
 };
-const LegdmentInfo = () => {
-  return <div>정보 정보</div>;
+const LegdmentInfo = (props) => {
+  const lodgment = props.lodgment;
+  return (
+    <>
+      <div>{lodgment === "" ? "여행지를 입력해주세요." : ""}</div>
+    </>
+  );
 };
 
 export default LodgmentList;

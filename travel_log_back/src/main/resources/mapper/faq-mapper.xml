@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.co.iei.faq.model.dao.FaqDao">
+	<select id="selectFaqCategory" resultType="string">
+		select faq_category from faq_type group by faq_category
+	</select>
+	<select id="selectFaqTypeList" resultType="faqType">
+		select * from faq_type
+	</select>
 	<select id="selectFaqList" resultType="faq">
 		select faq_no,faq_title from faq where faq_type=#{faqType}
 	</select>
