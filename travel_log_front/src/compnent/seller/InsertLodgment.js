@@ -5,19 +5,32 @@ import DaumPostcode from "react-daum-postcode";
 import UqillEditor from "../utils/UqillEditor";
 
 const InsertLodgment = () => {
-  // 보내줄 data
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+
+  // 기존 호텔에서 검색하면 사용자가 다른 건 건들지 못하게 readOnly로 바꾸어야함
+  const [isReadOnly, setIsReadOnly] = useState(false); // 추가된 상태
+
   const [hotelInof, sethotelInfo] = useState({});
   console.log(hotelInof);
   const [boardContent, setBoardContent] = useState(
     "<h2>숙소 공지사항</h2><p><br></p><p><br></p><h2>숙소 정보</h2><p><br></p><p><br></p><h2>주차장 정보</h2><h5><br></h5>"
   );
-  console.log(boardContent);
   //호텔 명
   const [hotelName, setHotelName] = useState("");
-  // const []
-
+  // 호텔 타입 저장
+  const [lodgmentType, setLodgmentType] = useState(1); //---------
+  // 호텔 번호 저장
+  const [lodgmentNo, setLodgmentNo] = useState(0); //---------
+  // 호텔 주소
+  const [address, setAddress] = useState(""); // 주소
+  // 호텔 성급 저장
+  const [lodgmentStar, setLodgmentStar] = useState(0); //---------
   // back으로 보내는 이미지
   const [lodgmentImg, setLodgmentImg] = useState(null);
+  // 호텔 check-in / check-out
+  const [checkIn, setCheckIn] = useState(null);
+  const [checkOut, setCheckOut] = useState(null);
+
   // 미리보기용 이미지
   const [viewImg, setViewImg] = useState(null);
   const lodgmentImgRef = useRef(null);
@@ -40,7 +53,6 @@ const InsertLodgment = () => {
     }
   };
 
-  const backServer = process.env.REACT_APP_BACK_SERVER;
   // YES 나 NO를 누르면 search-hotel이 보이거나 안보이게 하기
   const [isVisible, setIsVisible] = useState(false);
   // yes 누르면 호텔 검색창 보이게
@@ -51,9 +63,6 @@ const InsertLodgment = () => {
   const noHotel = () => {
     setIsVisible(false);
   };
-
-  // 호텔 타입 저장
-  const [lodgmentType, setLodgmentType] = useState(1); // -------
 
   // 선택된 호텔 타입의 value 값을 저장
   const lodgmentTypeChange = (e) => {
@@ -78,27 +87,72 @@ const InsertLodgment = () => {
   };
 
   // 주소
-  const [addrBool, setAddrBool] = useState(false);
-  const addrOk = () => {
-    setAddrBool((prev) => !prev);
-  };
-  const [zoneCode, setZoneCode] = useState(""); // 우편번호
-  const [address, setAddress] = useState(""); // 주소
+  // const [addrBool, setAddrBool] = useState(false);
+  // const addrOk = () => {
+  //   setAddrBool((prev) => !prev);
+  // };
+
   const [deAddress, setDeAddress] = useState(""); // 상세주소
   // 우편번호랑 주소 input에 넣기
   const completeHandler = (data) => {
-    const { address, zonecode } = data;
-    setZoneCode(zonecode);
-    setAddress(address);
+    setAddress(data.address);
   };
-  const changeDeAddress = (e) => {
-    setDeAddress(e.target.value);
+
+  // 임시 데이터
+  const [loginNo, setLoginNo] = useState(1);
+  // 보내줄 data
+  const hotelData = {
+    hotelName,
+    lodgmentType,
+    lodgmentNo,
+    lodgmentStar,
+    lodgmentImg,
+    checkIn,
+    checkOut,
+    boardContent,
   };
+
   return (
     <div className="contanier insert-lodgment">
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          if (
+            hotelName !== "" &&
+            checkIn !== null &&
+            checkOut !== null &&
+            address !== ""
+          ) {
+            const form = new FormData();
+            form.append("lodgmentName", hotelName);
+            form.append("lodgmentAddr", address);
+            form.append("lodgmentTypeNo", lodgmentType);
+            form.append("lodgmentNo", lodgmentNo);
+            form.append("lodgmentStarGrade", lodgmentStar);
+            form.append("lodgmentCheckIn", checkIn);
+            form.append("lodgmentCheckOut", checkOut);
+            form.append("lodgmentNotice", boardContent);
+            form.append("sellerNo", loginNo);
+
+            if (lodgmentImg !== null) {
+              // 썸네일 있을 수도 있고 없을 수도 있음 => 첨부된 경우에만 추가
+              form.append("lodgmentImg", lodgmentImg);
+            }
+
+            axios
+              .post(`${backServer}/seller`, form, {
+                headers: {
+                  contentType: "multipart/form-data",
+                  processData: false,
+                },
+              })
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
         }}
       >
         <div className="box-wrap box-radius">
@@ -164,7 +218,13 @@ const InsertLodgment = () => {
                   return (
                     <SearchHotelList
                       key={"hotel-" + i}
+                      setHotelName={setHotelName} // 전달
+                      setAddress={setAddress}
+                      setLodgmentType={setLodgmentType}
                       sethotelInfo={sethotelInfo}
+                      setLodgmentNo={setLodgmentNo}
+                      setLodgmentStar={setLodgmentStar}
+                      setIsReadOnly={setIsReadOnly}
                       hotel={hotel}
                     />
                   );
@@ -179,47 +239,43 @@ const InsertLodgment = () => {
                   <label htmlFor="lodgmentName">숙소명</label>
                 </div>
                 <div className="input">
-                  <input type="text" id="lodgmentName" />
+                  <input
+                    type="text"
+                    id="lodgmentName"
+                    value={hotelName}
+                    onChange={(e) => setHotelName(e.target.value)}
+                    disabled={isReadOnly}
+                  />
                 </div>
               </div>
               <div className="input-item">
                 <div className="addr-api">
-                  <button
+                  {/* <button
                     type="button"
                     className=" btn primary"
                     onClick={addrOk}
                   >
                     주소찾기
-                  </button>
+                  </button> */}
                   <div className="addr-block">
                     <div className="addr-search-api">
-                      {addrBool ? (
-                        <DaumPostcode onComplete={completeHandler} />
+                      {!isReadOnly ? (
+                        <DaumPostcode
+                          onComplete={completeHandler}
+                          autoClose={false}
+                        />
                       ) : (
                         ""
                       )}
                     </div>
                     <div className="addr-api-input">
-                      <label htmlFor="addrCode">우편번호</label>
-                      <input
-                        type="text"
-                        id="addrCode"
-                        value={zoneCode}
-                        onChange={(e) => setZoneCode(e.target.value)}
-                      />
                       <label htmlFor="addrText">주소</label>
                       <input
                         type="text"
                         id="addrText"
                         value={address}
+                        readOnly
                         onChange={(e) => setAddress(e.target.value)}
-                      />
-                      <label htmlFor="addrDeText">상세 주소</label>
-                      <input
-                        type="text"
-                        id="addrDeText"
-                        value={deAddress}
-                        onChange={changeDeAddress}
                       />
                     </div>
                   </div>
@@ -230,7 +286,11 @@ const InsertLodgment = () => {
                   <label htmlFor="checkIn">체크인</label>
                 </div>
                 <div className="input">
-                  <input type="time" />
+                  <input
+                    type="time"
+                    id="checkIn"
+                    onChange={(e) => setCheckIn(e.target.value)}
+                  />
                 </div>
               </div>
               <div className="input-item">
@@ -238,7 +298,11 @@ const InsertLodgment = () => {
                   <label htmlFor="checkOut">체크아웃</label>
                 </div>
                 <div className="input">
-                  <input type="time" />
+                  <input
+                    type="time"
+                    id="checkOut"
+                    onChange={(e) => setCheckOut(e.target.value)}
+                  />
                 </div>
               </div>
               <div className="lodgment-type">
@@ -253,6 +317,7 @@ const InsertLodgment = () => {
                       value={1}
                       checked={lodgmentType === 1}
                       onChange={lodgmentTypeChange}
+                      disabled={isReadOnly}
                     />
                     호텔
                   </label>
@@ -263,6 +328,7 @@ const InsertLodgment = () => {
                       value={2}
                       checked={lodgmentType === 2}
                       onChange={lodgmentTypeChange}
+                      disabled={isReadOnly}
                     />
                     모텔
                   </label>
@@ -273,6 +339,7 @@ const InsertLodgment = () => {
                       value={3}
                       checked={lodgmentType === 3}
                       onChange={lodgmentTypeChange}
+                      disabled={isReadOnly}
                     />
                     펜션/풀빌라
                   </label>
@@ -283,6 +350,7 @@ const InsertLodgment = () => {
                       value={4}
                       checked={lodgmentType === 4}
                       onChange={lodgmentTypeChange}
+                      disabled={isReadOnly}
                     />
                     게스트하우스
                   </label>
@@ -293,6 +361,7 @@ const InsertLodgment = () => {
                       value={5}
                       checked={lodgmentType === 5}
                       onChange={lodgmentTypeChange}
+                      disabled={isReadOnly}
                     />
                     캠핑
                   </label>
@@ -309,7 +378,9 @@ const InsertLodgment = () => {
               />
             </div>
           </div>
-          <button className="insertLodgmentBtn btn primary">등록하기</button>
+          <button type="submit" className="insertLodgmentBtn btn primary">
+            등록하기
+          </button>
         </div>
       </form>
     </div>
@@ -320,8 +391,20 @@ const InsertLodgment = () => {
 const SearchHotelList = (props) => {
   const hotel = props.hotel;
   const sethotelInof = props.sethotelInfo;
+  const setHotelName = props.setHotelName;
+  const setLodgmentStar = props.setLodgmentStar;
+  const setLodgmentType = props.setLodgmentType;
+  const setLodgmentNo = props.setLodgmentNo;
+  const setAddress = props.setAddress;
+  const setIsReadOnly = props.setIsReadOnly;
   const inputHotelInfo = () => {
     sethotelInof(hotel);
+    setAddress(hotel.xlodgmentAddr);
+    setHotelName(hotel.xlodgmentName);
+    setLodgmentNo(hotel.xlodgmentNo);
+    setLodgmentStar(hotel.xlodgmentStarGrade);
+    setLodgmentType(1);
+    setIsReadOnly(true); // 기존호텔에서 검색한건 readOnly로 바꾸어줌
   };
   return (
     <div className="search-item" onClick={inputHotelInfo}>

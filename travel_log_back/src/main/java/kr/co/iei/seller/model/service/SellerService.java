@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dao.SellerDao;
@@ -36,6 +37,12 @@ public class SellerService {
 	public LodgmentStorageDTO selectOneLodgment(int lodgmentNo) {
 		LodgmentStorageDTO ls = sellerDao.selectOneLodgment(lodgmentNo);
 		return ls;
+	}
+
+	@Transactional
+	public int insertLodgment(LodgmentStorageDTO ls) {
+		int result = sellerDao.insertLodgment(ls);
+		return result;
 	}
 
 
