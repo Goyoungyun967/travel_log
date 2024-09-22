@@ -20,6 +20,7 @@
 	</select>
 	
 	<!-- 호텔 등록 -->
+	<!-- lodgmentNo가 0이면 기존 호텔에 없는 번호이므로 시퀀스 돌리기 -->
 	<insert id="insertLodgment">
 		insert into lodgment_storage VALUES (
         							<if test="lodgmentNo == 0">
