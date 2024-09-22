@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./css/lodgment_list.css";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const SellerLodgmentList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [lodgmentList, setLodgmentList] = useState([]);
@@ -37,21 +37,35 @@ const SellerLodgmentList = () => {
 // 숙소 정보 뽑아오는 곳
 const ListItem = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
   const list = props.list;
   console.log(list);
   return (
-    <div className="item">
-      <div className="item-img">
-        <img src="/img/hotel.jpg" width="250px" />
+    <>
+      <div
+        className="item"
+        onClick={() => {
+          navigate(`/seller/lodgmentView/${list.lodgmentNo}`);
+        }}
+      >
+        <div className="item-img">
+          <img
+            src={
+              list.lodgmentImgPath
+                ? `${backServer}/seller/lodgment/${list.lodgmentImgPath}`
+                : "/image/lodgment_default_img.png"
+            }
+          />
+        </div>
+        <div className="item-tx">
+          <h5>{list.lodgmentAddr}</h5>
+          <span>{list.lodgmentStarGrade}</span>
+          <span>성급</span>
+          <h3>{list.lodgmentName}</h3>
+          <button className="btn primary">호텔 수정</button>
+        </div>
       </div>
-      <div className="item-tx">
-        <h5>{list.lodgmentAddr}</h5>
-        <span>{list.lodgmentStarGrade}</span>
-        <span>성급</span>
-        <h3>{list.lodgmentName}</h3>
-        <button className="btn primary">호텔 수정</button>
-      </div>
-    </div>
+    </>
   );
 };
 

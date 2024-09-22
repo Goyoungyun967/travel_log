@@ -39,6 +39,7 @@
   padding: 10px;
 }
 .seller-lodgment-list > .item-wrap > .item > .item-img > img {
+  width: 250px;
   border-radius: 10px;
 }
 .btn {

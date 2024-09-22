@@ -74,8 +74,6 @@ public class SellerController {
 		        String filepath = fileUtil.upload(savepath, lodgmentImg);
 		        ls.setLodgmentImgPath(filepath); // 경로 저장
 		    }
-
-		
 		int result = sellerService.insertLodgment(ls);
 		return ResponseEntity.ok(result);
 	}

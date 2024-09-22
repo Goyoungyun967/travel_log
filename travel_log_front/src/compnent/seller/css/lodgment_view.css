@@ -1,0 +1,40 @@
+/*---- 기능 ----*/
+.box-radius {
+  border-radius: 10px;
+}
+.ftl {
+  float: left;
+}
+/*---- 기능 ----*/
+.lv-box-wrap {
+  border: 1px solid #ccc;
+  padding: 30px;
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+.lv-item-fr-wrap {
+  display: flex;
+  flex-direction: row;
+}
+.lv-box-wrap > .lv-item-fr-wrap > .lv-img-wrap {
+  background-color: yellow;
+  width: 300px;
+}
+.lv-item-wrap {
+  display: flex;
+  flex-direction: column;
+}
+.lv-item-wrap > * {
+  padding: 5px;
+}
+.item-sc-wrap {
+  margin-top: 10px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+/*------- 지울거 --------*/
+.item-map {
+  background-color: pink;
+}
