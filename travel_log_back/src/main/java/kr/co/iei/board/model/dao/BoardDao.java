@@ -9,8 +9,9 @@ import kr.co.iei.util.PageInfo;
 @Mapper
 public interface BoardDao {
 
-	int totalCount(int boardType);
+	int totalCount(int Type);
 
-	List selectBoardList(PageInfo pi);
+	List selectBoardList(PageInfo pi, int type);
+
 
 }
