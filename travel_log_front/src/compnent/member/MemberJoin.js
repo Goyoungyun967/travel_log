@@ -5,8 +5,9 @@ import {
   RadioGroup,
 } from "@mui/material";
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import DaumPostcode from "react-daum-postcode";
 
 const MemberJoin = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -21,6 +22,7 @@ const MemberJoin = () => {
     memberEmail: "",
     memberNickname: "",
     memberEmailId: "",
+    memberAddrDetail: "",
   });
 
   //아이디 중복체크 결과에따라서 바뀔 state
@@ -29,6 +31,7 @@ const MemberJoin = () => {
   //2 : 정규표현식을 만족하지 못한 상태
   //3 :  아이디가 중복인경우
   const [idCheck, setIdCheck] = useState(0);
+  const [showPostcode, setShowPostcode] = useState(false); // 주소 검색 모달 상태
   const checkId = () => {
     //아이디 유효성 검사
     //1. 정규표현식 감사
@@ -78,6 +81,8 @@ const MemberJoin = () => {
   const join = () => {
     if (idCheck === 1 && pwMessage.current.classList.contains("valid")) {
       member.memberEmail = member.memberEmailId + "@" + member.memberEmail;
+      const fullAddress = member.memberAddr + " " + member.memberAddrDetail;
+      member.memberAddr = fullAddress;
       axios
         .post(`${backServer}/member`, member)
         .then((res) => {
@@ -90,16 +95,23 @@ const MemberJoin = () => {
     }
   };
 
-  const sendEmail = () => {
+  const sendEmail = (e) => {
     member.memberEmail = member.memberEmailId + "@" + member.memberEmail;
     axios
-      .get(`${backServer}/sendEmail/memberEmail/${member.memberEmail}`)
+      .get(`${backServer}/sendEmail/${member.memberEmail}`)
       .then((res) => {
         console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handleCompletePostcode = (data) => {
+    // 주소 선택 후 처리
+    const fullAddress = data.address;
+    setMember({ ...member, memberAddr: fullAddress });
+    setShowPostcode(false); // 모달 닫기
   };
 
   return (
@@ -236,6 +248,38 @@ const MemberJoin = () => {
           value={member.memberAddr}
           onChange={changeMember}
         ></input>
+
+        <div className="Addr-zone">
+          <input
+            type="text"
+            className="detail-Addr"
+            placeholder="상세주소를 입력하세요"
+            name="memberAddrDetail"
+            value={member.memberAddrDetail}
+            onChange={changeMember}
+          ></input>
+          <button
+            type="button"
+            className="Addr-search-btn"
+            onClick={() => setShowPostcode(true)}
+          >
+            주소검색
+          </button>
+        </div>
+        {showPostcode && (
+          <div className="postcode-modal">
+            <DaumPostcode
+              onComplete={handleCompletePostcode}
+              autoClose={false} // 선택 후 모달을 닫지 않도록 설정
+            />
+            <button
+              onClick={() => setShowPostcode(false)}
+              className="Addr-close-btn"
+            >
+              닫기
+            </button>
+          </div>
+        )}
       </div>
       <div className="join-wrap">
         <label htmlFor="memberEmail">이메일</label>
@@ -281,10 +325,17 @@ const MemberJoin = () => {
             직접입력
           </option>
         </select>
+
         <button type="button" className="email-btn" onClick={sendEmail}>
           인증하기
         </button>
       </div>
+
+      <div className="send-email-zone">
+        <div className="email-success">인증완료</div>
+        <div className="email-time"></div>
+      </div>
+
       <button type="button" className="join-btn" onClick={join}>
         회원가입 완료
       </button>
