@@ -60,7 +60,7 @@ const ListItem = (props) => {
           />
         </div>
         <div className="item-tx">
-          <h5>{list.lodgmentAddr}</h5>
+          <p>{list.lodgmentAddr}</p>
           <span>{list.lodgmentStarGrade}</span>
           <span>성급</span>
           <h3>{list.lodgmentName}</h3>

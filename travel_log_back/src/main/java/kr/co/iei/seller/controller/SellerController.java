@@ -108,5 +108,7 @@ public class SellerController {
 //		return ResponseEntity.ok(map);
 //	}
 	
-	// 객실 등록
+//	// 객실 등록
+//	@PostMapping
+//	public ResponseEntity<Integer> insertRoom()
 }

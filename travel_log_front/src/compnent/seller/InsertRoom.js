@@ -47,6 +47,7 @@ const InsertRoom = () => {
       });
   }, []);
   console.log(lodgmentList);
+
   return (
     <>
       <form>

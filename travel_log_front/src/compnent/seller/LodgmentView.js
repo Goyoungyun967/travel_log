@@ -50,6 +50,12 @@ const LodgmentView = () => {
             <span>체크아웃 : </span>
             <span>{lodgmentList.lodgmentCheckOut}</span>
           </div>
+          <Link
+            to={`/seller/updateLodgment/${lodgmentList.lodgmentNo}`}
+            className="btn primary"
+          >
+            호텔 수정
+          </Link>
         </div>
       </div>
       <div className="item-sc-wrap">

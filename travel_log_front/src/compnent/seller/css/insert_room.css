@@ -59,7 +59,11 @@
   align-items: center;
   justify-content: space-around;
 }
-.inroom-input-wrap > .input-fr-wrap > .input-item {
+.inroom-input-wrap
+  > .input-fr-wrap
+  > .inroom-input-wrap
+  > .input-fr-wrap
+  > .input-item {
   width: 150px;
 }
 .inroom-input-wrap > .input-fr-wrap > .input-sc-wrap {
@@ -116,7 +120,7 @@
   margin-left: 8px;
 }
 
-input[type="checkbox"]:checked + .custom-checkbox {
+.tag > .checkbox-label > input[type="checkbox"]:checked + .custom-checkbox {
   font-weight: bold;
   color: #007bff; /* 체크된 항목의 색상을 원하는 색상으로 변경 */
 }
