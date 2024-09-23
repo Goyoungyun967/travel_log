@@ -21,8 +21,8 @@ public interface SellerDao {
 
 	int deleteLodgment(int lodgmentNo);
 
-	List selectOneRoom(int lodgmentNo);
-
 	List<RoomFileDTO> selectRoomFile(int roomNo);
+
+	List<RoomDTO> selectRoomInfo(int lodgmentNo);
 
 }

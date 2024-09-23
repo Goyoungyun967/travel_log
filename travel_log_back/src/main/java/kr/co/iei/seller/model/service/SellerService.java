@@ -60,32 +60,14 @@ public class SellerService {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		LodgmentStorageDTO ls = sellerDao.selectOneLodgment(lodgmentNo); // 호텔 정보 출력
-		List list = sellerDao.selectOneRoom(lodgmentNo); // 객실 정보 출력
+		List<RoomDTO> list = sellerDao.selectRoomInfo(lodgmentNo); 
 		System.out.println(list);
-		
-//		// 있으면 넣고 ~
-//		if(list != null) {
-//			List<RoomFileDTO> rfd = sellerDao.selectRoomFile(list.getRoomNo()); // 객실 사진 리스트로 받아오기
-//			list.setFileList(rfd);
-//			map.put("room",list);
-//			
-//		}
+	
 		map.put("lodgment",ls);
+		map.put("list", list);
 		
 		
 		return map;
-	}
-
-	public List<RoomDTO> selectRoomInfo(int lodgmentNo) {
-		List list = sellerDao.selectOneRoom(lodgmentNo); // 객실 정보 출력
-		System.out.println(list);
-//		if(list != null) {
-//		List<RoomFileDTO> rfd = sellerDao.selectRoomFile(list.getRoomNo()); // 객실 사진 리스트로 받아오기
-////		list.setFileList(rfd);
-//		map.put("room",list);
-//		
-//	}
-		return null;
 	}
 
 
