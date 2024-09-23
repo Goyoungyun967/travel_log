@@ -36,20 +36,41 @@
   color: #ccc;
 }
 .photo {
-  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.photo_add {
+  width: 600px;
+}
+.addBtn {
+  font-size: 15px;
+  line-height: 30px;
+  width: 100px;
+  height: 30px;
+  text-align: center;
+  background-color: #333;
+  color: #fff;
+  border-radius: 10px;
+}
+.p_arr {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
-.input-wrap {
+.inroom-input-wrap {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-around;
 }
-.input-item {
+.inroom-input-wrap > .input-item {
   padding: 25px;
   display: flex;
   flex-wrap: nowrap;
   margin-top: 10px;
 }
-.input-item > .input-title {
+.inroom-input-wrap > .input-item > .input-title {
   margin-right: 10px;
   width: 80px;
 }
@@ -57,7 +78,7 @@
   -webkit-appearance: none;
   margin: 0;
 }
-.input > input {
+.inroom-input-wrap > .input-item > .input > input {
   border: none;
   width: 200px;
   border-bottom: 2px solid #ddd;
@@ -89,7 +110,7 @@
   color: white;
   border-color: skyblue;
 }
-.room_info_add > .input-wrap > .box-notice {
+.room_info_add > .input-wrap {
   margin-top: 20px;
   width: 450px;
 }
@@ -105,6 +126,3 @@
   color: var(--main2);
 }
 /*------- 지울 거 ------*/
-.photo_add {
-  background-color: #ccc;
-}

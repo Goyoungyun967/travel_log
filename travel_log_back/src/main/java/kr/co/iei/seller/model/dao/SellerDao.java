@@ -17,4 +17,6 @@ public interface SellerDao {
 
 	int insertLodgment(LodgmentStorageDTO ls);
 
+	int deleteLodgment(int lodgmentNo);
+
 }

@@ -40,4 +40,8 @@
 							        #{lodgmentCheckOut}
     	)
 	</insert>
+	<!-- 호텔 등록하면 기존 호텔 테이블에서 삭제해주어야함 (primary key 땜시 안됨) -->
+	<delete id="deleteLodgment">
+		delete from HOTEL_XLSX where x_lodgment_no=#{lodgmentNo}
+	</delete>
 </mapper>

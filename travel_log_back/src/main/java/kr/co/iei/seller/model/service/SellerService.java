@@ -29,7 +29,7 @@ public class SellerService {
 	
 	// 판매자 정보 조회
 	public MemberDTO selectOneSeller(int sellerNo) {
-//		SellerDTO로 바꿔야함
+		//		SellerDTO로 바꿔야함
 		return null;
 	}
 
@@ -39,10 +39,16 @@ public class SellerService {
 		return ls;
 	}
 
+	// 호텔 등록
 	@Transactional
 	public int insertLodgment(LodgmentStorageDTO ls) {
-		int result = sellerDao.insertLodgment(ls);
-		return result;
+		LodgmentStorageDTO lg = sellerDao.selectOneLodgment(ls.getLodgmentNo());
+		if(lg == null) {
+			int result = sellerDao.insertLodgment(ls);
+			int rs = sellerDao.deleteLodgment(ls.getLodgmentNo());
+			return result;
+		}
+		return 0;
 	}
 
 
