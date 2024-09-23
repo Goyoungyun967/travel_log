@@ -94,13 +94,14 @@ const MemberJoin = () => {
         });
     }
   };
-
+  const sendRef = useRef();
   const sendEmail = (e) => {
-    member.memberEmail = member.memberEmailId + "@" + member.memberEmail;
+    const memberEmail = member.memberEmailId + "@" + member.memberEmail;
     axios
-      .get(`${backServer}/sendEmail/${member.memberEmail}`)
+      .get(`${backServer}/member/sendEmail/${memberEmail}`)
       .then((res) => {
         console.log(res);
+        sendRef.current.style.display = "block";
       })
       .catch((err) => {
         console.log(err);
@@ -330,9 +331,9 @@ const MemberJoin = () => {
           인증하기
         </button>
       </div>
-
-      <div className="send-email-zone">
-        <div className="email-success">인증완료</div>
+      <div className="send-email-wrap hide" ref={sendRef}>
+        <input type="text" className="send-email-input"></input>
+        <button className="email-success">인증완료</button>
         <div className="email-time"></div>
       </div>
 
