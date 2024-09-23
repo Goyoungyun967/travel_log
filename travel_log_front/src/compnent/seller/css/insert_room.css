@@ -1,7 +1,7 @@
 .room_box-wrap {
   border: 1px solid #ccc;
   padding: 30px;
-  width: 700px;
+  width: 900px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -13,15 +13,10 @@
   justify-content: center;
 }
 .hotel_info {
-  width: 700px;
   display: flex;
   border-bottom: 1px solid #333;
 }
-.hotel_info > .lod_title {
-  width: 400px;
-}
 .hotel_info > .lod_title h3 {
-  width: 100%;
   white-space: nowrap; /* 줄 바꿈 방지 */
   overflow: hidden; /* 넘치는 부분 숨김 */
   text-overflow: ellipsis; /* 넘치는 부분 생략 표시 (...) */
@@ -39,9 +34,6 @@
   display: flex;
   flex-direction: column;
 }
-.photo_add {
-  width: 600px;
-}
 .addBtn {
   font-size: 15px;
   line-height: 30px;
@@ -52,27 +44,38 @@
   color: #fff;
   border-radius: 10px;
 }
+.addBtn:hover {
+  font-weight: bold;
+  cursor: pointer;
+}
 .p_arr {
   margin-top: 10px;
   display: flex;
   flex-direction: row;
+  justify-content: center;
+}
+.inroom-input-wrap > .input-fr-wrap {
+  display: flex;
+  align-items: center;
   justify-content: space-around;
 }
-
-.inroom-input-wrap {
+.inroom-input-wrap > .input-fr-wrap > .input-item {
+  width: 150px;
+}
+.inroom-input-wrap > .input-fr-wrap > .input-sc-wrap {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  flex-direction: column;
+}
+.inroom-input-wrap > .input-fr-wrap > .input-sc-wrap > .input-item {
+  width: 300px;
 }
 .inroom-input-wrap > .input-item {
-  padding: 25px;
   display: flex;
   flex-wrap: nowrap;
   margin-top: 10px;
 }
 .inroom-input-wrap > .input-item > .input-title {
   margin-right: 10px;
-  width: 80px;
 }
 .room_price > input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -86,30 +89,7 @@
 .room_info_add > .input-wrap > .input-item {
   width: 300px;
 }
-.hash-tag {
-  width: 650px;
-}
-.hash-tag > h3 {
-  padding: 10px;
-}
 
-.hash-tag > .tag > input {
-  font-size: 10px;
-  margin: 2px;
-  border: none;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 5px;
-}
-.hash-tag > .tag > input:hover {
-  background-color: skyblue;
-  cursor: pointer;
-}
-.tag input[type="button"].active {
-  background-color: skyblue;
-  color: white;
-  border-color: skyblue;
-}
 .room_info_add > .input-wrap {
   margin-top: 20px;
   width: 450px;
@@ -126,3 +106,17 @@
   color: var(--main2);
 }
 /*------- 지울 거 ------*/
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.custom-checkbox {
+  margin-left: 8px;
+}
+
+input[type="checkbox"]:checked + .custom-checkbox {
+  font-weight: bold;
+  color: #007bff; /* 체크된 항목의 색상을 원하는 색상으로 변경 */
+}

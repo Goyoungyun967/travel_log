@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import "./css/lodgment_list.css";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 const SellerLodgmentList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const params = useParams();
+  const lodgmentNo = params.lodgmentNo;
   const [lodgmentList, setLodgmentList] = useState([]);
   useEffect(() => {
     axios
@@ -20,7 +22,7 @@ const SellerLodgmentList = () => {
   // 판매자 메인
   return (
     <div className="contanier seller-lodgment-list">
-      {/* {isLogin? 현재 로그인이 되어있으면 으로 처리해야함 */}
+      {/* {isLogin? 현재 로그인이 되어있으면 으로 처리해야함 - 일단 임시로 1로 처리*/}
       <Link to={`/seller/insertLodgment`} className="btn primary">
         등록하기
       </Link>
@@ -62,7 +64,6 @@ const ListItem = (props) => {
           <span>{list.lodgmentStarGrade}</span>
           <span>성급</span>
           <h3>{list.lodgmentName}</h3>
-          <button className="btn primary">호텔 수정</button>
         </div>
       </div>
     </>
