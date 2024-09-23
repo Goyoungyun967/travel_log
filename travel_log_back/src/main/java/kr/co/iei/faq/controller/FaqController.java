@@ -48,25 +48,4 @@ public class FaqController {
 		FaqDTO faq = faqService.selectFaq(faqNo);
 		return ResponseEntity.ok(faq);
 	}
-	
-	@PostMapping
-	@Operation(summary = "faq 등록",description = "faq 타입,제목,내용을 받아서 faq 정보 등록")
-	public ResponseEntity<Integer> insertFaq(@RequestBody FaqDTO faq){
-		int result = faqService.insertFaq(faq);
-		return ResponseEntity.ok(result);
-	}
-	
-	@PatchMapping
-	@Operation(summary = "faq 수정",description = "faq 번호,타입,제목,내용을 받아서 faq 정보 수정")
-	public ResponseEntity<Integer> updateFaq(@RequestBody FaqDTO faq){
-		int result = faqService.updateFaq(faq);
-		return ResponseEntity.ok(result);
-	}
-	
-	@DeleteMapping(value="/{faqNo}")
-	@Operation(summary = "faq 정보 삭제",description = "faq 번호를 받아서 faq 정보 삭제")
-	public ResponseEntity<Integer> deleteFaq(@PathVariable int faqNo){
-		int result = faqService.deleteFaq(faqNo);
-		return ResponseEntity.ok(result);
-	}
 }
