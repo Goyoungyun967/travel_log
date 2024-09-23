@@ -6,7 +6,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.iei.faq.model.dao.FaqDao;
+import kr.co.iei.faq.model.dto.FaqDTO;
 import kr.co.iei.inquiry.model.dao.InquiryDao;
 import kr.co.iei.util.PageInfo;
 import kr.co.iei.util.PageUtil;
@@ -16,6 +19,8 @@ import kr.co.iei.util.PageUtil;
 public class AdminService {
 	@Autowired
 	private InquiryDao inquiryDao;
+	@Autowired
+	private FaqDao faqDao;
 	@Autowired
 	private PageUtil pageUtil;
 
@@ -35,4 +40,27 @@ public class AdminService {
 		map.put("list",list);
 		return map;
 	}
+
+	public FaqDTO selectAdminFaq(int faqNo) {
+		FaqDTO faq = faqDao.selectAdminFaq(faqNo);
+		return faq;
+	}
+	@Transactional
+	public int insertFaq(FaqDTO faq) {
+		int result = faqDao.insertFaq(faq);
+		return result;
+	}
+
+	@Transactional
+	public int updateFaq(FaqDTO faq) {
+		int result = faqDao.updateFaq(faq);
+		return result;
+	}
+	
+	@Transactional
+	public int deleteFaq(int faqNo) {
+		int result = faqDao.deleteFaq(faqNo);
+		return result;
+	}
+
 }

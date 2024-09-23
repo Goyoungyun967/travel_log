@@ -11,8 +11,10 @@ import dayjs from "dayjs";
 import { format } from "date-fns";
 import Swal from "sweetalert2";
 import { PortableWifiOff } from "@mui/icons-material";
+import axios from "axios";
 
 const SearchBar = (props) => {
+  const backServer = process.env.REACT_APP_BACK_SERVER;
   const lodgment = props.lodgment;
   const setLodgment = props.setLodgment;
   const guest = props.guest;
@@ -24,18 +26,12 @@ const SearchBar = (props) => {
   const startDay = props.startDay;
   const endDay = props.endDay;
   const onClick = props.onClick;
-  const [lodgmentSearch, setLodgmentSearch] = useState([
-    { title: "서울" },
-    { title: "인천" },
-    { title: "서울" },
-    { title: "인천" },
-    { title: "서울" },
-    { title: "인천" },
-  ]);
+  const [lodgmentSearch, setLodgmentSearch] = useState([]);
+  const [lodgmentSearchName, setLodgmentSearchName] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [guestDropdownOpen, setGuestDropdownOpen] = useState(false);
   const [dateDropdownOpen, setDateDropdownOpen] = useState(false);
-
+  console.log(lodgmentSearchName);
   const onChange = (dates) => {
     const [start, end] = dates;
     setStartDate(start);
@@ -62,6 +58,19 @@ const SearchBar = (props) => {
   const lodgmentChange = (e) => {
     const value = e.target.value;
     setLodgment(value);
+    if (value.length > 0) {
+      axios
+        .get(`${backServer}/lodgment/search/${value}`)
+        .then((res) => {
+          setLodgmentSearch(res.data.list || []);
+          setLodgmentSearchName(res.data.name || []);
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log("Error fetching lodgment data:", err);
+        });
+    }
+
     setDropdownOpen(value.length > 0);
   };
 
@@ -133,6 +142,18 @@ const SearchBar = (props) => {
                                 key={i}
                                 search={search}
                                 setLodgment={setLodgment}
+                                dropdownOpen={dropdownOpen}
+                                setDropdownOpen={setDropdownOpen}
+                              />
+                            ))}
+
+                            {lodgmentSearchName.map((searchName, i) => (
+                              <SearchName
+                                key={searchName + i}
+                                search={searchName}
+                                setLodgment={setLodgment}
+                                dropdownOpen={dropdownOpen}
+                                setDropdownOpen={setDropdownOpen}
                               />
                             ))}
                           </ul>
@@ -240,15 +261,35 @@ const SearchBar = (props) => {
 };
 
 const SearchList = (props) => {
-  const searchTitle = props.search.title;
+  const searchTitle = props.search;
   const setLodgment = props.setLodgment;
+  const dropdownOpen = props.dropdownOpen;
+  const setDropdownOpen = props.setDropdownOpen;
   return (
     <li
       onClick={() => {
         setLodgment(searchTitle);
+        setDropdownOpen(!dropdownOpen);
       }}
     >
       {searchTitle}
+    </li>
+  );
+};
+
+const SearchName = (props) => {
+  const searchName = props.search;
+  const setLodgment = props.setLodgment;
+  const dropdownOpen = props.dropdownOpen;
+  const setDropdownOpen = props.setDropdownOpen;
+  return (
+    <li
+      onClick={() => {
+        setLodgment(searchName);
+        setDropdownOpen(!dropdownOpen);
+      }}
+    >
+      {searchName}
     </li>
   );
 };

@@ -9,4 +9,8 @@ public interface LodgmentDao {
 
 	List serviceList();
 
+	List search(String value);
+
+	List searchLodgment(String value);
+
 }

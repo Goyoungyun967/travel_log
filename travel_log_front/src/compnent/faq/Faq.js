@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import "../faq/faq.css";
 import { Link, NavLink, Route, Routes, useParams } from "react-router-dom";
 import FaqWrite from "./FaqWrtie";
+import { Quill } from "react-quill";
 
 const Faq = () => {
     const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -97,7 +98,8 @@ const FaqList = () => {
                 }
                 return <div key={"faq"+index} className="faq-content-box">
                     <div className="faq-title-wrap" onClick={showFaqContent}>
-                        <p className="faq-title">{faq.faqTitle}</p>
+                        {<p className="faq-title">{faq.faqTitle}</p>}
+                        
                         <span className="material-icons">expand_more</span>
                     </div>
                     {faq.faqContent ?

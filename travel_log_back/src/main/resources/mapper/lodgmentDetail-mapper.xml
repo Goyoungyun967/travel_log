@@ -4,4 +4,17 @@
 	<select id="serviceList" resultType="string">
 	 	select service_tag_type from service_tag
 	</select>
+	<select id="search" resultType="string">
+		select 
+		substr(lodgment_addr,1,instr(lodgment_addr,' ',1,2)) 
+		from lodgment_storage 
+		where lodgment_addr like '%'||#{value}||'%'
+		group by substr(lodgment_addr,1,instr(lodgment_addr,' ',1,2))
+	</select>
+	<select id="searchLodgment" resultType="string">
+		select 
+		lodgment_name	
+		from lodgment_storage 
+		where lodgment_name like '%'||#{value}||'%'
+	</select>
 </mapper>

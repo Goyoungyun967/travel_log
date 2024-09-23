@@ -19,7 +19,7 @@
   flex-direction: row;
 }
 .lv-box-wrap > .lv-item-fr-wrap > .lv-img-wrap {
-  background-color: yellow;
+  margin: 20px;
   width: 300px;
 }
 .lv-item-wrap {
