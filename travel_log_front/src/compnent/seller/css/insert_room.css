@@ -48,7 +48,6 @@
   display: flex;
   flex-wrap: nowrap;
   margin-top: 10px;
-  width: 300px;
 }
 .input-item > .input-title {
   margin-right: 10px;

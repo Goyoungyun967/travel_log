@@ -2,13 +2,17 @@ import { useEffect, useRef, useState } from "react";
 import "./board.css"; // 게시판 css
 import SearchIcon from "@mui/icons-material/Search"; // 검색 아이콘 import
 import PersonIcon from "@mui/icons-material/Person"; //맴버 아이콘
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward"; //화살표
 import PageNavi from "../utils/PageNavi"; //페이지 네비
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const BoardList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [boardList, setBoardList] = useState([]);
   const [accompanyList, setAccompanyList] = useState([]);
+  const [type, setType] = useState(1);
+
   const [areaSearch, setAreaSearch] = useState([
     { title: "서울" },
     { title: "경기" },
@@ -85,6 +89,23 @@ const BoardList = () => {
       container.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
+  //게시판 가져오기
+  useEffect(() => {
+    axios
+      .get(`${backServer}/board/list/${type}/${reqPage}`)
+      .then((res) => {
+        const allBoards = res.data.list;
+        setBoardList(allBoards.filter((board) => board.boardType === 1)); // 일반 게시글
+        setAccompanyList(allBoards.filter((board) => board.boardType === 2)); // 동행 게시글
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  // 더보기 누를때 마다 화면 타입으로 바꿔주기
+  const handleMoreClick = () => {
+    setType((prevType) => (prevType === 1 ? 2 : 1)); // 타입 토글
+  };
 
   return (
     <div className="board-list-wrap">
@@ -117,181 +138,39 @@ const BoardList = () => {
 
       <div className="area-box">{/* 지역*/}</div>
       <div className="board-preview-container">
-        <div className="board-page-title flex-spbetw">
-          <span>최신 여행 동행</span>
-          <span className="board-next">더보기>></span>
-        </div>
-        <div className="scrollable-container" ref={scrollContainerRef}>
-          <div className="board-preview-wrap width-box">
-            <div className="board-preview-list awbcss">
-              <div className="board-preview-thumb"></div>
-              <div className="board-preview-content">
-                <div className="board-preview-title">제목 제목 제목</div>
-                <div className="member flex-spbetw ">
-                  <div className="memberId-age-gender text-min">
-                    닉닉닉.28.남자
-                  </div>
-                  <div className="area text-min">경상도</div>
-                </div>
+        {type === 1 ? (
+          <>
+            <div className="board-page-title flex-spbetw">
+              <span>최신 여행 동행</span>
+              <span className="board-next" onClick={handleMoreClick}>
+                더보기 <ArrowForwardIcon style={{ paddingBottom: "4px" }} />
+              </span>
+            </div>
+            {/* 가로 리스트 출력 */}
+            <div className="scrollable-container" ref={scrollContainerRef}>
+              <div className="board-preview-wrap width-box">
+                {accompanyList.map((accompany, i) => (
+                  <AccompanyItem key={"accompany-" + i} accompany={accompany} />
+                ))}
               </div>
             </div>
-
-            <div className="board-preview-list awbcss">
-              <div className="board-preview-thumb"></div>
-              <div className="board-preview-content">
-                <div className="board-preview-title">어쩌구 저쩌구</div>
-                <div className="member flex-spbetw text-min">
-                  <div className="memberId-age-gender text-min">
-                    닉닉닉.28.남자
-                  </div>
-                  <div className="area text-min">경상도</div>
-                </div>
-              </div>
+            <div className="board-page-title flex-spbetw">
+              <span>최신 여행 게시판</span>
             </div>
-            <div className="board-preview-list awbcss">
-              <div className="board-preview-thumb"></div>
-              <div className="board-preview-content">
-                <div className="board-preview-title">어쩌구 저쩌구</div>
-                <div className="member flex-spbetw text-min">
-                  <div className="memberId-age-gender text-min">
-                    닉닉닉.28.남자
-                  </div>
-                  <div className="area text-min">경상도</div>
-                </div>
-              </div>
+            <div className="board-preview-wrap height-box">
+              {boardList.map((board, i) => (
+                <BoardItem key={"board-" + i} board={board} />
+              ))}
             </div>
-            <div className="board-preview-list awbcss">
-              <div className="board-preview-thumb"></div>
-              <div className="board-preview-content">
-                <div className="board-preview-title">어쩌구 저쩌구</div>
-                <div className="member flex-spbetw text-min">
-                  <div className="memberId-age-gender text-min">
-                    닉닉닉.28.남자
-                  </div>
-                  <div className="area text-min">경상도</div>
-                </div>
-              </div>
+            <div className="board-paging-wrap">
+              <PageNavi pi={pi} reqPage={reqPage} setReqPage={setReqPage} />
             </div>
-            <div className="board-preview-list awbcss">
-              <div className="board-preview-thumb"></div>
-              <div className="board-preview-content">
-                <div className="board-preview-title">어쩌구 저쩌구</div>
-                <div className="board-member flex-spbetw text-min">
-                  <div className="memberId-age-gender text-min">
-                    닉닉닉.28.남자
-                  </div>
-                  <div className="area text-min">경상도</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="board-preview-container">
-          <div className="board-page-title flex-spbetw">
-            <span>최신 여행 게시판</span>
-          </div>
-          <div className="board-preview-wrap height-box">
-            <div className="boardList-preview">
-              <div className="boardList-content">
-                <div className="boardList-area text-medium">서울</div>
-                <div className="board-memberIcon">
-                  <PersonIcon />
-                  <div className="board-memberId">아이디</div>
-                </div>
-                <div className="board-regDate text-min">10일전</div>
-                <div className="board-preview-content">
-                  <div className="board-preview-title">
-                    asdasdadas내용내용
-                    <div className="boardList-preview-thumb">
-                      <img className="preview-thumb"></img>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="like-comment-keep">
-                <div className="board-like sub-item">좋아요</div>
-                <div className="board-comment sub-item">댓글</div>
-                <div className="board-keep sub-item-right">저장</div>
-              </div>
-            </div>
-          </div>
-          <div className="board-preview-wrap height-box">
-            <div className="boardList-preview">
-              <div className="boardList-content">
-                <div className="boardList-area text-medium">서울</div>
-                <div className="board-memberIcon">
-                  <PersonIcon />
-                  <div className="board-memberId">아이디</div>
-                </div>
-                <div className="board-regDate text-min">10일전</div>
-                <div className="board-preview-content">
-                  <div className="board-preview-title">
-                    asdasdadas내용내용
-                    <div className="boardList-preview-thumb">
-                      <img className="preview-thumb"></img>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="like-comment-keep">
-                <div className="board-like sub-item">좋아요</div>
-                <div className="board-comment sub-item">댓글</div>
-                <div className="board-keep sub-item-right">저장</div>
-              </div>
-            </div>
-          </div>
-          <div className="board-preview-wrap height-box">
-            <div className="boardList-preview">
-              <div className="boardList-content">
-                <div className="boardList-area text-medium">서울</div>
-                <div className="board-memberIcon">
-                  <PersonIcon />
-                  <div className="board-memberId">아이디</div>
-                </div>
-                <div className="board-regDate text-min">10일전</div>
-                <div className="board-preview-content">
-                  <div className="board-preview-title">
-                    asdasdadas내용내용
-                    <div className="boardList-preview-thumb">
-                      <img className="preview-thumb"></img>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="like-comment-keep">
-                <div className="board-like sub-item">좋아요</div>
-                <div className="board-comment sub-item">댓글</div>
-                <div className="board-keep sub-item-right">저장</div>
-              </div>
-            </div>
-          </div>
-          <div className="board-preview-wrap height-box">
-            <div className="boardList-preview">
-              <div className="boardList-content">
-                <div className="boardList-area text-medium">서울</div>
-                <div className="board-memberIcon">
-                  <PersonIcon />
-                  <div className="board-memberId">아이디</div>
-                </div>
-                <div className="board-regDate text-min">10일전</div>
-                <div className="board-preview-content">
-                  <div className="board-preview-title">
-                    asdasdadas내용내용
-                    <div className="boardList-preview-thumb">
-                      <img className="preview-thumb"></img>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="like-comment-keep">
-                <div className="board-like sub-item">좋아요</div>
-                <div className="board-comment sub-item">댓글</div>
-                <div className="board-keep sub-item-right">저장</div>
-              </div>
-            </div>
-          </div>
-        </div>
+          </>
+        ) : type === 2 ? (
+          <></>
+        ) : null}
       </div>
+
       <div className="write-box">
         <Link to="/board/accompanyWrite" className="accompany-write sub-item">
           동행 게시판 글 작성
@@ -319,6 +198,89 @@ const SearchList = (props) => {
     >
       {searchTitle}
     </li>
+  );
+};
+
+const AccompanyItem = (props) => {
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+  const accompany = props.accompany;
+  const navigate = useNavigate();
+  return (
+    <div
+      className="board-preview-list awbcss"
+      onClick={() => {
+        navigate(`/board/view${accompany.boardNo}`);
+      }}
+    >
+      <div className="board-preview-thumb">
+        <img
+          src={
+            accompany.boardThumb
+              ? `${backServer}/board/thumb/${accompany.boardThumb}`
+              : "/image/lodgment_default_img.png"
+          }
+        />
+      </div>
+      <div className="board-preview-content">
+        <div className="board-preview-title">{accompany.boardTitle}</div>
+        <div className="member flex-spbetw ">
+          <div className="memberId-age-gender text-min">
+            <span>회원아이디</span>
+            <span>28</span>
+            <span>남</span>
+          </div>
+          <div className="area text-min">{accompany.boardArea}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const BoardItem = (props) => {
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+  const board = props.board;
+  const navigate = useNavigate();
+  return (
+    // return 문으로 JSX 요소를 반환
+    <div
+      className="boardList-preview"
+      onClick={() => {
+        navigate(`/board/view/${board.boardNo}`); // 클릭 시 상세 페이지로 이동
+      }}
+    >
+      <div className="boardList-content">
+        <div className="boardList-area text-medium">{board.boardArea}</div>{" "}
+        {/* 지역 표시 */}
+        <div className="board-memberIcon">
+          <PersonIcon />
+          <div className="board-memberId">계정 아이디</div>{" "}
+          {/* 사용자 아이디 */}
+        </div>
+        <div className="board-regDate text-min">{board.regDate}</div>{" "}
+        {/* 등록 날짜 */}
+        <div className="board-preview-content">
+          <div className="board-preview-title">
+            {board.boardContent} {/* 게시물 내용 */}
+            <div className="boardList-preview-thumb">
+              <img
+                src={
+                  board.boardThumb
+                    ? `${backServer}/board/thumb/${board.boardThumb}` // 게시물 썸네일
+                    : "/image/lodgment_default_img.png" // 기본 이미지
+                }
+                className="preview-thumb"
+                alt="게시물 썸네일" // 이미지 설명
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="like-comment-keep">
+        <div className="board-like sub-item">좋아요</div>
+        <div className="board-comment sub-item">댓글</div>
+        <div className="board-keep sub-item-right">저장</div>
+      </div>
+    </div>
   );
 };
 

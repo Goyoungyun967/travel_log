@@ -3,14 +3,18 @@ package kr.co.iei.seller.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -18,6 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.service.SellerService;
+import kr.co.iei.util.FileUtils;
 
 @CrossOrigin("*")
 @RestController
@@ -26,6 +31,11 @@ import kr.co.iei.seller.model.service.SellerService;
 public class SellerController {
 	@Autowired
 	private SellerService sellerService;
+	@Autowired
+	private FileUtils fileUtil;
+	
+	@Value("${file.root}")
+	public String root;
 	
 	// 등록한 호텔 조회 (메인)
 	@Operation(summary="등록한 숙소 리스트", description = "등록한 호텔 정보 조회(회원가입 처리 완료 되면 post로 조회)")
@@ -53,6 +63,20 @@ public class SellerController {
 		return ResponseEntity.ok(list);
 	}
 	
+	// 호텔 등록
+	@Operation(summary = "호텔 등록", description = "호텔 등록()")
+	@PostMapping
+	public ResponseEntity<Integer> insertLodgment(@ModelAttribute LodgmentStorageDTO ls, @ModelAttribute MultipartFile lodgmentImg){
+		System.out.println(ls);
+		 if (lodgmentImg != null) {
+		        // 이미지 처리 로직
+		        String savepath = root + "/lodgment/";
+		        String filepath = fileUtil.upload(savepath, lodgmentImg);
+		        ls.setLodgmentImgPath(filepath); // 경로 저장
+		    }
+		int result = sellerService.insertLodgment(ls);
+		return ResponseEntity.ok(result);
+	}
 	
 	// 해당 호텔 정보
 	@Operation(summary = "호텔 정보", description = "호텔 정보 출력")

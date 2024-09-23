@@ -15,4 +15,6 @@ public interface SellerDao {
 
 	LodgmentStorageDTO selectOneLodgment(int lodgmentNo);
 
+	int insertLodgment(LodgmentStorageDTO ls);
+
 }
