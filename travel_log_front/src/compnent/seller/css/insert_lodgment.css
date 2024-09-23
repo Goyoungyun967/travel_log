@@ -40,7 +40,7 @@
   margin-top: 10px;
   flex-direction: column;
 }
-.input-item > .input-title {
+.insert-lodgment-item > .input-item > .input-title {
   margin-right: 10px;
   width: 600px;
 }
@@ -60,7 +60,6 @@
 }
 .box-notice {
   margin-top: 20px;
-  width: 750px;
 }
 .btn {
   margin-top: 25px;
@@ -167,9 +166,8 @@
   margin-top: 30px;
 }
 
-.editor {
+.box-notice > .editor {
   display: flex;
   justify-content: center;
-  width: 750px;
   height: 500px;
 }

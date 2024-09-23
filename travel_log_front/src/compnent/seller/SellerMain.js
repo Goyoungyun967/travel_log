@@ -14,7 +14,7 @@ const SellerMain = () => {
       {/* 판매자 개인정보 조회 */}
       <Route path="info" element={<SellerInfo />} />
       {/* 호텔 객실 등록하기 */}
-      <Route path="insertRoom" element={<InsertRoom />} />
+      <Route path="insertRoom/:lodgmentNo" element={<InsertRoom />} />
       {/* 호텔 누르면 해당 호텔 상세로 이동 */}
       <Route path="lodgmentView/:lodgmentNo" element={<LodgmentView />} />
     </Routes>

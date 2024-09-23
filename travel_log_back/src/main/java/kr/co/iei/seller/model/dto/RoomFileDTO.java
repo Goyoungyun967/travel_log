@@ -1,5 +1,7 @@
 package kr.co.iei.seller.model.dto;
 
+import java.util.List;
+
 import org.apache.ibatis.type.Alias;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,6 +19,6 @@ public class RoomFileDTO {
 	private int roomFileNo;
 	@Schema(description = "객실 번호",type="int")
 	private int roomNo;
-	@Schema(description = "객실 사진",type="String[]")
-	private String[] roomImg;
+	@Schema(description = "객실 사진",type="String")
+	private String roomImg;
 }
