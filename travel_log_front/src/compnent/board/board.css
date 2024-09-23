@@ -425,7 +425,7 @@
   border-radius: 10px;
 }
 /*input item*/
-.input-item input {
+.board-input-item input {
   width: 100%; /* 입력 필드 너비 100% */
   padding: 8px; /* 패딩 */
   border: none; /* 경계선 없음 */
@@ -433,7 +433,7 @@
   box-shadow: none; /* 그림자 없음 (원하는 경우) */
 }
 
-.input-item input:focus {
+.board-input-item input:focus {
   outline: none; /* 포커스 시 윤곽선 제거 */
 }
 /*썸네일*/
@@ -465,4 +465,63 @@
   margin-top: 10px; /* 아래쪽 여백 */
   font-size: 14px; /* 폰트 크기 */
   color: #888; /* 회색 글자 색 */
+}
+
+.accompany-map-title {
+  text-align: center;
+}
+/*동행 날짜*/
+.accompany-info-wrap {
+  border-radius: 10px;
+  border-bottom: 1px solid var(--gray5);
+  margin: 0px auto;
+}
+
+.accompany-date-title {
+  font-size: 16px;
+  font-weight: bold;
+  padding-left: 15px;
+  border-right: 1px solid var(--gray5);
+  margin-right: 20px;
+}
+
+.accompany-date-container {
+  border-right: 1px solid var(--gray5);
+  display: flex;
+  align-items: center; /* 세로 정렬 */
+}
+
+.accompany-date-wrap {
+  margin-right: 20px;
+  padding-top: 15px;
+  height: 73px;
+}
+
+.board-date-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.board-date-input {
+  border: 1px solid #cacaca;
+  border-radius: 5px;
+  padding: 10px;
+  width: 215px; /* 원하는 너비 설정 */
+  font-size: 16px;
+  outline: none;
+  transition: border 0.3s;
+}
+
+.board-date-input:focus {
+  border-color: #007bff; /* 포커스 시 경계 색상 변경 */
+}
+
+.-board-datepicker-wrap {
+  position: absolute;
+  z-index: 1000;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(212, 212, 212, 0.2);
+  padding: 10px;
 }

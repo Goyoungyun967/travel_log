@@ -14,6 +14,8 @@ const BoardFrm = (props) => {
   const setBoardThumb = props.setBoardThumb;
   const fileList = props.fileList;
   const setFileList = props.setFileList;
+  const boardArea = props.boardArea;
+  const setBoardArea = props.setBoardArea;
 
   const delBoardFileNo = props.delBoardFileNo;
   const setDelBoardFileNo = props.setDelBoardFileNo;
@@ -22,25 +24,7 @@ const BoardFrm = (props) => {
   const [boardImg, setBoardImg] = useState(null);
   //썸네일 이미지 첨부파일이 변경되면 동작할 함수
   //지역 선택
-  const [areaSearch, setAreaSearch] = useState([
-    { title: "서울" },
-    { title: "경기" },
-    { title: "부산" },
-    { title: "대구" },
-    { title: "인천" },
-    { title: "대전" },
-    { title: "광주" },
-    { title: "울산" },
-    { title: "세종" },
-    { title: "강원" },
-    { title: "충북" },
-    { title: "충남" },
-    { title: "경북" },
-    { title: "경남" },
-    { title: "전북" },
-    { title: "전북" },
-    { title: "제주" },
-  ]);
+
   const [selectedArea, setSelectedArea] = useState("");
 
   const handleChange = (event) => {
@@ -94,7 +78,7 @@ const BoardFrm = (props) => {
                 <label htmlFor="boardTitle">제목</label>
               </th>
               <td>
-                <div className="input-item">
+                <div className="board-input-item">
                   <input
                     type="text"
                     id="boardTitle"
@@ -154,7 +138,7 @@ const BoardFrm = (props) => {
                   onChange={handleChange}
                 >
                   <option value="">-- 선택하세요 --</option>
-                  {areaSearch.map((area, index) => (
+                  {boardArea.map((area, index) => (
                     <option key={index} value={area.title}>
                       {area.title}
                     </option>
