@@ -1,16 +1,21 @@
 package kr.co.iei.lodgment.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.websocket.server.PathParam;
+import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
 import kr.co.iei.lodgment.model.service.LodgmentService;
 
 
@@ -28,4 +33,12 @@ public class LodgmentController {
 		List list = lodgmentService.serviceList();
 		return ResponseEntity.ok(list);
 	}
+	
+	@GetMapping(value = "/search/{value}")
+	public ResponseEntity<Map> search(@PathVariable String value){
+		Map map = lodgmentService.search(value);
+		return ResponseEntity.ok(map);
+	}
+	
+
 }

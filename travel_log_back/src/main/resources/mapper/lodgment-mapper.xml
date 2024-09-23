@@ -40,8 +40,17 @@
 							        #{lodgmentCheckOut}
     	)
 	</insert>
+	
 	<!-- 호텔 등록하면 기존 호텔 테이블에서 삭제해주어야함 (primary key 땜시 안됨) -->
 	<delete id="deleteLodgment">
 		delete from HOTEL_XLSX where x_lodgment_no=#{lodgmentNo}
 	</delete>
+	
+	<!-- 객실 정보 출력 -->
+	<select id="selectOneRoom" resultType="room">
+		select * from room where lodgment_no=#{lodgmentNo}
+	</select>
+	<select id="selectRoomFileList" resultType="roomFile">
+		select * from room_file where room_no=#{roomNo}
+	</select>
 </mapper>

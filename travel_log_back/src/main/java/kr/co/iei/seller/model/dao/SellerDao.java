@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
+import kr.co.iei.seller.model.dto.RoomDTO;
+import kr.co.iei.seller.model.dto.RoomFileDTO;
 
 @Mapper
 public interface SellerDao {
@@ -18,5 +20,9 @@ public interface SellerDao {
 	int insertLodgment(LodgmentStorageDTO ls);
 
 	int deleteLodgment(int lodgmentNo);
+
+	List selectOneRoom(int lodgmentNo);
+
+	List<RoomFileDTO> selectRoomFile(int roomNo);
 
 }

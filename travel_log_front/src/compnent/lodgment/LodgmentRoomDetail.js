@@ -1,4 +1,4 @@
-const LodgmentLoomDetail = () => {
+const LodgmentRoomDetail = () => {
   return (
     <div className="lodgment-loom-type">
       <div>
@@ -29,4 +29,4 @@ const LodgmentLoomDetail = () => {
   );
 };
 
-export default LodgmentLoomDetail;
+export default LodgmentRoomDetail;
