@@ -98,7 +98,7 @@ const LodgmentList = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [lodgmentInfo]);
+  }, []);
 
   return (
     <section className="section">
