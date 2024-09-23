@@ -95,5 +95,5 @@ public class SellerController {
 		return ResponseEntity.ok(member); // 판매자 DTO가 없으므로 일단 멤버로 대체
 	}
 	
-	
+	// 객실 등록
 }

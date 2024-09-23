@@ -57,14 +57,9 @@ const InsertRoom = () => {
               <h5>사진은 최대 5개만 등록 가능합니다.</h5>
               <div className="photo_add">
                 <FileInfo roomFile={roomFile} setRoomFile={setRoomFile} />
-                <img src="/img/hotel.jpg" alt="" width="100px" />
-                <img src="/img/hotel.jpg" alt="" width="100px" />
-                <img src="/img/hotel.jpg" alt="" width="100px" />
-                <img src="/img/hotel.jpg" alt="" width="100px" />
-                <img src="/img/hotel.jpg" alt="" width="100px" />
               </div>
               <div className="room_info_add">
-                <div className="input-wrap">
+                <div className="inroom-input-wrap">
                   <div className="input-item">
                     <div className="input-title">
                       <label htmlFor="#">상품수</label>
@@ -138,10 +133,17 @@ const FileInfo = (props) => {
   const setRoomFile = props.setRoomFile;
   // 미리보기용 첨부 파일 (파일 전송 x)
   const [showRoomFile, setShowRoomFile] = useState([]);
+  console.log("파일 - ", showRoomFile);
   const addRoomFile = (e) => {
     const files = e.currentTarget.files;
     const fileArr = new Array();
     const imgPrvArr = new Array();
+
+    if (roomFile.length + files.length > 5) {
+      alert("파일은 최대 5개까지 첨부할 수 있습니다.");
+      return;
+    }
+
     for (let i = 0; i < files.length; i++) {
       fileArr.push(files[i]);
       if (files[i].type.startsWith("image/")) {
@@ -161,16 +163,29 @@ const FileInfo = (props) => {
   };
   return (
     <div className="photo">
-      <label htmlFor="roomFile" className="btn-primary sm">
+      <label htmlFor="roomFile" className="addBtn">
         파일첨부
       </label>
-      <input
-        type="file"
-        id="roomFile"
-        style={{ display: "none" }}
-        onChange={addRoomFile}
-        multiple
-      />
+      <div className="p_arr">
+        <input
+          type="file"
+          id="roomFile"
+          style={{ display: "none" }}
+          onChange={addRoomFile}
+          multiple
+        />
+        {showRoomFile.map((file, i) => {
+          return (
+            <>
+              {file.preview ? (
+                <img src={file.preview} width="100px" className="photoArr" />
+              ) : (
+                ""
+              )}
+            </>
+          );
+        })}
+      </div>
     </div>
   );
 };
