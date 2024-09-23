@@ -7,12 +7,14 @@ import Rating from "@mui/material/Rating";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import axios from "axios";
 import { Backspace } from "@mui/icons-material";
+import Swal from "sweetalert2";
 
 const LodgmentList = () => {
+  const navigate = useNavigate;
   const BackServer = process.env.REACT_APP_BACK_SERVER;
   //호텔 / 리조트 / 펜션으로 검색할 경우
   const [lodgementType, setLodgmentType] = useState("");
@@ -73,6 +75,31 @@ const LodgmentList = () => {
   //console.log("value[0] :" + value[0]);
   //console.log("value[1] :" + value[1]);
 
+  const lodgementSearchBtn = () => {
+    if (lodgment === "") {
+      Swal.fire({
+        icon: "error",
+        title: "여행지, 숙소를 입력해주세요.",
+        confirmButtonText: "확인",
+      });
+      return;
+    }
+  };
+
+  //검색
+  const [lodgmentListSearch, setLodgmentListSearch] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${BackServer}/lodgment/searchLodgment/`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [lodgmentInfo]);
+
   return (
     <section className="section">
       <div className="lodgment-wrap-input">
@@ -85,6 +112,7 @@ const LodgmentList = () => {
           setStartDate={setStartDate}
           endDate={endDate}
           setEndDate={setEndDate}
+          onClick={lodgementSearchBtn}
         />
       </div>
       <div className="lodgment-search-wrap">

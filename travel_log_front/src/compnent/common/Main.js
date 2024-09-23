@@ -24,7 +24,7 @@ const Main = () => {
     if (!lodgment) {
       Swal.fire({
         icon: "error",
-        title: "입력 값을 확인해주세요.",
+        title: "여행지, 숙소를 입력해주세요.",
         confirmButtonText: "확인",
       });
       return;
