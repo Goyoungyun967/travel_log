@@ -1,4 +1,10 @@
-const PayMentUserInfo = () => {
+const PayMentUserInfo = (props) => {
+  const guest = props.guest;
+  const setGuest = props.setGuest;
+  const changeInfo = (e) => {
+    const name = e.target.name;
+    setGuest({ ...guest, [name]: e.target.value });
+  };
   return (
     <ul>
       <li className="text-paymentName-info">
@@ -8,30 +14,36 @@ const PayMentUserInfo = () => {
         <label htmlFor="paymentName">이름</label>
       </li>
       <li>
-        <input type="text" className="payment-input" id="paymentName" />
+        <input
+          type="text"
+          className="payment-input"
+          id="paymentName"
+          name="gusetName"
+          onChange={changeInfo}
+        />
       </li>
       <li>
         <label htmlFor="paymentPhone">전화번호</label>
       </li>
       <li>
-        <input type="text" className="payment-input" id="paymentPhone" />
-      </li>
-      <li>
-        <label htmlFor="paymentEmail">이메일</label>
-      </li>
-      <li>
         <input
           type="text"
           className="payment-input"
-          id="paymentEmail"
-          readOnly
+          id="paymentPhone"
+          name="guestPhone"
+          onChange={changeInfo}
         />
       </li>
       <li>
         <label>요청사항</label>
       </li>
       <li>
-        <textarea className="payment-textarea" maxLength={100} />
+        <textarea
+          className="payment-textarea"
+          name="guestReq"
+          onChange={changeInfo}
+          maxLength={100}
+        />
       </li>
     </ul>
   );

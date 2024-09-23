@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import LodgmentDetailMap from "./LodgmentDetailMap";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import LodgmentLoomDetail from "./LodgmentLoomDetail";
+import LodgmentRoomDetail from "./LodgmentRoomDetail";
 const LodgmentDetail = () => {
   return (
     <section className="section lodgmentDetail">
@@ -31,7 +31,7 @@ const LodgmentDetail = () => {
           <LodgmentDetailMap />
         </div>
         <div className="lodgment-loom-type-wrap">
-          <LodgmentLoomDetail />
+          <LodgmentRoomDetail />
         </div>
       </div>
       <div className="user-active-wrap">

@@ -33,6 +33,7 @@ const LodgmentDetailMapPayment = () => {
     .catch((error) => {
       console.error("API 호출 오류:", error);
     });
+
   return (
     <div>
       <div>위치</div>
