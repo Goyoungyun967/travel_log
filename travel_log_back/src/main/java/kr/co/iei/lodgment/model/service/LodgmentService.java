@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.iei.lodgment.model.dao.LodgmentDao;
 import kr.co.iei.lodgment.model.dto.LodgmentDTO;
+import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
 
 @Service
 public class LodgmentService {
@@ -30,10 +31,11 @@ public class LodgmentService {
 		return map;
 	}
 
-	public List<LodgmentDTO>  getLodgmentList(int reqPage, String lodgment, String startDate, String endDate, int guest) {
-		 int limit = 10;
-	     int offset = (reqPage - 1) * limit; // 페이지 계산
-	     List<LodgmentDTO> list = lodgmentDao.getLodgmentList(offset, limit, lodgment, startDate, endDate, guest);
+	public List<SearchLodgmentDTO>  getLodgmentList(int reqPage, String lodgment, String startDate, String endDate, int guest) {
+		 int limit = 10;  //한페이지당 열개 
+	     int start = (reqPage - 1) * limit +1; //가져 올 글 
+	     int end = start+limit;
+	     List<SearchLodgmentDTO> list = lodgmentDao.getLodgmentList(start, end, lodgment, startDate, endDate, guest);
 	     return list;
 	}
 }

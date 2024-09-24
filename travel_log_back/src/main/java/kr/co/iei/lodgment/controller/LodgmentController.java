@@ -1,6 +1,8 @@
 package kr.co.iei.lodgment.controller;
 
 import java.sql.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -41,19 +43,28 @@ public class LodgmentController {
 		Map map = lodgmentService.search(value);
 		return ResponseEntity.ok(map);
 	}
-	@GetMapping(value = "/searchLodgment/{reqPage}/{lodgment}/{startDate}/{endDate}/{guest}")
-	public ResponseEntity<List<LodgmentDTO>> searchLodgment(
-			@PathVariable int reqPage,
-			@PathVariable String lodgment, 
-			@PathVariable String startDate,
-			@PathVariable String endDate,
-			@PathVariable int guest){
-//		System.out.println(reqPage);
-//		System.out.println(lodgment);
-//		System.out.println(startDate);
-//		System.out.println(endDate);
-//		System.out.println(guest);
-		List<LodgmentDTO> list = lodgmentService.getLodgmentList(reqPage,lodgment,startDate,endDate,guest);
+	@GetMapping(value = "/searchLodgment")
+	public ResponseEntity<List<SearchLodgmentDTO>> searchLodgment(
+			@RequestParam int reqPage,
+            @RequestParam String lodgment,
+            @RequestParam String startDate,
+            @RequestParam String endDate,
+            @RequestParam int guest,
+            @RequestParam(required = false) int minPrice,
+            @RequestParam(required = false) int maxPrice,
+            @RequestParam(required = false) List<String> selectedServiceTags,
+            @RequestParam(required = false) int starValue,
+            @RequestParam(required = false) String order){
+		System.out.println(reqPage);
+		System.out.println(lodgment);
+		System.out.println(startDate);
+		System.out.println(endDate);
+		System.out.println(minPrice);
+		System.out.println(maxPrice);
+		System.out.println(selectedServiceTags);
+		System.out.println(starValue);
+		System.out.println(order);
+		List<SearchLodgmentDTO> list = lodgmentService.getLodgmentList(reqPage,lodgment,startDate,endDate,guest);
 		return ResponseEntity.ok(list);
 	}
 	

@@ -24,6 +24,9 @@ const SearchBar = (props) => {
   const startDay = props.startDay;
   const endDay = props.endDay;
   const onClick = props.onClick;
+
+  const { searchRef } = props;
+
   const [lodgmentSearch, setLodgmentSearch] = useState([]);
   const [lodgmentSearchName, setLodgmentSearchName] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -249,7 +252,7 @@ const SearchBar = (props) => {
               </tbody>
             </table>
             <div className="search-btn-wrap">
-              <button type="button" onClick={onClick}>
+              <button type="button" ref={searchRef} onClick={onClick}>
                 숙소 검색
               </button>
             </div>
