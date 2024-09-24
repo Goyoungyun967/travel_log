@@ -10,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dao.SellerDao;
+import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
+import kr.co.iei.seller.model.dto.RoomServiceTag;
 
 @Service
 public class SellerService {
@@ -68,6 +70,18 @@ public class SellerService {
 		
 		
 		return map;
+	}
+
+	@Transactional
+	public int insertRoom(InsertRoomDTO room, List<RoomFileDTO> roomFileList) {
+		int result = sellerDao.insertRoom(room);
+		System.out.println(room);
+		for(RoomFileDTO roomFile : roomFileList) {
+			roomFile.setRoomNo(room.getRoomNo());
+			result += sellerDao.insertRoomFile(roomFile);
+		}
+		
+		return 0;
 	}
 
 

@@ -41,21 +41,21 @@ public class AdminController {
 		return ResponseEntity.ok(faq);
 	}
 
-	@PostMapping
+	@PostMapping(value="/faq")
 	@Operation(summary = "faq 등록",description = "faq 타입,제목,내용을 받아서 faq 정보 등록")
 	public ResponseEntity<Integer> insertFaq(@RequestBody FaqDTO faq){
 		int result = adminService.insertFaq(faq);
 		return ResponseEntity.ok(result);
 	}
 	
-	@PatchMapping
+	@PatchMapping(value="/faq")
 	@Operation(summary = "faq 수정",description = "faq 번호,타입,제목,내용을 받아서 faq 정보 수정")
 	public ResponseEntity<Integer> updateFaq(@RequestBody FaqDTO faq){
 		int result = adminService.updateFaq(faq);
 		return ResponseEntity.ok(result);
 	}
 	
-	@DeleteMapping(value="/{faqNo}")
+	@DeleteMapping(value="/faq/{faqNo}")
 	@Operation(summary = "faq 정보 삭제",description = "faq 번호를 받아서 faq 정보 삭제")
 	public ResponseEntity<Integer> deleteFaq(@PathVariable int faqNo){
 		int result = adminService.deleteFaq(faqNo);

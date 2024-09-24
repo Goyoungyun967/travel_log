@@ -2,7 +2,7 @@ import "./css/lodgmentList.css";
 import SearchBar from "./SearchBar";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Rating from "@mui/material/Rating";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -10,72 +10,85 @@ import Radio from "@mui/material/Radio";
 import { useLocation, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import axios from "axios";
-import { Backspace } from "@mui/icons-material";
 import Swal from "sweetalert2";
 
 const LodgmentList = () => {
-  const navigate = useNavigate;
-  const BackServer = process.env.REACT_APP_BACK_SERVER;
-  //호텔 / 리조트 / 펜션으로 검색할 경우
-  const [lodgementType, setLodgmentType] = useState("");
-  //메인에서 검색해서 들어올 경우, 검색 정보 저장
+  const navigate = useNavigate();
+  //main=>LodgmentList 에서 가져온 검색정보
   const { state } = useLocation();
+  const BackServer = process.env.REACT_APP_BACK_SERVER;
+  //하단으로 가면 자동으로 페이지 10개씩 가져오게하는 넘버링
+  const [reqPage, setReqPage] = useState(1);
+
+  //일정 기본값 설정
   const startDay = dayjs().add(1, "day").toDate();
   const endDay = dayjs().add(2, "day").toDate();
 
-  //state 에서 넘어온 정보가 있을 경우 , 없을 경우들어갈 기본 정보
-  const [lodgment, setLodgment] = useState(
-    state && state.lodgment ? state.lodgment : ""
-  );
-  const [guest, setGuest] = useState(state && state.guest ? state.guest : 2);
-  const [startDate, setStartDate] = useState(
-    state && state.startDate ? state.startDate : startDay
-  );
-  const [endDate, setEndDate] = useState(
-    state && state.endDate ? state.endDate : endDay
-  );
-  //가격 슬라이더의 초기값
+  //state 에 정보가 있을경우 정보 기입 / 없으면 기본값 설정
+  const [lodgment, setLodgment] = useState(state?.lodgment || "");
+  const [guest, setGuest] = useState(state?.guest || 2);
+  const [startDate, setStartDate] = useState(state?.startDate || startDay);
+  const [endDate, setEndDate] = useState(state?.endDate || endDay);
+
+  //서브 부가 검색
+  //1 : 호텔  2: 리조트, 3: 펜션
+  const [lodgementType, setLodgmentType] = useState("");
+
+  //가격 조정
   const [value, setValue] = useState([0, 500000]);
 
-  //가격 슬라이더의 값 업데이트
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  //1,000단위 설정
-  //가격이 1,000 으로 표시된다
-  const numberFormat = (num) => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //정규식 천 단위 포맷
-  };
-
-  //별점초기화 값
+  //호텔 성급
   const [starValue, setStarValue] = useState(5);
-
-  //정렬 버튼
   const [radioBtn, setRadioBtn] = useState("null");
-  const radioChange = (e) => {
-    setRadioBtn(e.target.value);
-  };
-  //서비스태그
-  //select *from service_tag ;
-  const [serviceTag, setServiceTag] = useState([]);
+
+  //서비스 태그 검색해서 저장할 객체
+  const [serviceTag, setServiceTag] = useState([
+    { serviceTagNo: "" },
+    { serviceTagType: "" },
+  ]);
   useEffect(() => {
     axios
       .get(`${BackServer}/lodgment/service`)
       .then((res) => {
-        //console.log(res);
         setServiceTag(res.data);
+        // console.log(res);
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
   }, []);
 
-  //console.log(serviceTag);
-  //console.log("value[0] :" + value[0]);
-  //console.log("value[1] :" + value[1]);
+  //선택된 태그 저장
+  const [selectedServiceTags, setSelectedServiceTags] = useState([]);
 
-  const lodgementSearchBtn = () => {
+  //
+  const searchRef = useRef(null);
+
+  //서비스 태그 선택되면 값 저장
+  const handleServiceTagClick = (service) => {
+    setSelectedServiceTags((prev) => {
+      if (prev.includes(service)) {
+        return prev.filter((tag) => tag !== service);
+      } else {
+        return [...prev, service];
+      }
+    });
+  };
+
+  //값이 변하면 lodgment 검색
+  useEffect(() => {
+    lodgmentSearchBtn();
+  }, [
+    selectedServiceTags,
+    lodgment,
+    value,
+    starValue,
+    radioBtn,
+    lodgementType,
+  ]);
+
+  //숙소 검색 누르면 작동
+  const lodgmentSearchBtn = () => {
     if (lodgment === "") {
       Swal.fire({
         icon: "error",
@@ -84,21 +97,37 @@ const LodgmentList = () => {
       });
       return;
     }
-  };
-
-  //검색
-  const [lodgmentListSearch, setLodgmentListSearch] = useState([]);
-
-  useEffect(() => {
     axios
-      .get(`${BackServer}/lodgment/searchLodgment/`)
+      .get(`${BackServer}/lodgment/searchLodgment`, {
+        params: {
+          reqPage,
+          lodgment,
+          startDate,
+          endDate,
+          guest,
+          minPrice: value[0],
+          maxPrice: value[1],
+          selectedServiceTags,
+          starValue,
+          order: radioBtn,
+        },
+      })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  };
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  // 1,000단위 포맷
+  const numberFormat = (num) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
 
   return (
     <section className="section">
@@ -112,7 +141,8 @@ const LodgmentList = () => {
           setStartDate={setStartDate}
           endDate={endDate}
           setEndDate={setEndDate}
-          onClick={lodgementSearchBtn}
+          onClick={lodgmentSearchBtn}
+          searchRef={searchRef}
         />
       </div>
       <div className="lodgment-search-wrap">
@@ -124,12 +154,12 @@ const LodgmentList = () => {
             </div>
             <Box sx={{ width: "100%" }}>
               <Slider
-                value={value} // 슬라이더의 현재 값
-                onChange={handleChange} // 슬라이더 값 변화 시 호출
-                aria-labelledby="range-slider" // 슬라이더 설명
-                max={500000} // 최대값
-                min={0} // 최소값
-                step={1000} // 가격 이동 단위
+                value={value}
+                onChange={handleChange}
+                aria-labelledby="range-slider"
+                max={500000}
+                min={0}
+                step={1000}
               />
             </Box>
             <div className="lodgment-price-range">
@@ -160,13 +190,17 @@ const LodgmentList = () => {
           <div className="lodgment-service-wrap">
             <div className="lodgment-info-text">서비스</div>
             <div className="lodgment-service-box">
-              {serviceTag.map((service, i) => {
-                return (
-                  <button key={"service=" + i} className="lodgment-service">
-                    {service}
-                  </button>
-                );
-              })}
+              {serviceTag.map((service, i) => (
+                <button
+                  key={"service=" + i}
+                  className={`lodgment-service ${
+                    selectedServiceTags.includes(service) ? "selected" : ""
+                  }`}
+                  onClick={() => handleServiceTagClick(service)}
+                >
+                  {service.serviceTagType}
+                </button>
+              ))}
             </div>
           </div>
           <div className="radio-lodgment-wrap">
@@ -176,20 +210,20 @@ const LodgmentList = () => {
                 aria-labelledby="demo-controlled-radio-buttons-group"
                 name="controlled-radio-buttons-group"
                 value={radioBtn}
-                onChange={radioChange}
+                onChange={(e) => setRadioBtn(e.target.value)}
               >
                 <FormControlLabel
-                  value="lowPrice"
+                  value="1"
                   control={<Radio />}
                   label="낮은가격순"
                 />
                 <FormControlLabel
-                  value="highPrice"
+                  value="2"
                   control={<Radio />}
                   label="높은 가격순"
                 />
                 <FormControlLabel
-                  value="Popularity"
+                  value="3"
                   control={<Radio />}
                   label="인기순"
                 />
@@ -199,9 +233,39 @@ const LodgmentList = () => {
         </div>
         <div className="lodgment-info-wrap">
           <div className="lodgment-type-select">
-            <button type="button">호텔</button>
-            <button type="button">리조트</button>
-            <button type="button">펜션</button>
+            <button
+              onClick={() => setLodgmentType("1")}
+              type="button"
+              className={
+                lodgementType === "1"
+                  ? "selectedLodgmentType"
+                  : "lodgment-type-select-btn"
+              }
+            >
+              호텔
+            </button>
+            <button
+              onClick={() => setLodgmentType("2")}
+              type="button"
+              className={
+                lodgementType === "2"
+                  ? "selectedLodgmentType"
+                  : "lodgment-type-select-btn"
+              }
+            >
+              리조트
+            </button>
+            <button
+              onClick={() => setLodgmentType("3")}
+              type="button"
+              className={
+                lodgementType === "3"
+                  ? "selectedLodgmentType"
+                  : "lodgment-type-select-btn"
+              }
+            >
+              펜션
+            </button>
           </div>
           <div className="lodgment-info-wrap">
             <LegdmentInfo lodgment={lodgment} />
@@ -211,6 +275,7 @@ const LodgmentList = () => {
     </section>
   );
 };
+
 const LegdmentInfo = (props) => {
   const lodgment = props.lodgment;
   return (

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Alias(value = "lodgmentDetail")
-@Schema(description="숙소 객체")
+@Schema(description="숙소")
 public class LodgmentDTO {
 	@Schema(description = "숙소 번호",type="int")
 	private int lodgmentNo;
@@ -33,4 +33,8 @@ public class LodgmentDTO {
 	private String lodgmentCheckIn;
 	@Schema(description = "체크아웃 시간",type="String")
 	private String lodgmentCheckOut;
+	@Schema(description = "서비스태그",type="String")
+	private String serviceTagNo;
+	@Schema(description = "태그번호",type="int")
+	private String serviceTagType;
 }

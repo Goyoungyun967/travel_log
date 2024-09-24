@@ -7,10 +7,8 @@ import DatePicker from "react-datepicker";
 import PersonIcon from "@mui/icons-material/Person";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import "react-datepicker/dist/react-datepicker.css"; // 달력 css
-import dayjs from "dayjs";
 import { format } from "date-fns";
 import Swal from "sweetalert2";
-import { PortableWifiOff } from "@mui/icons-material";
 import axios from "axios";
 
 const SearchBar = (props) => {
@@ -26,12 +24,15 @@ const SearchBar = (props) => {
   const startDay = props.startDay;
   const endDay = props.endDay;
   const onClick = props.onClick;
+
+  const { searchRef } = props;
+
   const [lodgmentSearch, setLodgmentSearch] = useState([]);
   const [lodgmentSearchName, setLodgmentSearchName] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [guestDropdownOpen, setGuestDropdownOpen] = useState(false);
   const [dateDropdownOpen, setDateDropdownOpen] = useState(false);
-  console.log(lodgmentSearchName);
+  //console.log(lodgmentSearchName);
   const onChange = (dates) => {
     const [start, end] = dates;
     setStartDate(start);
@@ -64,10 +65,10 @@ const SearchBar = (props) => {
         .then((res) => {
           setLodgmentSearch(res.data.list || []);
           setLodgmentSearchName(res.data.name || []);
-          console.log(res);
+          //console.log(res);
         })
         .catch((err) => {
-          console.log("Error fetching lodgment data:", err);
+          //console.log("Error fetching lodgment data:", err);
         });
     }
 
@@ -251,7 +252,9 @@ const SearchBar = (props) => {
               </tbody>
             </table>
             <div className="search-btn-wrap">
-              <button onClick={onClick}>숙소 검색</button>
+              <button type="button" ref={searchRef} onClick={onClick}>
+                숙소 검색
+              </button>
             </div>
           </div>
         </form>

@@ -1,4 +1,4 @@
-package kr.co.iei;
+package kr.co.iei.util;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -59,7 +59,7 @@ public class JwtUtils {
 						.expiration(expireTime)		//토큰만료 시간
 						.signWith(key)				//암호화 서명
 						.claim("memberId",memberId)	//토큰에 포함할 회원정보 세팅 (key=value)
-						.claim("memberType", memberLevel)//토큰에 포함할 회원정보 세팅 (key=value)
+						.claim("memberLevel", memberLevel)//토큰에 포함할 회원정보 세팅 (key=value)
 					    .compact();					//생성
 			return token;
 	}

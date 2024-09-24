@@ -1,13 +1,29 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import UqillEditor from "../utils/UqillEditor";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const FaqWrite = (props) => {
     const backServer = process.env.REACT_APP_BACK_SERVER;
-    const faqNo = props.faqNo;
+    const faqNo = useParams().faqNo;
     const faqTypeList = props.faqTypeList;
+    //const [faqTypeList,setFaqTypeList] = useState(null);
+    /*
+    useEffect(()=>{
+        const newFaqTypeList = new Array();
+        for(let i=0;i<list.length;i++){
+            const arr = new Array();
+            for(let j=0;j<list[i].typeList.length;j++){
+                const faqType = {faqTypeName : list[i].typeList[j].faqTypeName};
+                arr.push(faqType);
+            }
+            const faqCategory = {categoryName : list[i].category, category : list[i].typeList[0].faqType.substring(0,1),typeList : arr};
+            newFaqTypeList.push(faqCategory);
+        }
+        setFaqTypeList(newFaqTypeList);
+    },[])
+    */
     const [faqCategory, setFaqCategory] = useState(0);
     const [faq, setFaq] = useState({faqType : "L1", faqTitle : ""});
     const [faqContent,setFaqContent] = useState("")
@@ -16,15 +32,19 @@ const FaqWrite = (props) => {
         setFaq({...faq, [e.target.id] : e.target.value})
     }
     useEffect(()=>{
-        setFaq({...faq, faqType : faqTypeList[faqCategory].typeList[0].faqType});
         if(faqNo){
-            
+            axios.get(`${backServer}/admin/faq/${faqNo}`).then((res)=>{
+                setFaq(res.data);
+                setFaqContent(res.data.faqContent);
+            }).catch((err)=>{
+                console.log(err);
+            })
         }
-    },[faqCategory]);
-    const faqWrite = () => {
+    },[]);
+    
+    const writeFaq = () => {
         const writeFaq = {...faq, faqContent};
-        console.log(writeFaq);
-        axios.post(`${backServer}/faq`,writeFaq).then((res)=>{
+        axios.post(`${backServer}/admin/faq`,writeFaq).then((res)=>{
             if(res.data > 0){
             Swal.fire({
                 title : "작성 완료",
@@ -44,27 +64,75 @@ const FaqWrite = (props) => {
             console.log(err);
         })
     }
+    console.log(faqTypeList);
+    const updateFaq= () => {
+        const updateFaq = {...faq, faqContent};
+        axios.patch(`${backServer}/admin/faq`,updateFaq).then((res)=>{
+            if(res.data > 0){
+            Swal.fire({
+                title : "수정 완료",
+                text : "수정이 완료 되었습니다.",
+                icon : "success"
+            }).then(()=>{
+                navigate(`/faq/faqList/${faq.faqType}`);
+            })
+            }else{
+                Swal.fire({
+                    title : "수정 실패",
+                    text : "잠시 후 다시 시도해주세요.",
+                    icon : "error"
+                })
+            }
+        }).catch((err)=>{
+            console.log(err);
+        })
+    }
+    console.log(faq);
     return (faqTypeList ? 
         <div className="faq-write-wrap">
             <table>
                 <tbody>
                     <tr>
                         <td colSpan={2}>
+                            
+                            {/*faqTypeList.map((category,index)=>{
+                                    return <div key={`faq-category-${index}`} className="input-item">
+                                        <select id="faqCategory" value={faq.faqType.substring(0,1)} onChange={(e)=>{
+                                            const newFaqType  = e.target.value+faq.faqType.substring(0,2);
+                                            setFaq({...faq, faqType : newFaqType})
+                                        }}>
+                                            <option value={category.category}>{category.categoryName}</option>
+                                        </select>
+                                        <select id="faqType" value={faq.faqType.substring(1,1)} onChange={(e)=>{
+                                            const newFaqType  = faq.faqType.substring(1,1)+e.target.value;
+                                            console.log(newFaqType);
+                                            setFaq({...faq, faqType : newFaqType})
+                                        }}>
+                                            {category.typeList.map((type,i)=>{
+                                                return <option key={`faq-type-${i}`} value={i}>{type.faqTypeName}</option>
+                                            })}
+                                        </select>
+                                    </div>
+                            })*/}
+                            {
                             <div className="input-item">
-                                <select id="faqCategory" onChange={(e)=>{
+                                
+                                <select id="faqCategory" value={faqCategory} onChange={(e)=>{
                                     setFaqCategory(e.target.value);
+                                    setFaq({...faq, faqType : faqTypeList[e.target.value].typeList[0].faqType});
                                 }}>
                                     {faqTypeList.map((item,index)=>{
                                         return <option key={`faqCategoryInput+${index}`} value={index} >{item.category}</option>
                                     })}
                                 </select>
-                                <select id="faqType" onChange={changeValue}>
+                                <select id="faqType" value={faq.faqType} onChange={changeValue}>
                                     {faqTypeList[faqCategory].typeList.map((typeList,index)=>{
                                         return <option key={`faqTypeInput+${index}`} value={typeList.faqType}>{typeList.faqTypeName}</option>
                                     })
                                     }
                                 </select>
                             </div>
+                            }
                         </td>
                     </tr>
                     <tr>
@@ -75,13 +143,14 @@ const FaqWrite = (props) => {
                         <td colSpan={2} className="faq-input-content"><UqillEditor boardContent={faqContent} setBoardContent={setFaqContent} width={"100%"} /></td>
                     </tr>
                     <tr>
-                        <td colSpan={2}><div className="faq-btn-wrap"><button className="faq-write-btn" onClick={faqWrite}>작성하기</button></div></td>
+                        <td colSpan={2}><div className="faq-btn-wrap"><button className="faq-write-btn" onClick={faqNo ? updateFaq : writeFaq}>{faqNo ? "수정하기" : "작성하기"}</button></div></td>
                     </tr>
                 </tbody>
             </table>
         </div>
         : ""
     );
+    
 }
 
 export default FaqWrite;
