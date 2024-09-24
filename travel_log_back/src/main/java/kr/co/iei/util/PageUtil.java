@@ -10,6 +10,7 @@ public class PageUtil {
 		int totalPage = (int)Math.ceil(totalCount/(double)numPerPage);
 		int pageNo = ((reqPage-1)/pageNaviSize)*pageNaviSize +1;
 		PageInfo pi = new PageInfo(start,end,pageNo,pageNaviSize,totalPage);
+		System.out.println("asd:"+start);
 		return pi;
 	}
 }

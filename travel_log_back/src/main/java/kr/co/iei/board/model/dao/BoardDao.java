@@ -13,5 +13,9 @@ public interface BoardDao {
 
 	List selectBoardList(PageInfo pi, int type);
 
+	int accompanyTotalCount(int type);
+
+	List selectAccompanyList(PageInfo pi, int type);
+
 
 }

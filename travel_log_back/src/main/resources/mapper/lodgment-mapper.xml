@@ -46,11 +46,43 @@
 		delete from HOTEL_XLSX where x_lodgment_no=#{lodgmentNo}
 	</delete>
 	
-	<!-- 객실 정보 출력 -->
-	<select id="selectOneRoom" resultType="room">
-		select * from room where lodgment_no=#{lodgmentNo}
-	</select>
-	<select id="selectRoomFileList" resultType="roomFile">
-		select * from room_file where room_no=#{roomNo}
-	</select>
+	 <!-- 객실 정보 조회 (객실 정보 + 파일들) -->
+    <select id="selectRoomInfo" resultMap="RoomResultMap">
+        SELECT
+            r.room_no AS room_no,
+            r.lodgment_no AS lodgment_no,
+            r.room_name AS room_name,
+            r.room_qua AS room_qua,
+            r.room_max_capacity AS room_max_capacity,
+            r.room_price AS room_price,
+            r.room_info AS room_info,
+            rf.room_file_no AS room_file_no,
+            rf.room_img AS room_img
+        FROM
+            room r
+        LEFT JOIN
+            room_file rf ON r.room_no = rf.room_no
+        WHERE
+            r.lodgment_no = #{lodgmentNo}
+    </select>
+
+    <!-- 객실 정보와 파일 정보를 묶어주는 ResultMap -->
+    <resultMap type="room" id="RoomResultMap">
+        <id column="room_no" property="roomNo" />
+        <result column="lodgment_no" property="lodgmentNo" />
+        <result column="room_name" property="roomName" />
+        <result column="room_qua" property="roomQua" />
+        <result column="room_max_capacity" property="roomMaxCapacity" />
+        <result column="room_price" property="roomPrice" />
+        <result column="room_info" property="roomInfo" />
+        <collection 
+        	property="fileList"
+        	ofType="roomFile"
+        	javaType="java.util.List"
+        >
+        <id property="roomFileNo" column="room_file_no"/>
+            <result property="roomImg" column="room_img"/>
+            </collection>
+    </resultMap>
+
 </mapper>

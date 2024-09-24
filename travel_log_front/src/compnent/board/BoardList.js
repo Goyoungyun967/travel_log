@@ -6,12 +6,12 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward"; //화살표
 import PageNavi from "../utils/PageNavi"; //페이지 네비
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import AccompanyWrite from "./AccompanyWrite";
 
 const BoardList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [boardList, setBoardList] = useState([]);
   const [accompanyList, setAccompanyList] = useState([]);
-  const [type, setType] = useState(1);
 
   const [areaSearch, setAreaSearch] = useState([
     { title: "서울" },
@@ -89,23 +89,34 @@ const BoardList = () => {
       container.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
-  //게시판 가져오기
+  //일반게시판 가져오기
   useEffect(() => {
     axios
-      .get(`${backServer}/board/list/${type}/${reqPage}`)
+      .get(`${backServer}/board/boardList/1/${reqPage}`)
       .then((res) => {
-        const allBoards = res.data.list;
-        setBoardList(allBoards.filter((board) => board.boardType === 1)); // 일반 게시글
-        setAccompanyList(allBoards.filter((board) => board.boardType === 2)); // 동행 게시글
+        setBoardList(res.data.list); // 일반 게시글
+        setPi(res.data.pi);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  //동행 게시판
+  useEffect(() => {
+    axios
+      .get(`${backServer}/board/accompanyList/2/${reqPage}`)
+      .then((res) => {
+        setAccompanyList(res.data.list); // 일반 게시글
+        setPi(res.data.pi);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
   // 더보기 누를때 마다 화면 타입으로 바꿔주기
-  const handleMoreClick = () => {
-    setType((prevType) => (prevType === 1 ? 2 : 1)); // 타입 토글
-  };
+  // const handleMoreClick = () => {
+  //   setBoardType((prevType) => (prevType === 1 ? 2 : 1)); // 타입 토글
+  // };
 
   return (
     <div className="board-list-wrap">
@@ -138,44 +149,38 @@ const BoardList = () => {
 
       <div className="area-box">{/* 지역*/}</div>
       <div className="board-preview-container">
-        {type === 1 ? (
-          <>
-            <div className="board-page-title flex-spbetw">
-              <span>최신 여행 동행</span>
-              <span className="board-next" onClick={handleMoreClick}>
-                더보기 <ArrowForwardIcon style={{ paddingBottom: "4px" }} />
-              </span>
-            </div>
-            {/* 가로 리스트 출력 */}
-            <div className="scrollable-container" ref={scrollContainerRef}>
-              <div className="board-preview-wrap width-box">
-                {accompanyList.map((accompany, i) => (
-                  <AccompanyItem key={"accompany-" + i} accompany={accompany} />
-                ))}
-              </div>
-            </div>
-            <div className="board-page-title flex-spbetw">
-              <span>최신 여행 게시판</span>
-            </div>
-            <div className="board-preview-wrap height-box">
-              {boardList.map((board, i) => (
-                <BoardItem key={"board-" + i} board={board} />
-              ))}
-            </div>
-            <div className="board-paging-wrap">
-              <PageNavi pi={pi} reqPage={reqPage} setReqPage={setReqPage} />
-            </div>
-          </>
-        ) : type === 2 ? (
-          <></>
-        ) : null}
+        <div className="board-page-title flex-spbetw">
+          <span>최신 여행 동행</span>
+          <span className="board-next">
+            {/* onClick={handleMoreClick} */}
+            더보기 <ArrowForwardIcon style={{ paddingBottom: "4px" }} />
+          </span>
+        </div>
+        {/* 가로 리스트 출력 */}
+        <div className="scrollable-container" ref={scrollContainerRef}>
+          <div className="board-preview-wrap width-box">
+            {accompanyList.map((accompany, i) => (
+              <AccompanyItem key={"accompany-" + i} accompany={accompany} />
+            ))}
+          </div>
+        </div>
+        <div className="board-page-title flex-spbetw">
+          <span>최신 여행 게시판</span>
+        </div>
+        <div className="board-preview-wrap height-box">
+          {boardList.map((board, i) => (
+            <BoardItem key={"board-" + i} board={board} />
+          ))}
+        </div>
+        <div className="board-paging-wrap">
+          <PageNavi pi={pi} reqPage={reqPage} setReqPage={setReqPage} />
+        </div>
       </div>
-
       <div className="write-box">
-        <Link to="/board/accompanyWrite" className="accompany-write sub-item">
+        <Link to="/board/AccompanyWrite" className="accompany-write sub-item">
           동행 게시판 글 작성
         </Link>
-        <Link to="/board/boardWrite" className="board-write sub-item-right">
+        <Link to={`/board/boardWrite`} className="board-write sub-item-right">
           여행 게시판 글 작성
         </Link>
       </div>
@@ -193,7 +198,7 @@ const SearchList = (props) => {
     <li
       onClick={() => {
         setSearchInput(searchTitle); // 선택된 검색어로 입력 필드 업데이트
-        setDropdownOpen(false); // 선택 후 드롭다운 닫기
+        setDropdownOpen(false);
       }}
     >
       {searchTitle}
@@ -249,14 +254,14 @@ const BoardItem = (props) => {
       }}
     >
       <div className="boardList-content">
-        <div className="boardList-area text-medium">{board.boardArea}</div>{" "}
+        <div className="boardList-area text-medium">{board.boardArea}</div>
         {/* 지역 표시 */}
         <div className="board-memberIcon">
           <PersonIcon />
-          <div className="board-memberId">계정 아이디</div>{" "}
+          <div className="board-memberId">계정 아이디</div>
           {/* 사용자 아이디 */}
         </div>
-        <div className="board-regDate text-min">{board.regDate}</div>{" "}
+        <div className="board-regDate text-min">{board.regDate}</div>
         {/* 등록 날짜 */}
         <div className="board-preview-content">
           <div className="board-preview-title">
