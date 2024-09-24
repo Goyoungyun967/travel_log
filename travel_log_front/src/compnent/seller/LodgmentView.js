@@ -9,10 +9,10 @@ const LodgmentView = () => {
   const [lodgmentList, setLodgmentList] = useState({});
   useEffect(() => {
     axios
-      .get(`${backServer}/seller/lodgmentInfo/${lodgmentNo}`)
+      .get(`${backServer}/seller/lodgmentView/${lodgmentNo}`)
       .then((res) => {
         console.log(res);
-        setLodgmentList(res.data);
+        setLodgmentList(res.data.lodgment);
       })
       .catch((err) => {
         console.log(err);

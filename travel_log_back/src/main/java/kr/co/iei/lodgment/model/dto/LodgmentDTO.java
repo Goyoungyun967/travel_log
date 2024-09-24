@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Alias(value = "lodgmentDetail")
-@Schema(description="숙소 객체")
+@Schema(description="숙소 검색")
 public class LodgmentDTO {
 	@Schema(description = "숙소 번호",type="int")
 	private int lodgmentNo;

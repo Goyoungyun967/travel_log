@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import "../faq/faq.css";
-import { Link, NavLink, Route, Routes, useParams } from "react-router-dom";
+import { Link, NavLink, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import FaqWrite from "./FaqWrtie";
+import { Quill } from "react-quill";
+import Swal from "sweetalert2";
 
 const Faq = () => {
     const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -56,8 +58,9 @@ const Faq = () => {
                 </div>
                 <div className="faq-content-wrap">
                     <Routes>
-                        <Route path="faqList/:faqType" element={<FaqList/>}/>
+                        <Route path="faqList/:faqType" element={<FaqList faqTypeList={faqTypeList}/>}/>
                         <Route path="faqWrite" element={<FaqWrite faqTypeList={faqTypeList}/>}/>
+                        <Route path="faqUpdate/:faqNo" element={<FaqWrite faqTypeList={faqTypeList}/>}/>
                     </Routes>
                 </div>
             </div>
@@ -67,8 +70,10 @@ const Faq = () => {
 
 const FaqList = () => {
     const backServer = process.env.REACT_APP_BACK_SERVER;
+    const navigate = useNavigate();
     const faqType = useParams().faqType;
     const [faqList, setFaqList] = useState([]);
+    console.log(faqType);
     useEffect(()=>{
         axios.get(`${backServer}/faq/faqList/${faqType}`).then((res)=>{
             console.log(res);
@@ -95,10 +100,37 @@ const FaqList = () => {
                         e.currentTarget.lastChild.innerText = "expand_less";
                     }
                 }
+                const deleteFaq = () => {
+                    axios.delete(`${backServer}/admin/faq/${faq.faqNo}`).then((res)=>{
+                        if(res.data > 0){
+                            Swal.fire({
+                                title : "삭제 성공",
+                                text : "삭제가 완료 되었습니다.",
+                                icon : "success"
+                            })
+                            faqList.splice(index,1);
+                            setFaqList([...faqList]);
+                        }else{
+                            Swal.fire({
+                                title : "삭제 실패",
+                                text : "잠시 후 다시 시도해 주세요.",
+                                icon : "error"
+                            })
+                        }
+                    })
+                } 
                 return <div key={"faq"+index} className="faq-content-box">
+                    <div className="faq-title-box">
                     <div className="faq-title-wrap" onClick={showFaqContent}>
-                        <p className="faq-title">{faq.faqTitle}</p>
+                        {<p className="faq-title">{faq.faqTitle}</p>}
                         <span className="material-icons">expand_more</span>
+                    </div>
+                        <div className="faq-btn-box">
+                            <button onClick={()=>{
+                                navigate(`/faq/faqUpdate/${faq.faqNo}`)
+                            }}>수정</button>
+                            <button onClick={deleteFaq}>삭제</button>
+                        </div>
                     </div>
                     {faq.faqContent ?
                     <div className="faq-content">

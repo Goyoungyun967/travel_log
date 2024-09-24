@@ -7,7 +7,9 @@ const UqillEditor = (props) => {
   // 수정할 내용
   const setBoardContent = props.setBoardContent;
   const editorRef = useRef(null);
-
+  //style 지정
+  const width = props.width;
+  const height = props.height;
   // 값이 바뀔때 마다 set
   const changeValue = () => {
     const editorData = editorRef.current.getInstance().getHTML();
@@ -31,7 +33,7 @@ const UqillEditor = (props) => {
           ref={editorRef}
           value={boardContent}
           onChange={setBoardContent}
-          style={{ width: "700px", height: "400px" }}
+          style={{ width: width ? width :"700px", height: height ? height :"400px" }}
           modules={modules}
         />
       ) : (

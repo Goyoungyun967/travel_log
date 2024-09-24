@@ -23,4 +23,6 @@ public interface FaqDao {
 
 	String[] selectFaqCategory();
 
+	FaqDTO selectAdminFaq(int faqNo);
+
 }

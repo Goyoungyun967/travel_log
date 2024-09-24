@@ -25,9 +25,25 @@ public class BoardService {
 			int boardCount = boardDao.totalCount(type);// 게시물 수
 			PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, boardCount);
 			List list = boardDao.selectBoardList(pi,type);
+			System.out.println("list"+list);
+			System.out.println("pi1:"+pi);
 			Map<String, Object> map = new HashMap<String,Object>();
 			map.put("list",list);
 			map.put("pi", pi);
 			return map;
+	}
+
+	public Map selectAccompanyList(int type, int reqPage) {
+		int numPerPage = 10;
+		int pageNaviSize = 5;
+		int accompanyCount = boardDao.accompanyTotalCount(type);// 게시물 수
+		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, accompanyCount);
+		List list = boardDao.selectAccompanyList(pi,type);
+		System.out.println("list2"+list);
+		System.out.println("pi2:"+pi);
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("list",list);
+		map.put("pi", pi);
+		return map;
 	}
 }

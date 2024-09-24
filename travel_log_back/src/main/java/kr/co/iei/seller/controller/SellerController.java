@@ -92,21 +92,21 @@ public class SellerController {
 	
 	// 판매자 정보 조회
 	// public ResponseEntity<판매자DTO> selectOneSeller(@RequestHeader("Authorization") String token){ => 토큰 사용해서 조회
+//	@Operation(summary = "판매자 정보 조회", description = "판매자 정보 출력")
 	@GetMapping
 	public ResponseEntity<MemberDTO> selectOneSeller(@RequestBody int sellerNo){
 		MemberDTO member = sellerService.selectOneSeller(sellerNo);
 		return ResponseEntity.ok(member); // 판매자 DTO가 없으므로 일단 멤버로 대체
 	}
 	
-	// 호텔 상세 - 미완성
-//	@GetMapping(value="/lodgmentView/{lodgmentNo}")
-//	public ResponseEntity<Map> list(@PathVariable int lodgmentNo){
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		LodgmentStorageDTO ls = sellerService.selectOneLodgment(lodgmentNo);
-//		List<RoomDTO> list = sellerService.selectRoomInfo(lodgmentNo);
-//		
-//		return ResponseEntity.ok(map);
-//	}
+	// 호텔 상세
+	@Operation(summary = "호텔 상세", description = "호텔 정보 출력(호텔 + 객실(객실 사진))")
+	@GetMapping(value="/lodgmentView/{lodgmentNo}")
+	public ResponseEntity<Map> list(@PathVariable int lodgmentNo){
+		System.out.println(lodgmentNo);
+		Map map = sellerService.selectHotelInfo(lodgmentNo);
+		return ResponseEntity.ok(map);
+	}
 	
 //	// 객실 등록
 //	@PostMapping

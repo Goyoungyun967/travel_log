@@ -16,6 +16,9 @@ import Swal from "sweetalert2";
 const LodgmentList = () => {
   const navigate = useNavigate;
   const BackServer = process.env.REACT_APP_BACK_SERVER;
+  const [reqPage, setReqPage] = useState(1);
+  console.log(reqPage);
+
   //호텔 / 리조트 / 펜션으로 검색할 경우
   const [lodgementType, setLodgmentType] = useState("");
   //메인에서 검색해서 들어올 경우, 검색 정보 저장
@@ -86,12 +89,11 @@ const LodgmentList = () => {
     }
   };
 
-  //검색
-  const [lodgmentListSearch, setLodgmentListSearch] = useState([]);
-
   useEffect(() => {
     axios
-      .get(`${BackServer}/lodgment/searchLodgment/`)
+      .get(
+        `${BackServer}/lodgment/searchLodgment/${reqPage}/${lodgment}/${startDate}/${endDate}/${guest}`
+      )
       .then((res) => {
         console.log(res);
       })
