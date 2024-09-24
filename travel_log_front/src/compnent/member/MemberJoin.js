@@ -8,6 +8,8 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DaumPostcode from "react-daum-postcode";
+import Swal from "sweetalert2";
+import { Timer } from "@mui/icons-material";
 
 const MemberJoin = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -32,6 +34,14 @@ const MemberJoin = () => {
   //3 :  아이디가 중복인경우
   const [idCheck, setIdCheck] = useState(0);
   const [showPostcode, setShowPostcode] = useState(false); // 주소 검색 모달 상태
+  const [timer, setTimer] = useState(300); // 5분 타이머 (300초)
+  const [isTimerExpired, setIsTimerExpired] = useState(false);
+  const sendRef = useRef();
+  const [inputDisabled, setInputDisabled] = useState(false);
+  const [verificationCode, setVerificationCode] = useState(""); // 입력한 인증 코드
+  const [sentCode, setSentCode] = useState(""); // 발송된 인증 코드
+  const [isVerificationCompleted, setIsVerificationCompleted] = useState(false); // 이메일 성공상태
+
   const checkId = () => {
     //아이디 유효성 검사
     //1. 정규표현식 감사
@@ -55,10 +65,19 @@ const MemberJoin = () => {
         });
     }
   };
-  console.log(member);
+
   const changeMember = (e) => {
     const name = e.target.name;
-    setMember({ ...member, [name]: e.target.value });
+    const originalValue = e.target.value; // 원래 값을 const로 저장
+    let value = originalValue; // 수정할 값을 let으로 선언
+
+    if (name === "memberPhone") {
+      value = value
+        .replace(/[^0-9]/g, "") // 숫자만 남김
+        .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, "$1-$2-$3")
+        .replace(/(-{1,2})$/, "");
+    }
+    setMember({ ...member, [name]: value });
   };
   const [memberPwRe, setMemberPwRe] = useState("");
   const changeMemberPwRe = (e) => {
@@ -79,6 +98,14 @@ const MemberJoin = () => {
   };
 
   const join = () => {
+    if (!isVerificationCompleted) {
+      Swal.fire({
+        title: "인증 실패",
+        icon: "warning",
+        text: "이메일 인증이 완료되어야 회원가입이 가능합니다.",
+      });
+      return;
+    }
     if (idCheck === 1 && pwMessage.current.classList.contains("valid")) {
       member.memberEmail = member.memberEmailId + "@" + member.memberEmail;
       const fullAddress = member.memberAddr + " " + member.memberAddrDetail;
@@ -87,25 +114,56 @@ const MemberJoin = () => {
         .post(`${backServer}/member`, member)
         .then((res) => {
           console.log(res);
+
           navigate("/login");
+
+          Swal.fire({
+            title: "성공! ",
+            icon: "success",
+            text: "환영합니다 !",
+          });
         })
         .catch((err) => {
           console.log(err);
         });
     }
   };
-  const sendRef = useRef();
-  const sendEmail = (e) => {
+
+  const sendEmail = () => {
     const memberEmail = member.memberEmailId + "@" + member.memberEmail;
     axios
       .get(`${backServer}/member/sendEmail/${memberEmail}`)
       .then((res) => {
         console.log(res);
         sendRef.current.style.display = "block";
+        setSentCode(res.data); // 예시로 서버에서 받은 인증 코드 저장
+        setTimer(300);
+        setIsTimerExpired(false);
+        setInputDisabled(false); // 여기서 이메일 입력을 활성화
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const verifyCode = () => {
+    if (verificationCode === sentCode) {
+      setIsTimerExpired(true);
+      Swal.fire({
+        title: "인증이 완료되었습니다.",
+        icon: "success",
+        text: "이메일 인증이 완료되었습니다.",
+      });
+      setInputDisabled(true); // 인증 완료 후 입력 비활성화
+      setIsVerificationCompleted(true); // 인증 완료 상태로 변경
+      setIsTimerExpired(true); // 타이머 만료 상태로 변경
+    } else {
+      Swal.fire({
+        title: "인증 실패",
+        icon: "error",
+        text: "인증 코드가 일치하지 않습니다.",
+      });
+    }
   };
 
   const handleCompletePostcode = (data) => {
@@ -114,6 +172,25 @@ const MemberJoin = () => {
     setMember({ ...member, memberAddr: fullAddress });
     setShowPostcode(false); // 모달 닫기
   };
+
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      setTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(timerId);
+          setIsTimerExpired(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    if (timer <= 0 || isTimerExpired) {
+      clearInterval(timerId);
+    }
+
+    return () => clearInterval(timerId);
+  }, [timer, isTimerExpired]);
 
   return (
     <section className="join-content">
@@ -231,6 +308,7 @@ const MemberJoin = () => {
       </div>
       <div className="input-item">
         <input
+          maxLength={13}
           type="text"
           name="memberPhone"
           id="memberPhone"
@@ -332,9 +410,30 @@ const MemberJoin = () => {
         </button>
       </div>
       <div className="send-email-wrap hide" ref={sendRef}>
-        <input type="text" className="send-email-input"></input>
-        <button className="email-success">인증완료</button>
-        <div className="email-time"></div>
+        <div className="hidden-zone">
+          <input
+            type="text"
+            className="send-email-input"
+            ref={sendRef}
+            disabled={inputDisabled}
+            onChange={(e) => setVerificationCode(e.target.value)}
+          ></input>
+          <button className="email-success" onClick={verifyCode}>
+            인증완료
+          </button>
+          <div className="email-time">
+            {isVerificationCompleted ? (
+              <p className="success-email-tag">인증이 완료되었습니다.</p>
+            ) : isTimerExpired ? (
+              <p>인증 시간이 만료되었습니다.</p>
+            ) : (
+              <p>
+                남은 시간: {Math.floor(timer / 60)}:
+                {String(timer % 60).padStart(2, "0")}
+              </p>
+            )}
+          </div>
+        </div>
       </div>
 
       <button type="button" className="join-btn" onClick={join}>
