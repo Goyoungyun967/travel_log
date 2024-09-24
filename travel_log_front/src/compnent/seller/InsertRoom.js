@@ -9,6 +9,8 @@ const InsertRoom = () => {
   const lodgmentNo = params.lodgmentNo;
   // 호텔 정보를 위한 state
   const [lodgmentList, setLodgmentList] = useState({});
+  // 객실 이름
+  const [roomName, setRoomName] = useState("");
   // 상품 수
   const [roomNum, setRoomNum] = useState(0);
   // 객실 가격
@@ -25,6 +27,10 @@ const InsertRoom = () => {
   const [maxCapa, setMaxCapa] = useState(0);
 
   console.log(
+    "숙소 번호 - ",
+    lodgmentNo,
+    "상품 이름 - ",
+    roomName,
     "상품 수 - ",
     roomNum,
     "객실 가격 - ",
@@ -48,9 +54,54 @@ const InsertRoom = () => {
   }, []);
   console.log(lodgmentList);
 
+  // 보내기
+  const writeRoom = () => {
+    const backServer = process.env.REACT_APP_BACK_SERVER;
+    if (
+      roomName !== "" &&
+      roomNum !== 0 &&
+      roomPrice !== 0 &&
+      boardContent !== "" &&
+      maxCapa !== 0
+    ) {
+      const form = new FormData();
+      form.append("lodgmentNo", lodgmentNo);
+      form.append("roomQua", roomNum);
+      form.append("roomName", roomName);
+      form.append("roomPrice", roomPrice);
+      form.append("boardContent", boardContent);
+      form.append("maxCapacity", maxCapa);
+      // 첨부파일 추가한 경우에만 추가(첨부파일은 여러개가 같은  name으로 전송)
+      for (let i = 0; i < roomFile.length; i++) {
+        form.append("roomFile", roomFile[i]);
+      }
+      for (let i = 0; i < hashTag.length; i++) {
+        form.append("serviceTag", hashTag[i]);
+      }
+      axios
+        .post(`${backServer}/seller/insertRoom`, form, {
+          headers: {
+            contentType: "multipart/form-data",
+            processData: false,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   return (
     <>
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          writeRoom();
+        }}
+      >
         <div className="room_box-wrap room_box-radius">
           <div className="room_box">
             <div className="hotel_info">
@@ -83,11 +134,25 @@ const InsertRoom = () => {
                   <div className="input-sc-wrap">
                     <div className="input-item">
                       <div className="input-title">
-                        <label htmlFor="#">최대인원수</label>
+                        <label htmlFor="roomName">객실 이름</label>
+                      </div>
+                      <div className="input room_name">
+                        <input
+                          type="text"
+                          id="roomName"
+                          value={roomName}
+                          onChange={(e) => setRoomName(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="input-item">
+                      <div className="input-title">
+                        <label htmlFor="maxCapacity">최대인원수</label>
                       </div>
                       <div className="input">
                         <input
                           type="number"
+                          id="maxCapacity"
                           min={0}
                           max={100}
                           value={maxCapa === 0 ? "" : maxCapa}
@@ -97,11 +162,12 @@ const InsertRoom = () => {
                     </div>
                     <div className="input-item">
                       <div className="input-title">
-                        <label htmlFor="#">상품수</label>
+                        <label htmlFor="roomNum">상품수</label>
                       </div>
                       <div className="input">
                         <input
                           type="number"
+                          id="roomNum"
                           min={0}
                           max={1000}
                           value={roomNum === 0 ? "" : roomNum}
@@ -111,11 +177,12 @@ const InsertRoom = () => {
                     </div>
                     <div className="input-item">
                       <div className="input-title">
-                        <label htmlFor="#">상품 가격</label>
+                        <label htmlFor="roomPrice">상품 가격</label>
                       </div>
                       <div className="input room_price">
                         <input
                           type="number"
+                          id="roomPrice"
                           min={0}
                           max={10000000000}
                           value={roomPrice === 0 ? "" : roomPrice}

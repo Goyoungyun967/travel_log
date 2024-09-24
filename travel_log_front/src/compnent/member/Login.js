@@ -6,6 +6,18 @@ import { FormControl, FormLabel, RadioGroup } from "@mui/material";
 import { useState } from "react";
 
 const Login = () => {
+  const [member, setMember] = useState({ memberId: "", memberPw: "" });
+  const [seller, setSeller] = useState({ businessNo: "", sellerPw: "" });
+
+  const changeMember = (e) => {
+    const name = e.target.name;
+    setMember({ ...member, [name]: e.target.value });
+  };
+
+  const changeSeller = (e) => {
+    const name = e.target.name;
+    setSeller({ ...seller, [name]: e.target.value });
+  };
   const [type, setType] = useState(true);
   const changeType = (e) => {
     setType(!type);
@@ -38,19 +50,47 @@ const Login = () => {
             {type ? (
               <div className="input-group">
                 <label htmlFor="memberId">아이디 :</label>
-                <input type="text" name="memberId" />
+                <input
+                  type="text"
+                  name="memberId"
+                  id="memberId"
+                  value={member.memberId}
+                  onChange={changeMember}
+                />
+                <div className="input-group">
+                  <label htmlFor="memberPw">비밀번호:</label>
+                  <input
+                    type="password"
+                    name="memberPw"
+                    id="memberPw"
+                    value={member.memberPw}
+                    onChange={changeMember}
+                  />
+                </div>
               </div>
             ) : (
               <div className="input-group">
                 <label htmlFor="businessNo">사업자번호 :</label>
-                <input type="text" name="businessNo" />
+                <input
+                  type="text"
+                  name="businessNo"
+                  id="businessNo"
+                  value={seller.businessNo}
+                  onChange={changeSeller}
+                />
+                <div className="input-group">
+                  <label htmlFor="sellerPw">사업자 비밀번호:</label>
+                  <input
+                    type="password"
+                    name="sellerPw"
+                    id="sellerPw"
+                    value={seller.sellerPw}
+                    onChange={changeSeller}
+                  />
+                </div>
               </div>
             )}
 
-            <div className="input-group">
-              <label htmlFor="memberPw">비밀번호:</label>
-              <input type="password" className="memberPw" id="memberPw" />
-            </div>
             <button type="submit" className="login-btn">
               로그인
             </button>

@@ -41,7 +41,7 @@
     	)
 	</insert>
 	
-	<!-- 호텔 등록하면 기존 호텔 테이블에서 삭제해주어야함 (primary key 땜시 안됨) -->
+	<!-- 호텔 등록하면 기존 호텔 테이블에서 삭제해주어야함 (제약조건 걸려있어서 호텔 번호 중복 불가) -->
 	<delete id="deleteLodgment">
 		delete from HOTEL_XLSX where x_lodgment_no=#{lodgmentNo}
 	</delete>
@@ -80,9 +80,22 @@
         	ofType="roomFile"
         	javaType="java.util.List"
         >
-        <id property="roomFileNo" column="room_file_no"/>
+        	<id property="roomFileNo" column="room_file_no"/>
             <result property="roomImg" column="room_img"/>
-            </collection>
+        </collection>
     </resultMap>
-
+	
+	
+	<!-- 객실 등록 -->
+	<insert id="insertRoom">
+		insert into room values(room_seq.nextval, #{lodgmentNo},#{roomName},#{roomQua},#{maxCapactiy},#{roomPrice},#{boardContent})
+		<selectKey resultType="int" keyProperty="roomNo" order="AFTER">
+			select max(room_no) from room
+		</selectKey>
+	</insert>
+	
+	<!-- 객실 파일 등록 -->
+	<insert id="insertRoomFile">
+		insert into room_file values(room_file_seq.nextval,#{roomImg})
+	</insert>
 </mapper>

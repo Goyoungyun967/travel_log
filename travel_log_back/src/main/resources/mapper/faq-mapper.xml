@@ -23,6 +23,6 @@
 		update faq set faq_type=#{faqType},faq_title=#{faqTitle},faq_content=#{faqContent} where faq_no=#{faqNo}
 	</update>
 	<select id="selectAdminFaq" resultType="faq">
-		select * from faq where faq_no=#{faqNo};
+		select * from faq where faq_no=#{faqNo}
 	</select>
 </mapper>

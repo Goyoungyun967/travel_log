@@ -3,6 +3,7 @@ package kr.co.iei.member.contorller;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,7 @@ public class MemberContorller {
 		
 		return ResponseEntity.ok(result);
 	}
+	
 	@PostMapping
 	public ResponseEntity<Integer> join(@RequestBody MemberDTO member){
 		int result = memberService.insertMember(member);
@@ -49,7 +51,7 @@ public class MemberContorller {
 	}
 	
 	@GetMapping(value="/sendEmail/{memberEmail}")
-	public String sendEamil(@PathVariable String memberEmail) {
+	public ResponseEntity<String> sendEamil(@PathVariable String memberEmail) {
 		//인증메일 인증코드 생성
 		Random r = new Random();
 		StringBuffer sb = new StringBuffer();
@@ -74,7 +76,14 @@ public class MemberContorller {
 							  +"<h3>인증번호는 [<span style='color:red;'>"
 							  + sb.toString()
 							  +"</span>]입니다.</h3>";
-		emailSender.sendMail("트레블로그 이메일 인증번호", memberEmail, emailContent);
-		return sb.toString();
+		
+		try {
+	        emailSender.sendMail("트레블로그 이메일 인증번호", memberEmail, emailContent);
+	        System.out.println("Generated verification code: " + sb.toString());
+	        return ResponseEntity.ok(sb.toString()); // 이메일 발송 성공
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                             .body("이메일 발송 실패: " + e.getMessage());
+	    }
 	}
 }

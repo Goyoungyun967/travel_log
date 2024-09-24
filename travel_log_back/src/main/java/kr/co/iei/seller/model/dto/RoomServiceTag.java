@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Alias(value="serviceTag")
+@Alias(value="roomServiceTag")
 @Schema(description="서비스 태그 객체")
-public class ServiceTagDTO {
+public class RoomServiceTag {
+	@Schema(description = "숙소 번호",type="int")
+	private int roomNo;
 	@Schema(description = "서비스 태그 번호",type="int")
-	private int serviceTageNo;
-	@Schema(description = "서비스 태그 타입",type="String")
-	private String serviceTageType;
+	private int serviceTagNo;
 }
