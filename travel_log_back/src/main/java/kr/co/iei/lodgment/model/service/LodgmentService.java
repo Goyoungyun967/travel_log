@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.iei.lodgment.model.dao.LodgmentDao;
+import kr.co.iei.lodgment.model.dto.LodgmentDTO;
 
 @Service
 public class LodgmentService {
@@ -27,5 +28,12 @@ public class LodgmentService {
 		map.put("list", list);
 		map.put("name", name);
 		return map;
+	}
+
+	public List<LodgmentDTO>  getLodgmentList(int reqPage, String lodgment, String startDate, String endDate, int guest) {
+		 int limit = 10;
+	     int offset = (reqPage - 1) * limit; // 페이지 계산
+	     List<LodgmentDTO> list = lodgmentDao.getLodgmentList(offset, limit, lodgment, startDate, endDate, guest);
+	     return list;
 	}
 }
