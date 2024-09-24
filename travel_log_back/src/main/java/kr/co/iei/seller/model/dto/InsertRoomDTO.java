@@ -24,7 +24,7 @@ public class InsertRoomDTO {
     private int roomPrice; // 객실 가격
     private String boardContent; // 객실 공지사항
     
-    private List<String> serviceTag; // 서비스태그(해시태그) 배열 형태
+    private List<Integer> serviceTag; // 서비스태그(해시태그) 배열 형태
     
     private MultipartFile[] roomFile; // 첨부파일 배열형태
 }

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import "./css/lodgment_view.css";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
+import KakaoMap from "./KakaoMap";
 
 const LodgmentView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -81,7 +83,7 @@ const LodgmentView = () => {
       <div className="item-tr-wrap">
         <div className="item-map">
           지도 들어갈 자리
-          {/* <KakaoMap lodgmentList={lodgmentList} /> */}
+          <KakaoMap lodgmentAddr={lodgmentList.lodgmentAddr} />
         </div>
         <div className="item-notice">
           <h1>공지사항</h1>

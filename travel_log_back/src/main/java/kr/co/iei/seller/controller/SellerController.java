@@ -113,7 +113,7 @@ public class SellerController {
 	
 //	// 객실 등록
 	@PostMapping(value="/insertRoom")
-	public ResponseEntity<Integer> insertRoom(@ModelAttribute InsertRoomDTO room, @ModelAttribute MultipartFile[] roomFile){
+	public ResponseEntity<Boolean> insertRoom(@ModelAttribute InsertRoomDTO room, @ModelAttribute MultipartFile[] roomFile){
 		System.out.println(room);
 		List<RoomFileDTO> roomFileList = new ArrayList<RoomFileDTO>();
 		if(roomFile != null) {
@@ -127,6 +127,6 @@ public class SellerController {
 			}
 		}
 		int result = sellerService.insertRoom(room, roomFileList);
-		return null;
+		return ResponseEntity.ok(result==1+roomFileList.size());
 	}
 }

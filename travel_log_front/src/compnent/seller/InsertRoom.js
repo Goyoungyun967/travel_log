@@ -217,7 +217,7 @@ const InsertRoom = () => {
 const HashTap = (props) => {
   const setHashTag = props.setHashTag;
   const inputCheckboxChange = (e) => {
-    const value = e.target.value;
+    const value = Number(e.target.value);
     setHashTag((prevTags) =>
       e.target.checked
         ? [...prevTags, value]
@@ -229,51 +229,51 @@ const HashTap = (props) => {
       <h3>#해시태그</h3>
       <div className="tag">
         <label className="checkbox-label">
-          <input type="checkbox" value="1" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={1} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">사우나</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="2" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={2} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">수영장</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="3" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={3} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">레스토랑</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="4" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={4} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">객실스파</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="5" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={5} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">애견동반</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="6" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={6} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">욕실용품</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="7" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={7} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">탈수기</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="8" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={8} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">건조기</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="9" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={9} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">매점</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="10" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={10} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">주차장</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="11" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={11} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">와이파이</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="12" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={12} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">TV</span>
         </label>
       </div>
@@ -331,13 +331,13 @@ const FileInfo = (props) => {
         />
         {showRoomFile.map((file, i) => {
           return (
-            <>
+            <div key={i}>
               {file.preview ? (
                 <img src={file.preview} width="150px" className="photoArr" />
               ) : (
                 ""
               )}
-            </>
+            </div>
           );
         })}
       </div>
