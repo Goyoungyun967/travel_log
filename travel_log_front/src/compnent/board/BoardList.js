@@ -244,16 +244,17 @@ const AccompanyItem = (props) => {
 const BoardItem = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const board = props.board;
+  console.log(board);
   const navigate = useNavigate();
   return (
     // return 문으로 JSX 요소를 반환
-    <div
-      className="boardList-preview"
-      onClick={() => {
-        navigate(`/board/view/${board.boardNo}`); // 클릭 시 상세 페이지로 이동
-      }}
-    >
-      <div className="boardList-content">
+    <div className="boardList-preview">
+      <div
+        className="boardList-content"
+        onClick={() => {
+          navigate(`/board/view/${board.boardNo}`); // 클릭 시 상세 페이지로 이동
+        }}
+      >
         <div className="boardList-area text-medium">{board.boardArea}</div>
         {/* 지역 표시 */}
         <div className="board-memberIcon">
@@ -273,8 +274,7 @@ const BoardItem = (props) => {
                     ? `${backServer}/board/thumb/${board.boardThumb}` // 게시물 썸네일
                     : "/image/lodgment_default_img.png" // 기본 이미지
                 }
-                className="preview-thumb"
-                alt="게시물 썸네일" // 이미지 설명
+                className="board-preview-thumb"
               />
             </div>
           </div>

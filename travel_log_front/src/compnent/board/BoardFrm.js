@@ -14,9 +14,13 @@ const BoardFrm = (props) => {
   const setBoardThumb = props.setBoardThumb;
   const fileList = props.fileList;
   const setFileList = props.setFileList;
+
+  //지역
   const boardArea = props.boardArea;
   const setBoardArea = props.setBoardArea;
-
+  //지역 셀렛
+  const selectedArea = props.selectedArea;
+  const setSelectedArea = props.setSelectedArea;
   const delBoardFileNo = props.delBoardFileNo;
   const setDelBoardFileNo = props.setDelBoardFileNo;
   const thumbnailRef = useRef(null);
@@ -25,10 +29,9 @@ const BoardFrm = (props) => {
   //썸네일 이미지 첨부파일이 변경되면 동작할 함수
   //지역 선택
 
-  const [selectedArea, setSelectedArea] = useState("");
-
   const handleChange = (event) => {
     setSelectedArea(event.target.value);
+    console.log(selectedArea);
   };
   //-------------------------------------------
   const changeThumbnail = (e) => {
@@ -44,6 +47,7 @@ const BoardFrm = (props) => {
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
         setBoardImg(reader.result);
+        console.log();
       };
     } else {
       setThumbnail(null);
@@ -66,6 +70,7 @@ const BoardFrm = (props) => {
     setBoardFile([...boardFile, ...fileArr]);
     setShowBoardFile([...showBoardFile, ...filenameArr]);
   };
+  console.log(boardThumb);
   console.log(boardFile);
   console.log(showBoardFile);
   return (

@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import BoardFrm from "./BoardFrm";
+import { constructNow } from "date-fns";
 const BoardWrite = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [boardContent, setBoardContent] = useState("");
@@ -32,50 +33,59 @@ const BoardWrite = () => {
     { title: "전북" },
     { title: "제주" },
   ]);
+  const [selectedArea, setSelectedArea] = useState("");
+
   const inputTitle = (e) => {
     setBoardTitle(e.target.value);
   };
   const inputContent = (e) => {
     setBoardContent(e.target.value);
   };
-  // const writeBoard = () => {
-  //   if (boardTitle !== "" && boardContent !== "") {
-  //     const form = new FormData();
-  //     form.append("boardTitle", boardTitle);
-  //     form.append("boardContent", boardContent);
-  //     //   form.append("boardWriter", loginId);
-  //     //썸네일이 첨부된 경우에만 추가
-  //     if (thumbnail !== null) {
-  //       form.append("thumbnail", thumbnail);
-  //     }
-  //     //첨부파일도 추가한 경우에만 추가 (첨부파일은 여러개가 같은 name으로 전송)
-  //     for (let i = 0; i < boardFile.length; i++) {
-  //       form.append("boardFile", boardFile[i]);
-  //     }
-  //     axios
-  //       .post(`${backServer}/board`, form, {
-  //         headers: {
-  //           contentType: "multipart/form-data",
-  //           processData: false,
-  //         },
-  //       })
-  //       .then((res) => {
-  //         console.log(res);
-  //         if (res.data) {
-  //           navigate("/board/list");
-  //         } else {
-  //           Swal.fire({
-  //             title: "에러",
-  //             text: "원인찾아",
-  //             icon: "error",
-  //           });
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  // };
+  const handleBoardContentChange = (content) => {
+    const cleanedContent = content.replace(/<p>/g, "").replace(/<\/p>/g, "");
+    setBoardContent(cleanedContent);
+  };
+  const writeBoard = () => {
+    if (boardTitle !== "" && boardContent !== "") {
+      const form = new FormData();
+      form.append("boardTitle", boardTitle);
+      form.append("boardContent", boardContent);
+      form.append("boardArea", selectedArea);
+      //   form.append("boardWriter", loginId);
+      //썸네일이 첨부된 경우에만 추가
+      console.log(selectedArea);
+      if (thumbnail !== null) {
+        form.append("thumnail", thumbnail);
+        console.log(thumbnail);
+      }
+      //첨부파일도 추가한 경우에만 추가 (첨부파일은 여러개가 같은 name으로 전송)
+      for (let i = 0; i < boardFile.length; i++) {
+        form.append("boardFile", boardFile[i]);
+      }
+      axios
+        .post(`${backServer}/board`, form, {
+          headers: {
+            contentType: "multipart/form-data",
+            processData: false,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.data) {
+            navigate("/board/list");
+          } else {
+            Swal.fire({
+              title: "에러",
+              text: "원인찾아",
+              icon: "error",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
   return (
     <div className="write-content-wrap">
       <div className="write-page-title">여행 게시글 작성</div>
@@ -83,7 +93,7 @@ const BoardWrite = () => {
         className="board-write-frm"
         onSubmit={(e) => {
           e.preventDefault();
-          // writeBoard();
+          writeBoard();
         }}
       >
         <BoardFrm
@@ -96,11 +106,13 @@ const BoardWrite = () => {
           setThumbnail={setThumbnail}
           boardFile={boardFile}
           setBoardFile={setBoardFile}
+          selectedArea={selectedArea}
+          setSelectedArea={setSelectedArea}
         />
         <div className="board-editer-wrap">
           <UqillEditor
             boardContent={boardContent}
-            setBoardContent={setBoardContent}
+            setBoardContent={handleBoardContentChange}
           />
         </div>
         <div className="board-btn-zone">

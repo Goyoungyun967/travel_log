@@ -1,5 +1,7 @@
 package kr.co.iei.board.model.dto;
 
+import java.util.List;
+
 import org.apache.ibatis.type.Alias;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,5 +31,15 @@ public class BoardDTO {
 	private String regDate; //글쓴 날짜 
 	@Schema(description = "게시판 타입", type = "int")
 	private int boardType; // 1번 일반게시판 , 2번 동행 게시판
+	private List<BoardFileDTO> fileList;
+	
+	//상세 페이지 dto
+	private String memberImage;
+	private String memberNickName;
+	private int likeCount;
+	private int keepCount;
+	private int commentCount;
 
+	
+	
 }

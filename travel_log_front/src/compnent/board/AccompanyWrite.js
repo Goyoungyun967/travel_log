@@ -125,10 +125,10 @@ const AccompanyWrite = () => {
             setAccompanyDate={setAccompanyDate}
             accompanyType={accompanyType}
             setAccompanyType={setAccompanyType}
-            accompanyArea={accompanyArea}
-            setAccompanyArea={setAccompanyArea}
-            accompanyContent={accompanyContent}
-            setAccompanyContent={setAccompanyContent}
+            // accompanyArea={accompanyArea}
+            // setAccompanyArea={setAccompanyArea}
+            // accompanyContent={accompanyContent}
+            // setAccompanyContent={setAccompanyContent}
             startDate={startDate}
             endDate={endDate}
             setEndDate={setEndDate}
@@ -144,7 +144,7 @@ const AccompanyWrite = () => {
 
         <div className="board-btn-zone">
           <button type="submit" className="boardWrite-btn">
-            등록하기
+            동행 일정 등록
           </button>
         </div>
       </form>
