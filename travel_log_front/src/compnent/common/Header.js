@@ -121,7 +121,7 @@ const Header = (props) => {
                 <Link to="/login">로그인</Link>
               </li>
               <li>
-                <Link to="/join">회원가입</Link>
+                <Link to="/select">회원가입</Link>
               </li>
             </>
           )}

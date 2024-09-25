@@ -4,7 +4,8 @@
 .lodgment-search-wrap {
   display: flex;
   justify-items: center;
-  margin-top: 50px;
+  margin-top: 30px;
+  margin-left: 10px;
 }
 .price-text-wrap {
   margin-top: 30px;
@@ -127,4 +128,50 @@
   font-weight: 900;
   cursor: pointer;
   border: none;
+}
+
+.lodgment-card {
+  cursor: pointer;
+}
+.lodgment-card-container {
+  width: 100%;
+  padding: 10px;
+  margin-left: 40px;
+}
+.lodgment-card-container :hover {
+  background-color: #1976d2;
+}
+.lodgment-card {
+  display: flex;
+  border-bottom: 4px solid var(--gray6);
+  margin-bottom: 50px;
+  margin-left: 30px;
+  width: 85%;
+}
+.lodgment-card img {
+  width: 300px;
+  margin-bottom: 30px;
+}
+.lodgment-details {
+  text-align: left;
+  margin-left: 40px;
+  width: 70%;
+}
+.lodgment-price {
+  font-size: 28px;
+  text-align: right;
+  margin-right: 20px;
+}
+.lodgment-price-day {
+  text-align: right;
+  font-size: 20px;
+  margin: 0;
+  padding: 0;
+  margin-right: 20px;
+  margin-top: 30px;
+}
+.lodgment-checkin {
+  margin: 0;
+  padding: 0;
+  margin-top: 5px;
 }

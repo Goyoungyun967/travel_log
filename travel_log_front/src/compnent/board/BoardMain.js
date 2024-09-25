@@ -10,7 +10,7 @@ const BoardMain = () => {
       <Route path="/list" element={<BoardList />}></Route>
       <Route path="accompanyWrite" element={<AccompanyWrite />} />
       <Route path="boardWrite" element={<BoardWrite />} />
-      <Route path="view/:boardNo" element={<BoardView />} />
+      <Route path="view/:boardNo/:timeString" element={<BoardView />} />
     </Routes>
   );
 };

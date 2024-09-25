@@ -75,13 +75,15 @@
   width: 100%;
 }
 
-.input-group {
+.seller-input-group {
   display: flex; /* 가로 정렬을 위한 설정 */
   align-items: center;
   margin-bottom: 10px;
+  display: flex;
+  align-items: center; /* 세로 정렬 */
 }
 
-.input-group > label {
+.seller-input-group > label {
   margin-left: 40px; /* 레이블과 입력 필드 간 간격 */
   font-size: 16px;
   color: #555;
@@ -418,5 +420,46 @@
 
 .email-time > .success-email-tag {
   color: #0056b3;
+  margin-top: 7px;
+}
+
+.bank-zone {
+  width: 90px;
+  margin-left: 10px;
+}
+
+.bank-system {
+  display: flex;
+  align-items: center; /* 세로 정렬 */
+  margin-bottom: 1rem; /* 아래 여백 추가 */
+}
+.account-num {
+  margin-left: 19px;
+}
+.bank-system > .input-item {
+  overflow: hidden;
+}
+
+.account-zone {
+  width: 190px;
+  margin-left: 9px;
+}
+
+.seller-phone-zone {
+  margin-bottom: 17px;
+}
+
+.check-wait {
+  color: green;
+  margin-top: 7px;
+}
+
+.yes-seller-check {
+  color: #0056b3;
+  margin-top: 7px;
+}
+
+.no-seller-check {
+  color: red;
   margin-top: 7px;
 }

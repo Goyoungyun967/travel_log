@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -92,6 +93,7 @@ public class BoardController {
 		BoardDTO board = boardService.selectOneBoard(boardNo);
 		return ResponseEntity.ok(board);
 	}
+	//안할수도 있음{첨부파일 저장하기}
 	@GetMapping(value = "/file/{boardFileNo}")
 	public ResponseEntity<Resource> filedown(@PathVariable int boardFileNo) throws FileNotFoundException{
 		System.out.println(boardFileNo);
@@ -113,7 +115,23 @@ public class BoardController {
 					.contentType(MediaType.APPLICATION_OCTET_STREAM)
 					.body(resource);
 	}
-	
+	//일반게시판 삭제
+	@DeleteMapping(value = "/delete/{boardNo}")
+	public ResponseEntity<Integer> deleteBoard(@PathVariable int boardNo){
+		List<BoardFileDTO> delFileList = boardService.deleteBoard(boardNo);
+		
+		if(delFileList != null) {
+			 String savepath = root+"/board/";
+			 for(BoardFileDTO boardFile : delFileList) {
+				 File deFile= new File(savepath+boardFile.getFileNo());
+				 deFile.delete();
+			 }
+			 return ResponseEntity.ok(1);
+		}else {
+			return ResponseEntity.ok(0);
+		}
+	}
+	//일반게시판 업데이트
 	
 	
 }
