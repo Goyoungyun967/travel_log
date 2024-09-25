@@ -28,6 +28,7 @@ import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
+import kr.co.iei.seller.model.dto.StmInfoDTO;
 import kr.co.iei.seller.model.service.SellerService;
 import kr.co.iei.util.FileUtils;
 
@@ -139,5 +140,13 @@ public class SellerController {
 		BookingInfoDTO bid = sellerService.bookInfo(bookNo);
 		System.out.println(bid);
 		return ResponseEntity.ok(bid);
+	}
+	
+	// 판매자 정산
+	@Operation(summary="판매자 정산", description = "정산 정보 출력")
+	@PostMapping(value="/stm/{sellerNo}")
+	public ResponseEntity<List> stmInfo(@PathVariable int sellerNo){
+		List<StmInfoDTO> ls = sellerService.selectStmInfo(sellerNo);
+		return ResponseEntity.ok(ls);
 	}
 }

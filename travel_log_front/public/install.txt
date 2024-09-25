@@ -29,4 +29,10 @@ npm install react-quill
 윤희수 2024-09-20 14:24
 npm install react-kakao-maps-sdk
 
+마수빈 2024-09-25 15:19
+npm install @mui/x-data-grid
+npm install @mui/x-data-grid-generator
+
+마수빈 2024-09-25 15:55 (차트 api)
+npm install recharts
 

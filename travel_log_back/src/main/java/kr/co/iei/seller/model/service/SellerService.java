@@ -17,6 +17,7 @@ import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
 import kr.co.iei.seller.model.dto.RoomServiceTag;
 import kr.co.iei.seller.model.dto.ServiceTagDTO;
+import kr.co.iei.seller.model.dto.StmInfoDTO;
 
 @Service
 public class SellerService {
@@ -100,6 +101,11 @@ public class SellerService {
 	public BookingInfoDTO bookInfo(int bookNo) {
 		BookingInfoDTO bid = sellerDao.bookInfo(bookNo);
 		return bid;
+	}
+
+	public List<StmInfoDTO> selectStmInfo(int sellerNo) {
+		List<StmInfoDTO> ls = sellerDao.selectStmInfo(sellerNo);
+		return ls;
 	}
 
 
