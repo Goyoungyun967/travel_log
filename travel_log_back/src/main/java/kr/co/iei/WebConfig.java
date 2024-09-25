@@ -31,6 +31,9 @@ public class WebConfig implements WebMvcConfigurer{
 		//썸네일		
 				registry.addResourceHandler("/board/thumb/**")
 						.addResourceLocations("file:///"+root+"/board/thumb/");
+		//bard 첨부파일
+				registry.addResourceHandler("/board/*")
+				.addResourceLocations("file:///"+root+"/board/");
 						
 	}
 	

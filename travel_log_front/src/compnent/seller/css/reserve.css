@@ -1,0 +1,57 @@
+/*---- 기능 ----*/
+.reserve-box-wrap {
+  border: 1px solid #ccc;
+  padding: 30px;
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.reserve-box-wrap > h3 {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.reserve-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 20px;
+  justify-content: center;
+}
+.reserve-info > .item-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.reserve-info > .item-wrap > .item {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 30px 0px;
+}
+.reserve-info > .item-wrap > .item > h3 {
+  font-size: 18px;
+  width: 200px;
+}
+.reserve-info > .item-wrap > .reserve > h3 {
+  font-weight: bold;
+  color: blue;
+}
+.reserve-info > .request-wrap {
+  display: flex;
+  width: 700px;
+  flex-direction: column;
+  justify-content: center;
+}
+.reserve-info > .request-wrap > h3 {
+  text-align: center;
+}
+.reserve-info > .request-wrap > .request-box {
+  border: 1px solid #ddd;
+  margin-top: 20px;
+  overflow: auto;
+  width: 100%;
+  padding: 20px;
+}
+/*------- 지울 곳 -------*/
