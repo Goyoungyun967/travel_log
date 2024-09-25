@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.iei.seller.model.dto.BookingInfoDTO;
 import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
+import kr.co.iei.seller.model.dto.RoomServiceTag;
 
 @Mapper
 public interface SellerDao {
@@ -29,5 +31,9 @@ public interface SellerDao {
 	int insertRoom(InsertRoomDTO room);
 
 	int insertRoomFile(RoomFileDTO roomFile);
+
+	int insertServiceTag(RoomServiceTag rst);
+
+	BookingInfoDTO bookInfo(int bookNo);
 
 }

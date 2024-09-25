@@ -10,11 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dao.SellerDao;
+import kr.co.iei.seller.model.dto.BookingInfoDTO;
 import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
 import kr.co.iei.seller.model.dto.RoomServiceTag;
+import kr.co.iei.seller.model.dto.ServiceTagDTO;
 
 @Service
 public class SellerService {
@@ -72,6 +74,7 @@ public class SellerService {
 		return map;
 	}
 
+	// 객실 등록(객실 정보, 파일, 해시태그 동시 처리)
 	@Transactional
 	public int insertRoom(InsertRoomDTO room, List<RoomFileDTO> roomFileList) {
 		int result = sellerDao.insertRoom(room);
@@ -80,8 +83,23 @@ public class SellerService {
 			roomFile.setRoomNo(room.getRoomNo());
 			result += sellerDao.insertRoomFile(roomFile);
 		}
+		// 체크가 null 값이 아닐 때만 (해시태그가 비어있을 수도 있으니까...)
+	    if (room.getServiceTag() != null) {
+	        for (int serviceTagNo : room.getServiceTag()) {
+	        	RoomServiceTag rst = new RoomServiceTag();
+	            rst.setRoomNo(room.getRoomNo());
+	            rst.setServiceTagNo(serviceTagNo); // 태그 값을 설정
+
+	            result += sellerDao.insertServiceTag(rst); // 서비스 태그 DB에 삽입
+	        }
+	    }
 		
-		return 0;
+		return result;
+	}
+
+	public BookingInfoDTO bookInfo(int bookNo) {
+		BookingInfoDTO bid = sellerDao.bookInfo(bookNo);
+		return bid;
 	}
 
 

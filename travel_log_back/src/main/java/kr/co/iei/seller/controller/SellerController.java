@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.member.model.dto.MemberDTO;
+import kr.co.iei.seller.model.dto.BookingInfoDTO;
 import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
@@ -113,7 +114,7 @@ public class SellerController {
 	
 //	// 객실 등록
 	@PostMapping(value="/insertRoom")
-	public ResponseEntity<Integer> insertRoom(@ModelAttribute InsertRoomDTO room, @ModelAttribute MultipartFile[] roomFile){
+	public ResponseEntity<Boolean> insertRoom(@ModelAttribute InsertRoomDTO room, @ModelAttribute MultipartFile[] roomFile){
 		System.out.println(room);
 		List<RoomFileDTO> roomFileList = new ArrayList<RoomFileDTO>();
 		if(roomFile != null) {
@@ -127,6 +128,16 @@ public class SellerController {
 			}
 		}
 		int result = sellerService.insertRoom(room, roomFileList);
-		return null;
+		return ResponseEntity.ok(result==1+roomFileList.size());
+	}
+	
+	
+	// 예약 상세 조회
+	@Operation(summary = "예약 상세", description = "예약 정보 출력(호텔 이름 + 객실 이름 + 예약 정보")
+	@GetMapping(value="/reserve/{bookNo}")
+	public ResponseEntity<BookingInfoDTO> bookInfo(@PathVariable int bookNo){
+		BookingInfoDTO bid = sellerService.bookInfo(bookNo);
+		System.out.println(bid);
+		return ResponseEntity.ok(bid);
 	}
 }

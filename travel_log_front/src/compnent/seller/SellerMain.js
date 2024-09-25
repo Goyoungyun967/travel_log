@@ -4,6 +4,7 @@ import InsertLodgment from "./InsertLodgment";
 import SellerInfo from "./SellerInfo";
 import InsertRoom from "./InsertRoom";
 import LodgmentView from "./LodgmentView";
+import Reserve from "./Reserve";
 const SellerMain = () => {
   return (
     <Routes>
@@ -17,6 +18,8 @@ const SellerMain = () => {
       <Route path="insertRoom/:lodgmentNo" element={<InsertRoom />} />
       {/* 호텔 누르면 해당 호텔 상세로 이동 */}
       <Route path="lodgmentView/:lodgmentNo" element={<LodgmentView />} />
+      {/* 예약 - 예약 번호 보내서 조회 */}
+      <Route path="reserve/:bookNo" element={<Reserve />} />
     </Routes>
   );
 };

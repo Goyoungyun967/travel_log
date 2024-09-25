@@ -88,7 +88,7 @@
 	
 	<!-- 객실 등록 -->
 	<insert id="insertRoom">
-		insert into room values(room_seq.nextval, #{lodgmentNo},#{roomName},#{roomQua},#{maxCapactiy},#{roomPrice},#{boardContent})
+		insert into room values(room_seq.nextval, #{lodgmentNo},#{roomName},#{roomQua},#{maxCapacity},#{roomPrice},#{boardContent})
 		<selectKey resultType="int" keyProperty="roomNo" order="AFTER">
 			select max(room_no) from room
 		</selectKey>
@@ -96,6 +96,23 @@
 	
 	<!-- 객실 파일 등록 -->
 	<insert id="insertRoomFile">
-		insert into room_file values(room_file_seq.nextval,#{roomImg})
+		insert into room_file values(room_file_seq.nextval,#{roomNo},#{roomImg})
 	</insert>
+	
+	<!-- 객실 해시태그 등록 -->
+	<insert id="insertServiceTag">
+		insert into room_service_tag values(#{roomNo},#{serviceTagNo})
+	</insert>
+	
+	
+	<!-- 숙소 객실 예약 요청사항 조회 -->
+	<select id="bookInfo" resultType="bookingInfo">
+		select ls.lodgment_name, r.room_name, b.*
+			from LODGMENT_STORAGE ls
+			join room r
+			using(lodgment_no)
+			join booking b
+			on r.room_no = b.room_no
+			where b.booking_no=#{bookNo}
+	</select>
 </mapper>
