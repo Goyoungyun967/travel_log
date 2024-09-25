@@ -55,7 +55,7 @@
 			where rnum BETWEEN #{start} and #{end}
 		</select>
 		<insert id="insertBoard">
-			 insert into board values(board_seq.nextval,#{boardTitle},#{boardContent},#{boardArea},to_char(sysdate,'yyyy-mm-dd'),1,#{boardThumb},28,0)
+			 insert into board values(board_seq.nextval,#{boardTitle},#{boardContent},#{boardArea},sysdate,1,#{boardThumb},28,0)
 			<selectKey resultType="int" keyProperty="boardNo" order="AFTER">
 				select max(board_no) from board
 			</selectKey>
@@ -105,6 +105,11 @@
 		        ofType="boardFile"
 		    />
 		</resultMap>
+		
+		
+		<delete id="deleteBoard">
+			delete from board where board_no=#{boardNo}
+		</delete>
 
 			
 	
