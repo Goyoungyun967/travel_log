@@ -1,11 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
+import { memberLevelState } from "../utils/RecoilData";
 
 const FaqList = () => {
     const backServer = process.env.REACT_APP_BACK_SERVER;
     const navigate = useNavigate();
+    const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
     const faqType = useParams().faqType;
     const [faqList, setFaqList] = useState([]);
     const categoryIndex = useParams().categoryIndex;
@@ -57,20 +60,22 @@ const FaqList = () => {
                 } 
                 return <div key={"faq"+index} className="faq-content-box">
                     <div className="faq-title-box">
-                    <div className="faq-title-wrap" onClick={showFaqContent}>
-                        {<p className="faq-title">{faq.faqTitle}</p>}
-                        <span className="material-icons">expand_more</span>
-                    </div>
+                        <div className="faq-title-wrap" onClick={showFaqContent}>
+                            {<div className="faq-title">{faq.faqTitle}</div>}
+                            <span className="material-icons">expand_more</span>
+                        </div>
+                        {memberLevel === 1 ?
                         <div className="faq-btn-box">
                             <button onClick={()=>{
                                 navigate(`/faq/faqUpdate/${faq.faqNo}/${categoryIndex}`)
                             }}>수정</button>
                             <button onClick={deleteFaq}>삭제</button>
                         </div>
+                        : ""}
                     </div>
                     {faq.faqContent ?
                     <div className="faq-content">
-                        <p>{faq.faqContent}</p>
+                        <p dangerouslySetInnerHTML={{__html : faq.faqContent}}></p>
                     </div>
                     : ""}
                 </div>
