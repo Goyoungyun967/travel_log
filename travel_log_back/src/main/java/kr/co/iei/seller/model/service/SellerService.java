@@ -10,12 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dao.SellerDao;
+import kr.co.iei.seller.model.dto.BookingInfoDTO;
 import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
 import kr.co.iei.seller.model.dto.RoomServiceTag;
 import kr.co.iei.seller.model.dto.ServiceTagDTO;
+import kr.co.iei.seller.model.dto.StmInfoDTO;
 
 @Service
 public class SellerService {
@@ -82,7 +84,7 @@ public class SellerService {
 			roomFile.setRoomNo(room.getRoomNo());
 			result += sellerDao.insertRoomFile(roomFile);
 		}
-		// 체크가 null 값이 아닐 때만 
+		// 체크가 null 값이 아닐 때만 (해시태그가 비어있을 수도 있으니까...)
 	    if (room.getServiceTag() != null) {
 	        for (int serviceTagNo : room.getServiceTag()) {
 	        	RoomServiceTag rst = new RoomServiceTag();
@@ -94,6 +96,16 @@ public class SellerService {
 	    }
 		
 		return result;
+	}
+
+	public BookingInfoDTO bookInfo(int bookNo) {
+		BookingInfoDTO bid = sellerDao.bookInfo(bookNo);
+		return bid;
+	}
+
+	public List<StmInfoDTO> selectStmInfo(int sellerNo) {
+		List<StmInfoDTO> ls = sellerDao.selectStmInfo(sellerNo);
+		return ls;
 	}
 
 

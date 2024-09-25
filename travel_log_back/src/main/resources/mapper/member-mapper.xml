@@ -6,6 +6,13 @@
  	</select>
  	
  	<insert id="insertMember">
- 		insert into member values(member_seq.nextval,#{memberId},#{memberPw},#{memberAge},#{memberGender},#{memberPhone},#{memberAddr},#{memberEmail},sysdate,#{memberLevel},#{memberNickname},#{memberImage})
+ 		insert into member values(member_seq.nextval,#{memberId},#{memberPw},#{memberAge},#{memberGender},#{memberPhone},#{memberAddr},#{memberEmail},sysdate,2,#{memberNickname},#{memberImage})
  	</insert>
+ 	
+ 	<select id="selectLoginMember" resultType="member">
+ 		select member_no,member_pw,member_nickname,member_level from member where member_id=#{memberId}
+ 	</select>
+ 	<select id="selectOneMember" resultType="member">
+ 		select * from member where member_no=#{memberNo}
+ 	</select>
 </mapper>

@@ -35,11 +35,11 @@ const BoardList = () => {
 
   const [searchInput, setSearchInput] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const scrollContainerRef = useRef(null);
   //페이지
   const [reqPage, setReqPage] = useState(1);
   const [pi, setPi] = useState({});
   //스크롤
+  const scrollContainerRef = useRef(null);
   const isMouseDownRef = useRef(false);
   const startXRef = useRef(0);
   const scrollLeftRef = useRef(0);

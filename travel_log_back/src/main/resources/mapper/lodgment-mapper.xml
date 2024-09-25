@@ -103,4 +103,21 @@
 	<insert id="insertServiceTag">
 		insert into room_service_tag values(#{roomNo},#{serviceTagNo})
 	</insert>
+	
+	
+	<!-- 숙소 객실 예약 요청사항 조회 -->
+	<select id="bookInfo" resultType="bookingInfo">
+		select ls.lodgment_name, r.room_name, b.*
+			from LODGMENT_STORAGE ls
+			join room r
+			using(lodgment_no)
+			join booking b
+			on r.room_no = b.room_no
+			where b.booking_no=#{bookNo}
+	</select>
+	
+	<!-- 판매자 정산 정보 -->
+	<select id="selectStmInfo" resultType="stmInfo">
+		select * from stm_tbl where seller_no=#{sellerNo}
+	</select>
 </mapper>
