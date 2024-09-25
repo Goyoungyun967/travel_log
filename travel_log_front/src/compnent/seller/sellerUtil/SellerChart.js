@@ -8,17 +8,24 @@ import {
   Tooltip,
 } from "recharts";
 
-const data = [
-  { name: "Page A", uv: 4000 },
-  { name: "Page B", uv: 3000 },
-  { name: "Page C", uv: 2000 },
-  { name: "Page D" },
-  { name: "Page E", uv: 1890 },
-  { name: "Page F", uv: 2390 },
-  { name: "Page G", uv: 3490 },
-];
+const SellerChart = (props) => {
+  const stmInfo = props.stmInfo;
+  console.log(stmInfo);
+  //   const data = [
+  //     { name: "Page A", uv: 4000 },
+  //     { name: "Page B", uv: 3000 },
+  //     { name: "Page C", uv: 2000 },
+  //     { name: "Page D" },
+  //     { name: "Page E", uv: 1890 },
+  //     { name: "Page F", uv: 2390 },
+  //     { name: "Page G", uv: 3490 },
+  //   ];
 
-const SellerChart = () => {
+  const data = stmInfo.map((item, i) => ({
+    name: `${item.stmDate}`,
+    가격: `${item.stmPrice}`,
+  }));
+
   return (
     <div>
       <LineChart
@@ -28,8 +35,8 @@ const SellerChart = () => {
         margin={{
           top: 10,
           right: 30,
-          left: 0,
-          bottom: 0,
+          left: 20, // 왼쪽 여백을 늘려서 그래프가 넘어가지 않게 함
+          bottom: 5,
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
@@ -39,7 +46,7 @@ const SellerChart = () => {
         <Line
           connectNulls
           type="monotone"
-          dataKey="uv"
+          dataKey="가격"
           stroke="#8884d8"
           fill="#8884d8"
         />
