@@ -8,11 +8,12 @@
 	select * from
 		(select rownum as rnum, sb.* from
 			(SELECT 
-			    b.board_title,
-			    b.board_content,
-			    b.board_area,
-			    b.reg_date,
-			    b.board_thumb,
+		        b.board_no,
+				b.board_title,
+				b.board_content,
+				b.board_area,
+				b.reg_date,
+				b.board_thumb,
 			    (select member_IMAGE from member m where m.member_no = b.member_no) as member_IMAGE,
 			    (select MEMBER_NICKNAME from member m where m.member_no = b.member_no) as member_NICKNAME,
                 (SELECT COUNT(*) FROM board_like bl WHERE bl.board_no = b.board_no) AS like_count,
@@ -28,29 +29,88 @@
     			sb)
     where rnum BETWEEN #{start} and #{end}
 	</select>
-	<select id="accompanyTotalCount" resultType="int">
-		SELECT COUNT(*) FROM board WHERE board_type= #{type}
-	</select>
-	<select id="selectAccompanyList" resultType="board">
-		select * from
-			(select rownum as rnum, sb.* from
-				(SELECT 
-				    b.board_title,
-				    b.board_content,
-				    b.board_area,
-				    b.reg_date,
-				    b.board_thumb,
-				    (select member_IMAGE from member m where m.member_no = b.member_no) as member_IMAGE,
-				    (select MEMBER_NICKNAME from member m where m.member_no = b.member_no) as member_NICKNAME
-				FROM 
-	    			board b
-	    		WHERE 
-	    			 board_type = # {type}
-	    	    order by
-	          		board_no desc
-	               ) 
-	    			sb)
-    where rnum BETWEEN #{start} and #{end}
-	</select>
+			<select id="accompanyTotalCount" resultType="int">
+				SELECT COUNT(*) FROM board WHERE board_type= #{type}
+			</select>	
+		<select id="selectAccompanyList" resultType="board">
+			select * from
+				(select rownum as rnum, sb.* from
+					(SELECT 
+					    b.board_title,
+					    b.board_content,
+					    b.board_area,
+					    b.reg_date,
+					    b.board_thumb,
+					    b.board_type,
+					    (select member_IMAGE from member m where m.member_no = b.member_no) as member_IMAGE,
+					    (select MEMBER_NICKNAME from member m where m.member_no = b.member_no) as member_NICKNAME
+					FROM 
+		    			board b
+		    		WHERE 
+		    			 board_type = #{type}
+		    	    order by
+		          		board_no desc
+		               ) 
+		    			sb)
+			where rnum BETWEEN #{start} and #{end}
+		</select>
+		<insert id="insertBoard">
+			 insert into board values(board_seq.nextval,#{boardTitle},#{boardContent},#{boardArea},to_char(sysdate,'yyyy-mm-dd'),1,#{boardThumb},28,0)
+			<selectKey resultType="int" keyProperty="boardNo" order="AFTER">
+				select max(board_no) from board
+			</selectKey>
+		</insert>
+		<insert id="insertBoardFile">
+		insert into board_file values(board_file_seq.nextval,#{filename},#{filepath},#{boardNo})
+		</insert>
+		<select id="selectOneBoard" resultMap="getBoard">
+		    select
+		        board_no,
+		        board_title,
+		        board_content,
+		        board_area,
+		        reg_date,
+		        board_type,
+		        board_thumb,
+		        read_count,
+		        (select member_IMAGE from member m where m.member_no = b.member_no) as member_IMAGE,
+		        (select MEMBER_NICKNAME from member m where m.member_no = b.member_no) as member_NICKNAME,
+		        (SELECT COUNT(*) FROM board_like bl WHERE bl.board_no = b.board_no) AS like_count,
+		        (SELECT COUNT(*) FROM board_keep bk WHERE bk.board_no = b.board_no) AS keep_count,
+		        (SELECT COUNT(*) FROM board_comment bc WHERE bc.board_no = b.board_no) AS comment_count
+		    from board b 
+		    where board_no = #{boardNo}
+		</select>
+		
+		<select id="selectOneBoardFileList" resultType="boardFile">
+		    select * from board_file where board_no=#{boardNo}
+		</select>
+		
+		<resultMap type="board" id="getBoard">
+		    <result column="board_no" property="boardNo"/>
+		    <result column="board_title" property="boardTitle"/>
+		    <result column="board_content" property="boardContent"/>
+		    <result column="board_area" property="boardArea"/>
+		    <result column="reg_date" property="regDate"/> <!-- 대문자 수정 -->
+		    <result column="board_type" property="boardType"/>
+		    <result column="board_thumb" property="boardThumb"/>
+		    <result column="read_count" property="readCount"/>
+		    <result column="like_count" property="likeCount"/>
+		    <result column="keep_count" property="keepCount"/>
+		    <result column="comment_count" property="commentCount"/>
+		    <collection property="fileList"
+		        select="selectOneBoardFileList"
+		        column="board_no"
+		        javaType="java.util.List"
+		        ofType="boardFile"
+		    />
+		</resultMap>
+
+			
+	
+	
+	
+	
+	
   
 </mapper>

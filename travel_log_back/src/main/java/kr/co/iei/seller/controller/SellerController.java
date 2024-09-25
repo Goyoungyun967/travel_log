@@ -1,5 +1,6 @@
 package kr.co.iei.seller.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +23,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.member.model.dto.MemberDTO;
+import kr.co.iei.seller.model.dto.BookingInfoDTO;
+import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
+import kr.co.iei.seller.model.dto.RoomFileDTO;
 import kr.co.iei.seller.model.service.SellerService;
 import kr.co.iei.util.FileUtils;
 
@@ -73,7 +77,7 @@ public class SellerController {
 		System.out.println(ls);
 		 if (lodgmentImg != null) {
 		        // 이미지 처리 로직
-		        String savepath = root + "/lodgment/";
+		        String savepath = root + "/seller/lodgment/";
 		        String filepath = fileUtil.upload(savepath, lodgmentImg);
 		        ls.setLodgmentImgPath(filepath); // 경로 저장
 		    }
@@ -109,6 +113,31 @@ public class SellerController {
 	}
 	
 //	// 객실 등록
-//	@PostMapping
-//	public ResponseEntity<Integer> insertRoom()
+	@PostMapping(value="/insertRoom")
+	public ResponseEntity<Boolean> insertRoom(@ModelAttribute InsertRoomDTO room, @ModelAttribute MultipartFile[] roomFile){
+		System.out.println(room);
+		List<RoomFileDTO> roomFileList = new ArrayList<RoomFileDTO>();
+		if(roomFile != null) {
+			String savepath = root+"/seller/room/";
+			for(MultipartFile file : roomFile) {
+				RoomFileDTO fileDTO = new RoomFileDTO();
+				String filename = file.getOriginalFilename();
+				String filepath = fileUtil.upload(savepath, file);
+				fileDTO.setRoomImg(filepath);
+				roomFileList.add(fileDTO);
+			}
+		}
+		int result = sellerService.insertRoom(room, roomFileList);
+		return ResponseEntity.ok(result==1+roomFileList.size());
+	}
+	
+	
+	// 예약 상세 조회
+	@Operation(summary = "예약 상세", description = "예약 정보 출력(호텔 이름 + 객실 이름 + 예약 정보")
+	@GetMapping(value="/reserve/{bookNo}")
+	public ResponseEntity<BookingInfoDTO> bookInfo(@PathVariable int bookNo){
+		BookingInfoDTO bid = sellerService.bookInfo(bookNo);
+		System.out.println(bid);
+		return ResponseEntity.ok(bid);
+	}
 }

@@ -32,9 +32,48 @@
 .item-sc-wrap {
   margin-top: 10px;
   border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
 }
-/*------- 지울거 --------*/
-.item-map {
-  background-color: pink;
+.lrv-wrap {
+  margin-top: 30px;
+}
+.lrv-wrap > .room-arr > .room-item {
+  display: flex;
+  border: 1px solid #ccc;
+  margin: 10px;
+}
+.lrv-wrap > .room-arr > .room-item:hover {
+  cursor: pointer;
+}
+.lrv-wrap > .room-arr > .room-item > .room-img {
+  width: 100px;
+  display: flex;
+  justify-items: center;
+  margin: 10px;
+}
+.lrv-wrap > .room-arr > .room-item > .room-item-info {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+.lrv-wrap > .room-arr > .room-item > .room-item-info > h5 {
+  font-weight: bold;
+  margin: 3px;
+}
+.lrv-wrap > .room-arr > .room-item > .room-item-info > p {
+  margin: 3px;
+}
+.lrv-wrap > .room-arr > .room-item > .room-item-info > * {
+  margin: 0;
+}
+
+.item-tr-wrap > .item-map {
+  margin: 15px;
+}
+.item-tr-wrap > .item-notice {
+  margin-top: 20px;
+  border-top: 1px solid #ccc;
+}
+.item-tr-wrap > .item-notice > h5 {
+  padding: 20px;
+  font-weight: bold;
 }

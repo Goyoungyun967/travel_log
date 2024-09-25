@@ -7,18 +7,18 @@ const AccompanyFrm = (props) => {
   const setAccompanyDate = props.setAccompanyDate;
   const accompanyType = props.accompanyType;
   const setAccompanyType = props.setAccompanyType;
-  const accompanyArea = props.accompanyArea;
-  const setAccompanyArea = props.setAccompanyArea;
-  const accompanyContent = props.accompanyContent;
-  const setAccompanyContent = props.setAccompanyContent;
+  // const accompanyArea = props.accompanyArea;
+  // const setAccompanyArea = props.setAccompanyArea;
+  // const accompanyContent = props.accompanyContent;
+  // const setAccompanyContent = props.setAccompanyContent;
+  //지역input된 지역 정보
+  const boardArea = props.boardArea;
+  const setBoardArea = props.setBoardArea;
+  //날짜
   const startDate = props.startDate;
   const endDate = props.endDate;
   const setEndDate = props.setEndDate;
   const setStartDate = props.setStartDate;
-  //지역input된 지역 정보
-  const boardArea = props.boardArea;
-  const setBoardArea = props.setBoardArea;
-
   //<div className="accompany-schedule"></div>;
   return (
     <div>

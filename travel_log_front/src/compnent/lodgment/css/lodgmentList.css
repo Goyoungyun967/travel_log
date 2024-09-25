@@ -72,17 +72,11 @@
   justify-content: center; /* 버튼들을 중앙에 배치 */
 }
 
-.lodgment-type-select button {
-  margin: 0 10px; /* 버튼 간의 여백 */
-  width: 200px;
-  background-color: #fff;
-  color: var(--main1);
-  border-bottom: 3px solid var(--line2);
-  cursor: pointer;
-}
-.lodgment-type-select button:hover {
+.lodgment-type-select-btn:hover {
   background-color: var(--main5);
   transform: translateY(-2px);
+  color: #fff;
+  font-weight: 900;
 }
 
 .lodgment-type-select button:active {
@@ -109,4 +103,28 @@
 }
 .lodgment-service:hover {
   background-color: var(--gray6); /* 호버 시 배경색 변화 */
+}
+.selected {
+  background-color: #1976d2; /* 선택된 색상 */
+  color: white; /* 선택된 텍스트 색상 */
+}
+
+.lodgment-type-select-btn {
+  margin: 0 10px; /* 버튼 간의 여백 */
+  width: 200px;
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+  background-color: white;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.selectedLodgmentType {
+  margin: 0 10px; /* 버튼 간의 여백 */
+  width: 200px;
+  background-color: #1976d2;
+  color: #fff;
+  font-weight: 900;
+  cursor: pointer;
+  border: none;
 }

@@ -29,6 +29,7 @@
   		</if>
   		<if test="state==1">
   			and (select count(*) from inquiry_reply where inquiry_no=i.inquiry_no) <![CDATA[<]]> 1 
+  			
   		</if>
   		<if test="state==2">
   			and (select count(*) from inquiry_reply where inquiry_no=i.inquiry_no) <![CDATA[>]]> 1

@@ -9,6 +9,8 @@ const InsertRoom = () => {
   const lodgmentNo = params.lodgmentNo;
   // 호텔 정보를 위한 state
   const [lodgmentList, setLodgmentList] = useState({});
+  // 객실 이름
+  const [roomName, setRoomName] = useState("");
   // 상품 수
   const [roomNum, setRoomNum] = useState(0);
   // 객실 가격
@@ -25,6 +27,10 @@ const InsertRoom = () => {
   const [maxCapa, setMaxCapa] = useState(0);
 
   console.log(
+    "숙소 번호 - ",
+    lodgmentNo,
+    "상품 이름 - ",
+    roomName,
     "상품 수 - ",
     roomNum,
     "객실 가격 - ",
@@ -48,9 +54,54 @@ const InsertRoom = () => {
   }, []);
   console.log(lodgmentList);
 
+  // 보내기
+  const writeRoom = () => {
+    const backServer = process.env.REACT_APP_BACK_SERVER;
+    if (
+      roomName !== "" &&
+      roomNum !== 0 &&
+      roomPrice !== 0 &&
+      boardContent !== "" &&
+      maxCapa !== 0
+    ) {
+      const form = new FormData();
+      form.append("lodgmentNo", lodgmentNo);
+      form.append("roomQua", roomNum);
+      form.append("roomName", roomName);
+      form.append("roomPrice", roomPrice);
+      form.append("boardContent", boardContent);
+      form.append("maxCapacity", maxCapa);
+      // 첨부파일 추가한 경우에만 추가(첨부파일은 여러개가 같은  name으로 전송)
+      for (let i = 0; i < roomFile.length; i++) {
+        form.append("roomFile", roomFile[i]);
+      }
+      for (let i = 0; i < hashTag.length; i++) {
+        form.append("serviceTag", hashTag[i]);
+      }
+      axios
+        .post(`${backServer}/seller/insertRoom`, form, {
+          headers: {
+            contentType: "multipart/form-data",
+            processData: false,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   return (
     <>
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          writeRoom();
+        }}
+      >
         <div className="room_box-wrap room_box-radius">
           <div className="room_box">
             <div className="hotel_info">
@@ -83,11 +134,25 @@ const InsertRoom = () => {
                   <div className="input-sc-wrap">
                     <div className="input-item">
                       <div className="input-title">
-                        <label htmlFor="#">최대인원수</label>
+                        <label htmlFor="roomName">객실 이름</label>
+                      </div>
+                      <div className="input room_name">
+                        <input
+                          type="text"
+                          id="roomName"
+                          value={roomName}
+                          onChange={(e) => setRoomName(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="input-item">
+                      <div className="input-title">
+                        <label htmlFor="maxCapacity">최대인원수</label>
                       </div>
                       <div className="input">
                         <input
                           type="number"
+                          id="maxCapacity"
                           min={0}
                           max={100}
                           value={maxCapa === 0 ? "" : maxCapa}
@@ -97,11 +162,12 @@ const InsertRoom = () => {
                     </div>
                     <div className="input-item">
                       <div className="input-title">
-                        <label htmlFor="#">상품수</label>
+                        <label htmlFor="roomNum">상품수</label>
                       </div>
                       <div className="input">
                         <input
                           type="number"
+                          id="roomNum"
                           min={0}
                           max={1000}
                           value={roomNum === 0 ? "" : roomNum}
@@ -111,11 +177,12 @@ const InsertRoom = () => {
                     </div>
                     <div className="input-item">
                       <div className="input-title">
-                        <label htmlFor="#">상품 가격</label>
+                        <label htmlFor="roomPrice">상품 가격</label>
                       </div>
                       <div className="input room_price">
                         <input
                           type="number"
+                          id="roomPrice"
                           min={0}
                           max={10000000000}
                           value={roomPrice === 0 ? "" : roomPrice}
@@ -150,7 +217,7 @@ const InsertRoom = () => {
 const HashTap = (props) => {
   const setHashTag = props.setHashTag;
   const inputCheckboxChange = (e) => {
-    const value = e.target.value;
+    const value = Number(e.target.value);
     setHashTag((prevTags) =>
       e.target.checked
         ? [...prevTags, value]
@@ -162,51 +229,51 @@ const HashTap = (props) => {
       <h3>#해시태그</h3>
       <div className="tag">
         <label className="checkbox-label">
-          <input type="checkbox" value="1" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={1} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">사우나</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="2" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={2} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">수영장</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="3" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={3} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">레스토랑</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="4" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={4} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">객실스파</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="5" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={5} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">애견동반</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="6" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={6} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">욕실용품</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="7" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={7} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">탈수기</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="8" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={8} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">건조기</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="9" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={9} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">매점</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="10" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={10} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">주차장</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="11" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={11} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">와이파이</span>
         </label>
         <label className="checkbox-label">
-          <input type="checkbox" value="12" onChange={inputCheckboxChange} />
+          <input type="checkbox" value={12} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">TV</span>
         </label>
       </div>
@@ -264,13 +331,13 @@ const FileInfo = (props) => {
         />
         {showRoomFile.map((file, i) => {
           return (
-            <>
+            <div key={i}>
               {file.preview ? (
                 <img src={file.preview} width="150px" className="photoArr" />
               ) : (
                 ""
               )}
-            </>
+            </div>
           );
         })}
       </div>

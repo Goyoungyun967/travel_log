@@ -13,7 +13,7 @@ const InsertLodgment = () => {
   const [hotelInof, sethotelInfo] = useState({});
   console.log(hotelInof);
   const [boardContent, setBoardContent] = useState(
-    "<h2>숙소 공지사항</h2><p><br></p><p><br></p><h2>숙소 정보</h2><p><br></p><p><br></p><h2>주차장 정보</h2><h5><br></h5>"
+    "<h5><strong>숙소 정보</strong></h5><p><br></p><p><br></p><p><br></p><p><br></p><h5><strong>주차장 정보</strong></h5>"
   );
   //호텔 명
   const [hotelName, setHotelName] = useState("");

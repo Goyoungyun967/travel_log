@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.co.iei.lodgment.model.dao.LodgmentDao">
-	<select id="serviceList" resultType="string">
-	 	select service_tag_type from service_tag
+	<select id="serviceList" resultType="lodgmentDetail">
+	 	select * from service_tag
 	</select>
 	<select id="search" resultType="string">
 		select 
@@ -19,42 +19,53 @@
 		where lodgment_name like '%'||#{value}||'%'
 	</select>
 	
-	<select id="getLodgmentList" resultType="lodgmentDetail"> 
-	SELECT *
-	FROM (
-	    SELECT
-	        lodgment_no,
-	        lodgment_name,
-	        lodgment_addr,
-	        lodgment_img_path,
-	        lodgment_star_grade,
-	        ROWNUM AS rn
-	    FROM (
-	        SELECT
-	            lodgment_no,
-	            lodgment_name,
-	            lodgment_addr,
-	            lodgment_img_path,
-	            lodgment_star_grade
-	        FROM
-	            lodgment_STORAGE
-	        WHERE
-	            lodgment_addr LIKE '%' || #{lodgment} || '%'
-	            AND lodgment_no IN (
-	                SELECT room_no
-	                FROM room
-	                WHERE room_no IN (
-	                    SELECT lodgment_no
-	                    FROM booking
-	                    WHERE ( #{endDate} >= start_date AND end_date >= #{startDate})
-	                    AND guest_count >= #{guest}
-	                )
-	            )
-	        ORDER BY lodgment_star_grade DESC
-	    )
-	    WHERE #{limit}  >= ROWNUM 
-	)
-	WHERE rn > #{offset}
+	<select id="getLodgmentList" resultType="searchLodgment"> 
+		SELECT 
+			lodgment_no,lodgment_name,lodgment_addr,lodgment_star_grade,lodgment_img_path,lodgment_check_in,
+			lodgment_check_out,room_price,room_max_capacity
+		FROM (
+		    SELECT rownum AS rnum, n.*
+		    FROM (
+		        SELECT 
+		            ls.lodgment_no,
+		            ls.lodgment_name,
+		            ls.lodgment_addr,
+		            ls.lodgment_star_grade,
+		            ls.lodgment_img_path,
+		            ls.lodgment_check_in,
+		            ls.lodgment_check_out,	
+		            ls.lodgment_type_no,
+		            r.room_no,
+		            r.room_name,
+		            r.room_price,
+		            r.room_max_capacity
+		        FROM 
+		            lodgment_storage ls
+		        JOIN 
+		            room r ON ls.lodgment_no = r.lodgment_no
+		        LEFT JOIN 
+		            booking b ON r.room_no = b.room_no AND (
+		                (b.start_date <![CDATA[<]]> to_char(#{endDate},'YYYY-MM-DD') AND b.end_date > to_char(#{startDate},'YYYY-MM-DD')) 
+		            )
+		        WHERE 
+		            r.room_price = (
+		                SELECT MIN(room_price)
+		                FROM room
+		                WHERE lodgment_no = ls.lodgment_no
+		            )
+		            AND (ls.lodgment_name LIKE '%' || #{lodgment} || '%' OR ls.lodgment_addr LIKE '%' || #{lodgment} || '%')
+		            AND (r.room_max_capacity >= 2)
+		        GROUP BY 
+		            ls.lodgment_no, ls.lodgment_name, ls.lodgment_addr, ls.lodgment_star_grade, 
+		            ls.lodgment_img_path, ls.lodgment_check_in, ls.lodgment_check_out,r.room_no, 
+		            r.room_name, r.room_price, r.room_max_capacity, ls.lodgment_type_no
+		        HAVING 
+		            (r.room_max_capacity - NVL(SUM(b.guest_count), 0)) > 0 
+		    ) n
+		)
+		WHERE rnum BETWEEN #{start} AND #{end}
+
+
 	</select>
 
 	
