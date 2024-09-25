@@ -11,4 +11,9 @@ public interface MemberDao {
 
 	int insertMember(MemberDTO member);
 
+	MemberDTO selectLoginMember(String memberId);
+
+	MemberDTO selectOneMember(int memberNo);
+
+
 }

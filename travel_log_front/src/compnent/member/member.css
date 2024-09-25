@@ -88,8 +88,8 @@
   margin-right: 15px;
 }
 
-.input-group input[type="text"],
-.input-group input[type="password"] {
+.login-input-group .login-zone {
+  margin-left: 16px;
   padding: 10px; /* 안쪽 여백을 줄임 */
   border: 1px solid #ccc; /* 테두리 */
   border-radius: 7px;
@@ -98,10 +98,18 @@
   transition: border-color 0.3s, box-shadow 0.3s; /* 테두리 색상 및 그림자 전환 효과 */
   margin-top: 5px; /* 위쪽 여백을 줄임 */
   border-radius: 8px;
+  margin-bottom: 15px;
 }
 
-.input-group input[type="text"]:focus,
-.input-group input[type="password"]:focus {
+.login-input-group .id-zone {
+  margin-right: 11px;
+}
+
+.login-input-group .business-zone {
+  margin-right: 32px;
+}
+
+.login-input-group .login-zone:hover {
   border-color: #007bff; /* 포커스 시 테두리 색상 변경 */
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 포커스 시 그림자 추가 */
 }
@@ -114,7 +122,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s; /* 전환 효과 추가 */
-  margin-left: 10px; /* 버튼과 입력 필드 간 간격 */
+
   width: 250px;
   margin: 0 auto;
 }
