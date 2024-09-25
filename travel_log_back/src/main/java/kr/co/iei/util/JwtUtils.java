@@ -24,7 +24,7 @@ public class JwtUtils {
 	public int expireHourRefresh;
 	
 	//1시간짜리 토큰생성
-	public String createAccessToken(String memberId, int memberLevel) {
+	public String createAccessToken(int memberNo, int memberLevel) {
 		//1. 작성해둔 키값을 이용해서 암호화 코드 생성
 		SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
 		//2. 토큰 생성시간 및 만료시간 설정 
@@ -38,14 +38,14 @@ public class JwtUtils {
 						.issuedAt(startTime)		//토큰 발생 시작시간	
 						.expiration(expireTime)		//토큰만료 시간
 						.signWith(key)				//암호화 서명
-						.claim("memberId",memberId)	//토큰에 포함할 회원정보 세팅 (key=value)
+						.claim("memberNo",memberNo)	//토큰에 포함할 회원정보 세팅 (key=value)
 						.claim("memberType", memberLevel)//토큰에 포함할 회원정보 세팅 (key=value)
 					    .compact();					//생성
 			return token;
 	}
 	
 	//8760짜리(1년) accessToken
-	public String createRefreshToken(String memberId, int memberLevel) {
+	public String createRefreshToken(int memberNo, int memberLevel) {
 		//1. 작성해둔 키값을 이용해서 암호화 코드 생성
 		SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
 		//2. 토큰 생성시간 및 만료시간 설정 
@@ -58,7 +58,7 @@ public class JwtUtils {
 						.issuedAt(startTime)		//토큰 발생 시작시간	
 						.expiration(expireTime)		//토큰만료 시간
 						.signWith(key)				//암호화 서명
-						.claim("memberId",memberId)	//토큰에 포함할 회원정보 세팅 (key=value)
+						.claim("memberNo",memberNo)	//토큰에 포함할 회원정보 세팅 (key=value)
 						.claim("memberLevel", memberLevel)//토큰에 포함할 회원정보 세팅 (key=value)
 					    .compact();					//생성
 			return token;
@@ -73,10 +73,10 @@ public class JwtUtils {
 										.build()	
 										.parse(token)
 										.getPayload();		
-		String memberId = (String)claims.get("memberId");
+		int memberNo = (int)claims.get("memberNo");
 		int memberLevel = (int)claims.get("memberLevel");
 		LoginMemberDTO loginMember = new LoginMemberDTO();
-		loginMember.setMemberId(memberId);
+		loginMember.setMemberNo(memberNo);
 		loginMember.setMemberLevel(memberLevel);
 		return loginMember;
 	}									

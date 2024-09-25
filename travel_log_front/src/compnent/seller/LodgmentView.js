@@ -3,7 +3,7 @@ import "./css/lodgment_view.css";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
-import KakaoMap from "./KakaoMap";
+import KakaoMap from "./sellerUtil/KakaoMap";
 
 const LodgmentView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;

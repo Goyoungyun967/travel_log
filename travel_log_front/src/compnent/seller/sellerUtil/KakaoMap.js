@@ -1,17 +1,12 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
-import { useParams } from "react-router-dom";
-const LodgmentDetailMapPayment = () => {
-  const params = useParams();
-  const lodgmentNo = params.lodgmentNo;
-  console.log(lodgmentNo);
-  const KakaoKey = process.env.REACT_APP_HS_KAKAO_REST_API_KEY;
-  const [lodgmentLongitude, setsLodgmentLongitude] = useState("");
-  //console.log(lodgmentLongitude);
+const { kakao } = window;
+
+const KakaoMap = (props) => {
+  const KakaoKey = process.env.REACT_APP_SB_KAKAO_REST_API_KEY;
   const [lodgmentLatitude, setLodgmentLatitude] = useState("");
-  //console.log(lodgmentLatitude);
-  const address = "인천 중구 영종해안남로 19-5";
+  const [lodgmentLongitude, setsLodgmentLongitude] = useState("");
+  const address = props.lodgmentAddr;
   fetch(
     `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(
       address
@@ -27,7 +22,6 @@ const LodgmentDetailMapPayment = () => {
     .then((data) => {
       if (data.documents.length > 0) {
         const { x: longitude, y: latitude } = data.documents[0].address;
-        //console.log(`경도: ${longitude}, 위도: ${latitude}`);
         setsLodgmentLongitude(longitude);
         setLodgmentLatitude(latitude);
       } else {
@@ -39,19 +33,18 @@ const LodgmentDetailMapPayment = () => {
     });
 
   return (
-    <div>
-      <div>위치</div>
+    <>
       <Map
-        level={6}
+        level={3}
         center={{ lat: lodgmentLatitude, lng: lodgmentLongitude }}
-        style={{ width: "80%", height: "100px" }}
+        style={{ width: "100%", height: "300px" }}
       >
-        <MapMarker position={{ lat: lodgmentLatitude, lng: lodgmentLongitude }}>
-          <div>네스트 호텔</div>
-        </MapMarker>
+        <MapMarker
+          position={{ lat: lodgmentLatitude, lng: lodgmentLongitude }}
+        ></MapMarker>
       </Map>
-      <div>{address}</div>
-    </div>
+    </>
   );
 };
-export default LodgmentDetailMapPayment;
+
+export default KakaoMap;

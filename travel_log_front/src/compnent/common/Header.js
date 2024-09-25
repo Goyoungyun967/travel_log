@@ -1,6 +1,28 @@
 import { Link } from "react-router-dom";
 import "./header_footer.css";
-const Header = () => {
+import axios from "axios";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  isLoginState,
+  loginNoState,
+  memberLevelState,
+} from "../utils/RecoilData";
+import { useEffect } from "react";
+
+const Header = (props) => {
+  const loginNickname = props.loginNickname;
+  const [loginNo, setLoginNo] = useRecoilState(loginNoState);
+  const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
+  const isLogin = useRecoilValue(isLoginState);
+  console.log("haeder :", loginNo, memberLevel);
+  const logout = () => {
+    setLoginNo(-1);
+    setMemberLevel(-1);
+    delete axios.defaults.headers.common["Authorization"];
+    window.localStorage.removeItem("refreshToken");
+  };
+
+  useEffect(() => {});
   return (
     <header className="header">
       <div>
@@ -75,20 +97,34 @@ const Header = () => {
                   <Link to="/faq">자주묻는질문</Link>
                 </li>
                 <li>
-                  <Link to="#">1:1문의</Link>
+                  <Link to="/inquiryWrite">1:1문의</Link>
                 </li>
               </ul>
             </li>
           </ul>
         </nav>
-
         <ul className="user-menu">
-          <li>
-            <Link to="Login">로그인</Link>
-          </li>
-          <li>
-            <Link to="Select">회원가입</Link>
-          </li>
+          {isLogin ? (
+            <>
+              <li>
+                <Link to="/member">{loginNickname}</Link>
+              </li>
+              <li>
+                <Link to="/#" onClick={logout}>
+                  로그아웃
+                </Link>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <Link to="/login">로그인</Link>
+              </li>
+              <li>
+                <Link to="/select">회원가입</Link>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </header>

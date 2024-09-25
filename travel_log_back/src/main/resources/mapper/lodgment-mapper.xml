@@ -115,4 +115,9 @@
 			on r.room_no = b.room_no
 			where b.booking_no=#{bookNo}
 	</select>
+	
+	<!-- 판매자 정산 정보 -->
+	<select id="selectStmInfo" resultType="stmInfo">
+		select * from stm_tbl where seller_no=#{sellerNo}
+	</select>
 </mapper>

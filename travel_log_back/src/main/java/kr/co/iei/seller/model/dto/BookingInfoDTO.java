@@ -28,8 +28,8 @@ public class BookingInfoDTO {
 	private String startDate;
 	@Schema(description = "종료일",type="String")
 	private String endDate;
-	@Schema(description = "결제일",type="int")
-	private int paymentCount;
+	@Schema(description = "결제일",type="String")
+	private String paymentDate;
 	@Schema(description = "투숙객 인원수",type="int")
 	private int guestCount;
 	@Schema(description = "투숙객 이름",type="String")
