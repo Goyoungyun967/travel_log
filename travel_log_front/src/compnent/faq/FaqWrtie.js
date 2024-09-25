@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 const FaqWrite = (props) => {
     const backServer = process.env.REACT_APP_BACK_SERVER;
     const faqNo = useParams().faqNo;
+    const categoryIndex = useParams().categoryIndex;
     const faqTypeList = props.faqTypeList;
     //const [faqTypeList,setFaqTypeList] = useState(null);
     /*
@@ -24,7 +25,7 @@ const FaqWrite = (props) => {
         setFaqTypeList(newFaqTypeList);
     },[])
     */
-    const [faqCategory, setFaqCategory] = useState(0);
+    const [faqCategoryIndex, setFaqCategoryIndex] = useState(categoryIndex ? categoryIndex : 0);
     const [faq, setFaq] = useState({faqType : "L1", faqTitle : ""});
     const [faqContent,setFaqContent] = useState("")
     const navigate = useNavigate();
@@ -32,6 +33,9 @@ const FaqWrite = (props) => {
         setFaq({...faq, [e.target.id] : e.target.value})
     }
     useEffect(()=>{
+        setFaq({faqType : "L1", faqTitle : ""})
+        setFaqContent("");
+        setFaqCategoryIndex(0);
         if(faqNo){
             axios.get(`${backServer}/admin/faq/${faqNo}`).then((res)=>{
                 setFaq(res.data);
@@ -40,7 +44,7 @@ const FaqWrite = (props) => {
                 console.log(err);
             })
         }
-    },[]);
+    },[faqNo]);
     
     const writeFaq = () => {
         const writeFaq = {...faq, faqContent};
@@ -64,7 +68,6 @@ const FaqWrite = (props) => {
             console.log(err);
         })
     }
-    console.log(faqTypeList);
     const updateFaq= () => {
         const updateFaq = {...faq, faqContent};
         axios.patch(`${backServer}/admin/faq`,updateFaq).then((res)=>{
@@ -87,7 +90,6 @@ const FaqWrite = (props) => {
             console.log(err);
         })
     }
-    console.log(faq);
     return (faqTypeList ? 
         <div className="faq-write-wrap">
             <table>
@@ -117,8 +119,8 @@ const FaqWrite = (props) => {
                             {
                             <div className="input-item">
                                 
-                                <select id="faqCategory" value={faqCategory} onChange={(e)=>{
-                                    setFaqCategory(e.target.value);
+                                <select id="faqCategory" value={faqCategoryIndex} onChange={(e)=>{
+                                    setFaqCategoryIndex(e.target.value);
                                     setFaq({...faq, faqType : faqTypeList[e.target.value].typeList[0].faqType});
                                 }}>
                                     {faqTypeList.map((item,index)=>{
@@ -126,7 +128,7 @@ const FaqWrite = (props) => {
                                     })}
                                 </select>
                                 <select id="faqType" value={faq.faqType} onChange={changeValue}>
-                                    {faqTypeList[faqCategory].typeList.map((typeList,index)=>{
+                                    {faqTypeList[faqCategoryIndex].typeList.map((typeList,index)=>{
                                         return <option key={`faqTypeInput+${index}`} value={typeList.faqType}>{typeList.faqTypeName}</option>
                                     })
                                     }

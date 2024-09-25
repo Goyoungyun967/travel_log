@@ -97,7 +97,7 @@ const Header = (props) => {
                   <Link to="/faq">자주묻는질문</Link>
                 </li>
                 <li>
-                  <Link to="#">1:1문의</Link>
+                  <Link to="/inquiryWrite">1:1문의</Link>
                 </li>
               </ul>
             </li>
