@@ -21,6 +21,7 @@ import jakarta.websocket.server.PathParam;
 import kr.co.iei.lodgment.model.dto.LodgmentDTO;
 import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
 import kr.co.iei.lodgment.model.service.LodgmentService;
+import lombok.Getter;
 
 
 @CrossOrigin("*")
@@ -32,17 +33,21 @@ public class LodgmentController {
 	@Autowired
 	private LodgmentService lodgmentService;
 	
+	//서비스 태그 가져오기
 	@GetMapping(value = "/service")
 	public ResponseEntity<List> serviceList(){
 		List list = lodgmentService.serviceList();
 		return ResponseEntity.ok(list);
 	}
 	
+	//검색창 : 여행지/호텔 관련 검색어 
 	@GetMapping(value = "/search/{value}")
 	public ResponseEntity<Map> search(@PathVariable String value){
 		Map map = lodgmentService.search(value);
 		return ResponseEntity.ok(map);
 	}
+	
+	//검색 할 경우 원하는 숙박 정보 
 	@GetMapping(value = "/searchLodgment")
 	public ResponseEntity<List<SearchLodgmentDTO>> searchLodgment(
 			@RequestParam int reqPage,
@@ -50,23 +55,37 @@ public class LodgmentController {
             @RequestParam String startDate,
             @RequestParam String endDate,
             @RequestParam int guest,
-            @RequestParam(required = false) int minPrice,
-            @RequestParam(required = false) int maxPrice,
-            @RequestParam(required = false) List<String> selectedServiceTags,
-            @RequestParam(required = false) int starValue,
-            @RequestParam(required = false) String order){
-		System.out.println(reqPage);
-		System.out.println(lodgment);
-		System.out.println(startDate);
-		System.out.println(endDate);
-		System.out.println(minPrice);
-		System.out.println(maxPrice);
-		System.out.println(selectedServiceTags);
-		System.out.println(starValue);
-		System.out.println(order);
-		List<SearchLodgmentDTO> list = lodgmentService.getLodgmentList(reqPage,lodgment,startDate,endDate,guest);
+            @RequestParam int minPrice,
+            @RequestParam int maxPrice,
+            @RequestParam String selectedServiceTags,
+            @RequestParam int starValue,
+            @RequestParam int order,
+            @RequestParam int lodgmentType){
+//		System.out.println("selectedServiceTags : "+selectedServiceTags);
+//		System.out.println("minPrice : "+minPrice);
+//		System.out.println("maxPrice : "+maxPrice);
+//		System.out.println("starValue : "+starValue);
+//		System.out.println("order : "+order);
+//		System.out.println("lodgmentType : "+lodgmentType);
+		int[] selectedServiceTagsArry = null;
+		if(!selectedServiceTags.equals("")) {
+			String[] tags = selectedServiceTags.split(",");
+			selectedServiceTagsArry = new int[tags.length]; 
+			for(int i = 0; i < tags.length; i++) {
+				selectedServiceTagsArry[i] = Integer.parseInt(tags[i]);
+			System.out.println(selectedServiceTagsArry[i]);
+			}
+		}else {
+			selectedServiceTagsArry = new int[1];
+			selectedServiceTagsArry[0] = 100;	
+		}
+		List<SearchLodgmentDTO> list = 
+				lodgmentService.getLodgmentList(reqPage,lodgment,startDate,endDate,guest,
+						minPrice,maxPrice,selectedServiceTagsArry,starValue,order, lodgmentType);
 		return ResponseEntity.ok(list);
+		
 	}
 	
+
 
 }

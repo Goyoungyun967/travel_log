@@ -7,7 +7,7 @@ const LodgmentMain = () => {
   return (
     <Routes>
       <Route path="lodgmentList" element={<LodgmentList />} />
-      <Route path="lodgmentDetail" element={<LodgmentDetail />} />
+      <Route path="lodgmentDetail/:lodgmentNo" element={<LodgmentDetail />} />
       <Route path="paymentPage" element={<PaymentPage />} />
     </Routes>
   );
