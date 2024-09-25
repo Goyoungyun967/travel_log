@@ -250,13 +250,6 @@ const InsertLodgment = () => {
               </div>
               <div className="input-item">
                 <div className="addr-api">
-                  {/* <button
-                    type="button"
-                    className=" btn primary"
-                    onClick={addrOk}
-                  >
-                    주소찾기
-                  </button> */}
                   <div className="addr-block">
                     <div className="addr-search-api">
                       {!isReadOnly ? (

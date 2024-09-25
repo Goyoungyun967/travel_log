@@ -1,0 +1,12 @@
+.stm-box-wrap {
+  padding: 30px;
+  width: 1000px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.stm-box-wrap > h3 {
+  text-align: center;
+  padding-bottom: 20px;
+}
