@@ -76,11 +76,10 @@
 }
 
 .seller-input-group {
-  display: flex; /* 가로 정렬을 위한 설정 */
-  align-items: center;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center; /* 세로 정렬 */
+  display: flex; /* Flexbox 사용 */
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  margin-bottom: 15px; /* 아래쪽 여백 추가 (필요 시) */
 }
 
 .seller-input-group > label {
@@ -209,9 +208,13 @@
 }
 
 .join-wrap {
-  margin: 15px 0; /* 위아래 여백 */
+  display: flex; /* 플렉스박스 사용 */
+  align-items: center; /* 세로 중앙 정렬 */
 }
 
+.input-item {
+  flex-grow: 1; /* 입력란이 남은 공간을 차지하도록 설정 */
+}
 .login-container .input-item {
   display: flex; /* 플렉스박스 사용 */
   align-items: center; /* 수직 중앙 정렬 */
@@ -425,24 +428,17 @@
 
 .bank-zone {
   width: 90px;
-  margin-left: 10px;
 }
 
 .bank-system {
   display: flex;
   align-items: center; /* 세로 정렬 */
-  margin-bottom: 1rem; /* 아래 여백 추가 */
-}
-.account-num {
-  margin-left: 19px;
-}
-.bank-system > .input-item {
-  overflow: hidden;
+  justify-content: space-between; /* 요소 간의 공간을 균등하게 배치 */
+  margin-bottom: 15px; /* 아래쪽 여백 추가 */
 }
 
-.account-zone {
-  width: 190px;
-  margin-left: 9px;
+.bank-system > .input-item {
+  overflow: hidden;
 }
 
 .seller-phone-zone {
@@ -462,4 +458,62 @@
 .no-seller-check {
   color: red;
   margin-top: 7px;
+}
+
+.business-input {
+  flex: 1; /* 남은 공간을 차지하게 함 */
+  margin-right: 10px; /* 버튼과의 간격 추가 */
+}
+
+.buiness-check-btn {
+  padding: 10px 15px; /* 버튼 패딩 조정 */
+  font-size: 16px; /* 폰트 크기 */
+  background-color: #007bff; /* 버튼 배경색 */
+  color: white; /* 버튼 글자색 */
+  border: none; /* 테두리 제거 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  cursor: pointer; /* 포인터 커서 */
+  transition: background-color 0.3s; /* 전환 효과 */
+}
+
+.buiness-check-btn:hover {
+  background-color: #0056b3; /* 호버 시 배경색 변경 */
+}
+
+.select-bank {
+  width: 100%; /* 너비를 100%로 설정하여 부모 요소에 맞춤 */
+  padding: 10px; /* 안쪽 여백 */
+  border: 1px solid #ccc; /* 테두리 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  font-size: 16px; /* 글자 크기 */
+  color: #333; /* 글자 색 */
+  background-color: #fff; /* 배경 색 */
+  transition: border-color 0.3s; /* 테두리 색 변화 애니메이션 */
+}
+
+.select-bank:focus {
+  border-color: #007bff; /* 포커스 시 테두리 색 변경 */
+  outline: none; /* 기본 아웃라인 제거 */
+}
+
+.label-bank {
+  width: 80px; /* 라벨의 고정 너비 */
+}
+
+.password-confirm {
+  margin-top: 10px;
+}
+
+.phone-name {
+  margin-top: 10px;
+}
+
+.account-num {
+  margin: 10px;
+  width: 68px;
+  margin-top: 0px;
+}
+
+.account-zone {
+  margin-bottom: 20px;
 }

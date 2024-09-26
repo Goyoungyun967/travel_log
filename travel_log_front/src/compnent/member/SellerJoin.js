@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import Swal from "sweetalert2";
 
 const SellerJoin = () => {
   const [seller, setSeller] = useState({
@@ -7,66 +8,118 @@ const SellerJoin = () => {
     representativeName: "",
     sellerPhone: "",
     bankName: "",
-    acountName: "",
+    accountName: "",
     accountNumber: "",
     sellerPw: "",
     businessName: "",
   });
-  const [sellerPwRe, setSellerPwRe] = useState("");
+  const [idCheck, setIdCheck] = useState(0);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+
+  const checkId = () => {
+    const idReg = /^\d{10}$/;
+    if (!idReg.test(seller.businessNo)) {
+      setIdCheck(2);
+    } else {
+      axios
+        .get(`${backServer}/seller/businessNo/${seller.businessNo}/check-id`)
+        .then((res) => {
+          if (res.data === 1) {
+            setIdCheck(3);
+          } else if (res.data === 0) {
+            setIdCheck(1);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
   const validateBusinessNo = (businessNo) => {
-    if (businessNo.length < 10) {
+    if (businessNo.length !== 10 || !/^\d{10}$/.test(businessNo)) {
       setIsValid(false);
+      Swal.fire({
+        title: "유효성 검사 실패",
+        icon: "error",
+        text: "사업자 번호는 10자리 숫자여야 합니다.",
+      });
       return;
     }
+
     setLoading(true);
-    setError("");
-
-    const API_URL = "http://api.odcloud.kr/api/nts-businessman/v1/validate";
-    const SERVICE_KEY = process.env.REACT_APP_SERVICE_KEY;
-
-    const requestBody = {
-      b_no: businessNo,
-    };
+    const API_URL = `http://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=elWxEMPoh3jH%2BiG6NxulIYzr1l7rtwxKljP00wB2Xh2emKpSF4bPPQ7RXsNJfkreAA3C6rcDDkQxAxdHVZr4RA%3D%3D`;
+    const requestBody = { b_no: [businessNo] };
 
     axios
-      .post(`${API_URL}?serviceKey=${SERVICE_KEY}&returnType=JSON`, requestBody)
-      .then((response) => {
-        console.log("전송할 데이터:", requestBody); // 요청 데이터 로그
-        console.log("API 응답:", response.data); // API 응답을 로그로 출력
-        if (
-          response.data &&
-          response.data.result &&
-          response.data.result.length > 0
-        ) {
-          setIsValid(true); // 유효한 사업자 번호
+      .post(API_URL, requestBody)
+      .then((res) => {
+        if (res.data.b_stt_no !== "") {
+          setIsValid(true);
+          Swal.fire({
+            title: "일치합니다",
+            icon: "success",
+            text: "국세청에 등록된 사업자번호랑 일치합니다.",
+          });
         } else {
-          setError("유효하지 않은 사업자 번호입니다.");
           setIsValid(false);
+          Swal.fire({
+            title: "불일치합니다",
+            icon: "warning",
+            text: "국세청에 등록되어있는 사업자번호가 아닙니다.",
+          });
         }
       })
-      .catch((error) => {
-        console.error("API 호출 오류:", error);
+      .catch((err) => {
+        console.log(err);
         setError("서버 오류가 발생했습니다.");
       })
       .finally(() => {
         setLoading(false);
       });
   };
-  console.log(seller);
+
   const changeSeller = (e) => {
     const name = e.target.name;
-    setSeller({ ...seller, [name]: e.target.value });
+    let value = e.target.value;
 
     if (name === "businessNo") {
-      validateBusinessNo(e.target.value); // 사업자 번호 입력 시 검증
+      value = value.replace(/-/g, "");
     }
+
+    if (name === "accountNumber") {
+      value = value.replace(/-/g, "");
+    }
+
+    if (name === "sellerPhone") {
+      value = value
+        .replace(/[^0-9]/g, "")
+        .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, "$1-$2-$3")
+        .replace(/(-{1,2})$/, "");
+    }
+
+    setSeller({ ...seller, [name]: value });
   };
+
+  const [sellerPwRe, setSellerPwRe] = useState("");
   const changeSellerPwRe = (e) => {
     setSellerPwRe(e.target.value);
+  };
+
+  const pwMessage = useRef(null);
+  const checkPw = () => {
+    pwMessage.current.classList.remove("valid");
+    pwMessage.current.classList.remove("invalid");
+    if (seller.sellerPw === sellerPwRe) {
+      pwMessage.current.classList.add("valid");
+      pwMessage.current.innerText = "비밀번호가 일치합니다.";
+    } else {
+      pwMessage.current.classList.add("invalid");
+      pwMessage.current.innerText = "비밀번호가 일치하지 않습니다.";
+    }
   };
 
   return (
@@ -76,21 +129,41 @@ const SellerJoin = () => {
         <label htmlFor="businessNo">사업자번호</label>
       </div>
       <div className="input-item">
-        <input
-          type="text"
-          name="businessNo"
-          id="businessNo"
-          value={seller.businessNo}
-          onChange={changeSeller}
-        ></input>
+        <div className="seller-input-group">
+          <input
+            className="business-input"
+            type="text"
+            name="businessNo"
+            id="businessNo"
+            value={seller.businessNo}
+            onChange={changeSeller}
+            disabled={isValid}
+            onBlur={checkId}
+          />
+          <button
+            type="button"
+            className="buiness-check-btn"
+            onClick={() => {
+              validateBusinessNo(seller.businessNo);
+            }}
+          >
+            인증하기
+          </button>
+        </div>
       </div>
-      {loading && <div className="check-wait">검증 중...</div>}
-      {isValid && (
-        <div className="yes-seller-check">유효한 사업자 번호입니다.</div>
-      )}
-      {!isValid && !loading && seller.businessNo && (
-        <div className="no-seller-check">유효하지 않은 사업자 번호입니다.</div>
-      )}
+
+      <p
+        className={`idCheck-msg ${
+          idCheck === 1 ? "valid" : idCheck === 3 ? "invalid" : ""
+        }`}
+      >
+        {idCheck === 0
+          ? ""
+          : idCheck === 1
+          ? "사용가능한 사업자번호입니다."
+          : "이미 사용중인 사업자 번호입니다."}
+      </p>
+
       <div className="join-wrap">
         <label htmlFor="sellerPw">비밀번호</label>
       </div>
@@ -101,20 +174,25 @@ const SellerJoin = () => {
           id="sellerPw"
           value={seller.sellerPw}
           onChange={changeSeller}
-        ></input>
+        />
       </div>
       <div className="join-wrap">
-        <label htmlFor="sellerPwRe">비밀번호 확인</label>
+        <label htmlFor="sellerPwRe" className="password-confirm">
+          비밀번호 확인
+        </label>
       </div>
-      <div className="input-item">
+      <div className="input-item ">
         <input
           type="password"
           name="sellerPwRe"
           id="sellerPwRe"
           value={sellerPwRe}
           onChange={changeSellerPwRe}
-        ></input>
+          onBlur={checkPw}
+        />
       </div>
+      <p className="pwCheck-msg" ref={pwMessage}></p>
+
       <div className="join-wrap">
         <label htmlFor="representativeName">대표자명</label>
       </div>
@@ -125,56 +203,71 @@ const SellerJoin = () => {
           id="representativeName"
           value={seller.representativeName}
           onChange={changeSeller}
-        ></input>
+        />
       </div>
+
       <div className="join-wrap">
-        <label htmlFor=" sellerPhone">전화번호</label>
+        <label htmlFor="sellerPhone" className="phone-name">
+          전화번호
+        </label>
       </div>
       <div className="input-item">
         <input
+          maxLength={13}
           className="seller-phone-zone"
           type="text"
           name="sellerPhone"
           id="sellerPhone"
           value={seller.sellerPhone}
           onChange={changeSeller}
-        ></input>
+        />
       </div>
+
       <div className="bank-system">
         <div className="seller-input-group">
           <div className="join-wrap">
-            <label htmlFor="bankName">은행명:</label>
-          </div>
-          <div className="input-item">
-            <input
-              className="bank-zone"
-              type="text"
+            <label htmlFor="bankName" className="label-bank">
+              은행명:
+            </label>
+            <select
+              className="bank-zone select-bank"
               name="bankName"
               id="bankName"
               value={seller.bankName}
               onChange={changeSeller}
-            />
+            >
+              <option value="">은행을 선택하세요</option>
+              <option value="신한은행">신한은행</option>
+              <option value="국민은행">국민은행</option>
+              <option value="우리은행">우리은행</option>
+              <option value="농협은행">농협은행</option>
+              <option value="하나은행">하나은행</option>
+              <option value="기업은행">기업은행</option>
+              <option value="KB국민은행">KB국민은행</option>
+              <option value="카카오뱅크">카카오뱅크</option>
+            </select>
           </div>
         </div>
 
-        <div className="seller-input-group">
+        <div className="seller-input-group" style={{ marginTop: "10px" }}>
           <div className="join-wrap">
             <label htmlFor="accountNumber" className="account-num">
               계좌번호:
             </label>
-          </div>
-          <div className="input-item">
-            <input
-              className="account-zone"
-              type="text"
-              name="accountNumber"
-              id="accountNumber"
-              value={seller.accountNumber}
-              onChange={changeSeller}
-            />
+            <div className="input-item">
+              <input
+                className="account-zone"
+                type="text"
+                name="accountNumber"
+                id="accountNumber"
+                value={seller.accountNumber}
+                onChange={changeSeller}
+              />
+            </div>
           </div>
         </div>
       </div>
+
       <div className="join-wrap">
         <label htmlFor="businessName">사업자명</label>
       </div>
@@ -185,8 +278,9 @@ const SellerJoin = () => {
           id="businessName"
           value={seller.businessName}
           onChange={changeSeller}
-        ></input>
+        />
       </div>
+
       <button type="button" className="join-btn">
         회원가입 완료
       </button>

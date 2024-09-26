@@ -15,5 +15,7 @@ public interface MemberDao {
 
 	MemberDTO selectOneMember(int memberNo);
 
+	int checkSellerId(String businessNo);
+
 
 }

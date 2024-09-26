@@ -63,4 +63,9 @@ public class MemberService {
 	}
 	return null;
 }
+
+	public int checkSellerId(String businessNo) {
+		int result = memberDao.checkSellerId(businessNo);
+		return result;
+	}
 }

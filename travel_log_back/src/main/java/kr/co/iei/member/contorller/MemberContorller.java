@@ -106,4 +106,11 @@ public class MemberContorller {
 			return ResponseEntity.status(404).build();
 		}
 	}
+	
+	@GetMapping(value="/businessNo/{businessNo}/check-id")
+	public ResponseEntity<Integer> checkSellerId(@PathVariable String businessNo){
+		int result = memberService.checkSellerId(businessNo);
+		
+		return ResponseEntity.ok(result);
+	}
 }
