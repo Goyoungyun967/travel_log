@@ -55,7 +55,7 @@ const FaqWrite = (props) => {
                 text : "작성이 완료 되었습니다.",
                 icon : "success"
             }).then(()=>{
-                navigate(`/faq/faqList/${faq.faqType}`);
+                navigate(`/faq/faqList/${faq.faqType}/${{categoryIndex}}`);
             })
             }else{
                 Swal.fire({
@@ -77,7 +77,7 @@ const FaqWrite = (props) => {
                 text : "수정이 완료 되었습니다.",
                 icon : "success"
             }).then(()=>{
-                navigate(`/faq/faqList/${faq.faqType}`);
+                navigate(`/faq/faqList/${faq.faqType}/${categoryIndex}`);
             })
             }else{
                 Swal.fire({

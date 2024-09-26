@@ -94,7 +94,7 @@ const Header = (props) => {
               <Link to="#">고객센터</Link>
               <ul className="sub-menu">
                 <li>
-                  <Link to="/faq">자주묻는질문</Link>
+                  <Link to="/faq/faqList/L1/0">자주묻는질문</Link>
                 </li>
                 <li>
                   <Link to="/inquiryWrite">1:1문의</Link>
@@ -107,7 +107,7 @@ const Header = (props) => {
           {isLogin ? (
             <>
               <li>
-                <Link to="/member">{loginNickname}</Link>
+                <Link to={memberLevel === 1 ? "/admin" : "/member"}>{loginNickname}</Link>
               </li>
               <li>
                 <Link to="/#" onClick={logout}>

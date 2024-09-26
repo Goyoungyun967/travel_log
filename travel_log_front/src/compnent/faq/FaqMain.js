@@ -4,10 +4,13 @@ import "../faq/faq.css";
 import { Link, NavLink, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import FaqWrite from "./FaqWrtie";
 import FaqList from "./FaqList";
+import { useRecoilState } from "recoil";
+import { memberLevelState } from "../utils/RecoilData";
 
 
 const FaqMain = () => {
     const backServer = process.env.REACT_APP_BACK_SERVER;
+    const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
     const [menuState, setMenuState] = useState([]);
     const [faqTypeList, setFaqTypeList] = useState(null);
     useEffect(()=>{
@@ -35,7 +38,7 @@ const FaqMain = () => {
             <div className="faq-wrap">
                 <div className="faq-page-title"><h3>자주묻는질문</h3></div>
                 <div className="faq-menu-bar">
-                <Link to="faqWrite">글쓰기</Link>
+                {memberLevel === 1 ? <Link to="faqWrite">글쓰기</Link> : ""}
                     {faqTypeList.map((faqType,index)=>{
                         return (<div key={"faqTypeCategory"+index}><ul  className="faq-main-menu" onClick={(e)=>{
                             menuState[index] = !menuState[index];

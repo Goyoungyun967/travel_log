@@ -1,11 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import "./board.css"; // 게시판 css
 import SearchIcon from "@mui/icons-material/Search"; // 검색 아이콘 import
-import PersonIcon from "@mui/icons-material/Person"; //맴버 아이콘
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward"; //화살표
+import FavoriteIcon from "@mui/icons-material/Favorite"; // 채워진 하트
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"; // 빈 하트
+import SaveIcon from "@mui/icons-material/Save"; //저장 모양
 import PageNavi from "../utils/PageNavi"; //페이지 네비
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble"; //댓글
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Image from "react-bootstrap/Image";
 import AccompanyWrite from "./AccompanyWrite";
 
 const BoardList = () => {
@@ -100,7 +106,7 @@ const BoardList = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [reqPage]);
   //동행 게시판
   useEffect(() => {
     axios
@@ -117,7 +123,6 @@ const BoardList = () => {
   // const handleMoreClick = () => {
   //   setBoardType((prevType) => (prevType === 1 ? 2 : 1)); // 타입 토글
   // };
-
   return (
     <div className="board-list-wrap">
       <div className="search-box-wrap">
@@ -172,9 +177,9 @@ const BoardList = () => {
             <BoardItem key={"board-" + i} board={board} />
           ))}
         </div>
-        <div className="board-paging-wrap">
-          <PageNavi pi={pi} reqPage={reqPage} setReqPage={setReqPage} />
-        </div>
+      </div>
+      <div className="board-paging-wrap">
+        <PageNavi pi={pi} reqPage={reqPage} setReqPage={setReqPage} />
       </div>
       <div className="write-box">
         <Link to="/board/AccompanyWrite" className="accompany-write sub-item">
@@ -193,7 +198,6 @@ const SearchList = (props) => {
   const searchTitle = props.search.title;
   const setSearchInput = props.setSearchInput;
   const setDropdownOpen = props.setDropdownOpen;
-
   return (
     <li
       onClick={() => {
@@ -244,35 +248,74 @@ const AccompanyItem = (props) => {
 const BoardItem = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const board = props.board;
-  console.log(board);
   const navigate = useNavigate();
+  const now = new Date();
+  console.log(now);
+  const regDate = new Date(board.regDate);
+  const time = now - regDate;
+  console.log(regDate);
+  const seconds = Math.floor(time / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const months = Math.floor(days / 30.44);
+  const years = Math.floor(months / 12);
+
+  // 시간 포맷
+  let timeString = "";
+  if (years > 0) timeString = `${years}년 전`;
+  else if (months > 0) timeString = `${months}달 전`;
+  else if (days > 0) timeString = `${days}일 전`;
+  else if (hours > 0) timeString = `${hours}시간 전`;
+  else if (minutes > 0) timeString = `${minutes}분 전`;
+  else timeString = `방금전`;
+  console.log(timeString);
+
+  //날짜 계산
+
   return (
-    // return 문으로 JSX 요소를 반환
     <div className="boardList-preview">
       <div
         className="boardList-content"
         onClick={() => {
-          navigate(`/board/view/${board.boardNo}`); // 클릭 시 상세 페이지로 이동
+          navigate(
+            `/board/view/${board.boardNo}/${encodeURIComponent(timeString)}`
+          );
         }}
       >
         <div className="boardList-area text-medium">{board.boardArea}</div>
-        {/* 지역 표시 */}
         <div className="board-memberIcon">
-          <PersonIcon />
-          <div className="board-memberId">계정 아이디</div>
-          {/* 사용자 아이디 */}
+          <Container
+            style={{
+              width: "350px",
+              margin: 0,
+              padding: "5px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Col xs={2} md={2} style={{ padding: 0 }}>
+              <Image
+                src="/image/board_default_img.png"
+                className="member-img-circle"
+                roundedCircle
+              />
+            </Col>
+            <Col xs={10} md={10} style={{ padding: 0 }}>
+              <div className="board-memberId">계정 아이디</div>
+              <div className="board-regDate text-min">{timeString}</div>
+            </Col>
+          </Container>
         </div>
-        <div className="board-regDate text-min">{board.regDate}</div>
-        {/* 등록 날짜 */}
         <div className="board-preview-content">
           <div className="board-preview-title">
-            {board.boardContent} {/* 게시물 내용 */}
+            {board.boardTitle}
             <div className="boardList-preview-thumb">
               <img
                 src={
                   board.boardThumb
-                    ? `${backServer}/board/thumb/${board.boardThumb}` // 게시물 썸네일
-                    : "/image/lodgment_default_img.png" // 기본 이미지
+                    ? `${backServer}/board/thumb/${board.boardThumb}`
+                    : "/image/lodgment_default_img.png"
                 }
                 className="board-preview-thumb"
               />
@@ -281,9 +324,19 @@ const BoardItem = (props) => {
         </div>
       </div>
       <div className="like-comment-keep">
-        <div className="board-like sub-item">좋아요</div>
-        <div className="board-comment sub-item">댓글</div>
-        <div className="board-keep sub-item-right">저장</div>
+        <div className="board-like sub-item">
+          {board.likeCount === 0
+            ? "좋아요"
+            : <FavoriteIcon /> || board.likeCount}
+        </div>
+        <div className="board-comment sub-item">
+          {board.commentCount === 0
+            ? "댓글"
+            : <ChatBubbleIcon /> || board.commentCount}
+        </div>
+        <div className="board-keep sub-item-right">
+          {board.keepCount === 0 ? "저장" : <SaveIcon /> || board.keepCount}
+        </div>
       </div>
     </div>
   );

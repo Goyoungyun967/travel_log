@@ -70,9 +70,19 @@ public class BoardService {
 		board.setFileList(fileList);
 		return board;
 	}
+	//파일
 	public BoardFileDTO getBoardFile(int boardFileNo) {
 		BoardFileDTO boardFile = boardDao.getBoardFile(boardFileNo); 
 		
 		return boardFile;
+	}
+	//게시판삭제
+	public List<BoardFileDTO> deleteBoard(int boardNo) {
+		List<BoardFileDTO> fileList = boardDao.selectOneBoardFileList(boardNo);
+		int result = boardDao.deleteBoard(boardNo);
+		if(result>0) {
+			return fileList;
+		}
+		return null;
 	}
 }

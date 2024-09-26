@@ -1,12 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UqillEditor from "../utils/UqillEditor";
 import "./inquiry.css";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { isLoginState, loginNoState, memberLevelState } from "../utils/RecoilData";
+import axios from "axios";
 
-const InquiryWrite = (props) => {
+const InquiryWrite = () => {
+    const backServer = process.env.REACT_APP_BACK_SERVER;
     const [inquiryTitle, setinquiryTitle] = useState("");
     const [inquiryContent, setInquiryContent] = useState("");
+    const navigate = useNavigate();
     const [inquiryFile, setInquiryFile] = useState([]);
     const [showInquiryFile, setShowInquiryFile] = useState([]);
+    const isLogin = useRecoilValue(isLoginState);
+    const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
+    const [loginNo, setLoginNo] = useRecoilState(loginNoState);
+    useEffect(()=>{
+        const refreshToken = window.localStorage.getItem("refreshToken");
+        if(!refreshToken){
+            Swal.fire({
+                title : "로그인 필요",
+                text : "로그인 후 이용 가능합니다.",
+                icon : "info"
+            }).then(()=>{
+                navigate("/login");
+            })
+        }
+    },[])
     const addInquiryFile = (e) => {
         const files = e.target.files;
         const fileArr = new Array();
@@ -19,9 +41,51 @@ const InquiryWrite = (props) => {
         setShowInquiryFile([...showInquiryFile, ...filenameArr]);
     }
     const writeInquiry = () =>{
-
+        if(inquiryTitle !== "" && inquiryContent !== ""){
+            const form = new FormData();
+            if(memberLevel === 4){
+                form.append("sellerNo",loginNo);
+            }else{
+                form.append("memberNo",loginNo);
+            }
+            form.append("inquiryTitle",inquiryTitle);
+            form.append("inquiryContent",inquiryContent);
+            for(let i=0;i<inquiryFile.length;i++){
+                form.append("upfile",inquiryFile[i]);
+            }
+            axios.post(`${backServer}/inquiry`, form, {
+                headers : {
+                    contentType : "multipart/form-data",
+                    processData : false,
+                }
+            }).then((res)=>{
+                if(res.data){
+                    Swal.fire({
+                        title : "문의 작성 완료",
+                        text : "처리가 완료되면 마이페이지에서 확인해주세요.",
+                        icon : "success"
+                    }).then(()=>{
+                        navigate("/");
+                    })
+                }else{
+                    Swal.fire({
+                        title : "문의 작성 실패",
+                        text : "잠시 후 다시 시도해주세요.",
+                        icon : "error"
+                    })
+                }
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }else{
+            Swal.fire({
+                title : "문의 작성 실패",
+                text : "제목과 내용을 입력해주세요",
+                icon : "info"
+            })
+        }
     }
-    return (
+    return (isLogin ?
         <div className="inquiry-write-wrap">
             <div className="inquiry-page-title"><h3>1:1문의</h3></div>
             <table>
@@ -62,7 +126,7 @@ const InquiryWrite = (props) => {
                 </tbody>
             </table>
         </div>
-    );
+    : "");
 }
 
 export default InquiryWrite;
