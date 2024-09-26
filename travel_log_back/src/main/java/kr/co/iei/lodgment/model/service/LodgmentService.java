@@ -39,12 +39,12 @@ public class LodgmentService {
 		 int limit = 10;  //한페이지당 열개 
 	     int start = (reqPage - 1) * limit +1; // 1~
 	     int end = reqPage*limit; //~10
-			System.out.println("selectedServiceTagsArry : "+selectedServiceTagsArry.length);
-			System.out.println("minPrice : "+minPrice);
-			System.out.println("maxPrice : "+maxPrice);
-			System.out.println("starValue : "+starValue);
-			System.out.println("order : "+order);
-			System.out.println("lodgmentType : "+lodgmentType);
+//			System.out.println("selectedServiceTagsArry : "+selectedServiceTagsArry.length);
+//			System.out.println("minPrice : "+minPrice);
+//			System.out.println("maxPrice : "+maxPrice);
+//			System.out.println("starValue : "+starValue);
+//			System.out.println("order : "+order);
+//			System.out.println("lodgmentType : "+lodgmentType);
 	     List<SearchLodgmentDTO> list = lodgmentDao.getLodgmentList
 	    		 (start, end, lodgment, startDate.substring(0, 10), endDate.substring(0, 10), guest,
 	    				 minPrice, maxPrice, selectedServiceTagsArry, starValue, order, lodgmentType);
