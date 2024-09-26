@@ -114,6 +114,14 @@ public class SellerController {
 		return ResponseEntity.ok(map);
 	}
 	
+	// 객실 상세
+//	@Operation(summary = "객실 상세", description = "객실 상세(호텔+객실+객실태그(서비스태그)+첨부파일)")
+//	@GetMapping(value="/roomview/{roomNo}")
+//	public ResponseEntity<Map> roomList(@PathVariable int roomNo){
+//		Map map = sellerService.selectRoomInfo(roomNo);
+//		return ResponseEntity.ok(map);
+//	}
+	
 //	// 객실 등록
 	@PostMapping(value="/insertRoom")
 	public ResponseEntity<Boolean> insertRoom(@ModelAttribute InsertRoomDTO room, @ModelAttribute MultipartFile[] roomFile){
