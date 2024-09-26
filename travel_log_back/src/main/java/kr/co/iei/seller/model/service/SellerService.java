@@ -65,7 +65,7 @@ public class SellerService {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		LodgmentStorageDTO ls = sellerDao.selectOneLodgment(lodgmentNo); // 호텔 정보 출력
-		List<RoomDTO> list = sellerDao.selectRoomInfo(lodgmentNo); 
+		List<RoomDTO> list = sellerDao.selectRoomInfo(lodgmentNo); // 객실 정보 출력
 		System.out.println(list);
 	
 		map.put("lodgment",ls);
@@ -75,6 +75,13 @@ public class SellerService {
 		return map;
 	}
 
+	// 객실 상세
+		public Map selectRoomInfo(int roomNo) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			
+			return null;
+		}
+	
 	// 객실 등록(객실 정보, 파일, 해시태그 동시 처리)
 	@Transactional
 	public int insertRoom(InsertRoomDTO room, List<RoomFileDTO> roomFileList) {
@@ -103,10 +110,17 @@ public class SellerService {
 		return bid;
 	}
 
-	public List<StmInfoDTO> selectStmInfo(int sellerNo) {
-		List<StmInfoDTO> ls = sellerDao.selectStmInfo(sellerNo);
+	public List<StmInfoDTO> selectStmInfo(StmInfoDTO st) {
+		List<StmInfoDTO> ls = sellerDao.selectStmInfo(st);
 		return ls;
 	}
+
+	public List<StmInfoDTO> selectStmSearchInfo(StmInfoDTO st) {
+		List<StmInfoDTO> ls = sellerDao.selectStmInfo(st);
+		return ls;
+	}
+
+	
 
 
 }

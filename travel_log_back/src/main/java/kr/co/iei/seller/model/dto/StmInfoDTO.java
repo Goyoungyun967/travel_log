@@ -16,11 +16,16 @@ import lombok.NoArgsConstructor;
 @Schema(description="정산 객체")
 public class StmInfoDTO {
 	@Schema(description = "정산 완료 번호",type="int")
-	private int stmNo;
+	private int stmNum;
 	@Schema(description = "판매자 번호",type="int")
 	private int sellerNo;
 	@Schema(description = "정산 금액",type="int")
 	private int stmPrice;
 	@Schema(description = "정산 날짜",type="String")
 	private String stmDate;
+	
+	
+	// --- 검색 시
+	private String startDate; // 시작 날짜
+	private String endDate; // 끝 날짜
 }
