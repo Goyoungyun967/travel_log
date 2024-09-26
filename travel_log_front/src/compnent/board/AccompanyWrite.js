@@ -16,12 +16,6 @@ const AccompanyWrite = () => {
   const [thumbnail, setThumbnail] = useState(null); //썸네일은 첨부파일로 처리
   const [boardFile, setBoardFile] = useState([]);
   //동행 일정
-  //기본 날짜 세팅
-  const startDay = dayjs().add(1, "day").toDate();
-  const endDay = dayjs().add(2, "day").toDate();
-  //시작날짜 , 끝 날짜
-  const [startDate, setStartDate] = useState(startDay);
-  const [endDate, setEndDate] = useState(endDay);
 
   //동행 일정 정보
   const [accompanyDate, setAccompanyDate] = useState("");
@@ -33,26 +27,7 @@ const AccompanyWrite = () => {
     { title: "식사 동행" },
     { title: "공동 구매" },
   ]);
-  const [boardArea, setBoardArea] = useState([
-    { title: "서울" },
-    { title: "경기" },
-    { title: "부산" },
-    { title: "대구" },
-    { title: "인천" },
-    { title: "대전" },
-    { title: "광주" },
-    { title: "울산" },
-    { title: "세종" },
-    { title: "강원" },
-    { title: "충북" },
-    { title: "충남" },
-    { title: "경북" },
-    { title: "경남" },
-    { title: "전북" },
-    { title: "전북" },
-    { title: "제주" },
-  ]);
-  const [accompanyArea, setAccompanyArea] = useState("");
+
   const [accompanyContent, setAccompanyContent] = useState("");
   const inputTitle = (e) => {
     setBoardTitle(e.target.value);
@@ -110,8 +85,8 @@ const AccompanyWrite = () => {
       >
         <BoardFrm
           // loginNo = {loginNo}
-          boardArea={boardArea}
-          setBoardArea={setBoardArea}
+          // boardArea={boardArea}
+          // setBoardArea={setBoardArea}
           boardTitle={boardTitle}
           setBoardTitle={inputTitle}
           thumbnail={thumbnail}
@@ -121,18 +96,18 @@ const AccompanyWrite = () => {
         />
         <div className="board-accompany-wrap">
           <AccompanyFrm
-            accompanyDate={accompanyDate}
-            setAccompanyDate={setAccompanyDate}
+            // accompanyDate={accompanyDate}
+            // setAccompanyDate={setAccompanyDate}
             accompanyType={accompanyType}
             setAccompanyType={setAccompanyType}
             // accompanyArea={accompanyArea}
             // setAccompanyArea={setAccompanyArea}
             // accompanyContent={accompanyContent}
             // setAccompanyContent={setAccompanyContent}
-            startDate={startDate}
-            endDate={endDate}
-            setEndDate={setEndDate}
-            setStartDate={setStartDate}
+            // startDate={startDate}
+            // endDate={endDate}
+            // setEndDate={setEndDate}
+            // setStartDate={setStartDate}
           />
         </div>
         <div className="board-editer-wrap">

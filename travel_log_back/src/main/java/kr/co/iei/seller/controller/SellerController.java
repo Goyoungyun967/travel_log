@@ -1,5 +1,6 @@
 package kr.co.iei.seller.controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,7 @@ import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
+import kr.co.iei.seller.model.dto.StmInfoDTO;
 import kr.co.iei.seller.model.service.SellerService;
 import kr.co.iei.util.FileUtils;
 
@@ -112,6 +114,14 @@ public class SellerController {
 		return ResponseEntity.ok(map);
 	}
 	
+	// 객실 상세
+//	@Operation(summary = "객실 상세", description = "객실 상세(호텔+객실+객실태그(서비스태그)+첨부파일)")
+//	@GetMapping(value="/roomview/{roomNo}")
+//	public ResponseEntity<Map> roomList(@PathVariable int roomNo){
+//		Map map = sellerService.selectRoomInfo(roomNo);
+//		return ResponseEntity.ok(map);
+//	}
+	
 //	// 객실 등록
 	@PostMapping(value="/insertRoom")
 	public ResponseEntity<Boolean> insertRoom(@ModelAttribute InsertRoomDTO room, @ModelAttribute MultipartFile[] roomFile){
@@ -140,4 +150,19 @@ public class SellerController {
 		System.out.println(bid);
 		return ResponseEntity.ok(bid);
 	}
+	
+	// 판매자 정산
+	@Operation(summary="판매자 정산", description = "정산 정보 출력")
+	@PostMapping(value="/stm")
+	public ResponseEntity<List> stmInfo( @ModelAttribute StmInfoDTO st){
+		List<StmInfoDTO> ls = sellerService.selectStmInfo(st);
+		return ResponseEntity.ok(ls);
+	}
+	// 판매자 정산 - 검색
+		@Operation(summary="판매자 정산", description = "정산 정보 출력")
+		@PostMapping(value="/searchDate")
+		public ResponseEntity<List> stmSearchDate( @ModelAttribute StmInfoDTO st){
+			List<StmInfoDTO> ls = sellerService.selectStmSearchInfo(st);
+			return ResponseEntity.ok(ls);
+		}
 }

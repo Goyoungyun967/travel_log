@@ -1,5 +1,6 @@
 package kr.co.iei.board.model.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,9 +71,41 @@ public class BoardService {
 		board.setFileList(fileList);
 		return board;
 	}
+	//파일
 	public BoardFileDTO getBoardFile(int boardFileNo) {
 		BoardFileDTO boardFile = boardDao.getBoardFile(boardFileNo); 
 		
 		return boardFile;
+	}
+	//게시판삭제
+	public List<BoardFileDTO> deleteBoard(int boardNo) {
+		List<BoardFileDTO> fileList = boardDao.selectOneBoardFileList(boardNo);
+		int result = boardDao.deleteBoard(boardNo);
+		if(result>0) {
+			return fileList;
+		}
+		return null;
+	}
+	@Transactional
+	public List<BoardFileDTO> updateBoard(BoardDTO board, List<BoardFileDTO> boardFileList) {
+		int result = boardDao.updateBoard(board);
+		
+		if(result>0) {
+			List<BoardFileDTO> delFileList = new ArrayList<BoardFileDTO>();
+			if(board.getDelBoardFileNo() != null) {
+				delFileList = boardDao.selectBoardFile(board.getDelBoardFileNo());
+				result += boardDao.deleteBoardFile(board.getDelBoardFileNo());
+			}
+			for(BoardFileDTO boardFile : boardFileList) {
+				result += boardDao.insertBoardFile(boardFile);
+			}
+			int updateTotal = board.getDelBoardFileNo() == null 
+									? 1+boardFileList.size() 
+									: 1+ boardFileList.size() + board.getDelBoardFileNo().length;
+			if(result == updateTotal) {
+				return delFileList;
+			}
+		}
+		return null;
 	}
 }

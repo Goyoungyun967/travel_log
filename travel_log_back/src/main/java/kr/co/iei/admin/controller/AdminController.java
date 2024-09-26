@@ -29,7 +29,7 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 	
-	@GetMapping(value="/inquiry/{reqPage}/{type}/{state}")
+	@GetMapping(value="/inquiry/list/{reqPage}/{type}/{state}")
 	@Operation(summary = "1:1문의 리스트 조회",description = "페이지번호,타입,처리상태를 받아서 1:1문의 리스트 조회")
 	public ResponseEntity<Map> selectInquiryList(@PathVariable int reqPage,@PathVariable String type,@PathVariable int state){
 		Map map = adminService.selectInquiryList(reqPage,type,state);

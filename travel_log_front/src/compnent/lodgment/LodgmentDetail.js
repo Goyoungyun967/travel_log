@@ -5,7 +5,31 @@ import LodgmentDetailMap from "./LodgmentDetailMap";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import LodgmentRoomDetail from "./LodgmentRoomDetail";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 const LodgmentDetail = () => {
+  const BackServer = process.env.REACT_APP_BACK_SERVER;
+  const params = useParams();
+  const lodgmentNo = params.lodgmentInfo;
+  const startDate = params.startDate;
+  const endDate = params.endDate;
+  const guest = params.guest;
+  const [lodgmentInfo, SetLodgmentInfo] = useState({});
+  useEffect(() => {
+    axios
+      .get(
+        `${BackServer}/lodgment/roomInfo/${lodgmentNo}/${startDate}/${endDate}`
+      )
+      .then((res) => {
+        console.log(res);
+        SetLodgmentInfo(res.data.lodgmentInfo);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  console.log("lodgmentInfo" + lodgmentInfo.lodgmentNo);
   return (
     <section className="section lodgmentDetail">
       <div className="lodgment-detail-wrap">

@@ -16,8 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -92,6 +94,7 @@ public class BoardController {
 		BoardDTO board = boardService.selectOneBoard(boardNo);
 		return ResponseEntity.ok(board);
 	}
+	//안할수도 있음{첨부파일 저장하기}
 	@GetMapping(value = "/file/{boardFileNo}")
 	public ResponseEntity<Resource> filedown(@PathVariable int boardFileNo) throws FileNotFoundException{
 		System.out.println(boardFileNo);
@@ -113,7 +116,54 @@ public class BoardController {
 					.contentType(MediaType.APPLICATION_OCTET_STREAM)
 					.body(resource);
 	}
-	
+	//일반게시판 삭제
+	@DeleteMapping(value = "/delete/{boardNo}")
+	public ResponseEntity<Integer> deleteBoard(@PathVariable int boardNo){
+		List<BoardFileDTO> delFileList = boardService.deleteBoard(boardNo);
+		
+		if(delFileList != null) {
+			 String savepath = root+"/board/";
+			 for(BoardFileDTO boardFile : delFileList) {
+				 File deFile= new File(savepath+boardFile.getFileNo());
+				 deFile.delete();
+			 }
+			 return ResponseEntity.ok(1);
+		}else {
+			return ResponseEntity.ok(0);
+		}
+	}
+	//게시판 수정
+	@PatchMapping
+	public ResponseEntity<Boolean> updateBoard(@ModelAttribute BoardDTO board , @ModelAttribute MultipartFile thumbnail,@ModelAttribute MultipartFile[] boardFile){
+		if(thumbnail != null) {
+			String savepath = root+"/board/thumb/";
+			String filepath = fileUtils.upload(savepath, thumbnail);
+			board.setBoardThumb(filepath);
+		}
+		List<BoardFileDTO> boardFileList = new ArrayList<BoardFileDTO>();
+		if(boardFile != null) {
+			String savepath = root+"/board/";
+			for(MultipartFile file:boardFile) {
+				BoardFileDTO boardFileDTO = new BoardFileDTO();
+				String filename = file.getOriginalFilename();
+				String filepath = fileUtils.upload(savepath, file);
+				boardFileDTO.setFilename(filename);
+				boardFileDTO.setFilepath(filepath);
+				boardFileDTO.setFileNo(board.getBoardNo());
+				boardFileList.add(boardFileDTO);
+			}
+		}
+		List<BoardFileDTO> delFileList = boardService.updateBoard(board,boardFileList);
+		if(delFileList != null) {
+			String savrpath = root+"/board/";
+			for(BoardFileDTO deleteFIle : delFileList) {
+				File deFile = new File(savrpath+deleteFIle.getFilepath());
+				deFile.delete();
+			}
+			return ResponseEntity.ok(true);
+		}
+		return  ResponseEntity.ok(false);
+	}
 	
 	
 }

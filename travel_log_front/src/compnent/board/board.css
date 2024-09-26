@@ -1,10 +1,10 @@
-/*글자 사이즈*/
+props/*글자 사이즈*/
 
 .text-medium {
-  font-size: 15px;
+  font-size: 20px;
 }
 .text-min {
-  font-size: 10px;
+  font-size: 13px;
 }
 /*시작*/
 .board-list-wrap {
@@ -199,7 +199,6 @@
 .boardList-content {
   height: 150px;
   border-bottom: 1px solid var(--gray5);
-  padding-top: 10px;
 }
 .boardList-area {
   position: absolute;
@@ -214,7 +213,6 @@
 }
 .boardList-preview {
   margin-top: 8px;
-  padding: 7px;
   width: 100%;
   height: 210px;
   border-radius: 10px;
@@ -232,7 +230,7 @@
 }
 .board-preview-content {
   gap: 8px;
-  padding: 10px;
+  padding: 4px;
 }
 .board-preview-title {
   display: flex;
@@ -262,6 +260,13 @@
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
 }
+/*페이지네비*/
+.board-paging-wrap {
+  display: flex;
+}
+.board-paging-wrap {
+  justify-content: center;
+}
 /* 좋아요 / 저장 / 댓글  */
 .like-comment-keep {
   height: 55px;
@@ -275,7 +280,7 @@
   justify-content: center;
   align-items: center;
   display: flex;
-  height: 20px;
+  height: 50px;
   padding: 5px 5px;
   width: 99%;
   border-right: 1px solid var(--gray4);
@@ -284,7 +289,7 @@
   justify-content: center;
   align-items: center;
   display: flex;
-  height: 20px;
+  height: 50px;
   padding: 5px 5px;
   width: 99%;
 }
@@ -353,6 +358,10 @@
   justify-content: space-between; /* 버튼 간 간격 조정 */
   margin-top: 10px; /* 위쪽 여백 추가 */
   z-index: 10; /* 다른 요소 위로 */
+}
+.member-img-circle {
+  width: 50px;
+  height: 50px;
 }
 /*
 여행 게시판 글 작성
@@ -533,9 +542,10 @@
 /*여행 게시판 상세 게시판*/
 .board-view-content {
   width: 1000px;
-  border: 1px solid var(--gray5);
-  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 17px;
 }
+
 .board-silde-wrap {
   height: 400px;
 }
@@ -549,9 +559,65 @@
 }
 
 .board-member-img {
-  justify-content: left !important;
+  margin: 5px;
+  justify-content: left;
 }
 .nick-img-circle {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
+}
+.view-like-comment-keep {
+  margin-top: 10px;
+  border-top: 1px solid var(--gray5);
+}
+
+.board-view-head {
+  height: 150px;
+}
+.board-view-title {
+  padding: 5px;
+}
+.board-view-text-wrap {
+  padding: 5px;
+}
+.board-flex {
+  display: grid;
+  align-items: flex-start; /* 자식 요소를 위쪽에 정렬 */
+  justify-content: end; /* 자식 요소를 오른쪽에 정렬 */
+  height: 100vh; /* 필요에 따라 높이 조정 */
+}
+
+.boardList-area-view {
+  font-size: 27px;
+  width: 100px;
+  text-align: center;
+  color: var(--gray4);
+  display: flex; /* Flexbox로 변경 */
+}
+.board-back-icon {
+  padding-left: 2px;
+  color: var(--gray4);
+}
+/* 댓글 */
+.comment-input {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.comment-textarea {
+  flex: 1; /* 입력창이 가능한 공간을 모두 차지하도록 설정 */
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  margin-right: 8px; /* 버튼과의 간격 설정 */
+}
+
+.comment-submit-btn {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }

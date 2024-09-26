@@ -29,7 +29,7 @@ public class AdminService {
 		Map<String,Object> m = new HashMap<String, Object>();
 		m.put("type", type);
 		m.put("state", state);
-		int numPerPage = 20;
+		int numPerPage = 10;
 		int pageNaviSize = 5;
 		int totalCount = inquiryDao.getTotalCount(m);
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);

@@ -1,12 +1,19 @@
 package kr.co.iei.inquiry.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,11 +25,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.inquiry.model.dto.InquiryDTO;
 import kr.co.iei.inquiry.model.dto.InquiryFileDTO;
+import kr.co.iei.inquiry.model.dto.InquiryReplyDTO;
 import kr.co.iei.inquiry.model.service.InquiryService;
 import kr.co.iei.util.FileUtils;
 
@@ -40,7 +47,7 @@ public class InquiryController {
 	
 	@PostMapping
 	@Operation(summary = "1:1 문의 등록",description = "제목,내용,회원번호 또는 판매자번호,파일을 입력해서 db에 insert")
-	public ResponseEntity<Boolean> insertInquiry(@RequestBody InquiryDTO inquiry,@ModelAttribute MultipartFile[] upfile){
+	public ResponseEntity<Boolean> insertInquiry(@ModelAttribute InquiryDTO inquiry,@ModelAttribute MultipartFile[] upfile){
 		List<InquiryFileDTO> fileList = new ArrayList<InquiryFileDTO>();
 		if(upfile != null) {
 			String savepath = root+"/inquiry/"; 
@@ -76,5 +83,23 @@ public class InquiryController {
 	public ResponseEntity<InquiryDTO> selectOneInquiry(@PathVariable int inquiryNo){
 		InquiryDTO inquiry = inquiryService.selectOneInquiry(inquiryNo);
 		return ResponseEntity.ok(inquiry);
+	}
+	@Operation(summary = "1:1 문의 파일 다운로드",description = "1:1 문의 파일 경로를 받아서 파일 다운로드")
+	@GetMapping(value="/file/{filepath}")
+	public ResponseEntity<Resource> fileDown(@PathVariable String filepath) throws FileNotFoundException{
+		String savepath = root+"/inquiry/";
+		File file = new File(savepath+filepath);
+		Resource resource = new InputStreamResource(new FileInputStream(file));
+		HttpHeaders header = new HttpHeaders();
+		header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+		header.add("Pragma", "no-cache");
+		header.add("Expires", "0");
+		return ResponseEntity.status(HttpStatus.OK).headers(header).contentLength(file.length()).contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
+	}
+	
+	@PostMapping(value="/inquiryReply")
+	public ResponseEntity<Integer> insertInquiryReply(@RequestBody InquiryReplyDTO inquiryReply){
+		int result = inquiryService.insertInquiryReply(inquiryReply);
+		return ResponseEntity.ok(result);
 	}
 }

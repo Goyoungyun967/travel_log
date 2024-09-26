@@ -32,7 +32,7 @@ public class BoardDTO {
 	@Schema(description = "게시판 타입", type = "int")
 	private int boardType; // 1번 일반게시판 , 2번 동행 게시판
 	private List<BoardFileDTO> fileList;
-	
+	private int[] delBoardFileNo;
 	//상세 페이지 dto
 	private String memberImage;
 	private String memberNickName;
