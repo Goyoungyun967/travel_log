@@ -41,10 +41,7 @@ const BoardWrite = () => {
   const inputContent = (e) => {
     setBoardContent(e.target.value);
   };
-  const handleBoardContentChange = (content) => {
-    const cleanedContent = content.replace(/<p>/g, "").replace(/<\/p>/g, "");
-    setBoardContent(cleanedContent);
-  };
+
   const writeBoard = () => {
     if (boardTitle !== "" && boardContent !== "") {
       const form = new FormData();
@@ -112,7 +109,7 @@ const BoardWrite = () => {
         <div className="board-editer-wrap">
           <UqillEditor
             boardContent={boardContent}
-            setBoardContent={handleBoardContentChange}
+            setBoardContent={setBoardContent}
           />
         </div>
         <div className="board-btn-zone">

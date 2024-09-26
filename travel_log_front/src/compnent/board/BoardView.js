@@ -10,6 +10,7 @@ import "./board.css";
 import SaveIcon from "@mui/icons-material/Save"; //저장 모양
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble"; //댓글
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"; //뒤로가기 모양
+import BoardCommnet from "./BoardComment";
 const BoardView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
@@ -121,37 +122,60 @@ const BoardView = () => {
               </Carousel>
             </div>
           </div>
-          <div className="board-view-text-wrap">{board.boardContent}</div>
+
+          <div
+            className="board-view-text-wrap"
+            dangerouslySetInnerHTML={{ __html: board.boardContent }}
+          />
         </div>
+
         <div className="view-btn-zone">
           <Link
-          // to={`/board/update/${board.boardNo}`}
-          // className="btn-primary lg"
+            to={`/board/update/${board.boardNo}`}
+            className="board-update-btn"
           >
             수정
           </Link>
           <button
             type="button"
-            className="btn-secondary lg"
+            className="board-delete-btn"
             onClick={deleteBoard}
           >
             삭제
           </button>
         </div>
+        {/* 좋아요, 댓글 수, 저장 기능 */}
         <div className="like-comment-keep view-like-comment-keep">
           <div className="board-like sub-item">
-            {board.likeCount === 0
-              ? "좋아요"
-              : <FavoriteIcon /> || board.likeCount}
+            {board.likeCount === 0 ? (
+              "좋아요"
+            ) : (
+              <>
+                <FavoriteIcon /> {board.likeCount}
+              </>
+            )}
           </div>
           <div className="board-comment sub-item">
-            {board.commentCount === 0
-              ? "댓글"
-              : <ChatBubbleIcon /> || board.commentCount}
+            {board.commentCount === 0 ? (
+              "댓글"
+            ) : (
+              <>
+                <ChatBubbleIcon /> {board.commentCount}
+              </>
+            )}
           </div>
           <div className="board-keep sub-item-right">
-            {board.keepCount === 0 ? "저장" : <SaveIcon /> || board.keepCount}
+            {board.keepCount === 0 ? (
+              "저장"
+            ) : (
+              <>
+                <SaveIcon /> {board.keepCount}
+              </>
+            )}
           </div>
+        </div>
+        <div className="board-comment-wrap">
+          <BoardCommnet board={board} />
         </div>
       </div>
     </div>

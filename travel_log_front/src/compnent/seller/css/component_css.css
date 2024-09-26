@@ -1,0 +1,26 @@
+.stm-box-wrap > .search-date {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 20px;
+}
+.seller-search-dateApi > .seller-dateApi {
+  display: flex;
+  flex-direction: row;
+}
+
+.seller-search-dateApi > .seller-dateApi > * {
+  padding: 0 10px;
+}
+
+.stm-box-wrap > .search-date > .search-btn {
+  width: 100px;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(43, 75, 255);
+  color: #fff;
+}
+
+.stm-box-wrap > .search-date > .search-btn:hover {
+  background-color: rgb(26, 49, 179);
+}

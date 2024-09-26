@@ -37,6 +37,8 @@ public interface SellerDao {
 
 	BookingInfoDTO bookInfo(int bookNo);
 
-	List<StmInfoDTO> selectStmInfo(int sellerNo);
+	List<StmInfoDTO> selectStmInfo(StmInfoDTO st);
+
+	List<StmInfoDTO> selectStmSearchInfo(StmInfoDTO st);
 
 }

@@ -21,8 +21,10 @@ const BoardFrm = (props) => {
   //지역 셀렛
   const selectedArea = props.selectedArea;
   const setSelectedArea = props.setSelectedArea;
+
   const delBoardFileNo = props.delBoardFileNo;
   const setDelBoardFileNo = props.setDelBoardFileNo;
+
   const thumbnailRef = useRef(null);
   //썸네일 미리보기용 state(데이터 전송을 안할꺼임)
   const [boardImg, setBoardImg] = useState(null);
@@ -116,7 +118,7 @@ const BoardFrm = (props) => {
                     />
                   ) : (
                     <img
-                      src="/image/lodgment_default_img.png"
+                      src="/image/board_default_img.png"
                       onClick={() => {
                         thumbnailRef.current.click();
                       }}
