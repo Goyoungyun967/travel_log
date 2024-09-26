@@ -50,5 +50,11 @@ public class InquiryService {
 		return inquiry;
 	}
 
+	@Transactional
+	public int insertInquiryReply(InquiryReplyDTO inquiryReply) {
+		int result = inquiryDao.insertInquiryReply(inquiryReply);
+		return result;
+	}
+
 	
 }

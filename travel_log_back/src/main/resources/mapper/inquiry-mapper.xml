@@ -19,7 +19,7 @@
   	</trim>
   </select>
   <select id="selectInquiryList" resultType="inquiry">
-  	select * from (select rownum as rnum, i2.* from (select inquiry_no,inquiry_title,seller_no,member_no,member_id,to_char(reg_date,'yyyy-mm-dd') as reg_date,representative_name,(select count(*) from inquiry_reply where inquiry_no=i.inquiry_no) from inquiry i left join member using (member_no) left join seller using (seller_no)
+  	select * from (select rownum as rnum, i2.* from (select inquiry_no,inquiry_title,seller_no,member_no,member_id,to_char(reg_date,'yyyy-mm-dd') as reg_date,representative_name,(select count(*) from inquiry_reply where inquiry_no=i.inquiry_no) as inquiry_state from inquiry i left join member using (member_no) left join seller using (seller_no)
   		<trim prefix="where" prefixOverrides="and|or">
   			<if test="type.equals('member')">
   			seller_no is null
@@ -79,6 +79,6 @@
   	select * from inquiry_file where inquiry_no=#{inquiryNo}
   </select>
   <select id="selectInquiryReply" resultType="inquiryReply">
-  	select inquiry_reply_no,inquiry_reply_content,to_char(reg_date,'yyyy-mm-dd') as reg_date where inquiry_no=#{inquiryNo}
+  	select inquiry_reply_no,inquiry_reply_content,to_char(reg_date,'yyyy-mm-dd') as reg_date from inquiry_reply where inquiry_no=#{inquiryNo}
   </select>
 </mapper>

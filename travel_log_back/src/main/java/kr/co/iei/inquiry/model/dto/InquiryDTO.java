@@ -29,8 +29,10 @@ public class InquiryDTO {
 	private int memberNo;
 	@Schema(description = "1대1 문의한 회원아이디",type = "String")
 	private String memberId;
-	@Schema(description = "1대1 문의 작성일")
+	@Schema(description = "1대1 문의 작성일",type = "String")
 	private String regDate;
+	@Schema(description = "1대1 문의 작성일",type = "int")
+	private int inquiryState;
 	@Schema(description = "1대1 문의 파일리스트",type = "List")
 	private List inquiryFileList;
 	@Schema(description = "1대1 문의 답변",type = "InquiryReplyDTO")

@@ -110,7 +110,7 @@ const InquiryWrite = () => {
                                 setInquiryFile([...inquiryFile]);
                             }
                             return (
-                                <div className="inquiry-file-wrap">
+                                <div key={`inquiry-input-file-${index}`} className="inquiry-file-wrap">
                                     <span className="">{file}</span>
                                     <span className="material-icons deleteInquiryFile" onClick={deleteFile}>delete</span>
                                 </div>

@@ -13,7 +13,7 @@
 }
 .faq-menu-bar{
     position: absolute;
-    margin-top: 105px;
+    top: 105px;
     align-self: start;
     width: 200px;
     display: flex;

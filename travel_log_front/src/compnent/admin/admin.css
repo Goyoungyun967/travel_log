@@ -13,7 +13,7 @@
 }
 .admin-menu-bar{
     position: absolute;
-    margin-top: 105px;
+    top: 105px;
     align-self: start;
     width: 200px;
     display: flex;
@@ -74,7 +74,10 @@
     background-color: var(--main4);
 }
 .admin-content-wrap{
+    display: flex;
     width: 800px;
+    min-height: 500px;
     margin: 75px auto;
-    border-top: 1px solid #ccc;
+    flex-direction: column;
+    align-items: center;
 }

@@ -30,6 +30,8 @@ public interface InquiryDao {
 
 	int deleteInquiry(int inquiryNo);
 
+	int insertInquiryReply(InquiryReplyDTO inquiryReply);
+
 	
 
 }
