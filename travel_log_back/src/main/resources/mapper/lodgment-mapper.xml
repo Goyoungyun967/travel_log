@@ -116,8 +116,16 @@
 			where b.booking_no=#{bookNo}
 	</select>
 	
-	<!-- 판매자 정산 정보 -->
-	<select id="selectStmInfo" resultType="stmInfo">
-		select * from stm_tbl where seller_no=#{sellerNo}
+		<!-- 판매자 정산 정보 -->
+	<select id="selectStmInfo" resultMap="stmInfoMap">
+	    select stm_num, seller_no, stm_price, to_char(stm_date, 'YYYY/MM/dd') as stm_date
+	    from stm_tbl
+	    where seller_no = #{sellerNo}
 	</select>
+	<resultMap id="stmInfoMap" type="stmInfo">
+	    <result property="stmNum" column="stm_num" />
+	    <result property="sellerNo" column="seller_no" />
+	    <result property="stmPrice" column="stm_price" />
+	    <result property="stmDate" column="stm_date" />
+	</resultMap>
 </mapper>

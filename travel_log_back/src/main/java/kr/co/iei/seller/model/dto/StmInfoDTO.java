@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Schema(description="정산 객체")
 public class StmInfoDTO {
 	@Schema(description = "정산 완료 번호",type="int")
-	private int stmNo;
+	private int stmNum;
 	@Schema(description = "판매자 번호",type="int")
 	private int sellerNo;
 	@Schema(description = "정산 금액",type="int")

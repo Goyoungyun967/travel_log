@@ -23,7 +23,7 @@ const SellerChart = (props) => {
 
   const data = stmInfo.map((item, i) => ({
     name: `${item.stmDate}`,
-    가격: `${item.stmPrice}`,
+    가격: Number(item.stmPrice),
   }));
 
   return (

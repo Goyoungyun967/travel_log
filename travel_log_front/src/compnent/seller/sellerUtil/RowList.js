@@ -10,7 +10,7 @@ const RowList = (props) => {
   const rows = stmInfo.map((item, i) => ({
     id: i + 1,
     date: ` ${item.stmDate}`,
-    name: `${item.stmPrice}`,
+    name: Number(item.stmPrice),
   }));
 
   // 열 지정
