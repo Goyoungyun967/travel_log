@@ -1,0 +1,41 @@
+.seller-room-wrap {
+  border: 1px solid #ccc;
+  padding: 30px;
+  width: 1000px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+.seller-room-wrap > .hotel-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.seller-room-wrap > .hotel-info > .image {
+  width: 250px;
+  height: 250px;
+}
+
+.seller-room-wrap > .hotel-info > .image > img {
+  width: 200px;
+  margin: 25px;
+}
+
+.seller-room-wrap > .hotel-info > .room-item-wrap {
+  width: 60%;
+}
+.seller-room-wrap > .hotel-info > .room-item-wrap > .room-item {
+  width: 100%;
+  padding: 20px 0;
+  display: flex;
+}
+
+.seller-room-wrap > .hotel-info > .room-item-wrap > .room-item > h5 {
+  color: #333;
+  width: 50%;
+  font-weight: bold;
+}

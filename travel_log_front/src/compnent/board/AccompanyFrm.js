@@ -25,14 +25,6 @@ const AccompanyFrm = (props) => {
       <div className="accompany-info-wrap">
         <div className="accompany-date-container">
           <div className="accompany-date-title">동행 날짜 입력</div>
-          <div className="accompany-date-wrap">
-            <BoardDate
-              startDate={startDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
-              setStartDate={setStartDate}
-            />
-          </div>
         </div>
         <div className="accompany-area-wrap"></div>
       </div>
