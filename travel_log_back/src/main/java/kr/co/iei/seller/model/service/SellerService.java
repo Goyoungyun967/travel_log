@@ -103,8 +103,13 @@ public class SellerService {
 		return bid;
 	}
 
-	public List<StmInfoDTO> selectStmInfo(int sellerNo) {
-		List<StmInfoDTO> ls = sellerDao.selectStmInfo(sellerNo);
+	public List<StmInfoDTO> selectStmInfo(StmInfoDTO st) {
+		List<StmInfoDTO> ls = sellerDao.selectStmInfo(st);
+		return ls;
+	}
+
+	public List<StmInfoDTO> selectStmSearchInfo(StmInfoDTO st) {
+		List<StmInfoDTO> ls = sellerDao.selectStmInfo(st);
 		return ls;
 	}
 

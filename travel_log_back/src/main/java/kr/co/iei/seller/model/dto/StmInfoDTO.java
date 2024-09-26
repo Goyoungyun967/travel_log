@@ -23,4 +23,9 @@ public class StmInfoDTO {
 	private int stmPrice;
 	@Schema(description = "정산 날짜",type="String")
 	private String stmDate;
+	
+	
+	// --- 검색 시
+	private String startDate; // 시작 날짜
+	private String endDate; // 끝 날짜
 }

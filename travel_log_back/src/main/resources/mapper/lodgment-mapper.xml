@@ -116,11 +116,15 @@
 			where b.booking_no=#{bookNo}
 	</select>
 	
-		<!-- 판매자 정산 정보 -->
+	<!-- 판매자 정산 정보 -->		
 	<select id="selectStmInfo" resultMap="stmInfoMap">
-	    select stm_num, seller_no, stm_price, to_char(stm_date, 'YYYY/MM/dd') as stm_date
+	    select stm_num, seller_no, stm_price, to_char(stm_date, 'YYYY-MM-dd') as stm_date
 	    from stm_tbl
 	    where seller_no = #{sellerNo}
+	    <if test="startDate!=null and endDate!=null">
+	 	   and stm_date BETWEEN TO_DATE(#{startDate},'YY/MM/DD') 
+			AND TO_DATE(#{endDate}, 'YY/MM/DD')
+	    </if>
 	</select>
 	<resultMap id="stmInfoMap" type="stmInfo">
 	    <result property="stmNum" column="stm_num" />
@@ -128,4 +132,5 @@
 	    <result property="stmPrice" column="stm_price" />
 	    <result property="stmDate" column="stm_date" />
 	</resultMap>
+	
 </mapper>
