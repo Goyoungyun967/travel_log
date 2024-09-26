@@ -138,8 +138,12 @@
   padding: 10px;
   margin-left: 40px;
 }
-.lodgment-card-container :hover {
-  background-color: #1976d2;
+.lodgment-card:hover {
+  border: 3px solid var(--gray6);
+  box-sizing: border-box;
+  border-radius: 15px;
+  transform: scale(1.01);
+  width: 85%;
 }
 .lodgment-card {
   display: flex;
@@ -147,10 +151,12 @@
   margin-bottom: 50px;
   margin-left: 30px;
   width: 85%;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 .lodgment-card img {
   width: 300px;
   margin-bottom: 30px;
+  margin-top: 10px;
 }
 .lodgment-details {
   text-align: left;
@@ -174,4 +180,7 @@
   margin: 0;
   padding: 0;
   margin-top: 5px;
+}
+.lodgment-address {
+  margin-top: 20px;
 }

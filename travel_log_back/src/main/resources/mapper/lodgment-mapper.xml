@@ -46,7 +46,7 @@
 		delete from HOTEL_XLSX where x_lodgment_no=#{lodgmentNo}
 	</delete>
 	
-	 <!-- 객실 정보 조회 (객실 정보 + 파일들) -->
+	<!-- 객실 정보 조회 (객실 정보 + 파일들) -->
     <select id="selectRoomInfo" resultMap="RoomResultMap">
         SELECT
             r.room_no AS room_no,
@@ -84,7 +84,23 @@
             <result property="roomImg" column="room_img"/>
         </collection>
     </resultMap>
-	
+    
+    <!-- 객실 상세 -->
+    <!-- 
+	<select id="">
+		select ls.lodgment_name, ls.lodgment_addr, ls.lodgment_check_in, ls.lodgment_check_out, r.room_name,r.room_qua, r.room_max_capacity, r.room_price, r.room_info, st.service_tag_type
+		from room r
+		left join LODGMENT_STORAGE ls
+		using(lodgment_no)
+		left join room_file rf
+		on rf.room_no = r.room_no
+		join room_service_tag rst
+		on rst.room_no = r.room_no
+		join service_tag st
+		on st.service_tag_no = rst.service_tag_no
+		where r.ROOM_NO=22
+	</select>
+ 	-->
 	
 	<!-- 객실 등록 -->
 	<insert id="insertRoom">
@@ -116,8 +132,21 @@
 			where b.booking_no=#{bookNo}
 	</select>
 	
-	<!-- 판매자 정산 정보 -->
-	<select id="selectStmInfo" resultType="stmInfo">
-		select * from stm_tbl where seller_no=#{sellerNo}
+	<!-- 판매자 정산 정보 -->		
+	<select id="selectStmInfo" resultMap="stmInfoMap">
+	    select stm_num, seller_no, stm_price, to_char(stm_date, 'YYYY-MM-dd') as stm_date
+	    from stm_tbl
+	    where seller_no = #{sellerNo}
+	    <if test="startDate!=null and endDate!=null">
+	 	   and stm_date BETWEEN TO_DATE(#{startDate},'YY/MM/DD') 
+			AND TO_DATE(#{endDate}, 'YY/MM/DD')
+	    </if>
 	</select>
+	<resultMap id="stmInfoMap" type="stmInfo">
+	    <result property="stmNum" column="stm_num" />
+	    <result property="sellerNo" column="seller_no" />
+	    <result property="stmPrice" column="stm_price" />
+	    <result property="stmDate" column="stm_date" />
+	</resultMap>
+	
 </mapper>

@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.PathParam;
 import kr.co.iei.lodgment.model.dto.LodgmentDTO;
+import kr.co.iei.lodgment.model.dto.RoomSearchDTO;
 import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
 import kr.co.iei.lodgment.model.service.LodgmentService;
 import lombok.Getter;
@@ -48,7 +49,7 @@ public class LodgmentController {
 	}
 	
 	//검색 할 경우 원하는 숙박 정보 
-	@GetMapping(value = "/searchLodgment")
+	@GetMapping(value = "/searchLodgment")  //RequestParam 과 PathVariable 차이점 찾아보기 
 	public ResponseEntity<List<SearchLodgmentDTO>> searchLodgment(
 			@RequestParam int reqPage,
             @RequestParam String lodgment,
@@ -61,12 +62,6 @@ public class LodgmentController {
             @RequestParam int starValue,
             @RequestParam int order,
             @RequestParam int lodgmentType){
-//		System.out.println("selectedServiceTags : "+selectedServiceTags);
-//		System.out.println("minPrice : "+minPrice);
-//		System.out.println("maxPrice : "+maxPrice);
-//		System.out.println("starValue : "+starValue);
-//		System.out.println("order : "+order);
-//		System.out.println("lodgmentType : "+lodgmentType);
 		int[] selectedServiceTagsArry = null;
 		if(!selectedServiceTags.equals("")) {
 			String[] tags = selectedServiceTags.split(",");
@@ -86,6 +81,16 @@ public class LodgmentController {
 		
 	}
 	
+	@GetMapping(value = "/roomInfo/{lodgmentNo}/{startDate}/{endDate}")
+	public ResponseEntity<Map> roomInfo(
+			@PathVariable int lodgmentNo,
+			@PathVariable String startDate,
+			@PathVariable String endDate			
+			){
+		System.out.println(lodgmentNo);
+		Map map = lodgmentService.getRoomInfo(lodgmentNo,startDate,endDate);
+		return ResponseEntity.ok(map);
+	}
 
 
 }

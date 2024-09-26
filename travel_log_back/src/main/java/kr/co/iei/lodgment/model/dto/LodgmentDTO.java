@@ -1,5 +1,7 @@
 package kr.co.iei.lodgment.model.dto;
 
+import java.util.List;
+
 import org.apache.ibatis.type.Alias;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -37,4 +39,6 @@ public class LodgmentDTO {
 	private String serviceTagNo;
 	@Schema(description = "태그번호",type="int")
 	private String serviceTagType;
+	@Schema(description = "룸정보",type="RoomSearchDTO")
+	private List<RoomSearchDTO> RoomSearchList;	
 }

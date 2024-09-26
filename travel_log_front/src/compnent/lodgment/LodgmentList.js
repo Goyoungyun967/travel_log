@@ -16,6 +16,7 @@ const LodgmentList = () => {
   const navigate = useNavigate();
   //main=>LodgmentList 에서 가져온 검색정보
   const { state } = useLocation();
+  //console.log(state);
   const BackServer = process.env.REACT_APP_BACK_SERVER;
   //하단으로 가면 자동으로 페이지 10개씩 가져오게하는 넘버링
   const [reqPage, setReqPage] = useState(1);
@@ -67,6 +68,7 @@ const LodgmentList = () => {
   //
   const searchRef = useRef(null);
 
+  const [showScrollToTopButton, setShowScrollToTopButton] = useState(false);
   //서비스 태그 선택되면 값 저장
   const handleServiceTagClick = (service) => {
     setSelectedServiceTags((prev) => {
@@ -92,11 +94,18 @@ const LodgmentList = () => {
 
   //값이 변하면 lodgment 검색
   useEffect(() => {
+    //메인에서 들어오지 않을 경우
+    if (state !== null) {
+      lodgmentSearchBtn();
+    } else {
+      return;
+    }
     lodgmentSearchBtn();
-  }, [value, starValue, radioBtn, lodgmentType, selectedServiceTags]);
+  }, [value, starValue, radioBtn, lodgmentType, selectedServiceTags, reqPage]);
 
   //숙소 검색 누르면 작동
   const lodgmentSearchBtn = () => {
+    setReqPage(1);
     if (lodgment === "") {
       Swal.fire({
         icon: "error",
@@ -123,22 +132,41 @@ const LodgmentList = () => {
       })
       .then((res) => {
         //console.log(res);
-        setLodgmentDetailInfo(res.data);
+        if (reqPage === 1) {
+          setLodgmentDetailInfo(res.data);
+        } else {
+          setLodgmentDetailInfo((prev) => [...prev, ...res.data]);
+        }
+
+        if (res.data.length < 10) {
+          setShowScrollToTopButton(true);
+        } else {
+          setShowScrollToTopButton(false);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
   //console.log(lodgmentDetailInfo); axios 안에서는 랜더링이 돌고 값이 들어가기 때문에 확인하려면 밖에서
 
   useEffect(() => {
-    // state가 존재할 때만 lodgmentSearchBtn을 호출
-    if (state) {
-      lodgmentSearchBtn();
-    }
-  }, [state]);
-  console.log(selectedServiceTags);
+    const handleScroll = () => {
+      //현재브라우저창의 높이   현재 스크롤 위치   페이지 전체 높이
+      //페이지의 하단에 도달했는지 조건문
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        //reqPage 상태 변수 증가
+        setReqPage((prevPage) => prevPage + 1);
+      } else if (lodgmentDetailInfo.length < reqPage * 10) {
+        return;
+      }
+    };
+    //스크롤 이벤트가 발생할때마다 hendleScroll 함수 호출
+    window.addEventListener("scroll", handleScroll);
+    //이전에 등록한 이벤트 리스너 제거, 메모리 누수 방지
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <section className="section">
       <div className="lodgment-wrap-input">
@@ -275,6 +303,10 @@ const LodgmentList = () => {
             lodgmentDetailInfo={lodgmentDetailInfo}
             navigate={navigate}
             BackServer={BackServer}
+            showScrollToTopButton={showScrollToTopButton}
+            startDate={startDate}
+            endDate={endDate}
+            guest={guest}
           />
         </div>
       </div>
@@ -283,7 +315,16 @@ const LodgmentList = () => {
 };
 
 const LegdmentInfo = (props) => {
-  const { lodgment, lodgmentDetailInfo, navigate, BackServer } = props;
+  const {
+    lodgment,
+    lodgmentDetailInfo,
+    navigate,
+    BackServer,
+    showScrollToTopButton,
+    startDate,
+    endDate,
+    guest,
+  } = props;
 
   return (
     <div className="lodgment-info-container">
@@ -297,7 +338,9 @@ const LegdmentInfo = (props) => {
                 key={info.lodgmentNo}
                 className="lodgment-card"
                 onClick={() =>
-                  navigate(`/lodgment/lodgmentDetail/${info.lodgmentNo}`)
+                  navigate(
+                    `/lodgment/lodgmentDetail/${info.lodgmentNo}/${startDate}/${endDate}/${guest}`
+                  )
                 }
               >
                 <img
@@ -355,6 +398,11 @@ const LegdmentInfo = (props) => {
             <p>검색 결과가 없습니다.</p>
           )}
         </div>
+      )}
+      {showScrollToTopButton && (
+        <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+          위로가기
+        </button>
       )}
     </div>
   );

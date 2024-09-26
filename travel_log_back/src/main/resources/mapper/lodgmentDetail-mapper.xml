@@ -117,6 +117,71 @@
             )
 		WHERE rnum BETWEEN #{start} AND #{end}
 	</select>
-
+	<select id="getLodgmentInfo" resultType="lodgmentDetail">
+		select * from lodgment_storage where lodgment_no=${lodgmentNo}
+	</select>
 	
+	
+	<select id="getRoomNo" resultType="int">
+		select 
+			room_no 
+		from
+			room
+		left join lodgment_storage using (lodgment_no)
+		where lodgment_no = #{lodgmentNo}
+		order by room_no
+	</select>
+	
+	
+	<select id="getRoomList" resultMap="roomSearchFile">
+		SELECT 
+		    r.*, 
+		    CASE 
+		        WHEN 
+		            r.room_qua > COALESCE((
+		                SELECT COUNT(*)
+		                FROM 
+		                    lodgment_storage ls
+		                LEFT JOIN 
+		                    room rm ON ls.lodgment_no = rm.lodgment_no
+		                LEFT JOIN 
+		                    booking b ON rm.room_no = b.room_no
+		                WHERE  
+		                    (b.start_date <![CDATA[<]]>= to_date(#{endDate},'YYYY-MM-DD') 
+		                     AND b.end_date > to_date(#{startDate},'YYYY-MM-DD'))
+		                    AND ls.lodgment_no = #{lodgmentNo}
+		                    AND rm.room_no = r.room_no
+		            ), 0) THEN '1' 
+		        ELSE '2'  
+		    END AS ReservationStatus
+		FROM 
+		    room r
+		WHERE 
+		    r.room_no =#{roomNo}
+	</select>
+	<select id="selectRoomFile" resultType="roomFile">
+		select * from room_file where room_no=#{roomNo}
+	</select>
+	<resultMap type="roomSearch" id="roomSearchFile">
+			<result column="room_no" property="roomNo"/>
+			<result column="lodgment_no" property="lodgmentNo"/>
+			<result column="room_name" property="roomName"/>
+			<result column="room_max_capacity" property="roomMaxCapacity"/>
+			<result column="room_price" property="roomPrice"/>
+			<result column="room_info" property="roomInfo"/>
+			<result column="reservationstatus" property="reservationstatus"/>					
+			<collection 
+				property="fileList" 
+				select="selectRoomFile" 
+				column="room_no"
+				javaType="java.util.List"
+				ofType="roomFile"
+				></collection> <!-- 효율적이지는 않음, 데이터를 불필요한것까지 검색후, 이만큼만 쓸게 -->
+	</resultMap>
+	<!-- 
+	property: 매핑할 Java 객체의 속성 이름
+	select: fileList에 대해 실행할 SQL 쿼리의 ID를 지정
+	column: fileList에서 매핑할 데이터베이스 열 이름을 지정
+	javaType: 매핑될 Java 타입을 지정
+	ofType: fileList의 각 요소 타입을 지정 -->
 </mapper>
