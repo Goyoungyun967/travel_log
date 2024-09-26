@@ -89,7 +89,7 @@ const LodgmentDetailMap = () => {
     temp: "",
     icon: "",
   });
-  console.log(weather);
+  //console.log(weather);
   fetch(
     `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(
       address
@@ -121,12 +121,12 @@ const LodgmentDetailMap = () => {
         `https://api.openweathermap.org/data/2.5/weather?lat=${lodgmentLatitude}&lon=${lodgmentLongitude}&appid=${weatherKey}&units=metric`
       )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         // id 찾아서 매칭 후 description 한글 번역된 거 가져오기
         const weatherId = res.data.weather[0].id;
         const weatherKo = weatherDescKo[weatherId];
-        console.log(weatherId);
-        console.log(weatherKo);
+        // console.log(weatherId);
+        // console.log(weatherKo);
         // 날씨 아이콘 가져오기
         const weatherIcon = res.data.weather[0].icon;
         const weatherIconAdrs = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
@@ -138,7 +138,7 @@ const LodgmentDetailMap = () => {
           temp: temp,
           icon: weatherIconAdrs,
         });
-        console.log(res.data.name);
+        //console.log(res.data.name);
       })
       .catch((err) => {
         console.log(err);

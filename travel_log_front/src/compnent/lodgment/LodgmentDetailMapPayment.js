@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 const LodgmentDetailMapPayment = () => {
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
-  console.log(lodgmentNo);
+  // console.log(lodgmentNo);
   const KakaoKey = process.env.REACT_APP_HS_KAKAO_REST_API_KEY;
   const [lodgmentLongitude, setsLodgmentLongitude] = useState("");
   //console.log(lodgmentLongitude);
