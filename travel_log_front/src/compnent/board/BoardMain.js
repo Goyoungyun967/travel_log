@@ -3,6 +3,7 @@ import BoardList from "./BoardList";
 import AccompanyWrite from "./AccompanyWrite";
 import BoardWrite from "./BoardWrite";
 import BoardView from "./BoardView";
+import BoardUpdate from "./BoardUpdate";
 
 const BoardMain = () => {
   return (
@@ -11,6 +12,7 @@ const BoardMain = () => {
       <Route path="accompanyWrite" element={<AccompanyWrite />} />
       <Route path="boardWrite" element={<BoardWrite />} />
       <Route path="view/:boardNo/:timeString" element={<BoardView />} />
+      <Route path="update/:boardNo" element={<BoardUpdate />} />
     </Routes>
   );
 };

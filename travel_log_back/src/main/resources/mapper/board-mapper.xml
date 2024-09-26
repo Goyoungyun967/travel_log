@@ -110,7 +110,26 @@
 		<delete id="deleteBoard">
 			delete from board where board_no=#{boardNo}
 		</delete>
-
+		
+		
+		<update id="updateBoard">
+			update board set board_title= #{boardTitle},board_content=#{boardContent},board_thumb=#{boardThumb},board_area=#{boardArea} where board_no=#{boardNo}
+		</update>
+		<select id="selectBoardFile" resultType="boardFile">
+			select * from board_file
+			where file_no in 
+			<foreach collection="array" item="fileNo" open="(" close=")" separator=",">
+				#{fileNo}
+			</foreach>
+		</select>
+		<delete id="deleteBoardFile">
+			delete from board_file where file_no in
+			<foreach collection="array" item="fileNo" open="(" close=")" separator=",">
+				#{fileNo}
+			</foreach>
+		</delete>
+		
+		
 			
 	
 	

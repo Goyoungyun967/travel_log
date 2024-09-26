@@ -13,9 +13,11 @@ import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 import AccompanyWrite from "./AccompanyWrite";
+import ModalInput from "./BoardModal";
 
 const BoardList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
   const [boardList, setBoardList] = useState([]);
   const [accompanyList, setAccompanyList] = useState([]);
 
@@ -49,6 +51,9 @@ const BoardList = () => {
   const isMouseDownRef = useRef(false);
   const startXRef = useRef(0);
   const scrollLeftRef = useRef(0);
+  //모달
+  const [showModal, setShowModal] = useState(false);
+  const [currentLink, setCurrentLink] = useState("");
   // 검색어 변경
   const boardAreaChange = (e) => {
     const value = e.target.value; //
@@ -123,6 +128,23 @@ const BoardList = () => {
   // const handleMoreClick = () => {
   //   setBoardType((prevType) => (prevType === 1 ? 2 : 1)); // 타입 토글
   // };
+
+  // 모달창
+  const handleLinkClick = (link) => {
+    setCurrentLink(link); // 클릭한 링크 저장
+    setShowModal(true); // 모달 열기
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false); // 모달 닫기
+  };
+
+  const handleInputValue = (inputValue) => {
+    console.log(`입력된 값: ${inputValue}`);
+    setShowModal(false); // 모달 닫기
+    navigate(currentLink); // 저장된 링크로 이동
+  };
+
   return (
     <div className="board-list-wrap">
       <div className="search-box-wrap">
@@ -182,13 +204,22 @@ const BoardList = () => {
         <PageNavi pi={pi} reqPage={reqPage} setReqPage={setReqPage} />
       </div>
       <div className="write-box">
-        <Link to="/board/AccompanyWrite" className="accompany-write sub-item">
+        <div
+          onClick={() => handleLinkClick("/board/AccompanyWrite")}
+          className="accompany-write sub-item"
+        >
           동행 게시판 글 작성
-        </Link>
-        <Link to={`/board/boardWrite`} className="board-write sub-item-right">
+        </div>
+        <Link to="/board/boardWrite" className="accompany-write sub-item">
           여행 게시판 글 작성
         </Link>
       </div>
+      {/* 모달 추가 */}
+      <ModalInput
+        show={showModal}
+        handleClose={handleModalClose}
+        handleInput={handleInputValue}
+      />
     </div>
   );
 };
@@ -272,6 +303,7 @@ const BoardItem = (props) => {
   console.log(timeString);
 
   //날짜 계산
+  ///${encodeURIComponent(timeString)
 
   return (
     <div className="boardList-preview">
