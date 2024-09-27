@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +17,21 @@ import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
 import kr.co.iei.seller.model.dto.RoomServiceTag;
+import kr.co.iei.seller.model.dto.SellerDTO;
 import kr.co.iei.seller.model.dto.ServiceTagDTO;
 import kr.co.iei.seller.model.dto.StmInfoDTO;
+import kr.co.iei.util.SellerJwtUtils;
 
 @Service
 public class SellerService {
 	@Autowired
 	private SellerDao sellerDao;
+	
+	@Autowired
+	private BCryptPasswordEncoder encoder;
+	
+	@Autowired
+	private SellerJwtUtils sellerJwtUtils;
 
 	// 메인(등록한 호텔 정보)
 	public List selectLodgmentList(int sellerNo) {
@@ -118,6 +127,13 @@ public class SellerService {
 	public List<StmInfoDTO> selectStmSearchInfo(StmInfoDTO st) {
 		List<StmInfoDTO> ls = sellerDao.selectStmInfo(st);
 		return ls;
+	}
+	//형묵 seller-회원가입
+	public int insertSeller(SellerDTO seller) {
+		String encPw = encoder.encode(seller.getSellerPw());
+		seller.setSellerPw(encPw);
+		int result = sellerDao.insertSeller(seller);
+		return result;
 	}
 
 	

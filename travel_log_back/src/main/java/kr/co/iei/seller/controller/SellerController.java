@@ -29,6 +29,7 @@ import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
+import kr.co.iei.seller.model.dto.SellerDTO;
 import kr.co.iei.seller.model.dto.StmInfoDTO;
 import kr.co.iei.seller.model.service.SellerService;
 import kr.co.iei.util.FileUtils;
@@ -164,5 +165,15 @@ public class SellerController {
 		public ResponseEntity<List> stmSearchDate( @ModelAttribute StmInfoDTO st){
 			List<StmInfoDTO> ls = sellerService.selectStmSearchInfo(st);
 			return ResponseEntity.ok(ls);
+	}
+	//seller-login 형묵
+	@PostMapping(value="/seller")
+	public ResponseEntity<Integer> sellerjoin(@RequestBody SellerDTO seller){
+		int result = sellerService.insertSeller(seller);
+		if(result > 0) {
+			return ResponseEntity.ok(result);
+		}else {
+			return ResponseEntity.status(500).build();
 		}
+	}
 }
