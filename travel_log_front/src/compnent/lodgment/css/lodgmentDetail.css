@@ -36,7 +36,6 @@
   width: 90%;
 }
 .lodgment-loom-type-wrap {
-  margin: 50px;
 }
 .lodgment-loom-type {
   margin: 0 auto;
@@ -44,6 +43,7 @@
   height: 100%;
   border: 3px solid var(--gray6);
   border-radius: 15px;
+  margin-bottom: 50px;
 }
 .lodgment-loom-table {
   width: 100%;
@@ -55,4 +55,27 @@
   min-width: 100%;
   width: 80%;
   border-radius: 15px;
+}
+
+.room-search-list-map {
+  margin: 0 auto;
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+.sroom-detail-btn2 {
+  width: 100%;
+  border-radius: 15px;
+  background-color: var(--gray6);
+  border: none;
+  cursor: not-allowed;
+}
+.room-detail-btn {
+  width: 100%;
+  border-radius: 15px;
+  background-color: var(--gray6);
+  border: none;
+  transition: background-color 0.3s;
+}
+.room-detail-btn:hover {
+  background-color: var(--main1);
 }
