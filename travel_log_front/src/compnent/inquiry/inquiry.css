@@ -124,6 +124,9 @@
 .inquiry-reply-wrap>.inquiry-reply-content{
     padding: 10px 30px;
 }
+.inquiry-reply-content{
+    margin: 10px 0;
+}
 .inquiry-reply-content>button{
     margin-top: 70px;
     border: none;

@@ -75,7 +75,7 @@ const InquiryList = () => {
                         }}>
                             <td>{inquiry.inquiryNo}</td>
                             <td>{inquiry.inquiryTitle}</td>
-                            <td>{inquiry.memberId ? inquiry.memberId : inquiry.representativeName}</td>
+                            <td>{inquiry.memberId ? inquiry.memberId+"(회원)" : inquiry.representativeName+"(판매자)"}</td>
                             <td>{inquiry.regDate}</td>
                             <td>{inquiry.inquiryState === 0 ? "답변대기" : "답변완료"}</td>
                         </tr>
