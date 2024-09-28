@@ -89,7 +89,7 @@ const InquiryView = () => {
             </table>
             <div className="inquiry-reply-wrap">
             <span className="material-icons">subdirectory_arrow_right<span>문의 답변</span></span>
-            <div className="inquiry-reply-content">
+            <div className="inquiry-reply-content" style={inquiry.inquiryReply ? {border : "1px solid #ccc"} : {}}>
             {inquiry.inquiryReply ? <><p>답변 작성일 : {inquiry.inquiryReply.regDate}</p><p dangerouslySetInnerHTML={{__html : inquiry.inquiryReply.inquiryReplyContent}}></p></> : <UqillEditor boardContent={inquiryReplyContent} setBoardContent={setInquiryReplyContent} width={"100%"} />}
             {inquiry.inquiryReply ? "" :<button onClick={writeInquiryReply}>답변하기</button>}
             </div>

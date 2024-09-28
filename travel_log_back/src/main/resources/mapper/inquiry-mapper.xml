@@ -21,19 +21,19 @@
   <select id="selectInquiryList" resultType="inquiry">
   	select * from (select rownum as rnum, i2.* from (select inquiry_no,inquiry_title,seller_no,member_no,member_id,to_char(reg_date,'yyyy-mm-dd') as reg_date,representative_name,(select count(*) from inquiry_reply where inquiry_no=i.inquiry_no) as inquiry_state from inquiry i left join member using (member_no) left join seller using (seller_no)
   		<trim prefix="where" prefixOverrides="and|or">
-  			<if test="type.equals('member')">
-  			seller_no is null
-  		</if>
-  		<if test="type.equals('seller')">
-  			member_no is null
-  		</if>
-  		<if test="state==1">
-  			and (select count(*) from inquiry_reply where inquiry_no=i.inquiry_no) <![CDATA[<]]> 1 
-  			
-  		</if>
-  		<if test="state==2">
-  			and (select count(*) from inquiry_reply where inquiry_no=i.inquiry_no) <![CDATA[>]]> 1
-  		</if>
+	  		<if test="type.equals('member')">
+	  			seller_no is null
+	  		</if>
+	  		<if test="type.equals('seller')">
+	  			member_no is null
+	  		</if>
+	  		<if test="state==1">
+	  			and (select count(*) from inquiry_reply where inquiry_no=i.inquiry_no) <![CDATA[<]]> 1 
+	  			
+	  		</if>
+	  		<if test="state==2">
+	  			and (select count(*) from inquiry_reply where inquiry_no=i.inquiry_no) <![CDATA[>=]]> 1
+	  		</if>
   		</trim>
   		order by 1 desc
   	)i2) where rnum between #{start} and #{end}
