@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import "./css/insert_room.css";
 import axios from "axios";
 import UqillEditor from "../utils/UqillEditor";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+
 const InsertRoom = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
   // 호텔 정보를 위한 state
@@ -57,6 +60,32 @@ const InsertRoom = () => {
   // 보내기
   const writeRoom = () => {
     const backServer = process.env.REACT_APP_BACK_SERVER;
+    // 모든 필드의 입력값 확인
+    if (!roomName) {
+      alert("숙소명을 입력해 주세요.");
+      return;
+    }
+    if (!maxCapa) {
+      alert("최대 인원을 입력해 주세요.");
+      return;
+    }
+    if (!roomNum) {
+      alert("상품 수 를 입력해 주세요.");
+      return;
+    }
+    if (!roomPrice) {
+      alert("상품 가격을 입력해 주세요.");
+      return;
+    }
+    if (!boardContent) {
+      alert("내용을 입력해 주세요.");
+      return;
+    }
+    if (boardContent.length > 1000) {
+      alert("내용은 1000자 이내로 입력해 주세요.");
+      return;
+    }
+
     if (
       roomName !== "" &&
       roomNum !== 0 &&
@@ -86,7 +115,17 @@ const InsertRoom = () => {
           },
         })
         .then((res) => {
-          console.log(res);
+          console.log("res-", res);
+          if (res.data) {
+            navigate(`/seller/lodgmentView/${lodgmentNo}`);
+            console.log(form);
+          } else {
+            Swal.fire({
+              title: "에러가 발생했습니다.",
+              text: "원인을 찾으세요",
+              icon: "error",
+            });
+          }
         })
         .catch((err) => {
           console.log(err);

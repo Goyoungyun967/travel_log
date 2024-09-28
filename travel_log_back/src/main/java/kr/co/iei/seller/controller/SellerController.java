@@ -138,7 +138,8 @@ public class SellerController {
 			}
 		}
 		int result = sellerService.insertRoom(room, roomFileList);
-		return ResponseEntity.ok(result==1+roomFileList.size());
+		System.out.println(result);
+		return ResponseEntity.ok(result!=0+roomFileList.size());
 	}
 	
 	
