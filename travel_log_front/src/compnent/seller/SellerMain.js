@@ -23,7 +23,7 @@ const SellerMain = () => {
       {/* 예약 - 예약 번호 보내서 조회 */}
       <Route path="reserve/:bookNo" element={<Reserve />} />
       {/* 호텔 객실 정보 조회 */}
-      <Route path="roomView/:roomNo" element={<RoomView />} />
+      <Route path="roomView/:lodgmentNo/:roomNo" element={<RoomView />} />
 
       {/* 매출 - 매출 조회 */}
       <Route path="stm" element={<StmSeller />} />

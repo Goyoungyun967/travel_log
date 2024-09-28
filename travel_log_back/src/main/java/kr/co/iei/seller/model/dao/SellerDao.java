@@ -9,7 +9,7 @@ import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
-import kr.co.iei.seller.model.dto.RoomServiceTag;
+import kr.co.iei.seller.model.dto.RoomServiceTagDTO;
 import kr.co.iei.seller.model.dto.StmInfoDTO;
 
 @Mapper
@@ -33,12 +33,14 @@ public interface SellerDao {
 
 	int insertRoomFile(RoomFileDTO roomFile);
 
-	int insertServiceTag(RoomServiceTag rst);
+	int insertServiceTag(RoomServiceTagDTO rst);
 
 	BookingInfoDTO bookInfo(int bookNo);
 
 	List<StmInfoDTO> selectStmInfo(StmInfoDTO st);
 
 	List<StmInfoDTO> selectStmSearchInfo(StmInfoDTO st);
+
+	RoomDTO selectRoomViewInfo(int roomNo);
 
 }

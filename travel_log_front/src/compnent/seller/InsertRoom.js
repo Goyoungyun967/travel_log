@@ -213,6 +213,79 @@ const InsertRoom = () => {
   );
 };
 
+// 첨부파일
+const FileInfo = (props) => {
+  // 보낼 첨부파일
+  const roomFile = props.roomFile;
+  const setRoomFile = props.setRoomFile;
+  // 미리보기용 첨부 파일 (파일 전송 x)
+  const [showRoomFile, setShowRoomFile] = useState([]);
+  console.log("파일 - ", showRoomFile);
+
+  // 파일 add
+  const addRoomFile = (e) => {
+    const files = e.currentTarget.files;
+    const fileArr = new Array();
+    const imgPrvArr = new Array();
+
+    if (roomFile.length + files.length > 5) {
+      alert("파일은 최대 5개까지 첨부할 수 있습니다.");
+      return;
+    }
+
+    for (let i = 0; i < files.length; i++) {
+      fileArr.push(files[i]);
+      if (files[i].type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          imgPrvArr.push(reader.result);
+          setShowRoomFile((prev) => [...prev, { preview: reader.result }]); // 미리보기용
+        };
+        reader.readAsDataURL(files[i]);
+      } else {
+        setRoomFile((prev) => [...prev]);
+      }
+    }
+    setRoomFile((prev) => [...prev, ...fileArr]);
+  };
+
+  // 파일 삭제
+  const removeRoomFile = (index) => {
+    setRoomFile((prev) => prev.filter((_, i) => i !== index));
+    setShowRoomFile((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="photo">
+      <label htmlFor="roomFile" className="addBtn">
+        파일첨부
+      </label>
+      <div className="p_arr">
+        <input
+          type="file"
+          id="roomFile"
+          style={{ display: "none" }}
+          onChange={addRoomFile}
+          multiple
+        />
+        {showRoomFile.map((file, i) => (
+          <div className="photoArr" key={i}>
+            <img src={file.preview} width="150px" alt="preview" />
+            <span
+              className="delete-icon"
+              onClick={() => removeRoomFile(i)}
+              role="button"
+              aria-label="Remove"
+            >
+              ✖️
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 // 해시태그
 const HashTap = (props) => {
   const setHashTag = props.setHashTag;
@@ -276,70 +349,6 @@ const HashTap = (props) => {
           <input type="checkbox" value={12} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">TV</span>
         </label>
-      </div>
-    </div>
-  );
-};
-
-// 첨부파일
-const FileInfo = (props) => {
-  // 보낼 첨부파일
-  const roomFile = props.roomFile;
-  const setRoomFile = props.setRoomFile;
-  // 미리보기용 첨부 파일 (파일 전송 x)
-  const [showRoomFile, setShowRoomFile] = useState([]);
-  console.log("파일 - ", showRoomFile);
-  const addRoomFile = (e) => {
-    const files = e.currentTarget.files;
-    const fileArr = new Array();
-    const imgPrvArr = new Array();
-
-    if (roomFile.length + files.length > 5) {
-      alert("파일은 최대 5개까지 첨부할 수 있습니다.");
-      return;
-    }
-
-    for (let i = 0; i < files.length; i++) {
-      fileArr.push(files[i]);
-      if (files[i].type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          imgPrvArr.push(reader.result);
-          setShowRoomFile((prev) => [...prev, { preview: reader.result }]);
-        };
-        reader.readAsDataURL(files[i]);
-      } else {
-        setRoomFile((prev) => [...prev]);
-      }
-    }
-    setRoomFile((prev) => [...prev, ...fileArr]);
-    // setRoomFile([...roomFile, ...fileArr]); // File중첩시키기
-    // setShowRoomFile([...showRoomFile, ...fileArr]); // Filename중첩시키기
-  };
-  return (
-    <div className="photo">
-      <label htmlFor="roomFile" className="addBtn">
-        파일첨부
-      </label>
-      <div className="p_arr">
-        <input
-          type="file"
-          id="roomFile"
-          style={{ display: "none" }}
-          onChange={addRoomFile}
-          multiple
-        />
-        {showRoomFile.map((file, i) => {
-          return (
-            <div key={i}>
-              {file.preview ? (
-                <img src={file.preview} width="150px" className="photoArr" />
-              ) : (
-                ""
-              )}
-            </div>
-          );
-        })}
       </div>
     </div>
   );

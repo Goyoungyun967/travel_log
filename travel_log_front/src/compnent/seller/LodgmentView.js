@@ -75,6 +75,7 @@ const LodgmentView = () => {
           <h4>객실 정보</h4>
           <div className="room-arr">
             {roomList.map((room, i) => {
+              console.log("room-", room);
               return <RoomItem key={"room - " + i} room={room} />;
             })}
           </div>
@@ -109,7 +110,7 @@ const RoomItem = (props) => {
     <div
       className="room-item"
       onClick={() => {
-        navigate(`/seller/roomView/${room.roomNo}`);
+        navigate(`/seller/roomView/${room.lodgmentNo}/${room.roomNo}`);
       }}
     >
       <div className="room-img">

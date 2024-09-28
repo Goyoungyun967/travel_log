@@ -15,7 +15,7 @@ import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
-import kr.co.iei.seller.model.dto.RoomServiceTag;
+import kr.co.iei.seller.model.dto.RoomServiceTagDTO;
 import kr.co.iei.seller.model.dto.ServiceTagDTO;
 import kr.co.iei.seller.model.dto.StmInfoDTO;
 
@@ -66,7 +66,6 @@ public class SellerService {
 
 		LodgmentStorageDTO ls = sellerDao.selectOneLodgment(lodgmentNo); // 호텔 정보 출력
 		List<RoomDTO> list = sellerDao.selectRoomInfo(lodgmentNo); // 객실 정보 출력
-		System.out.println(list);
 	
 		map.put("lodgment",ls);
 		map.put("list", list);
@@ -76,10 +75,13 @@ public class SellerService {
 	}
 
 	// 객실 상세
-		public Map selectRoomInfo(int roomNo) {
+		public Map selectRoomInfo(int lodgmentNo,int roomNo) {
 			Map<String, Object> map = new HashMap<String, Object>();
-			
-			return null;
+			LodgmentStorageDTO ls = sellerDao.selectOneLodgment(lodgmentNo); // 호텔 정보 출력 (호텔 이름, 체크인, 체크 아웃, 주소 들고 오기)
+			RoomDTO rd = sellerDao.selectRoomViewInfo(roomNo);
+			map.put("lodgment",ls);
+			map.put("room",rd);
+			return map;
 		}
 	
 	// 객실 등록(객실 정보, 파일, 해시태그 동시 처리)
@@ -94,7 +96,7 @@ public class SellerService {
 		// 체크가 null 값이 아닐 때만 (해시태그가 비어있을 수도 있으니까...)
 	    if (room.getServiceTag() != null) {
 	        for (int serviceTagNo : room.getServiceTag()) {
-	        	RoomServiceTag rst = new RoomServiceTag();
+	        	RoomServiceTagDTO rst = new RoomServiceTagDTO();
 	            rst.setRoomNo(room.getRoomNo());
 	            rst.setServiceTagNo(serviceTagNo); // 태그 값을 설정
 
