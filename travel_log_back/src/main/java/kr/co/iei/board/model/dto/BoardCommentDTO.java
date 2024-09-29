@@ -1,5 +1,7 @@
 package kr.co.iei.board.model.dto;
 
+import java.util.List;
+
 import org.apache.ibatis.type.Alias;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,4 +25,7 @@ public class BoardCommentDTO {
 	private int commentRef; // 대댓 숫자
 	@Schema(description = "댓글 작성일", type = "String")
 	private String commnetDate;
+	private List<BoardCommentDTO> recomments; // 대댓글
+	
+	 private int boardNo; 
 }
