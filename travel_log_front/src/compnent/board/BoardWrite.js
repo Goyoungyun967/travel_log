@@ -6,10 +6,12 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import BoardFrm from "./BoardFrm";
 import { constructNow } from "date-fns";
+import { useRecoilState } from "recoil";
+import { loginNoState } from "../utils/RecoilData";
 const BoardWrite = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [boardContent, setBoardContent] = useState("");
-  //   const [loginNo, setLoginNo] = useRecoilState(loginIdState); //로그인한 회원 아이디값 (입력할게 아니기때문에 스테이트사용안함)
+  const [loginNo, setLoginNo] = useRecoilState(loginNoState); //로그인한 회원 아이디값 (입력할게 아니기때문에 스테이트사용안함)
   const navigate = useNavigate();
   const [boardTitle, setBoardTitle] = useState(""); //사용자가 입력할 제목
   const [thumbnail, setThumbnail] = useState(null); //썸네일은 첨부파일로 처리
@@ -48,7 +50,7 @@ const BoardWrite = () => {
       form.append("boardTitle", boardTitle);
       form.append("boardContent", boardContent);
       form.append("boardArea", selectedArea);
-      //   form.append("boardWriter", loginId);
+      form.append("memberNo", loginNo);
       //썸네일이 첨부된 경우에만 추가
       console.log(selectedArea);
       if (thumbnail !== null) {
@@ -94,7 +96,7 @@ const BoardWrite = () => {
         }}
       >
         <BoardFrm
-          // loginNo = {loginNo}
+          loginNo={loginNo}
           boardArea={boardArea}
           setBoardArea={setBoardArea}
           boardTitle={boardTitle}

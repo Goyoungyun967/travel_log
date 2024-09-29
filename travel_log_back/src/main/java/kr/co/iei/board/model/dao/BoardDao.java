@@ -37,6 +37,16 @@ public interface BoardDao {
 	List<BoardFileDTO> selectBoardFile(int[] delBoardFileNo);
 
 	int deleteBoardFile(int[] delBoardFileNo);
+
+	int insertLikeBoard(int boardNo, int memberNo);
+
+	int selectLikeBoard(int boardNo);
+
+	int deleteUnlikeBoard(int boardNo, int memberNo);
+	
+	int selectUnlikeBoard(int boardNo);
+
+	
 	
 
 }

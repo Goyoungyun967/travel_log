@@ -164,6 +164,17 @@ public class BoardController {
 		}
 		return  ResponseEntity.ok(false);
 	}
+	@PostMapping(value = "like/{boardNo}/{memberNo}")
+	public ResponseEntity<Integer> likeBoard(@PathVariable int boardNo,@PathVariable int memberNo){
+		int result = boardService.likeBoard(boardNo,memberNo); 
 	
+		return ResponseEntity.ok(result);
+	}
+	// 좋아요 취소
+    @DeleteMapping("/unlike/{boardNo}/{memberNo}")
+    public ResponseEntity<Integer> unlikeBoard(@PathVariable int boardNo, @PathVariable int memberNo) {
+        int result = boardService.unlikeBoard(boardNo, memberNo); // 좋아요 취소 처리
+        return ResponseEntity.ok(result); // 처리 결과 반환 (1: 성공, 0: 실패)
+    }
 	
 }
