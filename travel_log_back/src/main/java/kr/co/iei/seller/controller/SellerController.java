@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.co.iei.inquiry.model.dto.InquiryDTO;
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dto.BookingInfoDTO;
 import kr.co.iei.seller.model.dto.InsertRoomDTO;
@@ -160,10 +161,20 @@ public class SellerController {
 		return ResponseEntity.ok(ls);
 	}
 	// 판매자 정산 - 검색
-		@Operation(summary="판매자 정산", description = "정산 정보 출력")
-		@PostMapping(value="/searchDate")
-		public ResponseEntity<List> stmSearchDate( @ModelAttribute StmInfoDTO st){
-			List<StmInfoDTO> ls = sellerService.selectStmSearchInfo(st);
-			return ResponseEntity.ok(ls);
-		}
+	@Operation(summary="판매자 정산", description = "정산 정보 출력")
+	@PostMapping(value="/searchDate")
+	public ResponseEntity<List> stmSearchDate( @ModelAttribute StmInfoDTO st){
+		List<StmInfoDTO> ls = sellerService.selectStmSearchInfo(st);
+		return ResponseEntity.ok(ls);
+	}
+	
+	
+	// 판매자 문의 글 리스트 조회
+	@Operation(summary = "판매자 문의 리스트 조회", description = "판매자 문의 리스트 출력")
+	@PostMapping(value = "/inqList")
+//	public ResponseEntity<List> searchInqList(@RequestHeader("Authorization") String token){ => 토큰 처리 완료되면 token사용해서 판매자 번호로 리스트 조회하기
+	public ResponseEntity<List> searchInqList(@ModelAttribute InquiryDTO iqd){
+		List<InquiryDTO> ls = sellerService.selectInqList(iqd); // 나중에 토큰으로 바꿀겨
+		return ResponseEntity.ok(ls);
+	}
 }

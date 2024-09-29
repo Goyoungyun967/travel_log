@@ -185,4 +185,24 @@
 	    <result property="stmDate" column="stm_date" />
 	</resultMap>
 	
+	<!-- 판매자 문의 리스트 출력 -->
+	<select id="selectInqList" resultMap="inqListMap">
+		select
+			i.inquiry_no,
+			i.inquiry_title,
+			i.INQUIRY_CONTENT,
+			i.REG_DATE,
+			ir.INQUIRY_REPLY_CONTENT
+		from INQUIRY i
+		left join INQUIRY_REPLY ir
+		ON i.inquiry_no = ir.inquiry_no
+		where seller_no=#{sellerNo}
+	</select>
+	<resultMap type="inquiry" id="inqListMap">
+		<result property="inquiryNo" column="inquiry_no"/>
+		<result property="inquiryTitle" column="inquiry_title"/>
+		<result property="inquiryContent" column="inquiry_content"/>
+		<result property="regDate" column="reg_date"/>
+	    <result property="inquiryReply.inquiryReplyContent" column="inquiry_reply_content"/>
+	</resultMap>
 </mapper>

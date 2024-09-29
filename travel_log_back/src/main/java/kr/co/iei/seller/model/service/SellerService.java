@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.iei.inquiry.model.dto.InquiryDTO;
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dao.SellerDao;
 import kr.co.iei.seller.model.dto.BookingInfoDTO;
@@ -119,6 +120,11 @@ public class SellerService {
 
 	public List<StmInfoDTO> selectStmSearchInfo(StmInfoDTO st) {
 		List<StmInfoDTO> ls = sellerDao.selectStmInfo(st);
+		return ls;
+	}
+
+	public List<InquiryDTO> selectInqList(InquiryDTO iqd) {
+		List<InquiryDTO> ls = sellerDao.selectInqList(iqd);
 		return ls;
 	}
 
