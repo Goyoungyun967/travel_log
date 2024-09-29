@@ -1,4 +1,4 @@
-import RowList from "./sellerUtil/RowList";
+import { RowList } from "./sellerUtil/RowList";
 import "./css/seller_stm.css";
 import SellerChart from "./sellerUtil/SellerChart";
 import { useEffect, useState } from "react";

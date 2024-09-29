@@ -1,4 +1,5 @@
 import { DataGrid } from "@mui/x-data-grid";
+import Box from "@mui/material/Box";
 import { useState } from "react";
 
 const RowList = (props) => {
@@ -38,4 +39,20 @@ const RowList = (props) => {
   );
 };
 
-export default RowList;
+const SellerInqList = () => {
+  return (
+    <Box sx={{ height: 250, width: "100%" }}>
+      <DataGrid
+        columns={[{ field: "username" }, { field: "age" }]}
+        rows={[
+          {
+            id: 1,
+            username: "@MUI",
+            age: 20,
+          },
+        ]}
+      />
+    </Box>
+  );
+};
+export { RowList, SellerInqList };

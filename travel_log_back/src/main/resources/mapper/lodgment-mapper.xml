@@ -167,14 +167,15 @@
 			where b.booking_no=#{bookNo}
 	</select>
 	
-	<!-- 판매자 정산 정보 -->		
+	<!-- 판매자 정산 정보 -->
+	<!-- AND TO_DATE(#{endDate}, 'YY/MM/DD') + 1 - 1/86400 (<- 해당 일의 모든 데이터 추가 (25일 찾으면 24일까지 나와서 추가함)) -->	
 	<select id="selectStmInfo" resultMap="stmInfoMap">
 	    select stm_num, seller_no, stm_price, to_char(stm_date, 'YYYY-MM-dd') as stm_date
 	    from stm_tbl
 	    where seller_no = #{sellerNo}
 	    <if test="startDate!=null and endDate!=null">
 	 	   and stm_date BETWEEN TO_DATE(#{startDate},'YY/MM/DD') 
-			AND TO_DATE(#{endDate}, 'YY/MM/DD')
+			AND TO_DATE(#{endDate}, 'YY/MM/DD') + 1 - 1/86400
 	    </if>
 	</select>
 	<resultMap id="stmInfoMap" type="stmInfo">
