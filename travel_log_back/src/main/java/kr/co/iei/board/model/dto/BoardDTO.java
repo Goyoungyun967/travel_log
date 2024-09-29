@@ -33,6 +33,7 @@ public class BoardDTO {
 	private int boardType; // 1번 일반게시판 , 2번 동행 게시판
 	private List<BoardFileDTO> fileList;
 	private int[] delBoardFileNo;
+	private String memberNo;
 	//상세 페이지 dto
 	private String memberImage;
 	private String memberNickName;

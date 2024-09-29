@@ -108,4 +108,22 @@ public class BoardService {
 		}
 		return null;
 	}
+//	@Transactional
+//	public int likeBoard(int boardNo, int memberNo) {
+//		int result = boardDao.insertLikeBoard(boardNo,memberNo);
+//		if(result>0) {
+//			int likeCount = boardDao.selectLikeBoard(boardNo);
+//			return likeCount;
+//		}
+//		return 0;
+//	}
+//	@Transactional
+//	public int unlikeBoard(int boardNo, int memberNo) {
+//		int result = boardDao.deleteUnlikeBoard(boardNo,memberNo);
+//		if(result>0) {
+//			int unLikeCount = boardDao.selectUnlikeBoard(boardNo);
+//			return unLikeCount;
+//		}
+//		return 0;
+//	}
 }

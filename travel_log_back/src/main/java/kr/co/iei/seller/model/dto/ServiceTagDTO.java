@@ -16,5 +16,5 @@ public class ServiceTagDTO {
 	@Schema(description = "서비스 태그 번호",type="int")
 	private int serviceTageNo;
 	@Schema(description = "서비스 태그 타입",type="String")
-	private String serviceTageType;
+	private String serviceTagType;
 }

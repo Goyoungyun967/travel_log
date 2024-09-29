@@ -115,12 +115,12 @@ public class SellerController {
 	}
 	
 	// 객실 상세
-//	@Operation(summary = "객실 상세", description = "객실 상세(호텔+객실+객실태그(서비스태그)+첨부파일)")
-//	@GetMapping(value="/roomview/{roomNo}")
-//	public ResponseEntity<Map> roomList(@PathVariable int roomNo){
-//		Map map = sellerService.selectRoomInfo(roomNo);
-//		return ResponseEntity.ok(map);
-//	}
+	@Operation(summary = "객실 상세", description = "객실 상세(호텔+객실+객실태그(서비스태그)+첨부파일) 호텔 번호/객실 번호 받아서 가져옴")
+	@GetMapping(value="/roomView/{lodgmentNo}/{roomNo}")
+	public ResponseEntity<Map> roomList(@PathVariable int lodgmentNo,@PathVariable int roomNo){
+		Map map = sellerService.selectRoomInfo(lodgmentNo, roomNo);
+		return ResponseEntity.ok(map);
+	}
 	
 //	// 객실 등록
 	@PostMapping(value="/insertRoom")
@@ -138,7 +138,8 @@ public class SellerController {
 			}
 		}
 		int result = sellerService.insertRoom(room, roomFileList);
-		return ResponseEntity.ok(result==1+roomFileList.size());
+		System.out.println(result);
+		return ResponseEntity.ok(result!=0+roomFileList.size());
 	}
 	
 	

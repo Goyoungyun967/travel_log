@@ -24,3 +24,9 @@
 .stm-box-wrap > .search-date > .search-btn:hover {
   background-color: rgb(26, 49, 179);
 }
+
+.seller-lodgmentView-custom-image {
+  width: 150px;
+  height: 200px; /* 원하는 높이 설정 */
+  object-fit: cover; /* 이미지 비율 유지하며 잘리도록 설정 */
+}
