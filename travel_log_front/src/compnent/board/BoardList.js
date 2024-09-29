@@ -313,14 +313,18 @@ const BoardItem = (props) => {
   ///${encodeURIComponent(timeString)
 
   //좋아요
-  const [likeCount, setLikeCount] = useState(board.likeCount || 0); // 초기 좋아요 수
-  const [isLiked, setIsLiked] = useState(false); // 사용자가 좋아요를 눌렀는지 여부
+  const [likeCount, setLikeCount] = useState(0); // 초기 좋아요 수
+  const [isLiked, setIsLiked] = useState(false); // 좋아요를 눌렀는지 여부
+
+  useEffect(() => {
+    console.log(`좋아요 상태: ${isLiked}, 좋아요 수: ${likeCount}`);
+  }, [isLiked, likeCount]);
 
   const likeClick = () => {
     if (isLiked) {
       // 좋아요 취소 요청
       axios
-        .delete(`${backServer}/board/unlike/${board.boardNo}/${memberNo}`) // 좋아요 취소 API 호출
+        .delete(`${backServer}/board/unlike/${board.boardNo}/${memberNo}`)
         .then((res) => {
           console.log(res);
           setLikeCount(likeCount - 1); // 좋아요 수 감소
@@ -332,7 +336,7 @@ const BoardItem = (props) => {
     } else {
       // 좋아요 추가 요청
       axios
-        .post(`${backServer}/board/like/${board.boardNo}/${memberNo}`) // 좋아요 추가 API 호출
+        .post(`${backServer}/board/like/${board.boardNo}/${memberNo}`)
         .then((res) => {
           console.log(res);
           setLikeCount(likeCount + 1); // 좋아요 수 증가
@@ -396,17 +400,31 @@ const BoardItem = (props) => {
       </div>
       <div className="like-comment-keep">
         <div className="board-like sub-item" onClick={likeClick}>
-          {board.likeCount === 0
-            ? "좋아요"
-            : <FavoriteIcon /> || board.likeCount}
+          {board.likeCount === 0 ? (
+            "좋아요"
+          ) : (
+            <>
+              <FavoriteIcon /> {board.likeCount}
+            </>
+          )}
         </div>
         <div className="board-comment sub-item">
-          {board.commentCount === 0
-            ? "댓글"
-            : <ChatBubbleIcon /> || board.commentCount}
+          {board.commentCount === 0 ? (
+            "댓글"
+          ) : (
+            <>
+              <ChatBubbleIcon /> {board.commentCount}
+            </>
+          )}
         </div>
         <div className="board-keep sub-item-right">
-          {board.keepCount === 0 ? "저장" : <SaveIcon /> || board.keepCount}
+          {board.keepCount === 0 ? (
+            "저장"
+          ) : (
+            <>
+              <SaveIcon /> {board.keepCount}
+            </>
+          )}
         </div>
       </div>
     </div>
