@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.iei.inquiry.model.dto.InquiryDTO;
 import kr.co.iei.seller.model.dto.BookingInfoDTO;
 import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
@@ -42,5 +43,7 @@ public interface SellerDao {
 	List<StmInfoDTO> selectStmSearchInfo(StmInfoDTO st);
 
 	RoomDTO selectRoomViewInfo(int roomNo);
+
+	List<InquiryDTO> selectInqList(InquiryDTO iqd);
 
 }

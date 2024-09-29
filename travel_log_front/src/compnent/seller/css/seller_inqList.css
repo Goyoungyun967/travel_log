@@ -1,0 +1,29 @@
+.seller-inq-box-wrap {
+  padding: 30px;
+  width: 1000px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.seller-inq-box-wrap > h3 {
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+}
+
+.seller-inq-box-wrap > .inq-btn-wrap {
+  margin: 20px;
+  color: #fff;
+}
+.seller-inq-box-wrap > .inq-btn-wrap > .inq-btn {
+  background-color: dodgerblue;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.seller-inq-box-wrap > .inq-btn-wrap > .inq-btn:hover {
+  background-color: navy;
+  cursor: pointer;
+}
