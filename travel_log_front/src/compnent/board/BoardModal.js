@@ -17,11 +17,55 @@ const BoardModal = ({ show, handleClose, handleInput }) => {
   const [startDate, setStartDate] = useState(startDay);
   const [endDate, setEndDate] = useState(endDay);
 
+  const [boardArea, setBoardArea] = useState([
+    { title: "서울" },
+    { title: "경기" },
+    { title: "부산" },
+    { title: "대구" },
+    { title: "인천" },
+    { title: "대전" },
+    { title: "광주" },
+    { title: "울산" },
+    { title: "세종" },
+    { title: "강원" },
+    { title: "충북" },
+    { title: "충남" },
+    { title: "경북" },
+    { title: "경남" },
+    { title: "전북" },
+    { title: "제주" },
+  ]);
+
+  const [selectedArea, setSelectedArea] = useState("");
+
+  const handleChange = (event) => {
+    setSelectedArea(event.target.value);
+  };
+
   const handleConfirm = () => {
-    handleInput({ startDate, endDate, inputValue }); // 입력값 전달
-    handleClose(); // 모달 닫기
-    setInputValue(""); // 입력값 초기화
-    navigate("/board/boardWrite"); // 경로 이동
+    if (!selectedArea) {
+      alert("지역을 선택하세요.");
+      return;
+    }
+    if (dayjs(endDate).isBefore(dayjs(startDate))) {
+      alert("끝 날짜는 시작 날짜 이후여야 합니다.");
+      return;
+    }
+
+    const totalDays = dayjs(endDate).diff(dayjs(startDate), "day") + 1;
+    handleInput({ startDate, endDate, inputValue, selectedArea, totalDays });
+    handleClose();
+    setInputValue("");
+
+    navigate(
+      `/board/accompanyWrite?startDate=${encodeURIComponent(
+        startDate.toISOString()
+      )}&endDate=${encodeURIComponent(
+        endDate.toISOString()
+      )}&selectedArea=${encodeURIComponent(
+        selectedArea
+      )}&totalDays=${totalDays}`
+    );
   };
 
   return (
@@ -37,6 +81,25 @@ const BoardModal = ({ show, handleClose, handleInput }) => {
             setEndDate={setEndDate}
             setStartDate={setStartDate}
           />
+        </div>
+        <div>
+          <div>
+            <label htmlFor="area-select">지역 선택</label>
+          </div>
+          <div>
+            <select
+              id="area-select"
+              value={selectedArea}
+              onChange={handleChange}
+            >
+              <option value="">-- 선택하세요 --</option>
+              {boardArea.map((area, index) => (
+                <option key={index} value={area.title}>
+                  {area.title}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </Modal.Body>
       <Modal.Footer>

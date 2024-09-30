@@ -37,14 +37,17 @@
 			select * from
 				(select rownum as rnum, sb.* from
 					(SELECT 
+					 	b.board_no,
 					    b.board_title,
 					    b.board_content,
 					    b.board_area,
 					    b.reg_date,
 					    b.board_thumb,
+					    b.read_count,
 					    b.board_type,
 					    (select member_IMAGE from member m where m.member_no = b.member_no) as member_IMAGE,
-					    (select MEMBER_NICKNAME from member m where m.member_no = b.member_no) as member_NICKNAME
+					    (select MEMBER_NICKNAME from member m where m.member_no = b.member_no) as member_NICKNAME,
+					
 					FROM 
 		    			board b
 		    		WHERE 
@@ -135,7 +138,7 @@
 			insert into board_like values(#{memberNo},#{boardNo})
 		</insert>
 		<select id="selectLikeBoard" resultType="int">
-			select count(*) from board_like where board_no = #{boardNo}  
+			select count(*) from board_like where board_no = #{boardNo} and member_no=#{memberNo}  
 		</select>
 
 		<delete id="deleteUnlikeBoard">
@@ -144,6 +147,18 @@
 		<select id="selectUnlikeBoard" resultType="int">
 			select count(*) from board_like where board_no = #{boardNo}
 		</select>
+		
+		
+		
+		 	<!-- 댓글 목록 조회 -->
+    	<select id="selectCommentList" resultType="boardComment">
+        	SELECT * FROM board_comment WHERE board_no = #{boardNo}
+   		 </select>
+		 
+		 <!-- 댓글 추가 -->
+   		<insert id="insertComment">
+   			 INSERT INTO board_comment VALUES (board_comment_seq.nextval, #{memberNickname}, sysdate, 0, #{commentContent}, #{boardNo})
+		</insert>
 		
 		
 	

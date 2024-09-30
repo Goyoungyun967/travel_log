@@ -8,6 +8,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import kr.co.iei.board.model.dao.BoardDao;
 import kr.co.iei.board.model.dto.BoardCommentDTO;
@@ -111,35 +113,47 @@ public class BoardService {
 	}
 	@Transactional
 	public int likeBoard(int boardNo, int memberNo) {
-		int result = boardDao.insertLikeBoard(memberNo,boardNo);
-		if(result>0) {
-			int likeCount = boardDao.selectLikeBoard(boardNo);
-			return likeCount;
+		int likeCount = boardDao.selectLikeBoard(boardNo,memberNo);
+		if(likeCount==0) {
+			int result = boardDao.insertLikeBoard(memberNo,boardNo);
+			if(result>0) {
+				return likeCount;
+			}else {
+				return 0;
+			}
+			
 		}
 		return 0;
 	}
 	@Transactional
 	public int unlikeBoard(int boardNo, int memberNo) {
-		int result = boardDao.deleteUnlikeBoard(memberNo,boardNo);
-		if(result>0) {
-			int unLikeCount = boardDao.selectUnlikeBoard(boardNo);
-			return unLikeCount;
+		int unLikeCount = boardDao.selectUnlikeBoard(boardNo,memberNo);
+		
+		if(unLikeCount == 1) {
+			int result = boardDao.deleteUnlikeBoard(memberNo,boardNo);
+			if(result>0) {
+				return unLikeCount;
+			
+			}else {
+				return 0;
+			}
 		}
 		return 0;
 	}
 	
-//	// 댓글 목록 조회
-//	public List<BoardCommentDTO> getCommentList(int boardNo ) {
-//	    List<BoardCommentDTO> comments = boardDao.selectCommentList(boardNo);
-//	    return comments; // 댓글 목록 반환
-//	}
-//
-//	// 댓글 추가
-//	public boolean addComment(BoardCommentDTO comment,String commentWriter) {
-//	    int result = boardDao.insertComment(comment,commentWriter);
-//	    return result > 0; // 성공 여부 반환
-//	}
-//
+	// 댓글 목록 조회
+	public List<BoardCommentDTO> getCommentList(int boardNo ) {
+	    List<BoardCommentDTO> comments = boardDao.selectCommentList(boardNo);
+	    return comments; // 댓글 목록 반환
+	}
+
+	// 댓글 추가
+	public boolean addComment(int boardNo, String memberNickname, BoardCommentDTO comment) {
+	    int result = boardDao.insertComment( boardNo,memberNickname,comment);
+	    return result > 0; // 성공 여부 반환
+	}
+
+	
 //	// 댓글 수정
 //	public boolean editComment(int commentId, String newContent) {
 //	    int result = boardDao.updateComment(commentId, newContent);
@@ -151,4 +165,11 @@ public class BoardService {
 //	    int result = boardDao.deleteComment(commentId);
 //	    return result == 1; // 성공 여부 반환
 //	}
+	
+	
+	
+	
+	
+	
+	
 }
