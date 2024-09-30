@@ -224,12 +224,6 @@
 	where inquiry_no=#{inqNo}
 </select>
 
-<resultMap type="inquiry" id="InqViewMap">
-	<!-- 기본 정보 -->
-	<result property="inquiryTitle" column="inquiry_title"/>
-	<result property="inquiryContent" column="inquiry_content"/>
-	<result property="regDate" column="reg_date"/>
-	
 
 	<!-- 형묵 - sellerId 중복체크  -->
 	<select id="checkSellerId" resultType="int">
@@ -246,7 +240,12 @@
     	select seller_no,seller_pw,business_name from seller where business_no=#{businessNo}
     </select>
 
-
+<resultMap type="inquiry" id="InqViewMap">
+	<!-- 기본 정보 -->
+	<result property="inquiryTitle" column="inquiry_title"/>
+	<result property="inquiryContent" column="inquiry_content"/>
+	<result property="regDate" column="reg_date"/>
+	
 	<!-- 답변 정보 매핑 -->
 	<result property="inquiryReply.inquiryReplyContent" column="inquiry_reply_content"/>
 	<result property="inquiryReply.regDate" column="reply_reg_date"/>
@@ -256,6 +255,7 @@
 	    <result property="filepath" column="filepath"/>
 	</collection>
 </resultMap>
+
 
 
 </mapper>
