@@ -97,6 +97,7 @@ public class InquiryController {
 		return ResponseEntity.status(HttpStatus.OK).headers(header).contentLength(file.length()).contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
 	}
 	
+	@Operation(summary = "1:1 문의 답변 등록",description = "1:1 문의 번호, 답변 내용을 받아서 db에 insert")
 	@PostMapping(value="/inquiryReply")
 	public ResponseEntity<Integer> insertInquiryReply(@RequestBody InquiryReplyDTO inquiryReply){
 		int result = inquiryService.insertInquiryReply(inquiryReply);

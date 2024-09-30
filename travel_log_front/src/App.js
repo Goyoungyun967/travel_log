@@ -67,8 +67,8 @@ function App() {
           <Route path="/select/memberJoin" element={<MemberJoin />} />
           <Route path="/select/sellerJoin" element={<SellerJoin />} />
           <Route path="/seller/*" element={<SellerMain />} />
-          <Route path="/inquiryWrite" element={<InquiryWrite/>}/>
-          <Route path={"/admin/*"} element={<AdminMain/>}/>
+          <Route path="/inquiryWrite" element={<InquiryWrite />} />
+          <Route path={"/admin/*"} element={<AdminMain />} />
         </Routes>
       </main>
       <Footer />

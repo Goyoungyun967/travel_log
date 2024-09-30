@@ -1,83 +1,132 @@
-.admin-section{
-    width: 100%;
-    align-self: start;
+.admin-section {
+  width: 100%;
+  align-self: start;
 }
-.admin-wrap{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    position: relative;
+.admin-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
-.admin-page-title{
-    text-align: center;
-}
-.admin-menu-bar{
-    position: absolute;
-    top: 105px;
-    align-self: start;
-    width: 200px;
-    display: flex;
-    flex-direction: column;
+.admin-page-title {
+  text-align: center;
 }
 .admin-menu-bar {
-    font-size: 20px;
-    padding: 10px 0;
-    color: #fff;
+  position: absolute;
+  top: 105px;
+  align-self: start;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
 }
-.admin-menu-bar ul>li{
-    text-align: center;
+.admin-menu-bar {
+  font-size: 20px;
+  padding: 10px 0;
+  color: #fff;
 }
-.admin-menu-bar>a{
-    padding: 5px 0;
-    text-align: center;
-    background-color: var(--main4);
-    
+.admin-menu-bar ul > li {
+  text-align: center;
 }
-.admin-menu-bar>a:hover{
-    background-color: var(--main3);
+.admin-menu-bar > a {
+  padding: 5px 0;
+  text-align: center;
+  background-color: var(--main4);
+}
+.admin-menu-bar > a:hover {
+  background-color: var(--main3);
 }
 
-.admin-main-menu{
-    display: flex;
-    justify-content: center;
-    background-color: var(--main5);
-    cursor: pointer;
-    position: relative;
-    padding: 10px 0;
-    margin: 0 0;
+.admin-main-menu {
+  display: flex;
+  justify-content: center;
+  background-color: var(--main5);
+  cursor: pointer;
+  position: relative;
+  padding: 10px 0;
+  margin: 0 0;
 }
-.admin-main-menu>span{
-    font-size: 20px;
-    align-self: center;
-    position: absolute;
-    left: 175px;
+.admin-main-menu > span {
+  font-size: 20px;
+  align-self: center;
+  position: absolute;
+  left: 175px;
 }
-.admin-sub-menu{
-    display: none;
-    padding: 0 0;
-    margin: 0 0;
+.admin-sub-menu {
+  display: none;
+  padding: 0 0;
+  margin: 0 0;
 }
-.admin-sub-menu a{
-    padding: 10px 0;
-    display: block;
-    width: 100%;
-    height: 100%;
-    background-color: var(--main3);
+.admin-sub-menu a {
+  padding: 10px 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: var(--main3);
 }
-.admin-sub-menu a:hover{
-    background-color: var(--main4);
+.admin-sub-menu a:hover {
+  background-color: var(--main4);
 }
-.admin-menu-bar .active{
-    display: block;
+.admin-menu-bar .active {
+  display: block;
 }
-.admin-sub-menu>li>.active{
-    background-color: var(--main4);
+.admin-sub-menu > li > .active {
+  background-color: var(--main4);
 }
-.admin-content-wrap{
-    display: flex;
-    width: 800px;
-    min-height: 500px;
-    margin: 75px auto;
-    flex-direction: column;
-    align-items: center;
+.admin-content-wrap {
+  display: flex;
+  width: 800px;
+  min-height: 500px;
+  margin: 75px auto;
+  flex-direction: column;
+  align-items: center;
+}
+.admin-page-navi {
+  width: 100%;
+  display: flex;
+  height: auto;
+  justify-content: center;
+  margin-top: 30px;
+}
+.admin-list-table {
+  width: 100%;
+  border-top: 1px solid #ccc;
+}
+
+.admin-list-table th {
+  padding: 15px 0;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+.admin-list-table td {
+  padding: 15px 0;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+.admin-list-table .inquiry-list-content:hover {
+  background-color: rgba(204, 204, 204, 0.2);
+}
+.admin-search-box {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 100px;
+  padding: 0 40px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.seller-check {
+  position: relative;
+}
+.seller-check > :first-child {
+  position: absolute;
+  left: 0;
+  top: 7px;
+}
+.admin-seller-btn {
+  border: none;
+  background-color: var(--main3);
+  width: 100%;
+  height: 40px;
+  color: #fff;
+  border-radius: 7px;
 }
