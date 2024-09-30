@@ -44,7 +44,9 @@ public interface SellerDao {
 
 	List<StmInfoDTO> selectStmSearchInfo(StmInfoDTO st);
 
+	//형묵 - 판매자 회원가입
 	int insertSeller(SellerDTO seller);
+	
 	RoomDTO selectRoomViewInfo(int roomNo);
 
 	List<InquiryDTO> selectInqList(InquiryDTO iqd);

@@ -222,4 +222,8 @@
 		using(inquiry_no)
 		where inquiry_no=#{inquiryNo}
 	</select>
+	
+	<insert id="insertSeller">
+		insert into seller values()
+    </insert>
 </mapper>
