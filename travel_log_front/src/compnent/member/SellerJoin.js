@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const SellerJoin = () => {
@@ -8,7 +9,7 @@ const SellerJoin = () => {
     representativeName: "",
     sellerPhone: "",
     bankName: "",
-    accountName: "",
+
     accountNumber: "",
     sellerPw: "",
     businessName: "",
@@ -18,6 +19,7 @@ const SellerJoin = () => {
   const [loading, setLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
 
   const checkId = () => {
     const idReg = /^\d{10}$/;
@@ -51,13 +53,13 @@ const SellerJoin = () => {
     }
 
     setLoading(true);
-    const API_URL = `http://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=elWxEMPoh3jH%2BiG6NxulIYzr1l7rtwxKljP00wB2Xh2emKpSF4bPPQ7RXsNJfkreAA3C6rcDDkQxAxdHVZr4RA%3D%3D`;
+    const API_URL = `http://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=8N2YyKDuZXRkluMR8DCqPsnD92Xvt%2Bs8FFMCyyrdD3KL8KpspdZWZwYrd5WEYve%2BCmnsYmDmYWn8QNT0LH%2FjTQ%3D%3D`;
     const requestBody = { b_no: [businessNo] };
 
     axios
       .post(API_URL, requestBody)
       .then((res) => {
-        if (res.data.b_stt_no !== "") {
+        if (res.data.data[0].b_stt_cd !== "") {
           setIsValid(true);
           Swal.fire({
             title: "일치합니다",
@@ -121,7 +123,33 @@ const SellerJoin = () => {
       pwMessage.current.innerText = "비밀번호가 일치하지 않습니다.";
     }
   };
+  const sellerJoin = () => {
+    if (!isValid) {
+      Swal.fire({
+        title: "인증 실패",
+        icon: "warning",
+        text: "사업자 번호가 인증되야합니다.",
+      });
+      return;
+    }
+    if (idCheck === 1 && pwMessage.current.classList.contains("valid")) {
+      axios
+        .post(`${backServer}/seller`, seller)
+        .then((res) => {
+          console.log(res);
+          navigate("/login");
 
+          Swal.fire({
+            title: "회원가입을 축하합니다 ! ",
+            icon: "success",
+            text: "어세오세요!",
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
   return (
     <section className="join-content">
       <div className="seller-join">판매자회원가입</div>
@@ -144,25 +172,15 @@ const SellerJoin = () => {
             type="button"
             className="buiness-check-btn"
             onClick={() => {
-              validateBusinessNo(seller.businessNo);
+              if (!isValid) {
+                validateBusinessNo(seller.businessNo);
+              }
             }}
           >
             인증하기
           </button>
         </div>
       </div>
-
-      <p
-        className={`idCheck-msg ${
-          idCheck === 1 ? "valid" : idCheck === 3 ? "invalid" : ""
-        }`}
-      >
-        {idCheck === 0
-          ? ""
-          : idCheck === 1
-          ? "사용가능한 사업자번호입니다."
-          : "이미 사용중인 사업자 번호입니다."}
-      </p>
 
       <div className="join-wrap">
         <label htmlFor="sellerPw">비밀번호</label>
@@ -281,7 +299,7 @@ const SellerJoin = () => {
         />
       </div>
 
-      <button type="button" className="join-btn">
+      <button type="button" className="join-btn" onClick={sellerJoin}>
         회원가입 완료
       </button>
     </section>

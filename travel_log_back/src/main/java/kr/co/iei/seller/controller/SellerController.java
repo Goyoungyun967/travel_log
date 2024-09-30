@@ -30,6 +30,7 @@ import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
+import kr.co.iei.seller.model.dto.SellerDTO;
 import kr.co.iei.seller.model.dto.StmInfoDTO;
 import kr.co.iei.seller.model.service.SellerService;
 import kr.co.iei.util.FileUtils;
@@ -176,6 +177,7 @@ public class SellerController {
 	public ResponseEntity<List> searchInqList(@ModelAttribute InquiryDTO iqd){
 		List<InquiryDTO> ls = sellerService.selectInqList(iqd); // 나중에 토큰으로 바꿀겨
 		return ResponseEntity.ok(ls);
+
 	}
 	
 	// 판매자 문의 글 상세
