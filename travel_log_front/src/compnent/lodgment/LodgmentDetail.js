@@ -15,7 +15,8 @@ const LodgmentDetail = () => {
   const startDate = params.startDate;
   const endDate = params.endDate;
   const guest = params.guest;
-  const [lodgmentInfo, SetLodgmentInfo] = useState({});
+  const [lodgmentInfo, setLodgmentInfo] = useState({});
+  const [roomSearchList, setRoomSearchList] = useState([]);
   useEffect(() => {
     axios
       .get(
@@ -23,41 +24,69 @@ const LodgmentDetail = () => {
       )
       .then((res) => {
         console.log(res);
-        SetLodgmentInfo(res.data.lodgmentInfo);
+        setLodgmentInfo(res.data.lodgmentInfo);
+        setRoomSearchList(res.data.lodgmentInfo.roomSearchList);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-  console.log("lodgmentInfo" + lodgmentInfo.lodgmentNo);
+  //console.log("roomSearchList" + roomSearchList[0].roomNo);
   return (
     <section className="section lodgmentDetail">
-      <div className="lodgment-detail-wrap">
-        <LodgmentWrap />
+      <div className="lodgment-detail-img">
+        <img
+          src={
+            lodgmentInfo.lodgmentImgPath
+              ? `${BackServer}/seller/lodgment/${lodgmentInfo.lodgmentImgPath}`
+              : "/image/default_img.png"
+          }
+          // 기본 이미지 경로
+          alt={lodgmentInfo.lodgmentName}
+          className="lodgment-image"
+        />
       </div>
       <div className="lodgment-detail-info">
         <table>
           <tbody>
             <tr>
-              <td width={"50%"}>숙박 업체 종류</td>
+              <td width={"50%"}>
+                {lodgmentInfo.lodgmentTypeNo === 1 ? (
+                  <h4 className="lodgment-address">호텔</h4>
+                ) : lodgmentInfo.lodgmentTypeNo === 2 ? (
+                  <h4 className="lodgment-address">모텔</h4>
+                ) : lodgmentInfo.lodgmentTypeNo === 3 ? (
+                  <h4 className="lodgment-address">펜션/풀빌라</h4>
+                ) : lodgmentInfo.lodgmentTypeNo === 4 ? (
+                  <h4 className="lodgment-address">게스트하우스</h4>
+                ) : lodgmentInfo.lodgmentTypeNo === 5 ? (
+                  <h4 className="lodgment-address">캠핑</h4>
+                ) : (
+                  ""
+                )}
+              </td>
               <td className="member-rating" width={"50%"}>
                 평점
               </td>
             </tr>
             <tr>
               <td colSpan={2} className="lodgment-detail-name">
-                업체명
+                <h1>{lodgmentInfo.lodgmentName}</h1>
               </td>
             </tr>
           </tbody>
         </table>
         <div className="lodgment-detail-map-wrap">
-          <LodgmentDetailMap />
+          <LodgmentDetailMap
+            lodgmentAddr={lodgmentInfo.lodgmentAddr}
+            lodgmentName={lodgmentInfo.lodgmentName}
+          />
         </div>
         <div className="lodgment-loom-type-wrap">
-          <LodgmentRoomDetail />
+          <LodgmentRoomDetail roomSearchList={roomSearchList} />
         </div>
       </div>
+
       <div className="user-active-wrap">
         <Tabs
           defaultActiveKey="profile"
@@ -72,7 +101,9 @@ const LodgmentDetail = () => {
             Tab content for Profile
           </Tab>
           <Tab eventKey="longer-tab" title="공지사항">
-            Tab content for Loooonger Tab
+            <div
+              dangerouslySetInnerHTML={{ __html: lodgmentInfo.lodgmentNotice }}
+            ></div>
           </Tab>
         </Tabs>
       </div>

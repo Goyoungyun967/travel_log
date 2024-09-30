@@ -7,14 +7,15 @@ import LodgmentView from "./LodgmentView";
 import Reserve from "./Reserve";
 import StmSeller from "./StmSeller";
 import RoomView from "./RoomView";
+import InqList from "./InqList";
 const SellerMain = () => {
   return (
     <Routes>
-      {/* 판매자 메인 - 등록한 호텔 정보 출력 */}
+      {/* 판매자 메인 - 등록한 호텔 정보 출력 -> 토큰, post해서 조회 (일단 get으로 판매자 번호 1 부여함 수정해야함) */}
       <Route path="list" element={<SellerLodgmentList />} />
       {/* 호텔 등록하기 */}
       <Route path="insertLodgment" element={<InsertLodgment />} />
-      {/* 판매자 개인정보 조회 */}
+      {/* 판매자 개인정보 조회  -> 토큰, post해서 조회*/}
       <Route path="info" element={<SellerInfo />} />
       {/* 호텔 객실 등록하기 */}
       <Route path="insertRoom/:lodgmentNo" element={<InsertRoom />} />
@@ -23,10 +24,13 @@ const SellerMain = () => {
       {/* 예약 - 예약 번호 보내서 조회 */}
       <Route path="reserve/:bookNo" element={<Reserve />} />
       {/* 호텔 객실 정보 조회 */}
-      <Route path="roomView/:roomNo" element={<RoomView />} />
+      <Route path="roomView/:lodgmentNo/:roomNo" element={<RoomView />} />
 
       {/* 매출 - 매출 조회 */}
       <Route path="stm" element={<StmSeller />} />
+
+      {/* 문의 - 판매자 문의 조회 -> 토큰, post해서 조회*/}
+      <Route path="inqList" element={<InqList />} />
     </Routes>
   );
 };

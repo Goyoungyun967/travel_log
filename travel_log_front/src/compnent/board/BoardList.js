@@ -14,12 +14,15 @@ import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 import AccompanyWrite from "./AccompanyWrite";
 import ModalInput from "./BoardModal";
+import { useRecoilState } from "recoil";
+import { loginNoState } from "../utils/RecoilData";
 
 const BoardList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const [boardList, setBoardList] = useState([]);
   const [accompanyList, setAccompanyList] = useState([]);
+  const [loginNo, setLoginNo] = useRecoilState(loginNoState);
 
   const [areaSearch, setAreaSearch] = useState([
     { title: "서울" },
@@ -196,7 +199,7 @@ const BoardList = () => {
         </div>
         <div className="board-preview-wrap height-box">
           {boardList.map((board, i) => (
-            <BoardItem key={"board-" + i} board={board} />
+            <BoardItem key={"board-" + i} board={board} loginNo={loginNo} />
           ))}
         </div>
       </div>
@@ -244,6 +247,7 @@ const SearchList = (props) => {
 const AccompanyItem = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const accompany = props.accompany;
+
   const navigate = useNavigate();
   return (
     <div
@@ -279,7 +283,10 @@ const AccompanyItem = (props) => {
 const BoardItem = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const board = props.board;
+  const memberNo = props.loginNo;
   const navigate = useNavigate();
+
+  //작성 시간
   const now = new Date();
   console.log(now);
   const regDate = new Date(board.regDate);
@@ -304,6 +311,42 @@ const BoardItem = (props) => {
 
   //날짜 계산
   ///${encodeURIComponent(timeString)
+
+  //좋아요
+  const [likeCount, setLikeCount] = useState(0); // 초기 좋아요 수
+  const [isLiked, setIsLiked] = useState(false); // 좋아요를 눌렀는지 여부
+
+  useEffect(() => {
+    console.log(`좋아요 상태: ${isLiked}, 좋아요 수: ${likeCount}`);
+  }, [isLiked, likeCount]);
+
+  const likeClick = () => {
+    if (isLiked) {
+      // 좋아요 취소 요청
+      axios
+        .delete(`${backServer}/board/unlike/${board.boardNo}/${memberNo}`)
+        .then((res) => {
+          console.log(res);
+          setLikeCount(likeCount - 1); // 좋아요 수 감소
+          setIsLiked(false); // 좋아요 상태 변경
+        })
+        .catch((err) => {
+          console.error("좋아요 취소 중 오류 발생:", err);
+        });
+    } else {
+      // 좋아요 추가 요청
+      axios
+        .post(`${backServer}/board/like/${board.boardNo}/${memberNo}`)
+        .then((res) => {
+          console.log(res);
+          setLikeCount(likeCount + 1); // 좋아요 수 증가
+          setIsLiked(true); // 좋아요 상태 변경
+        })
+        .catch((err) => {
+          console.error("좋아요 요청 중 오류 발생:", err);
+        });
+    }
+  };
 
   return (
     <div className="boardList-preview">
@@ -334,7 +377,7 @@ const BoardItem = (props) => {
               />
             </Col>
             <Col xs={10} md={10} style={{ padding: 0 }}>
-              <div className="board-memberId">계정 아이디</div>
+              <div className="board-memberId">{board.memberNickName}</div>
               <div className="board-regDate text-min">{timeString}</div>
             </Col>
           </Container>
@@ -356,18 +399,32 @@ const BoardItem = (props) => {
         </div>
       </div>
       <div className="like-comment-keep">
-        <div className="board-like sub-item">
-          {board.likeCount === 0
-            ? "좋아요"
-            : <FavoriteIcon /> || board.likeCount}
+        <div className="board-like sub-item" onClick={likeClick}>
+          {board.likeCount === 0 ? (
+            "좋아요"
+          ) : (
+            <>
+              <FavoriteIcon /> {board.likeCount}
+            </>
+          )}
         </div>
         <div className="board-comment sub-item">
-          {board.commentCount === 0
-            ? "댓글"
-            : <ChatBubbleIcon /> || board.commentCount}
+          {board.commentCount === 0 ? (
+            "댓글"
+          ) : (
+            <>
+              <ChatBubbleIcon /> {board.commentCount}
+            </>
+          )}
         </div>
         <div className="board-keep sub-item-right">
-          {board.keepCount === 0 ? "저장" : <SaveIcon /> || board.keepCount}
+          {board.keepCount === 0 ? (
+            "저장"
+          ) : (
+            <>
+              <SaveIcon /> {board.keepCount}
+            </>
+          )}
         </div>
       </div>
     </div>

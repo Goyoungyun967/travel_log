@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.iei.board.model.dto.BoardCommentDTO;
 import kr.co.iei.board.model.dto.BoardDTO;
 import kr.co.iei.board.model.dto.BoardFileDTO;
 
@@ -37,6 +38,25 @@ public interface BoardDao {
 	List<BoardFileDTO> selectBoardFile(int[] delBoardFileNo);
 
 	int deleteBoardFile(int[] delBoardFileNo);
+
+	int insertLikeBoard(int memberNo, int boardNo );
+
+	int selectLikeBoard(int boardNo);
+
+	int deleteUnlikeBoard(int memberNo, int boardNo );
+	
+	int selectUnlikeBoard(int boardNo);
+	
+
+	List<BoardCommentDTO> selectCommentList(int boardNo);
+
+	int insertComment(BoardCommentDTO comment);
+
+	int updateComment(int commentId, String newContent);
+
+	int deleteComment(int commentId);
+ 
+	
 	
 
 }

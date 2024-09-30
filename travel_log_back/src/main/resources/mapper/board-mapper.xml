@@ -14,6 +14,7 @@
 				b.board_area,
 				b.reg_date,
 				b.board_thumb,
+				(select MEMBER_no from member m where m.member_no = b.member_no) as member_no,
 			    (select member_IMAGE from member m where m.member_no = b.member_no) as member_IMAGE,
 			    (select MEMBER_NICKNAME from member m where m.member_no = b.member_no) as member_NICKNAME,
                 (SELECT COUNT(*) FROM board_like bl WHERE bl.board_no = b.board_no) AS like_count,
@@ -55,7 +56,7 @@
 			where rnum BETWEEN #{start} and #{end}
 		</select>
 		<insert id="insertBoard">
-			 insert into board values(board_seq.nextval,#{boardTitle},#{boardContent},#{boardArea},sysdate,1,#{boardThumb},28,0)
+			 insert into board values(board_seq.nextval,#{boardTitle},#{boardContent},#{boardArea},sysdate,1,#{boardThumb},#{memberNo},0)
 			<selectKey resultType="int" keyProperty="boardNo" order="AFTER">
 				select max(board_no) from board
 			</selectKey>
@@ -128,6 +129,46 @@
 				#{fileNo}
 			</foreach>
 		</delete>
+		
+		
+		<insert id="insertLikeBoard">
+			insert into board_like values(#{memberNo},#{boardNo})
+		</insert>
+		<select id="selectLikeBoard" resultType="int">
+			select count(*) from board_like where board_no = #{boardNo}  
+		</select>
+
+		<delete id="deleteUnlikeBoard">
+			delete from board_like where board_no=#{boardNo} and member_No=#{memberNo}
+		</delete>
+		<select id="selectUnlikeBoard" resultType="int">
+			select count(*) from board_like where board_no = #{boardNo}
+		</select>
+		
+		
+		<!-- 댓글 목록 조회 -->
+    <select id="selectCommentList" resultType="boardComment">
+        SELECT * FROM board_comment WHERE board_no = #{boardNo}
+    </select>
+
+    <!-- 댓글 추가 -->
+   <insert id="insertComment">
+    INSERT INTO board_comment VALUES (board_comment_seq.nextval, #{commentWriter}, #{commentDate}, #{commentRef}, #{commentContent}, #{boardNo})
+	</insert>
+
+    <!-- 댓글 수정 -->
+    <update id="updateComment">
+        UPDATE board_comment
+        SET content = #{newContent}
+        WHERE comment_id = #{commentId}
+    </update>
+
+    <!-- 댓글 삭제 -->
+    <delete id="deleteComment">
+        DELETE FROM board_comment WHERE comment_id = #{commentId}
+    </delete>
+		
+		
 		
 		
 			

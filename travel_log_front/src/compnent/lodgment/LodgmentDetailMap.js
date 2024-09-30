@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
-const LodgmentDetailMap = () => {
+const LodgmentDetailMap = (props) => {
+  const lodgmentAddr = props.lodgmentAddr;
+  const lodgmentName = props.lodgmentName;
   const KakaoKey = process.env.REACT_APP_HS_KAKAO_REST_API_KEY;
   const weatherKey = process.env.REACT_APP_HS_WEATHER_API_KEY;
   const [lodgmentLongitude, setsLodgmentLongitude] = useState("");
   const [lodgmentLatitude, setLodgmentLatitude] = useState("");
-  const address = "인천 중구 영종해안남로 19-5";
+
   const weatherDescKo = {
     200: "비를 동반한 천둥구름",
     201: "가벼운 비를 동반한 천둥구름",
@@ -92,7 +94,7 @@ const LodgmentDetailMap = () => {
   //console.log(weather);
   fetch(
     `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(
-      address
+      lodgmentAddr
     )}`,
     {
       method: "GET",
@@ -156,10 +158,16 @@ const LodgmentDetailMap = () => {
           <MapMarker
             position={{ lat: lodgmentLatitude, lng: lodgmentLongitude }}
           >
-            <div>네스트 호텔</div>
+            <a
+              href={`https://map.kakao.com/link/map/${lodgmentName},${lodgmentLatitude},${lodgmentLongitude}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {lodgmentName}
+            </a>
           </MapMarker>
         </Map>
-        <div>{address}</div>
+        <div>{lodgmentAddr}</div>
       </div>
 
       <div>

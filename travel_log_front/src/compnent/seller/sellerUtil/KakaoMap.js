@@ -24,8 +24,6 @@ const KakaoMap = (props) => {
         const { x: longitude, y: latitude } = data.documents[0].address;
         setsLodgmentLongitude(longitude);
         setLodgmentLatitude(latitude);
-      } else {
-        console.log("주소를 찾을 수 없습니다.");
       }
     })
     .catch((error) => {

@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import "./css/insert_room.css";
 import axios from "axios";
 import UqillEditor from "../utils/UqillEditor";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+
 const InsertRoom = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
   // 호텔 정보를 위한 state
@@ -57,6 +60,32 @@ const InsertRoom = () => {
   // 보내기
   const writeRoom = () => {
     const backServer = process.env.REACT_APP_BACK_SERVER;
+    // 모든 필드의 입력값 확인
+    if (!roomName) {
+      alert("숙소명을 입력해 주세요.");
+      return;
+    }
+    if (!maxCapa) {
+      alert("최대 인원을 입력해 주세요.");
+      return;
+    }
+    if (!roomNum) {
+      alert("상품 수 를 입력해 주세요.");
+      return;
+    }
+    if (!roomPrice) {
+      alert("상품 가격을 입력해 주세요.");
+      return;
+    }
+    if (!boardContent) {
+      alert("내용을 입력해 주세요.");
+      return;
+    }
+    if (boardContent.length > 1000) {
+      alert("내용은 1000자 이내로 입력해 주세요.");
+      return;
+    }
+
     if (
       roomName !== "" &&
       roomNum !== 0 &&
@@ -86,7 +115,17 @@ const InsertRoom = () => {
           },
         })
         .then((res) => {
-          console.log(res);
+          console.log("res-", res);
+          if (res.data) {
+            navigate(`/seller/lodgmentView/${lodgmentNo}`);
+            console.log(form);
+          } else {
+            Swal.fire({
+              title: "에러가 발생했습니다.",
+              text: "원인을 찾으세요",
+              icon: "error",
+            });
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -213,6 +252,79 @@ const InsertRoom = () => {
   );
 };
 
+// 첨부파일
+const FileInfo = (props) => {
+  // 보낼 첨부파일
+  const roomFile = props.roomFile;
+  const setRoomFile = props.setRoomFile;
+  // 미리보기용 첨부 파일 (파일 전송 x)
+  const [showRoomFile, setShowRoomFile] = useState([]);
+  console.log("파일 - ", showRoomFile);
+
+  // 파일 add
+  const addRoomFile = (e) => {
+    const files = e.currentTarget.files;
+    const fileArr = new Array();
+    const imgPrvArr = new Array();
+
+    if (roomFile.length + files.length > 5) {
+      alert("파일은 최대 5개까지 첨부할 수 있습니다.");
+      return;
+    }
+
+    for (let i = 0; i < files.length; i++) {
+      fileArr.push(files[i]);
+      if (files[i].type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          imgPrvArr.push(reader.result);
+          setShowRoomFile((prev) => [...prev, { preview: reader.result }]); // 미리보기용
+        };
+        reader.readAsDataURL(files[i]);
+      } else {
+        setRoomFile((prev) => [...prev]);
+      }
+    }
+    setRoomFile((prev) => [...prev, ...fileArr]);
+  };
+
+  // 파일 삭제
+  const removeRoomFile = (index) => {
+    setRoomFile((prev) => prev.filter((_, i) => i !== index));
+    setShowRoomFile((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="photo">
+      <label htmlFor="roomFile" className="addBtn">
+        파일첨부
+      </label>
+      <div className="p_arr">
+        <input
+          type="file"
+          id="roomFile"
+          style={{ display: "none" }}
+          onChange={addRoomFile}
+          multiple
+        />
+        {showRoomFile.map((file, i) => (
+          <div className="photoArr" key={i}>
+            <img src={file.preview} width="150px" alt="preview" />
+            <span
+              className="delete-icon"
+              onClick={() => removeRoomFile(i)}
+              role="button"
+              aria-label="Remove"
+            >
+              ✖️
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 // 해시태그
 const HashTap = (props) => {
   const setHashTag = props.setHashTag;
@@ -276,70 +388,6 @@ const HashTap = (props) => {
           <input type="checkbox" value={12} onChange={inputCheckboxChange} />
           <span className="custom-checkbox">TV</span>
         </label>
-      </div>
-    </div>
-  );
-};
-
-// 첨부파일
-const FileInfo = (props) => {
-  // 보낼 첨부파일
-  const roomFile = props.roomFile;
-  const setRoomFile = props.setRoomFile;
-  // 미리보기용 첨부 파일 (파일 전송 x)
-  const [showRoomFile, setShowRoomFile] = useState([]);
-  console.log("파일 - ", showRoomFile);
-  const addRoomFile = (e) => {
-    const files = e.currentTarget.files;
-    const fileArr = new Array();
-    const imgPrvArr = new Array();
-
-    if (roomFile.length + files.length > 5) {
-      alert("파일은 최대 5개까지 첨부할 수 있습니다.");
-      return;
-    }
-
-    for (let i = 0; i < files.length; i++) {
-      fileArr.push(files[i]);
-      if (files[i].type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          imgPrvArr.push(reader.result);
-          setShowRoomFile((prev) => [...prev, { preview: reader.result }]);
-        };
-        reader.readAsDataURL(files[i]);
-      } else {
-        setRoomFile((prev) => [...prev]);
-      }
-    }
-    setRoomFile((prev) => [...prev, ...fileArr]);
-    // setRoomFile([...roomFile, ...fileArr]); // File중첩시키기
-    // setShowRoomFile([...showRoomFile, ...fileArr]); // Filename중첩시키기
-  };
-  return (
-    <div className="photo">
-      <label htmlFor="roomFile" className="addBtn">
-        파일첨부
-      </label>
-      <div className="p_arr">
-        <input
-          type="file"
-          id="roomFile"
-          style={{ display: "none" }}
-          onChange={addRoomFile}
-          multiple
-        />
-        {showRoomFile.map((file, i) => {
-          return (
-            <div key={i}>
-              {file.preview ? (
-                <img src={file.preview} width="150px" className="photoArr" />
-              ) : (
-                ""
-              )}
-            </div>
-          );
-        })}
       </div>
     </div>
   );

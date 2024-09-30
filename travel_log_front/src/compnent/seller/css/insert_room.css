@@ -98,17 +98,6 @@
   margin-top: 20px;
   width: 450px;
 }
-.btn {
-  margin-top: 25px;
-  width: 100px;
-  border-radius: 10px;
-  border: none;
-  padding: 5px;
-}
-.primary {
-  background-color: var(--main5);
-  color: var(--main2);
-}
 /*------- 지울 거 ------*/
 .checkbox-label {
   display: flex;
@@ -123,4 +112,23 @@
 .tag > .checkbox-label > input[type="checkbox"]:checked + .custom-checkbox {
   font-weight: bold;
   color: #007bff; /* 체크된 항목의 색상을 원하는 색상으로 변경 */
+}
+
+/**/
+.photoArr {
+  position: relative;
+  display: inline-block; /* 이미지 주변에 여백을 허용합니다. */
+}
+
+.delete-icon {
+  position: absolute;
+  top: 5px; /* 이미지 상단에서 약간 떨어진 위치 */
+  right: 5px; /* 이미지 오른쪽에서 약간 떨어진 위치 */
+  color: red;
+  cursor: pointer;
+  display: none; /* 기본적으로 숨김 */
+}
+
+.photoArr:hover .delete-icon {
+  display: block; /* 이미지 위에 마우스를 올리면 보이도록 설정 */
 }

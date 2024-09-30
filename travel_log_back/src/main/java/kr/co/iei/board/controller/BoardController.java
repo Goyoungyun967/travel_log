@@ -22,11 +22,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.co.iei.board.model.dto.BoardCommentDTO;
 import kr.co.iei.board.model.dto.BoardDTO;
 import kr.co.iei.board.model.dto.BoardFileDTO;
 import kr.co.iei.board.model.service.BoardService;
@@ -164,6 +166,52 @@ public class BoardController {
 		}
 		return  ResponseEntity.ok(false);
 	}
+	//좋아요 
+	@PostMapping(value = "like/{boardNo}/{memberNo}")
+	public ResponseEntity<Integer> likeBoard(@PathVariable int boardNo,@PathVariable int memberNo){
+		int result = boardService.likeBoard(boardNo,memberNo); 
 	
+		return ResponseEntity.ok(result);
+	}
+	// 좋아요 취소
+    @DeleteMapping("/unlike/{boardNo}/{memberNo}")
+    public ResponseEntity<Integer> unlikeBoard(@PathVariable int boardNo, @PathVariable int memberNo) {
+        int result = boardService.unlikeBoard(boardNo, memberNo); // 좋아요 취소 처리
+        return ResponseEntity.ok(result); // 처리 결과 반환 (1: 성공, 0: 실패)
+    }
+    
+    
+    // 댓글 목록 조회
+    @GetMapping("/commentList/{boardNo}")
+    public ResponseEntity<List<BoardCommentDTO>> getCommentList(@PathVariable int boardNo) {
+        List<BoardCommentDTO> comments = boardService.getCommentList(boardNo);
+        return ResponseEntity.ok(comments);
+    }
+
+    // 댓글 추가
+    @PostMapping("/AddComment")
+    public ResponseEntity<BoardCommentDTO> addComment(@RequestBody BoardCommentDTO comment) {
+        boolean isAdded = boardService.addComment(comment);
+        if (isAdded) {
+            return ResponseEntity.ok(comment); // 댓글이 추가되었을 때
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 추가 실패 시
+        }
+    }
+
+    // 댓글 수정
+    @PatchMapping("/editComment/{commentId}")
+    public ResponseEntity<Boolean> editComment(@PathVariable int commentId, @RequestBody Map<String, String> request) {
+        String newContent = request.get("content");
+        boolean result = boardService.editComment(commentId, newContent);
+        return ResponseEntity.ok(result);
+    }
+
+    // 댓글 삭제
+    @DeleteMapping("/deleteComment/{commentId}")
+    public ResponseEntity<Boolean> deleteComment(@PathVariable int commentId) {
+        boolean result = boardService.deleteComment(commentId);
+        return ResponseEntity.ok(result);
+    }
 	
 }

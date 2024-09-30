@@ -10,7 +10,7 @@ import dayjs from "dayjs";
 const AccompanyWrite = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [boardContent, setBoardContent] = useState("");
-  //   const [loginNo, setLoginNo] = useRecoilState(loginIdState); //로그인한 회원 아이디값 (입력할게 아니기때문에 스테이트사용안함)
+  //   const [loginNo, setLoginNo] = useRecoilState(loginNoState); //로그인한 회원 아이디값 (입력할게 아니기때문에 스테이트사용안함)
   const navigate = useNavigate();
   const [boardTitle, setBoardTitle] = useState(""); //사용자가 입력할 제목
   const [thumbnail, setThumbnail] = useState(null); //썸네일은 첨부파일로 처리

@@ -33,4 +33,7 @@ public class RoomDTO {
 	@Schema(description = "객실 사진 리스트",type="List<RoomFileDTO>")
 	private List<RoomFileDTO> fileList;
 	
+	@Schema(description = "객실 서비스 타입 리스트", type="List<RoomServiceTag>")
+	private List<ServiceTagDTO> serviceTagList;
+	
 }

@@ -1,8 +1,5 @@
 package kr.co.iei.lodgment.controller;
 
-import java.sql.Date;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -15,14 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.websocket.server.PathParam;
-import kr.co.iei.lodgment.model.dto.LodgmentDTO;
-import kr.co.iei.lodgment.model.dto.RoomSearchDTO;
 import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
 import kr.co.iei.lodgment.model.service.LodgmentService;
-import lombok.Getter;
+
 
 
 @CrossOrigin("*")
@@ -36,6 +30,7 @@ public class LodgmentController {
 	
 	//서비스 태그 가져오기
 	@GetMapping(value = "/service")
+	@Operation(summary = "등록된 서비스태그 가져오기",description = "등록된 서비스태그 전체 조회")
 	public ResponseEntity<List> serviceList(){
 		List list = lodgmentService.serviceList();
 		return ResponseEntity.ok(list);
@@ -43,6 +38,7 @@ public class LodgmentController {
 	
 	//검색창 : 여행지/호텔 관련 검색어 
 	@GetMapping(value = "/search/{value}")
+	@Operation(summary = "여행지,호텔 연관 검색어",description = "이용자가 입력한 여행지, 호텔에 대한 연관 검색어 실시간 조회")
 	public ResponseEntity<Map> search(@PathVariable String value){
 		Map map = lodgmentService.search(value);
 		return ResponseEntity.ok(map);
@@ -50,6 +46,7 @@ public class LodgmentController {
 	
 	//검색 할 경우 원하는 숙박 정보 
 	@GetMapping(value = "/searchLodgment")  //RequestParam 과 PathVariable 차이점 찾아보기 
+	@Operation(summary = "숙박업체 조회",description = "페이지, 여행지(또는 호텔), 체크인, 체크아웃, 인원수, 가격조정(최저가격 ~ 최고가격), 관련 서비스 태그(선택 무 가능), 호텔성급(선택 무 가능), 숙박타입 선택")
 	public ResponseEntity<List<SearchLodgmentDTO>> searchLodgment(
 			@RequestParam int reqPage,
             @RequestParam String lodgment,
@@ -68,7 +65,7 @@ public class LodgmentController {
 			selectedServiceTagsArry = new int[tags.length]; 
 			for(int i = 0; i < tags.length; i++) {
 				selectedServiceTagsArry[i] = Integer.parseInt(tags[i]);
-			System.out.println(selectedServiceTagsArry[i]);
+			//System.out.println(selectedServiceTagsArry[i]);
 			}
 		}else {
 			selectedServiceTagsArry = new int[1];
@@ -81,13 +78,15 @@ public class LodgmentController {
 		
 	}
 	
+	
 	@GetMapping(value = "/roomInfo/{lodgmentNo}/{startDate}/{endDate}")
+	@Operation(summary = "숙박업체 룸 디테일 정보 가져오기",description ="숙박업체 번호, 체크인,체크아웃 날짜로 수박업체 정보 받아오기") 
 	public ResponseEntity<Map> roomInfo(
 			@PathVariable int lodgmentNo,
 			@PathVariable String startDate,
 			@PathVariable String endDate			
 			){
-		System.out.println(lodgmentNo);
+		//System.out.println(lodgmentNo);
 		Map map = lodgmentService.getRoomInfo(lodgmentNo,startDate,endDate);
 		return ResponseEntity.ok(map);
 	}
