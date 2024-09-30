@@ -3,79 +3,229 @@ import "./css/paymentPage.css";
 import LodgmentDetailMapPayment from "./LodgmentDetailMapPayment";
 import LodgmentLoomDetail from "./LodgmentRoomDetail";
 import PayMentUserInfo from "./PaymentUserInfo";
+import { useLocation } from "react-router-dom";
+import { format } from "date-fns";
+import * as PortOne from "@portone/browser-sdk/v2";
 
 const PaymentPage = () => {
-  const [guest, setGuest] = useState({
+  const BackServer = process.env.REACT_APP_BACK_SERVER;
+  const { state } = useLocation();
+  console.log(state);
+
+  console.log(state.checkOut - state.checkIn);
+  // 투숙객 정보
+  const [bookingInfo, setBookingInfo] = useState({
     guestName: "",
     guestPhone: "",
     guestReq: "",
   });
+  // 투숙객 정보 입력 변환
+  const valueChange = (e) => {
+    const { name, value } = e.target;
+    setBookingInfo((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const [agree, setAgree] = useState(false);
+  //약관 동의
+  const [agreePrivacy, setAgreePrivacy] = useState(false);
+  const [agreeInfoSharing, setAgreeInfoSharing] = useState(false);
 
+  // 특정 날짜의 요일 구하는 함수
+  const getDayOfWeek = (dateString) => {
+    const date = new Date(dateString);
+    const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
+    return daysOfWeek[date.getDay()];
+  };
+
+  // 체크인과 체크아웃 요일
+  const checkInDay = getDayOfWeek(state.checkIn);
+  const checkOutDay = getDayOfWeek(state.checkOut);
+
+  const checkInClock =
+    " " +
+    state.lodgmentInfo.lodgmentCheckIn.slice(0, 2) +
+    "시 " +
+    state.lodgmentInfo.lodgmentCheckIn.slice(3, 5) +
+    "분";
+  const checkOutClock =
+    " " +
+    state.lodgmentInfo.lodgmentCheckOut.slice(0, 2) +
+    "시 " +
+    state.lodgmentInfo.lodgmentCheckOut.slice(3, 5) +
+    "분";
+
+  //몇박인지 계산
+  const calculateNights = (checkIn, checkOut) => {
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
+    const timeDiff = checkOutDate - checkInDate; // 밀리초 단위
+    const daysDiff = timeDiff / (1000 * 60 * 60 * 24); // 일 단위로 변환
+    return daysDiff;
+  };
+
+  const nights = calculateNights(state.checkIn, state.checkOut); // 숙박 일수 계산
+
+  const totalPrice = nights * state.room.roomPrice;
+  const priceTax = totalPrice * 0.1;
+  const netAmount = totalPrice * 0.9;
+
+  const date = new Date();
+  const dateString =
+    date.getFullYear() +
+    "" +
+    (date.getMonth() + 1) +
+    "" +
+    date.getDate() +
+    "" +
+    date.getHours() +
+    "" +
+    date.getMinutes() +
+    "" +
+    date.getSeconds();
+
+  //결제요청 함수
+  const requestPayment = () => {
+    PortOne.requestPayment({
+      storeId: "store-4ff4af41-85e3-4559-8eb8-0d08a2c6ceec", // 고객사 storeId로 변경해주세요.
+      paymentId: `payment-{${crypto.randomUUID()}`,
+      orderName: "나이키 와플 트레이너 2 SD",
+      totalAmount: 1000,
+      currency: "CURRENCY_KRW",
+      channelKey: "channel-key-3b37819a-1c72-4deb-a245-8c810af5403d", // 콘솔 결제 연동 화면에서 채널 연동 시 생성된 채널 키를 입력해주세요.
+      payMethod: "CARD",
+    });
+  };
   return (
     <section className="section">
       <div className="lodgment-payment-info-wrap">
+        <h1>예약하기</h1>
+        <div className="paymentPage-title"></div>
         <div className="lodgment-payment-img">
-          <img src="/image/nesthotel.jpg" alt="임시사진" />
+          <img
+            src={
+              state.lodgmentInfo.lodgmentImgPath
+                ? `${BackServer}/seller/lodgment/${state.lodgmentInfo.lodgmentImgPath}`
+                : "/image/default_img.png"
+            }
+            alt={state.lodgmentInfo.lodgmentName}
+          />
         </div>
         <div className="lodgment-payment-detail-wrap">
           <table className="lodgment-payment-detail">
             <tbody>
               <tr style={{ height: "50px" }}>
-                <td width={"100%"}>업체명</td>
+                <td width={"100%"}>
+                  <h1>{state.lodgmentInfo.lodgmentName}</h1>
+                  <div className="booking-roomName">
+                    <h2>{state.room.roomName}</h2>
+                  </div>
+                </td>
               </tr>
               <tr style={{ height: "50px" }}>
-                <td>00월 00일 00월 00일</td>
+                <td>
+                  <span>
+                    체크인 : {state.checkIn} ({checkInDay}){checkInClock}
+                  </span>
+                  <h6>
+                    체크아웃 : {state.checkOut} ({checkOutDay}){checkOutClock}
+                  </h6>
+                </td>
               </tr>
               <tr>
-                <td>
-                  <LodgmentDetailMapPayment />
-                </td>
+                <td></td>
               </tr>
             </tbody>
           </table>
+          <div>
+            <table className="lodgment-payment-detail">
+              <tbody>
+                <tr>
+                  <th width={"80%"}>
+                    <h5>
+                      {state.guest}명 / {nights}박
+                    </h5>
+                  </th>
+                  <td width={"20%"}>{netAmount} 원</td>
+                </tr>
+                <tr>
+                  <th width={"80%"}>
+                    <h5>세금 및 수수료</h5>
+                  </th>
+                  <td width={"20%"}>{priceTax} 원</td>
+                </tr>
+                <tr>
+                  <th width={"80%"}>
+                    <h5>총 결제 금액</h5>
+                  </th>
+                  <td width={"20%"}>{totalPrice} 원</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div className="lodgment-payment-info">
-        <LodgmentLoomDetail />
+        <BookingLoom />
       </div>
       <div className="payment-user-info-wrap">
-        <PayMentUserInfo guest={guest} setGuest={setGuest} />
+        <PayMentUserInfo valueChange={valueChange} />
       </div>
 
       <div className="terms-and-conditions">
-        <h3>약관 동의</h3>
+        <h3>개인정보 수집 및 이용 동의 (필수)</h3>
         <label>
           <input
             type="checkbox"
-            checked={agree}
-            onChange={() => setAgree(!agree)}
+            checked={agreePrivacy}
+            onChange={() => setAgreePrivacy(!agreePrivacy)}
           />
           약관에 동의합니다.
         </label>
         <textarea className="terms-content">
-          개인정보 보호 약관 개인정보의 수집 및 이용 목적 본 서비스는 고객님의
-          개인정보를 다음과 같은 목적으로 수집 및 이용합니다: 예약 확인 및 관리
-          고객 문의 응대 서비스 제공 및 결제 처리 서비스 개선 및 통계 분석
-          수집하는 개인정보 항목 고객님의 개인정보는 다음과 같이 수집합니다:
-          이름 연락처 (전화번호) 이메일 주소 예약 정보 개인정보의 보유 및 이용
-          기간 고객님의 개인정보는 수집 및 이용 목적이 달성된 후에는 지체 없이
-          파기됩니다. 단, 관련 법령에 따라 보존해야 하는 경우는 예외로 합니다.
-          개인정보의 제3자 제공 고객님의 개인정보를 제3자에게 제공하지 않으며,
-          법령에 의해 요구되는 경우를 제외하고는 사전 동의 없이 개인정보를
-          제공하지 않습니다. 개인정보 보호 고객님의 개인정보를 안전하게 보호하기
-          위해 필요한 기술적 및 관리적 조치를 시행합니다. 권리와 의무 고객님은
-          언제든지 개인정보의 열람, 정정, 삭제를 요구할 수 있으며, 요청 시 즉시
-          조치하겠습니다.
+          1.개인정보 수집 및 이용목적 상품 제공 계약의 성립, 계약 관련 동의 또는
+          철회 본인 의사 확인, 대금환불, 고객상담 2.개인정보 수집 항목 예약자 및
+          여행자 정보 : 이름, 이메일, 휴대폰번호, 영문이름(일부상품) 예약내역 :
+          예약일자, 결제금액 추가 예약 정보 : 성별 (일부 상품), 생년월일(일부
+          상품) 3. 보유 및 이용기간 회원 탈퇴시 까지(단, 관계 법령에 의해 보존할
+          경우 그 의무기간 동안 별도 보관) ※ 동의를 거부할 권리 및 동의 거부에
+          따른 불이익 개인정보 수집 및 이용에 대해 거부할 권리가 있으며, 동의를
+          거부할 경우 상품 예약 및 서비스 이용이 불가함을 알려 드립니다.
         </textarea>
       </div>
-
+      <div className="terms-and-conditions" readOnly>
+        <h3>개인정보 제공 동의 (필수)</h3>
+        <label>
+          <input
+            type="checkbox"
+            checked={agreeInfoSharing}
+            onChange={() => setAgreeInfoSharing(!agreeInfoSharing)}
+          />
+          약관에 동의합니다.
+        </label>
+        <textarea className="terms-content" readOnly>
+          1.개인 정보를 제공받는자 2.제공하는 개인정보 항목 *예약자 및 여행자
+          정보 : 이름, 이메일, 휴대폰번호, 영문이름(일부상품) 예약내역 :
+          예약일자, 결제금액 추가 예약 정보 : 성별 (일부 상품), 생년월일(일부
+          상품) 3.개인정보를 제공받는 자의 이용 목적 * 판매자와 구매자 거래,
+          고객관리(고객상담/불만처리) 4. 보유 및 이용기간 * 여행 완료 후 5일까지
+          ※ 동의를 거부할 권리 및 동의 거부에 따른 불이익 제3자제공 동의에 대해
+          거부할 권리가 있으며, 동의를 거부할 경우 상품 예약 및 서비스 이용이
+          불가함을 알려 드립니다..
+        </textarea>
+      </div>
       <div className="payment-action">
-        <button disabled={!agree}>결제하기</button>
+        <button
+          disabled={!agreePrivacy || !agreeInfoSharing}
+          onClick={requestPayment}
+        >
+          결제하기
+        </button>
       </div>
     </section>
   );
+};
+
+const BookingLoom = () => {
+  // 필요한 내용 추가
 };
 
 export default PaymentPage;

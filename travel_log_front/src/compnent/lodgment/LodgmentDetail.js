@@ -8,6 +8,7 @@ import LodgmentRoomDetail from "./LodgmentRoomDetail";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+
 const LodgmentDetail = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
   const params = useParams();
@@ -83,7 +84,13 @@ const LodgmentDetail = () => {
           />
         </div>
         <div className="lodgment-loom-type-wrap">
-          <LodgmentRoomDetail roomSearchList={roomSearchList} />
+          <LodgmentRoomDetail
+            roomSearchList={roomSearchList}
+            startDate={startDate}
+            endDate={endDate}
+            guest={guest}
+            lodgmentInfo={lodgmentInfo}
+          />
         </div>
       </div>
 
