@@ -189,9 +189,10 @@ public class BoardController {
     }
 
     // 댓글 추가
-    @PostMapping("/AddComment")
-    public ResponseEntity<BoardCommentDTO> addComment(@RequestBody BoardCommentDTO comment) {
-        boolean isAdded = boardService.addComment(comment);
+    @PostMapping("/AddComment/{memberNickname}")
+    public ResponseEntity<BoardCommentDTO> addComment(@RequestBody BoardCommentDTO comment , @PathVariable String memberNickName) {
+    	String commentWriter = memberNickName;
+        boolean isAdded = boardService.addComment(comment,commentWriter);
         if (isAdded) {
             return ResponseEntity.ok(comment); // 댓글이 추가되었을 때
         } else {

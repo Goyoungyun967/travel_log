@@ -50,7 +50,7 @@ public interface BoardDao {
 
 	List<BoardCommentDTO> selectCommentList(int boardNo);
 
-	int insertComment(BoardCommentDTO comment);
+	int insertComment(BoardCommentDTO comment, String commentWriter);
 
 	int updateComment(int commentId, String newContent);
 

@@ -129,14 +129,14 @@ public class BoardService {
 	}
 	
 	// 댓글 목록 조회
-	public List<BoardCommentDTO> getCommentList(int boardNo) {
+	public List<BoardCommentDTO> getCommentList(int boardNo ) {
 	    List<BoardCommentDTO> comments = boardDao.selectCommentList(boardNo);
 	    return comments; // 댓글 목록 반환
 	}
 
 	// 댓글 추가
-	public boolean addComment(BoardCommentDTO comment) {
-	    int result = boardDao.insertComment(comment);
+	public boolean addComment(BoardCommentDTO comment,String commentWriter) {
+	    int result = boardDao.insertComment(comment,commentWriter);
 	    return result > 0; // 성공 여부 반환
 	}
 

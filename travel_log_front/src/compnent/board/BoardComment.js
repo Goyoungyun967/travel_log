@@ -36,7 +36,7 @@ const BoardComment = ({ board }) => {
       };
 
       axios
-        .post(`${backServer}/board/AddComment`, newComment)
+        .post(`${backServer}/board/AddComment/${memberNickname}`, newComment)
         .then((res) => {
           setCommentList((prev) => [...prev, res.data]); // 댓글 목록 업데이트
           setCommentValue(""); // 입력 필드 초기화
