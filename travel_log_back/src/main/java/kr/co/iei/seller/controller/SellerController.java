@@ -161,7 +161,7 @@ public class SellerController {
 		return ResponseEntity.ok(ls);
 	}
 	// 판매자 정산 - 검색
-	@Operation(summary="판매자 정산", description = "정산 정보 출력")
+	@Operation(summary="판매자 정산", description = "정산 정보 검색해서 출력")
 	@PostMapping(value="/searchDate")
 	public ResponseEntity<List> stmSearchDate( @ModelAttribute StmInfoDTO st){
 		List<StmInfoDTO> ls = sellerService.selectStmSearchInfo(st);
@@ -177,4 +177,11 @@ public class SellerController {
 		List<InquiryDTO> ls = sellerService.selectInqList(iqd); // 나중에 토큰으로 바꿀겨
 		return ResponseEntity.ok(ls);
 	}
+	
+//	// 판매자 문의 글 상세
+//	@Operation(summary="판매자 문의 상세", description = "판매자 문의 상세 (inq정보 , 파일, 어드민 답변)")
+//	@GetMapping(vlaue="/")
+//	public ResponseEntity<InquiryDTO> searchInqView(@PathVariable){
+//		return ResponseEntity.ok(null);
+//	}
 }

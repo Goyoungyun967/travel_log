@@ -205,4 +205,21 @@
 		<result property="regDate" column="reg_date"/>
 	    <result property="inquiryReply.inquiryReplyContent" column="inquiry_reply_content"/>
 	</resultMap>
+	
+	<!-- 판매자 문의 상세 -->
+	<select id="">
+		select
+		    iq.INQUIRY_TITLE,
+		    iq.inquiry_content,
+		    iq.reg_date,
+		    iqf.filepath,
+		    iqr.inquiry_reply_content,
+		    iqr.reg_date
+		from INQUIRY iq
+		left join inquiry_file iqf
+		using(INQUIRY_NO)
+		left join inquiry_reply iqr
+		using(inquiry_no)
+		where inquiry_no=#{inquiryNo}
+	</select>
 </mapper>
