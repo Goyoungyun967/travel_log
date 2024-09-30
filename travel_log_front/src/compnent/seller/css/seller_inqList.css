@@ -27,3 +27,20 @@
   background-color: navy;
   cursor: pointer;
 }
+
+/*---------------------------*/
+.seller-inq-view-wrap {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 30px;
+  width: 1000px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+.seller-inq-view-wrap > h3 {
+  text-align: center;
+  color: #333;
+  font-weight: bold;
+}

@@ -71,7 +71,7 @@ const SellerInqList = (props) => {
 
   // 해당 행 클릭시 상세로 이동하게..
   const handleRowClick = (params) => {
-    navigate(`/seller/inqView${params.row.id}`);
+    navigate(`/seller/inqView/${params.row.id}`);
   };
 
   return (
