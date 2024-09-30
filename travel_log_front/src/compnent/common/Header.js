@@ -107,7 +107,9 @@ const Header = (props) => {
           {isLogin ? (
             <>
               <li>
-                <Link to={memberLevel === 1 ? "/admin" : "/member"}>{loginNickname}</Link>
+                <Link to={memberLevel === 1 ? "/admin" : "/member"}>
+                  {loginNickname}
+                </Link>
               </li>
               <li>
                 <Link to="/#" onClick={logout}>
