@@ -27,3 +27,92 @@
   background-color: navy;
   cursor: pointer;
 }
+
+/*---------------------------*/
+.seller-inq-view-wrap {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 30px;
+  width: 1000px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+.seller-inq-view-wrap > h3 {
+  text-align: center;
+  color: #333;
+  font-weight: bold;
+}
+
+.seller-inq-view-wrap > .seller-inq-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.seller-inq-view-wrap > .seller-inq-wrap > .seller-info-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.seller-inq-view-wrap
+  > .seller-inq-wrap
+  > .seller-info-wrap
+  > .seller-info-flex {
+  display: flex;
+  justify-content: space-around;
+}
+.seller-inq-view-wrap
+  > .seller-inq-wrap
+  > .seller-info-wrap
+  > .seller-info-flex
+  > .info-item {
+  display: flex;
+}
+
+.seller-inq-view-wrap
+  > .seller-inq-wrap
+  > .seller-info-wrap
+  > .seller-info-flex
+  > .info-item
+  > .info-item-title
+  > h5 {
+  font-weight: bold;
+  padding: 20px;
+}
+.seller-inq-view-wrap
+  > .seller-inq-wrap
+  > .seller-info-wrap
+  > .seller-info-flex
+  > .info-item
+  > .info-item-content
+  > h5 {
+  padding: 20px;
+}
+.seller-inq-view-wrap > .seller-inq-wrap > .seller-info-wrap > .info-item {
+  display: flex;
+  justify-content: center;
+}
+.seller-inq-view-wrap
+  > .seller-inq-wrap
+  > .seller-info-wrap
+  > .info-item
+  > .info-item-content-wrap
+  > .info-item-title
+  > h5 {
+  font-weight: bold;
+  text-align: center;
+  padding: 20px;
+  padding-top: 50px;
+}
+
+.seller-inq-view-wrap
+  > .seller-inq-wrap
+  > .seller-info-wrap
+  > .info-item
+  > .info-item-content-wrap
+  > .info-item-content {
+  border: 1px solid #ccc;
+  width: 800px;
+}

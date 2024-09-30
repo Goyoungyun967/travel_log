@@ -15,21 +15,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.inquiry.model.dto.InquiryDTO;
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dto.BookingInfoDTO;
 import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
+import kr.co.iei.seller.model.dto.LoginSellerDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
+import kr.co.iei.seller.model.dto.SellerDTO;
 import kr.co.iei.seller.model.dto.StmInfoDTO;
 import kr.co.iei.seller.model.service.SellerService;
 import kr.co.iei.util.FileUtils;
@@ -161,7 +163,7 @@ public class SellerController {
 		return ResponseEntity.ok(ls);
 	}
 	// 판매자 정산 - 검색
-	@Operation(summary="판매자 정산", description = "정산 정보 출력")
+	@Operation(summary="판매자 정산", description = "정산 정보 검색해서 출력")
 	@PostMapping(value="/searchDate")
 	public ResponseEntity<List> stmSearchDate( @ModelAttribute StmInfoDTO st){
 		List<StmInfoDTO> ls = sellerService.selectStmSearchInfo(st);
@@ -177,4 +179,47 @@ public class SellerController {
 		List<InquiryDTO> ls = sellerService.selectInqList(iqd); // 나중에 토큰으로 바꿀겨
 		return ResponseEntity.ok(ls);
 	}
+	
+	//seller-login 형묵
+	@PostMapping(value="/sellerJoin")
+	public ResponseEntity<Integer> sellerjoin(@RequestBody SellerDTO seller){
+		 System.out.println("수신된 seller 데이터: " + seller);  // 로그 확인
+		int result = sellerService.insertSeller(seller);
+		if(result > 0) {
+			return ResponseEntity.ok(result);
+		}else {
+			return ResponseEntity.status(500).build();
+		}
+	}
+	
+
+	//seller id-중복체크 
+	@GetMapping(value="/businessNo/{businessNo}/check-id")
+	public ResponseEntity<Integer> checkSellerId(@PathVariable String businessNo){
+		int result = sellerService.checkSellerId(businessNo);
+		
+		return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping(value="/login")
+	public ResponseEntity<LoginSellerDTO> login(@RequestBody SellerDTO seller){
+		
+		LoginSellerDTO loginSeller = sellerService.login(seller);
+		if(loginSeller != null) {
+			return ResponseEntity.ok(loginSeller);
+		}else {
+			return ResponseEntity.status(404).build();
+		}
+	}
+
+	// 판매자 문의 글 상세
+	@Operation(summary="판매자 문의 상세", description = "판매자 문의 상세 (inq정보 , 파일, 어드민 답변)")
+	@GetMapping(value="/inqView/{inqNo}")
+	public ResponseEntity<InquiryDTO> searchInqView(@PathVariable int inqNo){
+		System.out.println(inqNo);
+		InquiryDTO id = sellerService.selectInqView(inqNo);
+		System.out.println(id);
+		return ResponseEntity.ok(id);
+	}
+
 }

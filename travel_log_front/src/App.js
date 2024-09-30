@@ -23,6 +23,7 @@ function App() {
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
   const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
   const [loginNickname, setLoginNickname] = useState("");
+
   useEffect(() => {
     refreshLogin();
     window.setInterval(refreshLogin, 60 * 30 * 1000);
@@ -67,8 +68,8 @@ function App() {
           <Route path="/select/memberJoin" element={<MemberJoin />} />
           <Route path="/select/sellerJoin" element={<SellerJoin />} />
           <Route path="/seller/*" element={<SellerMain />} />
-          <Route path="/inquiryWrite" element={<InquiryWrite/>}/>
-          <Route path={"/admin/*"} element={<AdminMain/>}/>
+          <Route path="/inquiryWrite" element={<InquiryWrite />} />
+          <Route path={"/admin/*"} element={<AdminMain />} />
         </Routes>
       </main>
       <Footer />

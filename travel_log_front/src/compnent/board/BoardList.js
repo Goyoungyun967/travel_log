@@ -44,6 +44,9 @@ const BoardList = () => {
     { title: "제주" },
   ]);
 
+  const [likeCount, setLikeCount] = useState(0); // 초기 좋아요 수
+  const [isLike, setIsLike] = useState(0); // 좋아요를 눌렀는지 여부 (1: 안 눌림, 1: 눌림)
+
   const [searchInput, setSearchInput] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   //페이지
@@ -114,7 +117,7 @@ const BoardList = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [reqPage]);
+  }, [reqPage, isLike]);
   //동행 게시판
   useEffect(() => {
     axios
@@ -199,7 +202,15 @@ const BoardList = () => {
         </div>
         <div className="board-preview-wrap height-box">
           {boardList.map((board, i) => (
-            <BoardItem key={"board-" + i} board={board} loginNo={loginNo} />
+            <BoardItem
+              key={"board-" + i}
+              board={board}
+              loginNo={loginNo}
+              likeCount={likeCount}
+              setLikeCount={setLikeCount}
+              isLike={isLike}
+              setIsLike={setIsLike}
+            />
           ))}
         </div>
       </div>
@@ -284,6 +295,10 @@ const BoardItem = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const board = props.board;
   const memberNo = props.loginNo;
+  const isLike = props.isLike;
+  const setIsLike = props.setIsLike;
+  const likeCount = props.likeCount;
+  const setLikeCount = props.setLikeCount;
   const navigate = useNavigate();
 
   //작성 시간
@@ -313,22 +328,18 @@ const BoardItem = (props) => {
   ///${encodeURIComponent(timeString)
 
   //좋아요
-  const [likeCount, setLikeCount] = useState(0); // 초기 좋아요 수
-  const [isLiked, setIsLiked] = useState(false); // 좋아요를 눌렀는지 여부
-
-  useEffect(() => {
-    console.log(`좋아요 상태: ${isLiked}, 좋아요 수: ${likeCount}`);
-  }, [isLiked, likeCount]);
 
   const likeClick = () => {
-    if (isLiked) {
+    console.log(memberNo);
+
+    if (isLike === 1) {
       // 좋아요 취소 요청
       axios
         .delete(`${backServer}/board/unlike/${board.boardNo}/${memberNo}`)
         .then((res) => {
           console.log(res);
-          setLikeCount(likeCount - 1); // 좋아요 수 감소
-          setIsLiked(false); // 좋아요 상태 변경
+          setLikeCount((prevCount) => prevCount - 1); // 좋아요 수 감소
+          setIsLike(0); // 좋아요 상태 변경 (0으로 설정)
         })
         .catch((err) => {
           console.error("좋아요 취소 중 오류 발생:", err);
@@ -339,15 +350,14 @@ const BoardItem = (props) => {
         .post(`${backServer}/board/like/${board.boardNo}/${memberNo}`)
         .then((res) => {
           console.log(res);
-          setLikeCount(likeCount + 1); // 좋아요 수 증가
-          setIsLiked(true); // 좋아요 상태 변경
+          setLikeCount((prevCount) => prevCount + 1); // 좋아요 수 증가
+          setIsLike(1); // 좋아요 상태 변경 (1로 설정)
         })
         .catch((err) => {
           console.error("좋아요 요청 중 오류 발생:", err);
         });
     }
   };
-
   return (
     <div className="boardList-preview">
       <div

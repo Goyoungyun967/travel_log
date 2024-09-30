@@ -118,9 +118,9 @@ const MemberJoin = () => {
           navigate("/login");
 
           Swal.fire({
-            title: "성공! ",
+            title: "회원가입을 축하합니다 ! ",
             icon: "success",
-            text: "환영합니다 !",
+            text: "어세오세요!",
           });
         })
         .catch((err) => {

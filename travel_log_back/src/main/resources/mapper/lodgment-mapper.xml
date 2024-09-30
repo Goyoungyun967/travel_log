@@ -205,4 +205,57 @@
 		<result property="regDate" column="reg_date"/>
 	    <result property="inquiryReply.inquiryReplyContent" column="inquiry_reply_content"/>
 	</resultMap>
+	
+
+	<!-- 판매자 문의 상세 -->
+	<select id="selectInqView" resultMap="InqViewMap">
+	select
+	    iq.INQUIRY_TITLE,
+	    iq.inquiry_content,
+	    iq.reg_date,
+	    iqf.filepath,
+	    iqr.inquiry_reply_content,
+	    iqr.reg_date as reply_reg_date
+	from INQUIRY iq
+	left join inquiry_file iqf
+	using(INQUIRY_NO)
+	left join inquiry_reply iqr
+	using(INQUIRY_NO)
+	where inquiry_no=#{inqNo}
+</select>
+
+
+	<!-- 형묵 - sellerId 중복체크  -->
+	<select id="checkSellerId" resultType="int">
+ 		select count(*) from seller where business_no=#{businessNo}
+ 	</select>
+ 	
+ 	<!-- 형묵 seller 회원가입 -->
+	<insert id="insertSeller">
+		insert into seller values(seller_seq.nextval,#{businessNo},#{representativeName},#{sellerPhone},#{bankName},#{accountNumber},sysdate,0,#{sellerPw},#{businessName})
+    </insert>
+    
+    <!-- 형묵 seller 사실뭐하는건진 잘 모름 일단함-->
+    <select id="selectLoginSeller" resultType="seller">
+    	select seller_no,seller_pw,business_name from seller where business_no=#{businessNo}
+    </select>
+
+<resultMap type="inquiry" id="InqViewMap">
+	<!-- 기본 정보 -->
+	<result property="inquiryTitle" column="inquiry_title"/>
+	<result property="inquiryContent" column="inquiry_content"/>
+	<result property="regDate" column="reg_date"/>
+	
+	<!-- 답변 정보 매핑 -->
+	<result property="inquiryReply.inquiryReplyContent" column="inquiry_reply_content"/>
+	<result property="inquiryReply.regDate" column="reply_reg_date"/>
+	
+	<!-- 파일 리스트 매핑 -->
+	<collection property="inquiryFileList" ofType="inquiryFile" javaType="java.util.List">
+	    <result property="filepath" column="filepath"/>
+	</collection>
+</resultMap>
+
+
+
 </mapper>

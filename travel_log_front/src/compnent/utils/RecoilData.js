@@ -5,14 +5,14 @@ const loginNoState = atom({
   default: -1,
 });
 
-const memberLevelState = atom({
-  key: "memberLevelState",
+const sellerLoginNoState = atom({
+  key: "sellerLoginNoState",
   default: -1,
 });
 
-const memberNicknameState = atom({
-  key: "memberNicknameState",
-  default: -1, // 기본값을 빈 문자열로 설정
+const memberLevelState = atom({
+  key: "memberLevelState",
+  default: -1,
 });
 
 const isLoginState = selector({
@@ -20,10 +20,22 @@ const isLoginState = selector({
   get: (state) => {
     const loginNo = state.get(loginNoState);
     const memberLevel = state.get(memberLevelState);
-    const memberNickname = state.get(memberNicknameState);
 
-    return loginNo !== -1 && memberLevel !== -1 && memberNickname !== -1;
+    return loginNo !== -1 && memberLevel !== -1;
   },
 });
 
-export { loginNoState, memberLevelState, isLoginState, memberNicknameState };
+const isSellerLoginState = selector({
+  key: "isSellerLoginState",
+  get: (state) => {
+    const sellerLoginNo = state.get(sellerLoginNoState);
+    return sellerLoginNo !== -1;
+  },
+});
+export {
+  loginNoState,
+  memberLevelState,
+  isLoginState,
+  sellerLoginNoState,
+  isSellerLoginState,
+};
