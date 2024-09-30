@@ -206,20 +206,37 @@
 	    <result property="inquiryReply.inquiryReplyContent" column="inquiry_reply_content"/>
 	</resultMap>
 	
-	<!-- 판매자 문의 상세 -->
-	<select id="">
-		select
-		    iq.INQUIRY_TITLE,
-		    iq.inquiry_content,
-		    iq.reg_date,
-		    iqf.filepath,
-		    iqr.inquiry_reply_content,
-		    iqr.reg_date
-		from INQUIRY iq
-		left join inquiry_file iqf
-		using(INQUIRY_NO)
-		left join inquiry_reply iqr
-		using(inquiry_no)
-		where inquiry_no=#{inquiryNo}
-	</select>
+	<select id="selectInqView" resultMap="InqViewMap">
+	select
+	    iq.INQUIRY_TITLE,
+	    iq.inquiry_content,
+	    iq.reg_date,
+	    iqf.filepath,
+	    iqr.inquiry_reply_content,
+	    iqr.reg_date as reply_reg_date
+	from INQUIRY iq
+	left join inquiry_file iqf
+	using(INQUIRY_NO)
+	left join inquiry_reply iqr
+	using(INQUIRY_NO)
+	where inquiry_no=#{inqNo}
+</select>
+
+<resultMap type="inquiry" id="InqViewMap">
+	<!-- 기본 정보 -->
+	<result property="inquiryTitle" column="inquiry_title"/>
+	<result property="inquiryContent" column="inquiry_content"/>
+	<result property="regDate" column="reg_date"/>
+	
+	<!-- 답변 정보 매핑 -->
+	<result property="inquiryReply.inquiryReplyContent" column="inquiry_reply_content"/>
+	<result property="inquiryReply.regDate" column="reply_reg_date"/>
+	
+	<!-- 파일 리스트 매핑 -->
+	<collection property="inquiryFileList" ofType="inquiryFile" javaType="java.util.List">
+	    <result property="filepath" column="filepath"/>
+	</collection>
+</resultMap>
+
+
 </mapper>
