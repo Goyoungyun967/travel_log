@@ -116,3 +116,27 @@
   border: 1px solid #ccc;
   width: 800px;
 }
+
+.info-item-content-wrap > .info-item-reply-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+.info-item-content-wrap > .info-item-reply-wrap > .reply {
+  border: 1px solid #ccc;
+  width: 15%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.info-item-content-wrap > .info-item-reply-wrap > .reply-item {
+  border: 1px solid #ccc;
+  padding: 15px;
+  width: 80%;
+}
+.info-item-content-wrap > .info-item-reply-wrap > .reply-item > span {
+  float: right;
+  color: #ccc;
+  padding: 6px;
+}
