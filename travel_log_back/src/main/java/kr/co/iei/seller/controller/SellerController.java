@@ -30,7 +30,6 @@ import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
-import kr.co.iei.seller.model.dto.SellerDTO;
 import kr.co.iei.seller.model.dto.StmInfoDTO;
 import kr.co.iei.seller.model.service.SellerService;
 import kr.co.iei.util.FileUtils;
@@ -177,12 +176,12 @@ public class SellerController {
 	public ResponseEntity<List> searchInqList(@ModelAttribute InquiryDTO iqd){
 		List<InquiryDTO> ls = sellerService.selectInqList(iqd); // 나중에 토큰으로 바꿀겨
 		return ResponseEntity.ok(ls);
-
 	}
 	
-	// 판매자 문의 글 상세
-	@Operation(summary="판매자 문의 상세", description = "판매자 문의 상세 (inq정보 , 파일, 어드민 답변)")
-	public ResponseEntity<InquiryDTO> searchInqView(){
-		return ResponseEntity.ok(null);
-	}
+//	// 판매자 문의 글 상세
+//	@Operation(summary="판매자 문의 상세", description = "판매자 문의 상세 (inq정보 , 파일, 어드민 답변)")
+//	@GetMapping(vlaue="/")
+//	public ResponseEntity<InquiryDTO> searchInqView(@PathVariable){
+//		return ResponseEntity.ok(null);
+//	}
 }
