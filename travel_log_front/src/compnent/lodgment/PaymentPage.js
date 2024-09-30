@@ -5,41 +5,38 @@ import LodgmentLoomDetail from "./LodgmentRoomDetail";
 import PayMentUserInfo from "./PaymentUserInfo";
 import { useLocation } from "react-router-dom";
 import { format } from "date-fns";
-import * as PortOne from "@portone/browser-sdk/v2";
+import { loadTossPayments } from "@tosspayments/tosspayments-sdk";
 
 const PaymentPage = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
   const { state } = useLocation();
-  console.log(state);
 
-  console.log(state.checkOut - state.checkIn);
   // 투숙객 정보
   const [bookingInfo, setBookingInfo] = useState({
     guestName: "",
     guestPhone: "",
     guestReq: "",
   });
+
   // 투숙객 정보 입력 변환
   const valueChange = (e) => {
     const { name, value } = e.target;
     setBookingInfo((prev) => ({ ...prev, [name]: value }));
   };
 
-  //약관 동의
+  // 약관 동의
   const [agreePrivacy, setAgreePrivacy] = useState(false);
   const [agreeInfoSharing, setAgreeInfoSharing] = useState(false);
 
-  // 특정 날짜의 요일 구하는 함수
-  const getDayOfWeek = (dateString) => {
-    const date = new Date(dateString);
-    const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
-    return daysOfWeek[date.getDay()];
-  };
-
   // 체크인과 체크아웃 요일
-  const checkInDay = getDayOfWeek(state.checkIn);
-  const checkOutDay = getDayOfWeek(state.checkOut);
+  const checkInDay = new Date(state.checkIn).toLocaleString("ko-KR", {
+    weekday: "long",
+  });
+  const checkOutDay = new Date(state.checkOut).toLocaleString("ko-KR", {
+    weekday: "long",
+  });
 
+  //checkIn, checkOut 시간 계산
   const checkInClock =
     " " +
     state.lodgmentInfo.lodgmentCheckIn.slice(0, 2) +
@@ -53,45 +50,49 @@ const PaymentPage = () => {
     state.lodgmentInfo.lodgmentCheckOut.slice(3, 5) +
     "분";
 
-  //몇박인지 계산
-  const calculateNights = (checkIn, checkOut) => {
-    const checkInDate = new Date(checkIn);
-    const checkOutDate = new Date(checkOut);
-    const timeDiff = checkOutDate - checkInDate; // 밀리초 단위
-    const daysDiff = timeDiff / (1000 * 60 * 60 * 24); // 일 단위로 변환
-    return daysDiff;
-  };
-
-  const nights = calculateNights(state.checkIn, state.checkOut); // 숙박 일수 계산
-
+  const nights = Math.ceil(
+    (new Date(state.checkOut) - new Date(state.checkIn)) / (1000 * 60 * 60 * 24)
+  ); // 숙박 일수 계산
   const totalPrice = nights * state.room.roomPrice;
   const priceTax = totalPrice * 0.1;
   const netAmount = totalPrice * 0.9;
 
-  const date = new Date();
-  const dateString =
-    date.getFullYear() +
-    "" +
-    (date.getMonth() + 1) +
-    "" +
-    date.getDate() +
-    "" +
-    date.getHours() +
-    "" +
-    date.getMinutes() +
-    "" +
-    date.getSeconds();
+  const dateString = Date.now(); // 현재 시간으로 고유 주문번호 생성
 
-  //결제요청 함수
-  const requestPayment = () => {
-    PortOne.requestPayment({
-      storeId: "store-4ff4af41-85e3-4559-8eb8-0d08a2c6ceec", // 고객사 storeId로 변경해주세요.
-      paymentId: `payment-{${crypto.randomUUID()}`,
-      orderName: "나이키 와플 트레이너 2 SD",
-      totalAmount: 1000,
-      currency: "CURRENCY_KRW",
-      channelKey: "channel-key-3b37819a-1c72-4deb-a245-8c810af5403d", // 콘솔 결제 연동 화면에서 채널 연동 시 생성된 채널 키를 입력해주세요.
-      payMethod: "CARD",
+  // 결제 요청 함수
+  // 결제 요청 함수
+  const clientKey = process.env.REACT_APP_CLIENT_KEY;
+  const tossPay = () => {
+    // orderId가 필요해서 만든 랜덤 아이디값
+    const random = new Date().getTime() + Math.random();
+    const randomId = btoa(random);
+
+    loadTossPayments(clientKey).then((tossPayments) => {
+      if (radio === "가상계좌") {
+        // 가상계좌 결제 요청
+        tossPayments.requestPayment(`${radio}`, {
+          amount: 1, // 가격
+          orderId: `${randomId}`, // 주문 id
+          orderName: `gagyeong`, // 결제 이름
+          customerName: "travle_log", // 판매자, 판매처 이름
+          successUrl: "http://localhost:3000/success", // 성공시 리다이렉트 주소
+          failUrl: "http://localhost:3000/failed", // 실패시 리다이렉트 주소
+          validHours: 24, // 유효시간
+          cashReceipt: {
+            type: "소득공제",
+          },
+        });
+      } else {
+        // 카드 결제 메서드 실행
+        tossPayments.requestPayment(`${radio}`, {
+          amount: 1, // 가격
+          orderId: `${randomId}`, // 주문 id
+          orderName: `gagyeong`, // 결제 이름
+          customerName: `${name}`, // 판매자, 판매처 이름
+          successUrl: "http://localhost:3000/success", // 성공시 리다이렉트 주소
+          failUrl: "http://localhost:3000/failed", // 실패시 리다이렉트 주소
+        });
+      }
     });
   };
   return (
@@ -213,10 +214,7 @@ const PaymentPage = () => {
         </textarea>
       </div>
       <div className="payment-action">
-        <button
-          disabled={!agreePrivacy || !agreeInfoSharing}
-          onClick={requestPayment}
-        >
+        <button disabled={!agreePrivacy || !agreeInfoSharing} onClick={tossPay}>
           결제하기
         </button>
       </div>
