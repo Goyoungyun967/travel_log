@@ -51,4 +51,6 @@ public interface SellerDao {
 
 	List<InquiryDTO> selectInqList(InquiryDTO iqd);
 
+	InquiryDTO selectInqView(int inqNo);
+
 }

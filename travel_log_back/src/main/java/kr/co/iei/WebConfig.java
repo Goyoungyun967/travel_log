@@ -26,11 +26,17 @@ public class WebConfig implements WebMvcConfigurer{
 				.addResourceLocations("file:///"+root+"/seller/lodgment/");
 		
 		// 객실 이미지
-				registry.addResourceHandler("/seller/room/*")
-						.addResourceLocations("file:///"+root+"/seller/room/");
+		registry.addResourceHandler("/seller/room/*")
+				.addResourceLocations("file:///"+root+"/seller/room/");
 		//썸네일		
-				registry.addResourceHandler("/board/thumb/**")
-						.addResourceLocations("file:///"+root+"/board/thumb/");
+		registry.addResourceHandler("/board/thumb/**")
+				.addResourceLocations("file:///"+root+"/board/thumb/");
+
+		// 1 대 1 문의 사진
+		registry.addResourceHandler("/inq/inquiry/**")
+				.addResourceLocations("file:///"+root+"/inq/inquiry/");
+
+				
 		//bard 첨부파일
 				registry.addResourceHandler("/board/*")
 				.addResourceLocations("file:///"+root+"/board/");

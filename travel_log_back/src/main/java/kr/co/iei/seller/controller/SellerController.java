@@ -190,10 +190,13 @@ public class SellerController {
 		}
 	}
 	
-//	// 판매자 문의 글 상세
-//	@Operation(summary="판매자 문의 상세", description = "판매자 문의 상세 (inq정보 , 파일, 어드민 답변)")
-//	@GetMapping(vlaue="/")
-//	public ResponseEntity<InquiryDTO> searchInqView(@PathVariable){
-//		return ResponseEntity.ok(null);
-//	}
+	// 판매자 문의 글 상세
+	@Operation(summary="판매자 문의 상세", description = "판매자 문의 상세 (inq정보 , 파일, 어드민 답변)")
+	@GetMapping(value="/inqView/{inqNo}")
+	public ResponseEntity<InquiryDTO> searchInqView(@PathVariable int inqNo){
+		System.out.println(inqNo);
+		InquiryDTO id = sellerService.selectInqView(inqNo);
+		System.out.println(id);
+		return ResponseEntity.ok(id);
+	}
 }
