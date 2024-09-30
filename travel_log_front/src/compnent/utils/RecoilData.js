@@ -5,6 +5,11 @@ const loginNoState = atom({
   default: -1,
 });
 
+const sellerLoginNoState = atom({
+  key: "sellerLoginNoState",
+  default: -1,
+});
+
 const memberLevelState = atom({
   key: "memberLevelState",
   default: -1,
@@ -20,4 +25,17 @@ const isLoginState = selector({
   },
 });
 
-export { loginNoState, memberLevelState, isLoginState };
+const isSellerLoginState = selector({
+  key: "isSellerLoginState",
+  get: (state) => {
+    const sellerLoginNo = state.get(sellerLoginNoState);
+    return sellerLoginNo !== -1;
+  },
+});
+export {
+  loginNoState,
+  memberLevelState,
+  isLoginState,
+  sellerLoginNoState,
+  isSellerLoginState,
+};
