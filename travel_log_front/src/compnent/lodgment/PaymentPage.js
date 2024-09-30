@@ -60,41 +60,7 @@ const PaymentPage = () => {
   const dateString = Date.now(); // 현재 시간으로 고유 주문번호 생성
 
   // 결제 요청 함수
-  // 결제 요청 함수
-  const clientKey = process.env.REACT_APP_CLIENT_KEY;
-  const tossPay = () => {
-    // orderId가 필요해서 만든 랜덤 아이디값
-    const random = new Date().getTime() + Math.random();
-    const randomId = btoa(random);
-
-    loadTossPayments(clientKey).then((tossPayments) => {
-      if (radio === "가상계좌") {
-        // 가상계좌 결제 요청
-        tossPayments.requestPayment(`${radio}`, {
-          amount: 1, // 가격
-          orderId: `${randomId}`, // 주문 id
-          orderName: `gagyeong`, // 결제 이름
-          customerName: "travle_log", // 판매자, 판매처 이름
-          successUrl: "http://localhost:3000/success", // 성공시 리다이렉트 주소
-          failUrl: "http://localhost:3000/failed", // 실패시 리다이렉트 주소
-          validHours: 24, // 유효시간
-          cashReceipt: {
-            type: "소득공제",
-          },
-        });
-      } else {
-        // 카드 결제 메서드 실행
-        tossPayments.requestPayment(`${radio}`, {
-          amount: 1, // 가격
-          orderId: `${randomId}`, // 주문 id
-          orderName: `gagyeong`, // 결제 이름
-          customerName: `${name}`, // 판매자, 판매처 이름
-          successUrl: "http://localhost:3000/success", // 성공시 리다이렉트 주소
-          failUrl: "http://localhost:3000/failed", // 실패시 리다이렉트 주소
-        });
-      }
-    });
-  };
+  const tossPay = () => {};
   return (
     <section className="section">
       <div className="lodgment-payment-info-wrap">

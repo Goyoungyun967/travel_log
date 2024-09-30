@@ -37,6 +37,5 @@ npm install @mui/x-data-grid-generator
 npm install recharts
 
 윤희수 2024-09-30 19:35
-npm install @tosspayments/widget-sdk-react-native
 npm install @tosspayments/sdk
 

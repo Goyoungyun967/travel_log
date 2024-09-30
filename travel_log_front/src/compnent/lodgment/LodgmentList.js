@@ -83,6 +83,7 @@ const LodgmentList = () => {
   //검색한 호텔 정보 저장한 state
   const [lodgmentDetailInfo, setLodgmentDetailInfo] = useState([]);
 
+  //가격조정 함수
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
