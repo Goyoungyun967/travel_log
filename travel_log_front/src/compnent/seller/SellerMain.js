@@ -33,7 +33,7 @@ const SellerMain = () => {
       {/* 문의 - 판매자 문의 조회 -> 토큰, post해서 조회*/}
       <Route path="inqList" element={<InqList />} />
       {/* 문의 - 문의 상세*/}
-      <Route path="inqView/:inquiryNo" element={<InqView />} />
+      <Route path="inqView/:inqNo" element={<InqView />} />
     </Routes>
   );
 };

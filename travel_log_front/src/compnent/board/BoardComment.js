@@ -8,7 +8,6 @@
 //   const [memberNickname] = useRecoilState(memberNicknameState); // 사용자 닉네임
 //   const [commentList, setCommentList] = useState([]); // 댓글 목록
 //   const [commentValue, setCommentValue] = useState(""); // 댓글 입력값
-//   const [recommentValue, setRecommentValue] = useState({}); // 대댓글 입력값
 //   const [editCommentId, setEditCommentId] = useState(null); // 수정 중인 댓글 ID
 //   const [editValue, setEditValue] = useState(""); // 수정 입력값
 
@@ -43,38 +42,7 @@
 //         })
 //         .catch((err) => {
 //           console.error("댓글 전송 실패:", err);
-//         });
-//     }
-//   };
-
-//   // 대댓글 제출 핸들러
-//   const handleRecommentSubmit = (commentId) => {
-//     const trimmedRecommentValue = recommentValue[commentId]?.trim();
-//     if (trimmedRecommentValue) {
-//       const newRecomment = {
-//         boardNo: board.boardNo,
-//         user: memberNickname,
-//         content: trimmedRecommentValue,
-//         parentCommentId: commentId, // 대댓글은 부모 댓글 ID 설정
-//       };
-
-//       axios
-//         .post(`${backServer}/board/AddComment`, newRecomment)
-//         .then((res) => {
-//           setCommentList((prevComments) =>
-//             prevComments.map((comment) =>
-//               comment.commentNo === commentId
-//                 ? {
-//                     ...comment,
-//                     recomments: [...(comment.recomments || []), res.data],
-//                   }
-//                 : comment
-//             )
-//           );
-//           setRecommentValue((prev) => ({ ...prev, [commentId]: "" })); // 대댓글 입력 필드 초기화
-//         })
-//         .catch((err) => {
-//           console.error("대댓글 전송 실패:", err);
+//           alert("댓글 전송에 실패했습니다. 다시 시도해 주세요."); // 사용자에게 오류 메시지 표시
 //         });
 //     }
 //   };
@@ -105,14 +73,9 @@
 //         })
 //         .catch((err) => {
 //           console.error("댓글 수정 실패:", err);
+//           alert("댓글 수정에 실패했습니다. 다시 시도해 주세요."); // 사용자에게 오류 메시지 표시
 //         });
 //     }
-//   };
-
-//   // 대댓글 수정 핸들러
-//   const handleRecommentEdit = (recomment) => {
-//     setEditCommentId(recomment.commentNo);
-//     setEditValue(recomment.commentContent);
 //   };
 
 //   return (
@@ -159,68 +122,6 @@
 //                     </button>
 //                   </>
 //                 )}
-//               </div>
-
-//               {/* 대댓글 목록 */}
-//               {comment.recomments && comment.recomments.length > 0 && (
-//                 <div className="recomment-list">
-//                   {comment.recomments.map((recomment) => (
-//                     <div className="recomment-item" key={recomment.commentNo}>
-//                       <div className="recomment-user">
-//                         {recomment.commentWriter}
-//                       </div>
-//                       <div className="recomment-content">
-//                         {editCommentId === recomment.commentNo ? (
-//                           <>
-//                             <textarea
-//                               value={editValue}
-//                               onChange={(e) => setEditValue(e.target.value)}
-//                               className="edit-textarea"
-//                             />
-//                             <button
-//                               onClick={() =>
-//                                 handleEditSubmit(recomment.commentNo)
-//                               }
-//                             >
-//                               수정 완료
-//                             </button>
-//                           </>
-//                         ) : (
-//                           <>
-//                             {recomment.commentContent}
-//                             <button
-//                               onClick={() => handleRecommentEdit(recomment)}
-//                             >
-//                               수정
-//                             </button>
-//                           </>
-//                         )}
-//                       </div>
-//                     </div>
-//                   ))}
-//                 </div>
-//               )}
-
-//               {/* 대댓글 입력 영역 */}
-//               <div className="recomment-input-wrapper">
-//                 <textarea
-//                   placeholder="대댓글을 입력하세요..."
-//                   rows="2"
-//                   value={recommentValue[comment.commentNo] || ""}
-//                   onChange={(e) =>
-//                     setRecommentValue((prev) => ({
-//                       ...prev,
-//                       [comment.commentNo]: e.target.value,
-//                     }))
-//                   }
-//                   className="recomment-textarea"
-//                 />
-//                 <button
-//                   onClick={() => handleRecommentSubmit(comment.commentNo)}
-//                   className="submit-recomment-btn"
-//                 >
-//                   대댓글 작성
-//                 </button>
 //               </div>
 //             </div>
 //           ))
