@@ -7,7 +7,6 @@ import {
   loginNoState,
   memberLevelState,
 } from "../utils/RecoilData";
-import { useEffect } from "react";
 
 const Header = (props) => {
   const loginNickname = props.loginNickname;
@@ -22,7 +21,6 @@ const Header = (props) => {
     window.localStorage.removeItem("refreshToken");
   };
 
-  useEffect(() => {});
   return (
     <header className="header">
       <div>
