@@ -9,11 +9,11 @@ const SellerJoin = () => {
     representativeName: "",
     sellerPhone: "",
     bankName: "",
-
     accountNumber: "",
     sellerPw: "",
     businessName: "",
   });
+
   const [idCheck, setIdCheck] = useState(0);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -133,8 +133,9 @@ const SellerJoin = () => {
       return;
     }
     if (idCheck === 1 && pwMessage.current.classList.contains("valid")) {
+      console.log("전송할 seller 데이터:", seller);
       axios
-        .post(`${backServer}/seller`, seller)
+        .post(`${backServer}/seller/sellerJoin`, seller)
         .then((res) => {
           console.log(res);
           navigate("/login");

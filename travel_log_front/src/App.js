@@ -23,6 +23,7 @@ function App() {
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
   const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
   const [loginNickname, setLoginNickname] = useState("");
+
   useEffect(() => {
     refreshLogin();
     window.setInterval(refreshLogin, 60 * 30 * 1000);

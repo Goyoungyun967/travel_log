@@ -1,17 +1,22 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { InqSlideImg } from "./sellerUtil/SlideImg";
 
 const InqView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
-  const [inqView, setInqView] = useState();
+  const [inqView, setInqView] = useState({});
+  const [fileList, setFileList] = useState([]);
   const { inqNo } = useParams();
   console.log("i - ", inqNo);
+  console.log("ib - ", inqView);
   useEffect(() => {
     axios
-      .get(`${backServer}/inqView/${inqNo}`)
+      .get(`${backServer}/seller/inqView/${inqNo}`)
       .then((res) => {
         console.log(res);
+        setInqView(res.data);
+        setFileList(res.data.inquiryFileList);
       })
       .catch((err) => {
         console.log(err);
@@ -29,7 +34,7 @@ const InqView = () => {
                   <h5>문의 제목</h5>
                 </div>
                 <div className="info-item-content">
-                  <h5>환불해줘영</h5>
+                  <h5>{inqView.inquiryTitle}</h5>
                 </div>
               </div>
               <div className="info-item">
@@ -53,7 +58,9 @@ const InqView = () => {
             </div>
             <div className="info-item"></div>
           </div>
-          <div className="seller-img-wrap">사진 들어갈 자리</div>
+          <div className="seller-img-wrap">
+            <InqSlideImg fileList={fileList} />
+          </div>
         </div>
       </div>
     </>

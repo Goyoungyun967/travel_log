@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class LoginSellerDTO {
 	private String accessToken;
 	private String refreshToken;
-	private int businessNo;
-	private int businessName;
+	private String businessNo;
+	private String businessName;
 }

@@ -218,22 +218,13 @@ const BoardList = () => {
         <PageNavi pi={pi} reqPage={reqPage} setReqPage={setReqPage} />
       </div>
       <div className="write-box">
-        <div
-          onClick={() => handleLinkClick("/board/AccompanyWrite")}
-          className="accompany-write sub-item"
-        >
+        <Link to="/board/AccompanyWrite" className="accompany-write sub-item">
           동행 게시판 글 작성
-        </div>
-        <Link to="/board/boardWrite" className="accompany-write sub-item">
+        </Link>
+        <Link to="/board/boardWrite" className="board-write sub-item">
           여행 게시판 글 작성
         </Link>
       </div>
-      {/* 모달 추가 */}
-      <ModalInput
-        show={showModal}
-        handleClose={handleModalClose}
-        handleInput={handleInputValue}
-      />
     </div>
   );
 };
@@ -280,7 +271,7 @@ const AccompanyItem = (props) => {
         <div className="board-preview-title">{accompany.boardTitle}</div>
         <div className="member flex-spbetw ">
           <div className="memberId-age-gender text-min">
-            <span>회원아이디</span>
+            <span></span>
             <span>28</span>
             <span>남</span>
           </div>
@@ -358,13 +349,16 @@ const BoardItem = (props) => {
         });
     }
   };
+
   return (
     <div className="boardList-preview">
       <div
         className="boardList-content"
         onClick={() => {
           navigate(
-            `/board/view/${board.boardNo}/${encodeURIComponent(timeString)}`
+            `/board/view/${board.boardNo}/${encodeURIComponent(
+              timeString
+            )}/${isLike}/${likeCount}`
           );
         }}
       >

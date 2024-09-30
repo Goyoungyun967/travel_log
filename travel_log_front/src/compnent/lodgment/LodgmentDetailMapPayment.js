@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { useParams } from "react-router-dom";
@@ -37,17 +36,23 @@ const LodgmentDetailMapPayment = () => {
     .catch((error) => {
       console.error("API 호출 오류:", error);
     });
-
   return (
     <div>
       <div>위치</div>
+
       <Map
         level={6}
         center={{ lat: lodgmentLatitude, lng: lodgmentLongitude }}
-        style={{ width: "80%", height: "100px" }}
+        style={{ width: "100%", height: "300px" }}
       >
         <MapMarker position={{ lat: lodgmentLatitude, lng: lodgmentLongitude }}>
-          <div>네스트 호텔</div>
+          <a
+            href={`https://map.kakao.com/link/map/네스트호텔,${lodgmentLatitude},${lodgmentLongitude}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            네스트호텔
+          </a>
         </MapMarker>
       </Map>
       <div>{address}</div>

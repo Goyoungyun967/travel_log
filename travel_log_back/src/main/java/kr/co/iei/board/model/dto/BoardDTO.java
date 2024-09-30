@@ -36,7 +36,7 @@ public class BoardDTO {
 	private String memberNo;
 	//상세 페이지 dto
 	private String memberImage;
-	private String memberNickName;
+	private String memberNickname;
 	private int likeCount;
 	private int keepCount;
 	private int commentCount;
