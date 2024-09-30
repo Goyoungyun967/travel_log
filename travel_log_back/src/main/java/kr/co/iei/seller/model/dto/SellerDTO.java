@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Alias(value = "seller")
 public class SellerDTO {
 	private int sellerNo;
-	private int businessNo;
+	private String businessNo;
 	private String representativeName;
 	private String sellerPhone;
 	private String bankName;

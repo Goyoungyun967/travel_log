@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.iei.inquiry.model.dto.InquiryDTO;
+import kr.co.iei.member.model.dto.LoginMemberDTO;
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dao.SellerDao;
 import kr.co.iei.seller.model.dto.BookingInfoDTO;
 import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
+import kr.co.iei.seller.model.dto.LoginSellerDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
 import kr.co.iei.seller.model.dto.RoomServiceTagDTO;
@@ -107,7 +109,7 @@ public class SellerService {
 		return map;
 	}
 
-// 객실 등록(객실 정보, 파일, 해시태그 동시 처리)
+	// 객실 등록(객실 정보, 파일, 해시태그 동시 처리)
 	@Transactional
 	public int insertRoom(InsertRoomDTO room, List<RoomFileDTO> roomFileList) {
 		int result = sellerDao.insertRoom(room);
@@ -130,16 +132,19 @@ public class SellerService {
 		return result;
 	}
 
+	// 예약 상세 조회
 	public BookingInfoDTO bookInfo(int bookNo) {
 		BookingInfoDTO bid = sellerDao.bookInfo(bookNo);
 		return bid;
 	}
 
+	// 판매자 정산
 	public List<StmInfoDTO> selectStmInfo(StmInfoDTO st) {
 		List<StmInfoDTO> ls = sellerDao.selectStmInfo(st);
 		return ls;
 	}
 
+	// 판매자 문의 글 리스트 조회
 	public List<StmInfoDTO> selectStmSearchInfo(StmInfoDTO st) {
 		List<StmInfoDTO> ls = sellerDao.selectStmInfo(st);
 		return ls;
@@ -149,6 +154,7 @@ public class SellerService {
 		return ls;
 	}
 
+	@Transactional
 	// 형묵 seller-회원가입
 	public int insertSeller(SellerDTO seller) {
 		String encPw = encoder.encode(seller.getSellerPw());
@@ -156,5 +162,36 @@ public class SellerService {
 		int result = sellerDao.insertSeller(seller);
 		return result;
 	}
+	
+	//형묵 seller- id 중복체크 
+	public int checkSellerId(String businessNo) {
+		int result = sellerDao.checkSellerId(businessNo);
+		return result;
+	}
+
+ //형묵 seller-login하는중
+	public LoginSellerDTO login(SellerDTO seller) {
+		SellerDTO s = sellerDao.selectLoginSeller(seller.getBusinessNo());
+		System.out.println(s);
+		if(s!=null && encoder.matches(seller.getSellerPw(),s.getSellerPw())) {
+			String accessToken = sellerJwtUtils.createAccessToken(s.getBusinessNo());
+			String refreshToken = sellerJwtUtils.createRefreshToken(s.getBusinessNo());
+			LoginSellerDTO loginSeller = new LoginSellerDTO();
+			loginSeller.setAccessToken(accessToken);
+			loginSeller.setRefreshToken(refreshToken);
+			loginSeller.setBusinessNo(s.getBusinessNo());
+			loginSeller.setBusinessName(s.getBusinessName());
+			return loginSeller;
+		}
+		return null;
+	}
+
+
+	// 판매자 문의 글 상세
+	public InquiryDTO selectInqView(int inqNo) {
+		InquiryDTO id = sellerDao.selectInqView(inqNo);
+		return id;
+	}
+
 
 }

@@ -3,7 +3,7 @@ import "./css/room_view.css";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import KakaoMap from "./sellerUtil/KakaoMap";
-import SlideImg from "./sellerUtil/SlideImg";
+import { SlideImg } from "./sellerUtil/SlideImg";
 
 const RoomView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;

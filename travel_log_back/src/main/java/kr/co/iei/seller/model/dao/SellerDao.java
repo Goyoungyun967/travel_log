@@ -44,9 +44,21 @@ public interface SellerDao {
 
 	List<StmInfoDTO> selectStmSearchInfo(StmInfoDTO st);
 
+	//형묵 - 판매자 회원가입
 	int insertSeller(SellerDTO seller);
+	
+	//형묵 - sellerid 중복체크
+	int checkSellerId(String businessNo);
+	
 	RoomDTO selectRoomViewInfo(int roomNo);
 
 	List<InquiryDTO> selectInqList(InquiryDTO iqd);
+
+
+	SellerDTO selectLoginSeller(String businessNo);
+
+
+	InquiryDTO selectInqView(int inqNo);
+
 
 }

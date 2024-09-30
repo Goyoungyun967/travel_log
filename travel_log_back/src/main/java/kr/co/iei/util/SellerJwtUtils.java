@@ -24,7 +24,7 @@ public class SellerJwtUtils {
 	public int expireHourRefresh;
 	
 	//1시간짜리 토큰생성
-	public String createAccessToken(int businessNo) {
+	public String createAccessToken(String businessNo) {
 		//1. 작성해둔 키값을 이용해서 암호화 코드 생성
 		SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
 		//2. 토큰 생성시간 및 만료시간 설정 
@@ -44,7 +44,7 @@ public class SellerJwtUtils {
 	}
 	
 	//8760짜리(1년) accessToken
-	public String createRefreshToken(int businessNo) {
+	public String createRefreshToken(String businessNo) {
 		//1. 작성해둔 키값을 이용해서 암호화 코드 생성
 		SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
 		//2. 토큰 생성시간 및 만료시간 설정 
@@ -71,7 +71,7 @@ public class SellerJwtUtils {
 										.build()	
 										.parse(token)
 										.getPayload();		
-		int businessNo = (int)claims.get("businessNo");
+		String businessNo = (String)claims.get("businessNo");
 		
 		LoginSellerDTO loginSeller = new LoginSellerDTO();
 		loginSeller.setBusinessNo(businessNo);

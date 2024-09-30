@@ -7,11 +7,16 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { loginNoState, memberLevelState } from "../utils/RecoilData";
+import {
+  loginNoState,
+  memberLevelState,
+  sellerLoginNoState,
+} from "../utils/RecoilData";
 
 const Login = (props) => {
   const setLoginNickname = props.setLoginNickname;
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
+  const [sellerLoginNo, setSellerLoginNo] = useRecoilState(sellerLoginNoState);
   const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
   const [member, setMember] = useState({ memberId: "", memberPw: "" });
   const [seller, setSeller] = useState({ businessNo: "", sellerPw: "" });
@@ -29,6 +34,31 @@ const Login = (props) => {
   const [type, setType] = useState(true);
   const changeType = (e) => {
     setType(!type);
+  };
+  //seller 로그인
+  const sellerLogin = () => {
+    if (seller.businessNo == "" || seller.sellerPw === "") {
+      Swal.fire({
+        text: "아이디 또는 비밀번호를 입력하세요",
+        icon: "info",
+      });
+      return;
+    }
+    console.log(seller.businessNo);
+    console.log(seller.sellerPw);
+    axios
+      .post(`${backServer}/seller/login`, seller)
+      .then((res) => {
+        console.log(res);
+        setSellerLoginNo(res.data.sellerNo);
+      })
+      .catch((err) => {
+        console.log(err);
+        Swal.fire({
+          text: "아이디 또는 비밀번호 확인해주세요22222",
+          icon: "warning",
+        });
+      });
   };
 
   const login = () => {
@@ -88,7 +118,11 @@ const Login = (props) => {
             className="form"
             onSubmit={(e) => {
               e.preventDefault();
-              login();
+              if (type) {
+                login(); // 일반회원 로그인
+              } else {
+                sellerLogin(); // 사업자 로그인
+              }
             }}
           >
             {type ? (
