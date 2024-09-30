@@ -109,7 +109,7 @@ public class SellerService {
 		return map;
 	}
 
-// 객실 등록(객실 정보, 파일, 해시태그 동시 처리)
+	// 객실 등록(객실 정보, 파일, 해시태그 동시 처리)
 	@Transactional
 	public int insertRoom(InsertRoomDTO room, List<RoomFileDTO> roomFileList) {
 		int result = sellerDao.insertRoom(room);
@@ -132,16 +132,19 @@ public class SellerService {
 		return result;
 	}
 
+	// 예약 상세 조회
 	public BookingInfoDTO bookInfo(int bookNo) {
 		BookingInfoDTO bid = sellerDao.bookInfo(bookNo);
 		return bid;
 	}
 
+	// 판매자 정산
 	public List<StmInfoDTO> selectStmInfo(StmInfoDTO st) {
 		List<StmInfoDTO> ls = sellerDao.selectStmInfo(st);
 		return ls;
 	}
 
+	// 판매자 문의 글 리스트 조회
 	public List<StmInfoDTO> selectStmSearchInfo(StmInfoDTO st) {
 		List<StmInfoDTO> ls = sellerDao.selectStmInfo(st);
 		return ls;
@@ -166,6 +169,7 @@ public class SellerService {
 		return result;
 	}
 
+ //형묵 seller-login하는중
 	public LoginSellerDTO login(SellerDTO seller) {
 		SellerDTO s = sellerDao.selectLoginSeller(seller.getBusinessNo());
 		System.out.println(s);
@@ -181,4 +185,13 @@ public class SellerService {
 		}
 		return null;
 	}
+
+
+	// 판매자 문의 글 상세
+	public InquiryDTO selectInqView(int inqNo) {
+		InquiryDTO id = sellerDao.selectInqView(inqNo);
+		return id;
+	}
+
+
 }
