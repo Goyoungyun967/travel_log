@@ -5,7 +5,6 @@ import LodgmentLoomDetail from "./LodgmentRoomDetail";
 import PayMentUserInfo from "./PaymentUserInfo";
 import { useLocation } from "react-router-dom";
 import { format } from "date-fns";
-import { loadTossPayments } from "@tosspayments/tosspayments-sdk";
 
 const PaymentPage = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
