@@ -8,6 +8,7 @@ import BoardFrm from "./BoardFrm";
 import { constructNow } from "date-fns";
 import { useRecoilState } from "recoil";
 import { loginNoState } from "../utils/RecoilData";
+import BoardUqillEditor from "./../utils/BoardUqillEditor";
 const BoardWrite = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [boardContent, setBoardContent] = useState("");
@@ -109,7 +110,7 @@ const BoardWrite = () => {
           setSelectedArea={setSelectedArea}
         />
         <div className="board-editer-wrap">
-          <UqillEditor
+          <BoardUqillEditor
             boardContent={boardContent}
             setBoardContent={setBoardContent}
           />

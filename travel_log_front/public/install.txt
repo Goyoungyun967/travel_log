@@ -39,3 +39,12 @@ npm install recharts
 윤희수 2024-09-30 19:35
 npm install @tosspayments/sdk
 
+고영윤 2024-10-01 10:01
+npm install date-fns@latest
+npm install date-fns@^2.28.0
+지우고 다시 깔았음
+npm uninstall date-fns react-date-range @mui/x-date-pickers 
+npm install date-fns@3.x react-date-range @mui/x-date-pickers
+
+npm install date-fns@^2.28.0
+

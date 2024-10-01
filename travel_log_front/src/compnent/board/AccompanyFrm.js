@@ -1,6 +1,14 @@
-import BoardDate from "./BoardDate";
+import { format } from "date-fns";
 import BoardMap from "./map/BoardMap";
 import { useRef, useState } from "react";
+import Swal from "sweetalert2";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import "react-datepicker/dist/react-datepicker.css";
+import ko from "date-fns/locale/ko"; // 한국어 로케일
+import { TextField } from "@mui/material";
+import differenceInDays from "date-fns/differenceInDays";
+import DaumPostcode from "react-daum-postcode";
 
 const AccompanyFrm = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -11,42 +19,27 @@ const AccompanyFrm = (props) => {
   const setThumbnail = props.setThumbnail;
   const boardFile = props.boardFile;
   const setBoardFile = props.setBoardFile;
-  //수정인 경우에 추가로 전송되는 데이터
+
   const boardThumb = props.boardThumb;
   const setBoardThumb = props.setBoardThumb;
   const fileList = props.fileList;
   const setFileList = props.setFileList;
-  //날짜
 
-  const setEndDate = props.setEndDate;
+  const startDate = props.startDate;
   const setStartDate = props.setStartDate;
-  //날짜 변환
-  const startDate = new Date(props.startDate); // props로부터 startDate 받기
-  const endDate = new Date(startDate); // endDate를 startDate로 초기화
+  const endDate = props.endDate;
+  const setEndDate = props.setEndDate;
 
-  // endDate를 1일로 설정
-  endDate.setDate(startDate.getDate() + 1); // 1일 추가
-
-  // 날짜를 YYYY-MM-DD 형식으로 변환
-  const formatDate = (date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 +1
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
-
-  const formattedStartDate = formatDate(startDate);
-  const formattedEndDate = formatDate(endDate);
-
-  console.log("Start Date:", formattedStartDate);
-  console.log("End Date:", formattedEndDate);
-
-  //타입
   const accompanyType = props.accompanyType;
   const setAccompanyType = props.setAccompanyType;
 
   const selectedType = props.selectedType;
   const setSelectedType = props.setSelectedType;
+
+  //동행
+  const accompanyContent = props.accompanyContent;
+  const setAccompanyContent = props.setAccompanyContent;
+
   const handleTypeChange = (tagNo) => {
     setSelectedType((prev) => {
       if (prev.includes(tagNo)) {
@@ -57,10 +50,9 @@ const AccompanyFrm = (props) => {
     });
   };
 
-  //지역
   const boardArea = props.boardArea;
   const setBoardArea = props.setBoardArea;
-  //지역 셀렛
+
   const selectedArea = props.selectedArea;
   const setSelectedArea = props.setSelectedArea;
 
@@ -68,45 +60,33 @@ const AccompanyFrm = (props) => {
   const setDelBoardFileNo = props.setDelBoardFileNo;
 
   const thumbnailRef = useRef(null);
-  //썸네일 미리보기용 state(데이터 전송을 안할꺼임)
   const [boardImg, setBoardImg] = useState(null);
-  //썸네일 이미지 첨부파일이 변경되면 동작할 함수
-  //지역 선택
 
   const handleChange = (event) => {
     setSelectedArea(event.target.value);
-    console.log(selectedArea);
   };
-  //-------------------------------------------
+
   const changeThumbnail = (e) => {
-    //요소들이 겹쳐있는 상태에서 해당 요소를 선택할때는 currentTarget(target을 사용하면 여러요소가 한번에 작용)
-
     const files = e.currentTarget.files;
-
-    if (files.length !== 0 && files[0] !== 0) {
-      //썸네일 파일 객체를 글작성 시 전송하기 위해 값 저장
+    if (files.length !== 0) {
       setThumbnail(files[0]);
-      //화면에 썸네일 미리보기
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
         setBoardImg(reader.result);
-        console.log();
       };
     } else {
       setThumbnail(null);
       setBoardImg(null);
     }
   };
-  //첨부 파일 추가
-  //첨부파일 화면에 띄 울 State
+
   const [showBoardFile, setShowBoardFile] = useState([]);
-  //첨부파일 추가시 동작할 함수
+
   const addBoardFile = (e) => {
     const files = e.currentTarget.files;
-    const fileArr = new Array(); //글작성 시 전송할 파일 배열
-    const filenameArr = new Array(); // 화면에 노출시킬 파일 이름 배열
-    //배열 아님
+    const fileArr = [];
+    const filenameArr = [];
     for (let i = 0; i < files.length; i++) {
       fileArr.push(files[i]);
       filenameArr.push(files[i].name);
@@ -114,9 +94,28 @@ const AccompanyFrm = (props) => {
     setBoardFile([...boardFile, ...fileArr]);
     setShowBoardFile([...showBoardFile, ...filenameArr]);
   };
-  console.log(boardThumb);
-  console.log(boardFile);
-  console.log(showBoardFile);
+
+  const [clickCount, setClickCount] = useState(0); // 클릭 횟수 관리
+  const [selectedDates, setSelectedDates] = useState({
+    start: null,
+    end: null,
+  }); // 날짜 상태 관리
+  const [daysDifference, setDaysDifference] = useState(0); // 날짜 차이 상태 관리
+
+  const handleDateChange = (newValue) => {
+    if (clickCount === 0) {
+      setSelectedDates({ ...selectedDates, start: newValue });
+      setStartDate(newValue);
+    } else if (clickCount === 1) {
+      setSelectedDates({ ...selectedDates, end: newValue });
+      setEndDate(newValue);
+
+      // 날짜 차이를 계산하여 저장
+      const diff = differenceInDays(newValue, selectedDates.start);
+      setDaysDifference(diff);
+    }
+    setClickCount((prevCount) => (prevCount + 1) % 2); // 두 번 클릭 후 다시 초기화
+  };
   return (
     <div>
       <div className="board-info-wrap">
@@ -164,7 +163,7 @@ const AccompanyFrm = (props) => {
                       onClick={() => {
                         thumbnailRef.current.click();
                       }}
-                    ></img>
+                    />
                   )}
                   <input
                     ref={thumbnailRef}
@@ -172,7 +171,7 @@ const AccompanyFrm = (props) => {
                     accept="image/*"
                     style={{ display: "none" }}
                     onChange={changeThumbnail}
-                  ></input>
+                  />
                 </div>
               </td>
             </tr>
@@ -222,8 +221,7 @@ const AccompanyFrm = (props) => {
                           const newFileList = fileList.filter((item) => {
                             return item !== boardFile;
                           });
-                          setFileList(newFileList); //화면에 반영
-                          //컨트롤러로 전송하기 위해 배열 추가
+                          setFileList(newFileList);
                           setDelBoardFileNo([
                             ...delBoardFileNo,
                             boardFile.boardFileNo,
@@ -268,6 +266,35 @@ const AccompanyFrm = (props) => {
             </tr>
             <tr>
               <th>
+                <div className="accompany-date-title">여행 날짜</div>
+              </th>
+              <td>
+                <LocalizationProvider dateAdapter={AdapterDateFns} locale={ko}>
+                  <DatePicker
+                    label={clickCount === 0 ? "시작일자" : "종료일자"}
+                    value={
+                      clickCount === 0 ? selectedDates.start : selectedDates.end
+                    }
+                    onChange={handleDateChange}
+                    inputFormat="yyyy년 MM월 dd일"
+                    renderInput={(params) => <TextField {...params} />}
+                    disableTextInput // 사용자 입력을 비활성화
+                    minDate={new Date()}
+                  />
+                </LocalizationProvider>
+                <p>
+                  {selectedDates.start &&
+                    `시작 날짜: ${format(selectedDates.start, "yyyy-MM-dd")}`}
+                </p>
+                <p>
+                  {selectedDates.end &&
+                    `종료 날짜: ${format(selectedDates.end, "yyyy-MM-dd")}`}
+                </p>
+                <p>{daysDifference > 0 && `여행 기간: ${daysDifference}일`}</p>
+              </td>
+            </tr>
+            <tr>
+              <th>
                 <label htmlFor="accompanyType">동행유형</label>
               </th>
               <td>
@@ -290,23 +317,15 @@ const AccompanyFrm = (props) => {
             </tr>
             <tr>
               <th>
-                <div className="accompany-date-title">여행 날짜</div>
-              </th>
-              <td>
-                <BoardDate
-                  startDate={startDate}
-                  endDate={endDate}
-                  setEndDate={setEndDate}
-                  setStartDate={setStartDate}
-                />
-              </td>
-            </tr>
-            <tr>
-              <th>
                 <div className="accompany-map">동행 지도</div>
               </th>
               <td>
-                <BoardMap />
+                <div className="accmpany-address"></div>
+                <BoardMap
+                  daysDifference={daysDifference}
+                  accompanyContent={accompanyContent}
+                  setAccompanyContent={setAccompanyContent}
+                />
               </td>
             </tr>
           </tbody>
@@ -315,4 +334,5 @@ const AccompanyFrm = (props) => {
     </div>
   );
 };
+
 export default AccompanyFrm;
