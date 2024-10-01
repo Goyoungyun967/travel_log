@@ -54,11 +54,15 @@ public interface SellerDao {
 
 	List<InquiryDTO> selectInqList(InquiryDTO iqd);
 
-
 	SellerDTO selectLoginSeller(String businessNo);
 
-
 	InquiryDTO selectInqView(int inqNo);
+	
+	//seller refresh 형묵
+	SellerDTO selectOneSeller(int sellerNo);
+	
+
+
 
 
 }

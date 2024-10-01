@@ -4,23 +4,30 @@ import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   isLoginState,
+  loginBusinessNameState,
+  loginNicknameState,
   loginNoState,
   memberLevelState,
+  sellerLoginNoState,
 } from "../utils/RecoilData";
 
 const Header = (props) => {
-  const loginNickname = props.loginNickname;
+  const [loginBusinessName, setLoginBusinessName] = useRecoilState(
+    loginBusinessNameState
+  );
+  const [loginNickname, setLoginNickname] = useRecoilState(loginNicknameState);
+
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
   const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
+  const [sellerNo, setSellerNo] = useRecoilState(sellerLoginNoState);
   const isLogin = useRecoilValue(isLoginState);
-  console.log("haeder :", loginNo, memberLevel);
+
   const logout = () => {
     setLoginNo(-1);
     setMemberLevel(-1);
     delete axios.defaults.headers.common["Authorization"];
     window.localStorage.removeItem("refreshToken");
   };
-
   return (
     <header className="header">
       <div>
@@ -105,8 +112,16 @@ const Header = (props) => {
           {isLogin ? (
             <>
               <li>
-                <Link to={memberLevel === 1 ? "/admin" : "/member"}>
-                  {loginNickname}
+                <Link
+                  to={
+                    memberLevel === 1
+                      ? "/admin"
+                      : memberLevel === 4
+                      ? "/seller/list"
+                      : "/member"
+                  }
+                >
+                  {memberLevel === 4 ? loginBusinessName : loginNickname}
                 </Link>
               </li>
               <li>

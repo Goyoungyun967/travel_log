@@ -239,6 +239,11 @@
     <select id="selectLoginSeller" resultType="seller">
     	select seller_no,seller_pw,business_name from seller where business_no=#{businessNo}
     </select>
+    
+    <!-- 형묵 seller refresh하는부분 -->
+    <select id="selectOneSeller" resultType="seller">
+		select * from seller where seller_no=#{sellerNo}
+	</select>
 
 <resultMap type="inquiry" id="InqViewMap">
 	<!-- 기본 정보 -->

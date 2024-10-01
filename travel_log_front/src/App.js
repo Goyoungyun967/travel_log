@@ -13,7 +13,13 @@ import SellerJoin from "./compnent/member/SellerJoin";
 import SellerMain from "./compnent/seller/SellerMain";
 import InquiryWrite from "./compnent/inquiry/InquiryWrite";
 import { useRecoilState } from "recoil";
-import { loginNoState, memberLevelState } from "./compnent/utils/RecoilData";
+import {
+  loginBusinessNameState,
+  loginNicknameState,
+  loginNoState,
+  memberLevelState,
+  sellerLoginNoState,
+} from "./compnent/utils/RecoilData";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import AdminMain from "./compnent/admin/AdminMain";
@@ -22,11 +28,20 @@ function App() {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
   const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
-  const [loginNickname, setLoginNickname] = useState("");
+  const [loginNickname, setLoginNickname] = useRecoilState(loginNicknameState);
 
+  const [sellerLoginNo, setSellerLoginNo] = useRecoilState(sellerLoginNoState);
+  const [loginBusinessName, setLoginBusinessName] = useRecoilState(
+    loginBusinessNameState
+  );
   useEffect(() => {
     refreshLogin();
     window.setInterval(refreshLogin, 60 * 30 * 1000);
+  }, []);
+
+  useEffect(() => {
+    sellerRefreshLogin();
+    window.setInterval(sellerRefreshLogin, 60 * 30 * 1000);
   }, []);
   const refreshLogin = () => {
     const refreshToken = window.localStorage.getItem("refreshToken");
@@ -44,10 +59,39 @@ function App() {
         })
         .catch((err) => {
           console.log(err);
-          setLoginNo("");
-          setMemberLevel("");
+          setLoginNo(-1);
+          setMemberLevel(-1);
+          setLoginNickname("");
           delete axios.defaults.headers.common["Authorization"];
           window.localStorage.removeItem("refreshToken");
+        });
+    }
+  };
+  const sellerRefreshLogin = () => {
+    const refreshToken = window.localStorage.getItem("sellerRefreshToken");
+    console.log(refreshToken);
+    if (refreshToken != null) {
+      axios.defaults.headers.common["Authorization"] = refreshToken;
+      axios
+        .post(`${backServer}/seller/refresh`)
+        .then((res) => {
+          console.log(res);
+          setSellerLoginNo(res.data.sellerNo);
+          setLoginBusinessName(res.data.businessName);
+          setMemberLevel(4);
+          axios.defaults.headers.common["Authorization"] = res.data.accessToken;
+          window.localStorage.setItem(
+            "sellerRefreshToken",
+            res.data.refreshToken
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+          setSellerLoginNo(-1);
+          setMemberLevel(-1);
+          setLoginBusinessName("");
+          delete axios.defaults.headers.common["Authorization"];
+          window.localStorage.removeItem("sellerRefreshToken");
         });
     }
   };
@@ -60,10 +104,7 @@ function App() {
           <Route path="/board/*" element={<BoardMain />} />
           <Route path="/faq/*" element={<FaqMain />} />
           <Route path="/lodgment/*" element={<LodgmentMain />} />
-          <Route
-            path="/login"
-            element={<Login setLoginNickname={setLoginNickname} />}
-          />
+          <Route path="/login" element={<Login />} />
           <Route path="/select" element={<Select />} />
           <Route path="/select/memberJoin" element={<MemberJoin />} />
           <Route path="/select/sellerJoin" element={<SellerJoin />} />
