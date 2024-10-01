@@ -1,24 +1,58 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./css/paymentPage.css";
 import LodgmentDetailMapPayment from "./LodgmentDetailMapPayment";
-import LodgmentLoomDetail from "./LodgmentRoomDetail";
 import PayMentUserInfo from "./PaymentUserInfo";
 import { useLocation, useNavigate } from "react-router-dom";
-import { format } from "date-fns";
-import { loadTossPayments } from "@tosspayments/tosspayments-sdk";
+import axios from "axios";
+import { loginNoState } from "../utils/RecoilData";
+import { useRecoilState } from "recoil";
 
 const PaymentPage = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
+  const [loginNo, setLoginNo] = useRecoilState(loginNoState);
+
   const { state } = useLocation();
   const navigate = useNavigate();
+  console.log(state);
+
+  useEffect(() => {
+    // 외부 스크립트 로드 함수
+    const loadScript = (src, callback) => {
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = src;
+      script.onload = callback;
+      document.head.appendChild(script);
+    };
+    // 스크립트 로드 후 실행
+    loadScript("https://code.jquery.com/jquery-1.12.4.min.js", () => {
+      loadScript("https://cdn.iamport.kr/js/iamport.payment-1.2.0.js", () => {
+        const IMP = window.IMP;
+        // 가맹점 식별코드
+        IMP.init("imp17705812");
+      });
+    });
+    // 컴포넌트가 언마운트될 때 스크립트를 제거하기 위한 정리 함수
+    return () => {
+      const scripts = document.querySelectorAll('script[src^="https://"]');
+      scripts.forEach((script) => script.remove());
+    };
+  }, []);
 
   // 투숙객 정보
   const [bookingInfo, setBookingInfo] = useState({
     guestName: "",
     guestPhone: "",
-    guestReq: "",
+    guestRequest: "",
+    gusetCount: state.guest,
+    startDate: state.checkIn,
+    endDate: state.checkOut,
+    roomNo: state.room.roomNo,
+    sellerNo: state.lodgmentInfo.sellerNo,
+    memberNo: loginNo,
   });
 
+  console.log(bookingInfo);
   // 투숙객 정보 입력 변환
   const valueChange = (e) => {
     const { name, value } = e.target;
@@ -57,13 +91,57 @@ const PaymentPage = () => {
   const totalPrice = nights * state.room.roomPrice;
   const priceTax = totalPrice * 0.1;
   const netAmount = totalPrice * 0.9;
+  const productName =
+    state.lodgmentInfo.lodgmentName +
+    "/" +
+    state.room.roomName +
+    "/" +
+    nights +
+    "박/" +
+    state.guest +
+    "명";
 
-  const dateString = Date.now(); // 현재 시간으로 고유 주문번호 생성
+  // 서버에 결제 정보를 전달
+  const payBtn = async () => {
+    //window.IMP.init("imp17705812"); // 이 값은 계정 고유번호이므로 고정
+    window.IMP.request_pay(
+      {
+        //pg: "tosspayments",
+        //pg: "kakaopay.TC0ONETIME",
+        pg: "html5_inicis.INIpayTest", //테스트 시 html5_inicis.INIpayTest 기재
+        pay_method: "card",
+        merchant_uid: "order_no_" + crypto.randomUUID(), //상점에서 생성한 고유 주문번호
+        name: productName,
+        amount: totalPrice,
+        // buyer_email: "test@portone.io",
+        // buyer_name: "구매자이름",
+        // buyer_tel: "010-1234-5678", //필수 파라미터 입니다.
+        // buyer_addr: "서울특별시 강남구 삼성동",
+        // buyer_postcode: "123-456",
+      },
+      (rsp) => {
+        //console.log(rsp);
+        if (rsp.success) {
+          // 결제 성공 시 서버에 요청
+          setBookingInfo(
+            { ...bookingInfo, portoneimpuid: rsp.merchant_uid } // 결제 ID 추가
+          );
 
-  // 결제 요청 함수
-  const tossPay = () => {
-    navigate("/lodgment/tossPayCheckout");
+          axios
+            .post(`${BackServer}/booking`, bookingInfo)
+            .then((res) => {
+              // 결제 완료 처리
+            })
+            .catch((error) => {
+              // 에러 발생 시 처리
+            });
+        } else {
+          // 에러발생시
+        }
+      }
+    );
   };
+
   return (
     <section className="section">
       <div className="lodgment-payment-info-wrap">
@@ -183,7 +261,7 @@ const PaymentPage = () => {
         </textarea>
       </div>
       <div className="payment-action">
-        <button disabled={!agreePrivacy || !agreeInfoSharing} onClick={tossPay}>
+        <button disabled={!agreePrivacy || !agreeInfoSharing} onClick={payBtn}>
           결제하기
         </button>
       </div>
