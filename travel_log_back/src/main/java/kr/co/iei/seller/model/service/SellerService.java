@@ -134,12 +134,6 @@ public class SellerService {
 		return result;
 	}
 
-	// 예약 상세 조회
-	public BookingInfoDTO bookInfo(int bookNo) {
-		BookingInfoDTO bid = sellerLodgmentDao.bookInfo(bookNo);
-		return bid;
-	}
-
 	// 판매자 정산
 	public List<StmInfoDTO> selectStmInfo(StmInfoDTO st) {
 		List<StmInfoDTO> ls = sellerLodgmentDao.selectStmInfo(st);
@@ -211,8 +205,20 @@ public class SellerService {
 			return loginSeller;
 		}catch(Exception e) {
 
+
 	}
 		return null;
-	}
+
 
 }
+	// 예약 리스트 조회
+	public List selectReserveList(int sellerNo) {
+		List list = sellerLodgmentDao.selectReserve(sellerNo);
+		return list;
+	}
+	
+	// 예약 상세 조회
+	public BookingInfoDTO bookInfo(int bookNo) {
+		BookingInfoDTO bid = sellerLodgmentDao.bookInfo(bookNo);
+		return bid;
+	}

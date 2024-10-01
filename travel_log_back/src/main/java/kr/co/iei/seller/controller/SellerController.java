@@ -146,16 +146,6 @@ public class SellerController {
 		return ResponseEntity.ok(result!=0+roomFileList.size());
 	}
 	
-	
-	// 예약 상세 조회
-	@Operation(summary = "예약 상세", description = "예약 정보 출력(호텔 이름 + 객실 이름 + 예약 정보")
-	@GetMapping(value="/reserve/{bookNo}")
-	public ResponseEntity<BookingInfoDTO> bookInfo(@PathVariable int bookNo){
-		BookingInfoDTO bid = sellerService.bookInfo(bookNo);
-		System.out.println(bid);
-		return ResponseEntity.ok(bid);
-	}
-	
 	// 판매자 정산
 	@Operation(summary="판매자 정산", description = "정산 정보 출력")
 	@PostMapping(value="/stm")
@@ -163,6 +153,7 @@ public class SellerController {
 		List<StmInfoDTO> ls = sellerService.selectStmInfo(st);
 		return ResponseEntity.ok(ls);
 	}
+	
 	// 판매자 정산 - 검색
 	@Operation(summary="판매자 정산", description = "정산 정보 검색해서 출력")
 	@PostMapping(value="/searchDate")
@@ -224,12 +215,29 @@ public class SellerController {
 
 	// 판매자 문의 글 상세
 	@Operation(summary="판매자 문의 상세", description = "판매자 문의 상세 (inq정보 , 파일, 어드민 답변)")
-	@GetMapping(value="/inqView/{inqNo}")
+	@GetMapping(value="/searchView/{inqNo}")
 	public ResponseEntity<InquiryDTO> searchInqView(@PathVariable int inqNo){
-		System.out.println(inqNo);
 		InquiryDTO id = sellerService.selectInqView(inqNo);
-		System.out.println(id);
 		return ResponseEntity.ok(id);
 	}
-
+	
+	
+	// 판매자 예약 리스트 조회
+	@Operation(summary="판매자 예약 리스트", description="판매자 예약 리스트 판매자 번호 받아서 조회")
+	@PostMapping(value="/reserveList/{sellerNo}") // 일단 1로 설정!!
+//	public ResponseEntity<List> searchBookList(@RequestHeader("Authorization") String token){ => 토큰 처리 완료되면 token사용해서 판매자 번호로 리스트 조회하기
+	public ResponseEntity<List> searchBookList(@PathVariable int sellerNo){
+		List list = sellerService.selectReserveList(sellerNo);
+		return ResponseEntity.ok(list);
+	}
+	
+	// 예약 상세 조회
+	@Operation(summary = "예약 상세", description = "예약 정보 출력(호텔 이름 + 객실 이름 + 예약 정보")
+	@GetMapping(value="/reserve/{bookNo}")
+	public ResponseEntity<BookingInfoDTO> bookInfo(@PathVariable int bookNo){
+		System.out.println("gg");
+		BookingInfoDTO bid = sellerService.bookInfo(bookNo);
+		return ResponseEntity.ok(bid);
+	}
+	
 }
