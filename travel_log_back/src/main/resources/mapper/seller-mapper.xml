@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.co.iei.seller.model.dao.SellerDao">
+
 	<!-- 형묵 - sellerId 중복체크  -->
 	<select id="checkSellerId" resultType="int">
  		select count(*) from seller where business_no=#{businessNo}
@@ -16,13 +17,21 @@
     	select seller_no,seller_pw,business_name from seller where business_no=#{businessNo}
     </select>
 
+    <!-- 형묵 seller refresh하는부분 -->
+    <select id="selectOneSeller" resultType="seller">
+		select * from seller where seller_no=#{sellerNo}
+	</select>
+
 	<select id="getTotalCount" resultType="int">
 		select count(*) from seller where seller_app=#{sellerApp}
 	</select>
+	
 	<select id="selectSellerList" resultType="seller">
 		select * from (select rownum as rnum, s.* from (select seller_no,business_no,representative_name,to_char(enroll_date,'yyyy-mm-dd') as enroll_date,seller_app from seller where seller_app=#{sellerApp})s) where rnum between #{start} and #{end}
 	</select>
+	
 	<update id="updateSellerApp">
 		update seller set seller_app=1 where seller_no in <foreach collection="array" item="sellerNo" open="(" close=")" separator=",">#{sellerNo}</foreach>
 	</update>
+
 </mapper>

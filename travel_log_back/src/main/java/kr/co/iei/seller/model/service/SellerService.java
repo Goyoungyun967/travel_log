@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.iei.inquiry.model.dto.InquiryDTO;
-import kr.co.iei.member.model.dto.LoginMemberDTO;
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dao.SellerDao;
 import kr.co.iei.seller.model.dao.SellerLodgmentDao;
@@ -172,17 +171,17 @@ public class SellerService {
 		return result;
 	}
 
- //형묵 seller-login하는중
+	//형묵 seller-login 완
 	public LoginSellerDTO login(SellerDTO seller) {
-		SellerDTO s = sellerLodgmentDao.selectLoginSeller(seller.getBusinessNo());
+		SellerDTO s = sellerDao.selectLoginSeller(seller.getBusinessNo());
 		System.out.println(s);
 		if(s!=null && encoder.matches(seller.getSellerPw(),s.getSellerPw())) {
-			String accessToken = sellerJwtUtils.createAccessToken(s.getBusinessNo());
-			String refreshToken = sellerJwtUtils.createRefreshToken(s.getBusinessNo());
+			String accessToken = sellerJwtUtils.createAccessToken(s.getSellerNo());
+			String refreshToken = sellerJwtUtils.createRefreshToken(s.getSellerNo());
 			LoginSellerDTO loginSeller = new LoginSellerDTO();
 			loginSeller.setAccessToken(accessToken);
 			loginSeller.setRefreshToken(refreshToken);
-			loginSeller.setBusinessNo(s.getBusinessNo());
+			loginSeller.setSellerNo(s.getSellerNo());
 			loginSeller.setBusinessName(s.getBusinessName());
 			return loginSeller;
 		}
@@ -195,6 +194,25 @@ public class SellerService {
 		InquiryDTO id = sellerLodgmentDao.selectInqView(inqNo);
 		return id;
 	}
+	
+	
+	//seller refresh 형묵
+	public LoginSellerDTO refresh(String token) {
+		try {
+			LoginSellerDTO loginSeller = sellerJwtUtils.checkToken(token);
+			String accessToken
+			= sellerJwtUtils.createAccessToken(loginSeller.getSellerNo());
+			String refreshToken
+			= sellerJwtUtils.createRefreshToken(loginSeller.getSellerNo());
+			loginSeller.setAccessToken(accessToken);
+			loginSeller.setRefreshToken(refreshToken);
+			SellerDTO s = sellerDao.selectOneSeller(loginSeller.getSellerNo());
+			loginSeller.setBusinessName(s.getBusinessName());
+			return loginSeller;
+		}catch(Exception e) {
 
+	}
+		return null;
+	}
 
 }

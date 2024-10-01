@@ -234,7 +234,7 @@
 		<result property="inquiryTitle" column="inquiry_title" />
 		<result property="inquiryContent" column="inquiry_content" />
 		<result property="regDate" column="reg_date" />
-
+	
 		<!-- 답변 정보 매핑 -->
 		<result property="inquiryReply.inquiryReplyContent"
 			column="inquiry_reply_content" />

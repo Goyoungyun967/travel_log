@@ -11,7 +11,6 @@ import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
 import kr.co.iei.seller.model.dto.RoomServiceTagDTO;
-import kr.co.iei.seller.model.dto.SellerDTO;
 import kr.co.iei.seller.model.dto.StmInfoDTO;
 
 @Mapper
@@ -46,8 +45,6 @@ public interface SellerLodgmentDao {
 	RoomDTO selectRoomViewInfo(int roomNo);
 
 	List<InquiryDTO> selectInqList(InquiryDTO iqd);
-
-	SellerDTO selectLoginSeller(String businessNo);
 
 	InquiryDTO selectInqView(int inqNo);
 
