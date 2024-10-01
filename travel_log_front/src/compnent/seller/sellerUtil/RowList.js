@@ -105,6 +105,7 @@ const SellerInqList = (props) => {
 
 // 판매자 예약 글 리스트
 const SellerReserveList = (props) => {
+  const navigate = useNavigate();
   const list = props.list;
   console.log(list);
 
@@ -120,7 +121,7 @@ const SellerReserveList = (props) => {
 
   // map 돌려서 행 지정
   const rows = list.map((item, i) => ({
-    id: i,
+    id: item.bookingNo,
     memberId: item.memberId,
     lodgmentName: item.lodgmentName,
     roomName: item.roomName,
@@ -133,6 +134,13 @@ const SellerReserveList = (props) => {
         ? "이용완료"
         : "예약취소", // 상태 업데이트
   }));
+
+  // 해당 행 클릭시 상세로 이동하게..
+  const handleRowClick = (params) => {
+    const inqNo = params.row.id;
+    console.log(inqNo);
+    navigate(`/seller/reserve/${inqNo}`);
+  };
   return (
     <>
       <div>
@@ -154,6 +162,7 @@ const SellerReserveList = (props) => {
           rowsPerPageOptions={5} // 사용자가 선택할 페이지 크기 옵션
           pagination // 페이지네이션 활성화
           disableSelectionOnClick // 클릭 선택 비활성화
+          onRowClick={handleRowClick}
         />
       </div>
     </>

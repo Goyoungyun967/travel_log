@@ -3,9 +3,12 @@ import "./css/insert_lodgment.css";
 import axios from "axios";
 import DaumPostcode from "react-daum-postcode";
 import UqillEditor from "../utils/UqillEditor";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const InsertLodgment = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
 
   // 기존 호텔에서 검색하면 사용자가 다른 건 건들지 못하게 readOnly로 바꾸어야함
   const [isReadOnly, setIsReadOnly] = useState(false); // 추가된 상태
@@ -148,6 +151,16 @@ const InsertLodgment = () => {
               })
               .then((res) => {
                 console.log(res);
+                if (res.data) {
+                  navigate(`/seller/list`);
+                  console.log(form);
+                } else {
+                  Swal.fire({
+                    title: "에러가 발생했습니다.",
+                    text: "원인을 찾으세요",
+                    icon: "error",
+                  });
+                }
               })
               .catch((err) => {
                 console.log(err);

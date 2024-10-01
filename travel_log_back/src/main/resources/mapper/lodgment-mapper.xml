@@ -155,19 +155,6 @@
 		values(#{roomNo},#{serviceTagNo})
 	</insert>
 
-
-	<!-- 숙소 객실 예약 요청사항 조회 -->
-	<select id="bookInfo" resultType="bookingInfo">
-		select ls.lodgment_name,
-		r.room_name, b.*
-		from LODGMENT_STORAGE ls
-		join room r
-		using(lodgment_no)
-		join booking b
-		on r.room_no = b.room_no
-		where b.booking_no=#{bookNo}
-	</select>
-
 	<!-- 판매자 정산 정보 -->
 	<!-- AND TO_DATE(#{endDate}, 'YY/MM/DD') + 1 - 1/86400 (<- 해당 일의 모든 데이터 
 		추가 (25일 찾으면 24일까지 나와서 추가함)) -->
@@ -247,6 +234,7 @@
 	<!-- 호텔 판매자 예약 정보 리스트 확인 -->
 	<select id="selectReserve" resultMap="ReserveListMap">
 		select
+			b.book_no,
 		    b.member_id,
 		    b.start_date,
 		    b.end_date,
@@ -262,6 +250,7 @@
 		where b.seller_no=#{sellerNo}
 	</select>
 	<resultMap type="bookingInfo" id="ReserveListMap">
+		<result property="bookingNo" column="book_no"/>
 		<result property="memberId" column="member_id"/>
 		<result property="startDate" column="start_date"/>
 		<result property="endDate" column="end_date"/>
@@ -270,4 +259,37 @@
 		<result property="roomName" column="room_name"/>
     	<result property="lodgmentName" column="lodgment_name"/>
 	</resultMap>
+	
+	<!-- 숙소 객실 예약 요청사항 조회 -->
+	<select id="bookInfo" resultType="bookingInfo">
+        select
+        	b.guest_name,
+            b.start_date,
+            b.end_date,
+            b.payment_date,
+            b.guest_count,
+            b.guest_phone,
+            b.status,
+            b.guest_request,
+            ls.lodgment_name,
+            r.room_name
+        from booking b
+        join room r
+        using(room_no)
+        left join lodgment_storage ls
+        using(lodgment_no)
+        where b.book_no=#{bookNo}
+	</select>
+	<!-- 
+	<resultMap type="bookingInfo" id="bookingInfoMap">
+		<result property="guestName" column="guest_name"/>
+		<result property="startDate" column="start_date"/>
+		<result property="endDate" column="end_date"/>
+		<result property="paymentDate" column="payment_date"/>
+		<result property="guestCount" column="guest_count"/>
+		<result property="guestPhone" column="guest_phone"/>
+    	<result property="lodgmentName" column="lodgment_name"/>
+		<result property="roomName" column="room_name"/>
+	</resultMap>
+	 -->
 </mapper>
