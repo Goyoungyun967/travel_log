@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.iei.member.model.dao.MemberDao;
 import kr.co.iei.member.model.dto.LoginMemberDTO;
@@ -67,5 +68,11 @@ public class MemberService {
 	public int checkSellerId(String businessNo) {
 		int result = memberDao.checkSellerId(businessNo);
 		return result;
+	}
+	@Transactional
+	public boolean updateProfile(MemberDTO member) {
+		
+		int result = memberDao.updateProfile(member);
+		return result == 1;
 	}
 }
