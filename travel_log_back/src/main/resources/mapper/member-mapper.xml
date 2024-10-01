@@ -19,4 +19,5 @@
  	<select id="checkSellerId" resultType="int">
  		select count(*) from seller where business_no=#{businessNo}
  	</select>
+ 	
 </mapper>

@@ -17,5 +17,4 @@ public interface MemberDao {
 
 	int checkSellerId(String businessNo);
 
-
 }

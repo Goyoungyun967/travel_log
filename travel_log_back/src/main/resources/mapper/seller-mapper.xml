@@ -16,4 +16,13 @@
     	select seller_no,seller_pw,business_name from seller where business_no=#{businessNo}
     </select>
 
+	<select id="getTotalCount" resultType="int">
+		select count(*) from seller where seller_app=#{sellerApp}
+	</select>
+	<select id="selectSellerList" resultType="seller">
+		select * from (select rownum as rnum, s.* from (select seller_no,business_no,representative_name,to_char(enroll_date,'yyyy-mm-dd') as enroll_date,seller_app from seller where seller_app=#{sellerApp})s) where rnum between #{start} and #{end}
+	</select>
+	<update id="updateSellerApp">
+		update seller set seller_app=1 where seller_no in <foreach collection="array" item="sellerNo" open="(" close=")" separator=",">#{sellerNo}</foreach>
+	</update>
 </mapper>

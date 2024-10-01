@@ -75,4 +75,9 @@ public class AdminController {
 		int result = adminService.updateSellerApp(sellerNo);
 		return ResponseEntity.ok(result == sellerNo.length);
 	}
+	@GetMapping(value="/member/chart")
+	public ResponseEntity<Map> getMemberChartData(){
+		Map map = adminService.getMemberChartData();
+		return ResponseEntity.ok(map);
+	}
 }
