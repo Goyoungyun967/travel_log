@@ -16,8 +16,17 @@ const LodgmentRoomDetail = (props) => {
     lodgmentInfo,
   } = props; // 기본값을 빈 배열로 설정
   const BackServer = process.env.REACT_APP_BACK_SERVER;
-  const checkIn = startDate ? format(startDate, "yyyy-MM-dd") : "";
-  const checkOut = endDate ? format(endDate, "yyyy-MM-dd") : "";
+  const checkIn =
+    typeof startDate === "string"
+      ? format(new Date(startDate), "yyyy-MM-dd")
+      : "";
+  const checkOut =
+    typeof endDate === "string" ? format(new Date(endDate), "yyyy-MM-dd") : "";
+  console.log("startDate:", startDate); // 추가
+  console.log("endDate:", endDate); // 추가
+
+  console.log("Check-in:", checkIn); // 추가
+  console.log("Check-out:", checkOut); // 추가
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
 
   const bookingNow = (room) => {
