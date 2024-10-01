@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.iei.faq.model.dao.FaqDao;
 import kr.co.iei.faq.model.dto.FaqDTO;
 import kr.co.iei.inquiry.model.dao.InquiryDao;
+import kr.co.iei.member.model.dao.MemberDao;
 import kr.co.iei.seller.model.dao.SellerDao;
 import kr.co.iei.util.PageInfo;
 import kr.co.iei.util.PageUtil;
@@ -26,6 +27,8 @@ public class AdminService {
 	private PageUtil pageUtil;
 	@Autowired
 	private SellerDao sellerDao;
+	@Autowired
+	private MemberDao memberDao;
 
 	public Map selectInquiryList(int reqPage, String type,int state) {
 		Map<String,Object> map = new HashMap<String, Object>();
@@ -71,21 +74,26 @@ public class AdminService {
 		Map<String, Object> m = new HashMap<String, Object>();
 		int numPerPage = 10;
 		int pageNaviSize = 5;
-		//int totalCount = sellerDao.getTotalCount(sellerApp);
-		int totalCount = 20;
+		int totalCount = sellerDao.getTotalCount(sellerApp);
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
 		m.put("start", pi.getStart());
 		m.put("end", pi.getEnd());
 		m.put("sellerApp", sellerApp);
-		//List list = sellerDao.selectSellerList(m);
+		List list = sellerDao.selectSellerList(m);
 		map.put("pi", pi);
+		map.put("list", list);
 		return map;
 	}
 
 	@Transactional
 	public int updateSellerApp(int[] sellerNo) {
-		//int result = sellerDao.updateSellerApp(sellerNo);
-		return 0;
+		int result = sellerDao.updateSellerApp(sellerNo);
+		return result;
+	}
+
+	public Map getMemberChartData() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		return map;
 	}
 
 }

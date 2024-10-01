@@ -3,12 +3,14 @@ import "./css/paymentPage.css";
 import LodgmentDetailMapPayment from "./LodgmentDetailMapPayment";
 import LodgmentLoomDetail from "./LodgmentRoomDetail";
 import PayMentUserInfo from "./PaymentUserInfo";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import { loadTossPayments } from "@tosspayments/tosspayments-sdk";
 
 const PaymentPage = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
   const { state } = useLocation();
+  const navigate = useNavigate();
 
   // 투숙객 정보
   const [bookingInfo, setBookingInfo] = useState({
@@ -59,7 +61,9 @@ const PaymentPage = () => {
   const dateString = Date.now(); // 현재 시간으로 고유 주문번호 생성
 
   // 결제 요청 함수
-  const tossPay = () => {};
+  const tossPay = () => {
+    navigate("/lodgment/tossPayCheckout");
+  };
   return (
     <section className="section">
       <div className="lodgment-payment-info-wrap">
