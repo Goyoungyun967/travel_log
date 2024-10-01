@@ -14,7 +14,7 @@ const PayMentUserInfo = (props) => {
           type="text"
           className="payment-input"
           id="paymentName"
-          name="gusetName"
+          name="guestName"
           onChange={valueChange}
           placeholder="투수객 이름을 입력해주세요."
         />
@@ -39,7 +39,7 @@ const PayMentUserInfo = (props) => {
       <li>
         <textarea
           className="payment-textarea"
-          name="guestReq"
+          name="guestRequest"
           onChange={valueChange}
           maxLength={100}
           placeholder="요청사항이 있으면 입력해주세요."

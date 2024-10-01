@@ -1,5 +1,8 @@
 package kr.co.iei.seller.model.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.iei.seller.model.dto.SellerDTO;
@@ -14,9 +17,18 @@ public interface SellerDao {
 	//형묵 - sellerid 중복체크
 	int checkSellerId(String businessNo);
 
+	//seller 가입자 승인
+	int updateSellerApp(int[] sellerNo);
+
 	SellerDTO selectLoginSeller(String businessNo);
 
 	//seller refresh 형묵
 	SellerDTO selectOneSeller(int sellerNo);
+	
+	//admin용 sellerList pagenavi에 쓸 totalCount
+	int getTotalCount(int sellerApp);
+	
+	//admin용 sellerList조회
+	List selectSellerList(Map<String, Object> m);
 	
 }

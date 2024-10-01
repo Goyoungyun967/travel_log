@@ -367,6 +367,7 @@ props/*글자 사이즈*/
 여행 게시판 글 작성
 */
 .write-content-wrap {
+  width: 80%;
   border-radius: 20px;
   border: 1px solid var(--main4);
   height: 100%;
@@ -401,7 +402,9 @@ props/*글자 사이즈*/
 .boardWrite-btn:active {
   transform: scale(0.98); /* 클릭 시 약간 작아지는 효과 */
 }
-
+.board-UpilEditor {
+  width: 100% !important;
+}
 /*
 여행 게시판 FRM
 */
@@ -494,7 +497,7 @@ props/*글자 사이즈*/
   font-size: 16px;
   font-weight: bold;
   padding-left: 15px;
-  border-right: 1px solid var(--gray5);
+  /* border-right: 1px solid var(--gray5); */
   margin-right: 20px;
 }
 
