@@ -18,47 +18,10 @@ import kr.co.iei.seller.model.dto.StmInfoDTO;
 @Mapper
 public interface SellerDao {
 
-	List selectLodgmentList(int sellerNo);
-
-	List selectXlsxHotelInfo(String searchInfo);
-
-	LodgmentStorageDTO selectOneLodgment(int lodgmentNo);
-
-	int insertLodgment(LodgmentStorageDTO ls);
-
-	int deleteLodgment(int lodgmentNo);
-
-	List<RoomFileDTO> selectRoomFile(int roomNo);
-
-	List<RoomDTO> selectRoomInfo(int lodgmentNo);
-
-	int insertRoom(InsertRoomDTO room);
-
-	int insertRoomFile(RoomFileDTO roomFile);
-
-	int insertServiceTag(RoomServiceTagDTO rst);
-
-	BookingInfoDTO bookInfo(int bookNo);
-
-	List<StmInfoDTO> selectStmInfo(StmInfoDTO st);
-
-	List<StmInfoDTO> selectStmSearchInfo(StmInfoDTO st);
-
 	//형묵 - 판매자 회원가입
 	int insertSeller(SellerDTO seller);
 	
 	//형묵 - sellerid 중복체크
 	int checkSellerId(String businessNo);
-	
-	RoomDTO selectRoomViewInfo(int roomNo);
-
-	List<InquiryDTO> selectInqList(InquiryDTO iqd);
-
-
-	SellerDTO selectLoginSeller(String businessNo);
-
-
-	InquiryDTO selectInqView(int inqNo);
-
 
 }

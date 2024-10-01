@@ -1,260 +1,251 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="kr.co.iei.seller.model.dao.SellerDao">
- 	<!-- 등록한 호텔 조회 -->
- 	<select id="selectLodgmentList" resultType="lodgmentStorage">
- 		select * from LODGMENT_STORAGE where seller_no=#{sellerNo}
- 	</select>
- 	
- 	<!-- 기존 호텔 검색 - 이름이나 주소에 해당 단어 섞여 있으면 조회 (리스트) -->
-	<select id="selectXlsxHotelInfo" resultType="hotelXlsx">
-		select * from HOTEL_XLSX
-		where X_LODGMENT_NAME like '%'||#{searchInfo}||'%'
-		or X_LODGMENT_ADDR like '%'||#{searchInfo}||'%'
+<mapper namespace="kr.co.iei.seller.model.dao.SellerLodgmentDao">
+	<!-- 등록한 호텔 조회 -->
+	<select id="selectLodgmentList" resultType="lodgmentStorage">
+		select * from LODGMENT_STORAGE where seller_no=#{sellerNo}
 	</select>
-	
+
+	<!-- 기존 호텔 검색 - 이름이나 주소에 해당 단어 섞여 있으면 조회 (리스트) -->
+	<select id="selectXlsxHotelInfo" resultType="hotelXlsx">
+		select * from
+		HOTEL_XLSX
+		where X_LODGMENT_NAME like '%'||#{searchInfo}||'%'
+		or
+		X_LODGMENT_ADDR like '%'||#{searchInfo}||'%'
+	</select>
+
 	<!-- 해당 호텔 조회 -->
 	<select id="selectOneLodgment" resultType="lodgmentStorage">
-		select * from lodgment_storage
+		select * from
+		lodgment_storage
 		where lodgment_no = #{lodgmentNo}
 	</select>
-	
+
 	<!-- 호텔 등록 -->
 	<!-- lodgmentNo가 0이면 기존 호텔에 없는 번호이므로 시퀀스 돌리기 -->
 	<insert id="insertLodgment">
 		insert into lodgment_storage VALUES (
-        							<if test="lodgmentNo == 0">
-        							    lodgment_seq.nextval
-        							</if>
-							        <if test="lodgmentNo != 0">
-							            #{lodgmentNo}
-							        </if>,
-							        #{sellerNo},
-							        #{lodgmentTypeNo},
-							        #{lodgmentName},
-							        #{lodgmentAddr},
-							        #{lodgmentImgPath},
-							        #{lodgmentStarGrade},
-							        #{lodgmentNotice},
-							        #{lodgmentCheckIn},
-							        #{lodgmentCheckOut}
-    	)
+		<if test="lodgmentNo == 0">
+			lodgment_seq.nextval
+		</if>
+		<if test="lodgmentNo != 0">
+			#{lodgmentNo}
+		</if>
+		,
+		#{sellerNo},
+		#{lodgmentTypeNo},
+		#{lodgmentName},
+		#{lodgmentAddr},
+		#{lodgmentImgPath},
+		#{lodgmentStarGrade},
+		#{lodgmentNotice},
+		#{lodgmentCheckIn},
+		#{lodgmentCheckOut}
+		)
 	</insert>
-	
+
 	<!-- 호텔 등록하면 기존 호텔 테이블에서 삭제해주어야함 (제약조건 걸려있어서 호텔 번호 중복 불가) -->
 	<delete id="deleteLodgment">
-		delete from HOTEL_XLSX where x_lodgment_no=#{lodgmentNo}
+		delete from HOTEL_XLSX where
+		x_lodgment_no=#{lodgmentNo}
 	</delete>
-	
-	<!-- 객실 정보 조회 (객실 정보 + 파일들) -->
-    <select id="selectRoomInfo" resultMap="RoomResultMap">
-        SELECT
-            r.room_no AS room_no,
-            r.lodgment_no AS lodgment_no,
-            r.room_name AS room_name,
-            r.room_qua AS room_qua,
-            r.room_max_capacity AS room_max_capacity,
-            r.room_price AS room_price,
-            r.room_info AS room_info,
-            rf.room_file_no AS room_file_no,
-            rf.room_img AS room_img
-        FROM
-            room r
-        LEFT JOIN
-            room_file rf ON r.room_no = rf.room_no
-        WHERE
-            r.lodgment_no = #{lodgmentNo}
-    </select>
 
-    <!-- 객실 정보와 파일 정보를 묶어주는 ResultMap -->
-    <resultMap type="room" id="RoomResultMap">
-        <id column="room_no" property="roomNo" />
-        <result column="lodgment_no" property="lodgmentNo" />
-        <result column="room_name" property="roomName" />
-        <result column="room_qua" property="roomQua" />
-        <result column="room_max_capacity" property="roomMaxCapacity" />
-        <result column="room_price" property="roomPrice" />
-        <result column="room_info" property="roomInfo" />
-        <collection 
-        	property="fileList"
-        	ofType="roomFile"
-        	javaType="java.util.List"
-        >
-        	<id property="roomFileNo" column="room_file_no"/>
-            <result property="roomImg" column="room_img"/>
-        </collection>
-    </resultMap>
-    
-    <!-- 객실 상세 (객실 정보 + 파일 + 해시태그)-->
-	<select id="selectRoomViewInfo" resultMap="RoomViewMap">
-	    SELECT 
-	        r.room_no AS room_no,
-	        r.lodgment_no AS lodgment_no,
-	        r.room_name AS room_name,
-	        r.room_qua AS room_qua,
-	        r.room_max_capacity AS room_max_capacity,
-	        r.room_price AS room_price,
-	        r.room_info AS room_info,
-	        st.service_tag_type AS serviceTagType,
-	        rf.room_img AS room_img
-	    FROM
-	        room r
-	    LEFT JOIN
-	        room_file rf ON r.room_no = rf.room_no
-	    LEFT JOIN
-	        ROOM_SERVICE_TAG rst ON r.room_no = rst.room_no
-	    LEFT JOIN
-	        SERVICE_TAG st ON st.SERVICE_TAG_NO = rst.SERVICE_TAG_NO
-	    WHERE
-	        r.room_no = #{roomNo}
+	<!-- 객실 정보 조회 (객실 정보 + 파일들) -->
+	<select id="selectRoomInfo" resultMap="RoomResultMap">
+		SELECT
+		r.room_no AS room_no,
+		r.lodgment_no AS lodgment_no,
+		r.room_name AS room_name,
+		r.room_qua AS room_qua,
+		r.room_max_capacity AS room_max_capacity,
+		r.room_price AS room_price,
+		r.room_info AS room_info,
+		rf.room_file_no AS room_file_no,
+		rf.room_img AS room_img
+		FROM
+		room r
+		LEFT JOIN
+		room_file rf ON r.room_no = rf.room_no
+		WHERE
+		r.lodgment_no = #{lodgmentNo}
 	</select>
-	<resultMap type="room" id="RoomViewMap">
-	    <id column="room_no" property="roomNo" />
-	    <result column="lodgment_no" property="lodgmentNo" />
-	    <result column="room_name" property="roomName" />
-	    <result column="room_qua" property="roomQua" />
-	    <result column="room_max_capacity" property="roomMaxCapacity" />
-	    <result column="room_price" property="roomPrice" />
-	    <result column="room_info" property="roomInfo" />
-	    
-	    <!-- 서비스 태그 리스트 -->
-	    <collection 
-	        property="serviceTagList" 
-	        ofType="serviceTag"
-	        javaType="java.util.List"
-	    >
-	        <result property="serviceTagType" column="serviceTagType" />
-	    </collection>
-	    
-	    <!-- 파일 리스트 -->
-	    <collection 
-	        property="fileList"
-	        ofType="roomFile"
-	        javaType="java.util.List"
-	    >
-	        <result property="roomImg" column="room_img" />
-	    </collection>
+
+	<!-- 객실 정보와 파일 정보를 묶어주는 ResultMap -->
+	<resultMap type="room" id="RoomResultMap">
+		<id column="room_no" property="roomNo" />
+		<result column="lodgment_no" property="lodgmentNo" />
+		<result column="room_name" property="roomName" />
+		<result column="room_qua" property="roomQua" />
+		<result column="room_max_capacity" property="roomMaxCapacity" />
+		<result column="room_price" property="roomPrice" />
+		<result column="room_info" property="roomInfo" />
+		<collection property="fileList" ofType="roomFile"
+			javaType="java.util.List">
+			<id property="roomFileNo" column="room_file_no" />
+			<result property="roomImg" column="room_img" />
+		</collection>
 	</resultMap>
 
-	
+	<!-- 객실 상세 (객실 정보 + 파일 + 해시태그) -->
+	<select id="selectRoomViewInfo" resultMap="RoomViewMap">
+		SELECT
+		r.room_no AS room_no,
+		r.lodgment_no AS lodgment_no,
+		r.room_name AS room_name,
+		r.room_qua AS room_qua,
+		r.room_max_capacity AS room_max_capacity,
+		r.room_price AS room_price,
+		r.room_info AS room_info,
+		st.service_tag_type AS serviceTagType,
+		rf.room_img AS room_img
+		FROM
+		room r
+		LEFT JOIN
+		room_file rf ON r.room_no = rf.room_no
+		LEFT JOIN
+		ROOM_SERVICE_TAG rst ON r.room_no = rst.room_no
+		LEFT JOIN
+		SERVICE_TAG st ON st.SERVICE_TAG_NO = rst.SERVICE_TAG_NO
+		WHERE
+		r.room_no = #{roomNo}
+	</select>
+	<resultMap type="room" id="RoomViewMap">
+		<id column="room_no" property="roomNo" />
+		<result column="lodgment_no" property="lodgmentNo" />
+		<result column="room_name" property="roomName" />
+		<result column="room_qua" property="roomQua" />
+		<result column="room_max_capacity" property="roomMaxCapacity" />
+		<result column="room_price" property="roomPrice" />
+		<result column="room_info" property="roomInfo" />
+
+		<!-- 서비스 태그 리스트 -->
+		<collection property="serviceTagList" ofType="serviceTag"
+			javaType="java.util.List">
+			<result property="serviceTagType" column="serviceTagType" />
+		</collection>
+
+		<!-- 파일 리스트 -->
+		<collection property="fileList" ofType="roomFile"
+			javaType="java.util.List">
+			<result property="roomImg" column="room_img" />
+		</collection>
+	</resultMap>
+
+
 	<!-- 객실 등록 -->
 	<insert id="insertRoom">
-		insert into room values(room_seq.nextval, #{lodgmentNo},#{roomName},#{roomQua},#{maxCapacity},#{roomPrice},#{boardContent})
-		<selectKey resultType="int" keyProperty="roomNo" order="AFTER">
+		insert into room values(room_seq.nextval,
+		#{lodgmentNo},#{roomName},#{roomQua},#{maxCapacity},#{roomPrice},#{boardContent})
+		<selectKey resultType="int" keyProperty="roomNo"
+			order="AFTER">
 			select max(room_no) from room
 		</selectKey>
 	</insert>
-	
+
 	<!-- 객실 파일 등록 -->
 	<insert id="insertRoomFile">
-		insert into room_file values(room_file_seq.nextval,#{roomNo},#{roomImg})
+		insert into room_file
+		values(room_file_seq.nextval,#{roomNo},#{roomImg})
 	</insert>
-	
+
 	<!-- 객실 해시태그 등록 -->
 	<insert id="insertServiceTag">
-		insert into room_service_tag values(#{roomNo},#{serviceTagNo})
+		insert into room_service_tag
+		values(#{roomNo},#{serviceTagNo})
 	</insert>
-	
-	
+
+
 	<!-- 숙소 객실 예약 요청사항 조회 -->
 	<select id="bookInfo" resultType="bookingInfo">
-		select ls.lodgment_name, r.room_name, b.*
-			from LODGMENT_STORAGE ls
-			join room r
-			using(lodgment_no)
-			join booking b
-			on r.room_no = b.room_no
-			where b.booking_no=#{bookNo}
+		select ls.lodgment_name,
+		r.room_name, b.*
+		from LODGMENT_STORAGE ls
+		join room r
+		using(lodgment_no)
+		join booking b
+		on r.room_no = b.room_no
+		where b.booking_no=#{bookNo}
 	</select>
-	
+
 	<!-- 판매자 정산 정보 -->
-	<!-- AND TO_DATE(#{endDate}, 'YY/MM/DD') + 1 - 1/86400 (<- 해당 일의 모든 데이터 추가 (25일 찾으면 24일까지 나와서 추가함)) -->	
+	<!-- AND TO_DATE(#{endDate}, 'YY/MM/DD') + 1 - 1/86400 (<- 해당 일의 모든 데이터 
+		추가 (25일 찾으면 24일까지 나와서 추가함)) -->
 	<select id="selectStmInfo" resultMap="stmInfoMap">
-	    select stm_num, seller_no, stm_price, to_char(stm_date, 'YYYY-MM-dd') as stm_date
-	    from stm_tbl
-	    where seller_no = #{sellerNo}
-	    <if test="startDate!=null and endDate!=null">
-	 	   and stm_date BETWEEN TO_DATE(#{startDate},'YY/MM/DD') 
+		select stm_num, seller_no, stm_price, to_char(stm_date, 'YYYY-MM-dd')
+		as stm_date
+		from stm_tbl
+		where seller_no = #{sellerNo}
+		<if test="startDate!=null and endDate!=null">
+			and stm_date BETWEEN TO_DATE(#{startDate},'YY/MM/DD')
 			AND TO_DATE(#{endDate}, 'YY/MM/DD') + 1 - 1/86400
-	    </if>
+		</if>
 	</select>
 	<resultMap id="stmInfoMap" type="stmInfo">
-	    <result property="stmNum" column="stm_num" />
-	    <result property="sellerNo" column="seller_no" />
-	    <result property="stmPrice" column="stm_price" />
-	    <result property="stmDate" column="stm_date" />
+		<result property="stmNum" column="stm_num" />
+		<result property="sellerNo" column="seller_no" />
+		<result property="stmPrice" column="stm_price" />
+		<result property="stmDate" column="stm_date" />
 	</resultMap>
-	
+
 	<!-- 판매자 문의 리스트 출력 -->
 	<select id="selectInqList" resultMap="inqListMap">
 		select
-			i.inquiry_no,
-			i.inquiry_title,
-			i.INQUIRY_CONTENT,
-			i.REG_DATE,
-			ir.INQUIRY_REPLY_CONTENT
+		i.inquiry_no,
+		i.inquiry_title,
+		i.INQUIRY_CONTENT,
+		i.REG_DATE,
+		ir.INQUIRY_REPLY_CONTENT
 		from INQUIRY i
 		left join INQUIRY_REPLY ir
-		ON i.inquiry_no = ir.inquiry_no
+		ON i.inquiry_no =
+		ir.inquiry_no
 		where seller_no=#{sellerNo}
 	</select>
 	<resultMap type="inquiry" id="inqListMap">
-		<result property="inquiryNo" column="inquiry_no"/>
-		<result property="inquiryTitle" column="inquiry_title"/>
-		<result property="inquiryContent" column="inquiry_content"/>
-		<result property="regDate" column="reg_date"/>
-	    <result property="inquiryReply.inquiryReplyContent" column="inquiry_reply_content"/>
+		<result property="inquiryNo" column="inquiry_no" />
+		<result property="inquiryTitle" column="inquiry_title" />
+		<result property="inquiryContent" column="inquiry_content" />
+		<result property="regDate" column="reg_date" />
+		<result property="inquiryReply.inquiryReplyContent"
+			column="inquiry_reply_content" />
 	</resultMap>
-	
+
 
 	<!-- 판매자 문의 상세 -->
 	<select id="selectInqView" resultMap="InqViewMap">
-	select
-	    iq.INQUIRY_TITLE,
-	    iq.inquiry_content,
-	    iq.reg_date,
-	    iqf.filepath,
-	    iqr.inquiry_reply_content,
-	    iqr.reg_date as reply_reg_date
-	from INQUIRY iq
-	left join inquiry_file iqf
-	using(INQUIRY_NO)
-	left join inquiry_reply iqr
-	using(INQUIRY_NO)
-	where inquiry_no=#{inqNo}
-</select>
+		select
+		iq.INQUIRY_TITLE,
+		iq.inquiry_content,
+		iq.reg_date,
+		iqf.filepath,
+		iqr.inquiry_reply_content,
+		iqr.reg_date as reply_reg_date
+		from INQUIRY iq
+		left join inquiry_file iqf
+		using(INQUIRY_NO)
+		left join inquiry_reply iqr
+		using(INQUIRY_NO)
+		where inquiry_no=#{inqNo}
+	</select>
 
+	<resultMap type="inquiry" id="InqViewMap">
+		<!-- 기본 정보 -->
+		<result property="inquiryTitle" column="inquiry_title" />
+		<result property="inquiryContent" column="inquiry_content" />
+		<result property="regDate" column="reg_date" />
 
-	<!-- 형묵 - sellerId 중복체크  -->
-	<select id="checkSellerId" resultType="int">
- 		select count(*) from seller where business_no=#{businessNo}
- 	</select>
- 	
- 	<!-- 형묵 seller 회원가입 -->
-	<insert id="insertSeller">
-		insert into seller values(seller_seq.nextval,#{businessNo},#{representativeName},#{sellerPhone},#{bankName},#{accountNumber},sysdate,0,#{sellerPw},#{businessName})
-    </insert>
-    
-    <!-- 형묵 seller 사실뭐하는건진 잘 모름 일단함-->
-    <select id="selectLoginSeller" resultType="seller">
-    	select seller_no,seller_pw,business_name from seller where business_no=#{businessNo}
-    </select>
+		<!-- 답변 정보 매핑 -->
+		<result property="inquiryReply.inquiryReplyContent"
+			column="inquiry_reply_content" />
+		<result property="inquiryReply.regDate" column="reply_reg_date" />
 
-<resultMap type="inquiry" id="InqViewMap">
-	<!-- 기본 정보 -->
-	<result property="inquiryTitle" column="inquiry_title"/>
-	<result property="inquiryContent" column="inquiry_content"/>
-	<result property="regDate" column="reg_date"/>
-	
-	<!-- 답변 정보 매핑 -->
-	<result property="inquiryReply.inquiryReplyContent" column="inquiry_reply_content"/>
-	<result property="inquiryReply.regDate" column="reply_reg_date"/>
-	
-	<!-- 파일 리스트 매핑 -->
-	<collection property="inquiryFileList" ofType="inquiryFile" javaType="java.util.List">
-	    <result property="filepath" column="filepath"/>
-	</collection>
-</resultMap>
+		<!-- 파일 리스트 매핑 -->
+		<collection property="inquiryFileList" ofType="inquiryFile"
+			javaType="java.util.List">
+			<result property="filepath" column="filepath" />
+		</collection>
+	</resultMap>
 
 
 
