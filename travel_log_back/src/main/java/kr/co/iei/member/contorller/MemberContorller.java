@@ -1,24 +1,32 @@
 package kr.co.iei.member.contorller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.member.model.dto.LoginMemberDTO;
 import kr.co.iei.member.model.dto.MemberDTO;
+
 import kr.co.iei.member.model.service.MemberService;
+import kr.co.iei.seller.model.dto.SellerDTO;
 import kr.co.iei.util.EmailSender;
+import kr.co.iei.util.FileUtils;
 
 @CrossOrigin("*")
 @RestController
@@ -30,6 +38,12 @@ public class MemberContorller {
 	private MemberService memberService;
 	@Autowired
 	private EmailSender emailSender;
+	
+	@Autowired
+	private FileUtils fileUtil;
+	
+	@Value("${file.root}")
+	public String root;
 	
 	@GetMapping(value="/memberId/{memberId}/check-id")
 	public ResponseEntity<Integer> checkId(@PathVariable String memberId){
@@ -113,4 +127,20 @@ public class MemberContorller {
 		
 		return ResponseEntity.ok(result);
 	}
+	
+	@PostMapping(value="/profile")
+	public ResponseEntity<Boolean> updateProfile(@ModelAttribute MemberDTO member,
+												 @ModelAttribute MultipartFile memberImage){
+		System.out.println(member);
+		System.out.println(memberImage);
+		if(memberImage != null) {
+			String savepath = root+"/member/profile/";
+			String filepath = fileUtil.upload(savepath, memberImage);
+			member.setMemberImage(filepath);
+			boolean result = memberService.updateProfile(member);
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.ok(false);
+	}
+												
 }

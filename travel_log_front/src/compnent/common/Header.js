@@ -25,8 +25,12 @@ const Header = (props) => {
   const logout = () => {
     setLoginNo(-1);
     setMemberLevel(-1);
+    setSellerNo(-1);
+    setLoginBusinessName("");
+    setLoginNickname("");
     delete axios.defaults.headers.common["Authorization"];
     window.localStorage.removeItem("refreshToken");
+    window.localStorage.removeItem("sellerRefreshToken");
   };
   return (
     <header className="header">
@@ -118,7 +122,7 @@ const Header = (props) => {
                       ? "/admin"
                       : memberLevel === 4
                       ? "/seller/list"
-                      : "/member"
+                      : "/member/mypage"
                   }
                 >
                   {memberLevel === 4 ? loginBusinessName : loginNickname}

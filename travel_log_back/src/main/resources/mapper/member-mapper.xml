@@ -19,4 +19,8 @@
  	<select id="checkSellerId" resultType="int">
  		select count(*) from seller where business_no=#{businessNo}
  	</select>
+ 	
+ 	<update id="updateProfile">
+ 		update member set member_image=#{memberImage} where member_no=#{memberNo}
+ 	</update>
 </mapper>

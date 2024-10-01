@@ -127,7 +127,6 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s; /* 전환 효과 추가 */
-
   width: 250px;
   margin: 0 auto;
 }
@@ -521,4 +520,170 @@
 
 .account-zone {
   margin-bottom: 20px;
+}
+
+.mypage-wrap {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mypage-title {
+  width: 100%;
+}
+
+.mypage-title h3 {
+  font-size: 30px;
+  text-align: center;
+  font-weight: 500;
+  margin: 0;
+}
+
+.image-space {
+  background-color: #fff;
+  width: 200px;
+  height: 200px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 그림자 추가 */
+  transition: transform 0.2s; /* 애니메이션 효과 */
+  border: 2px solid #007bff;
+  margin-bottom: 25px;
+}
+
+.image-space:hover {
+  transform: scale(1.05); /* 호버 시 확대 효과 */
+  color: #007bff;
+}
+
+.profile-size {
+  width: 200px;
+  height: 200px;
+}
+.profile-zone {
+  font-size: 25px;
+  color: #007bff;
+}
+
+.my-info-zone {
+  padding: 15px;
+  overflow: hidden;
+
+  margin: 0 auto;
+}
+
+.update-zone {
+  background-color: #fff;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  float: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 그림자 추가 */
+  transition: transform 0.2s; /* 애니메이션 효과 */
+  border: 2px solid #007bff;
+  margin-right: 60px;
+
+  color: #333;
+  font-size: 25px;
+}
+
+.update-zone:hover {
+  transform: scale(1.05); /* 호버 시 확대 효과 */
+  cursor: pointer;
+}
+
+.my-board-zone {
+  background-color: #fff;
+  width: 200px;
+  height: 200px;
+  margin-right: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  float: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 그림자 추가 */
+  transition: transform 0.2s; /* 애니메이션 효과 */
+  border: 2px solid #007bff;
+  color: #333;
+  font-size: 25px;
+}
+
+.my-board-zone:hover {
+  transform: scale(1.05); /* 호버 시 확대 효과 */
+  cursor: pointer;
+}
+
+.my-reservation-zone {
+  background-color: #fff;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 그림자 추가 */
+  transition: transform 0.2s; /* 애니메이션 효과 */
+  border: 2px solid #007bff;
+  color: #333;
+  font-size: 25px;
+}
+
+.my-reservation-zone:hover {
+  transform: scale(1.05); /* 호버 시 확대 효과 */
+  cursor: pointer;
+}
+
+.my-comment-zone {
+  background-color: #fff;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  float: left;
+  margin-top: 50px;
+  margin-right: 60px;
+  margin-left: 140px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 그림자 추가 */
+  transition: transform 0.2s; /* 애니메이션 효과 */
+  border: 2px solid #007bff;
+  color: #333;
+  font-size: 25px;
+}
+.my-comment-zone:hover {
+  transform: scale(1.05); /* 호버 시 확대 효과 */
+  cursor: pointer;
+}
+
+.my-account-zone {
+  background-color: #fff;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  margin-top: 50px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 그림자 추가 */
+  transition: transform 0.2s; /* 애니메이션 효과 */
+  border: 2px solid #007bff;
+  color: #333;
+  font-size: 25px;
+}
+
+.my-account-zone:hover {
+  transform: scale(1.05); /* 호버 시 확대 효과 */
+  cursor: pointer;
 }

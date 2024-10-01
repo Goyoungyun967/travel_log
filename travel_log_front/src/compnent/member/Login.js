@@ -15,7 +15,7 @@ import {
   sellerLoginNoState,
 } from "../utils/RecoilData";
 
-const Login = (props) => {
+const Login = () => {
   const [loginBusinessName, setLoginBusinessName] = useRecoilState(
     loginBusinessNameState
   );
@@ -66,11 +66,6 @@ const Login = (props) => {
           "sellerRefreshToken",
           res.data.refreshToken
         );
-        Swal.fire({
-          title: "회원가입을 축하합니다 ! ",
-          icon: "success",
-          text: "어세오세요!",
-        });
         navigate("/");
       })
       .catch((err) => {

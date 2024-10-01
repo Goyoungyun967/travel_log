@@ -23,6 +23,7 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import AdminMain from "./compnent/admin/AdminMain";
+import MemberMain from "./compnent/member/MemberMain";
 
 function App() {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -109,6 +110,7 @@ function App() {
           <Route path="/select/memberJoin" element={<MemberJoin />} />
           <Route path="/select/sellerJoin" element={<SellerJoin />} />
           <Route path="/seller/*" element={<SellerMain />} />
+          <Route path="/member/*" element={<MemberMain />} />
           <Route path="/inquiryWrite" element={<InquiryWrite />} />
           <Route path={"/admin/*"} element={<AdminMain />} />
         </Routes>
