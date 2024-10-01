@@ -207,8 +207,7 @@
 		<result property="inquiryTitle" column="inquiry_title" />
 		<result property="inquiryContent" column="inquiry_content" />
 		<result property="regDate" column="reg_date" />
-		<result property="inquiryReply.inquiryReplyContent"
-			column="inquiry_reply_content" />
+		<result property="inquiryReply.inquiryReplyContent" column="inquiry_reply_content" />
 	</resultMap>
 
 
@@ -236,17 +235,39 @@
 		<result property="regDate" column="reg_date" />
 
 		<!-- 답변 정보 매핑 -->
-		<result property="inquiryReply.inquiryReplyContent"
-			column="inquiry_reply_content" />
+		<result property="inquiryReply.inquiryReplyContent" column="inquiry_reply_content" />
 		<result property="inquiryReply.regDate" column="reply_reg_date" />
 
 		<!-- 파일 리스트 매핑 -->
-		<collection property="inquiryFileList" ofType="inquiryFile"
-			javaType="java.util.List">
+		<collection property="inquiryFileList" ofType="inquiryFile" javaType="java.util.List">
 			<result property="filepath" column="filepath" />
 		</collection>
 	</resultMap>
 
-
-
+	<!-- 호텔 판매자 예약 정보 리스트 확인 -->
+	<select id="selectReserve" resultMap="ReserveListMap">
+		select
+		    b.member_id,
+		    b.start_date,
+		    b.end_date,
+		    b.payment_date,
+		    b.status,
+		    r.room_name,
+		    ls.LODGMENT_NAME
+		from booking b
+		left join room r
+		using(room_no)
+		left join LODGMENT_STORAGE ls
+		on ls.LODGMENT_NO = r.LODGMENT_NO
+		where b.seller_no=#{sellerNo}
+	</select>
+	<resultMap type="bookingInfo" id="ReserveListMap">
+		<result property="memberId" column="member_id"/>
+		<result property="startDate" column="start_date"/>
+		<result property="endDate" column="end_date"/>
+		<result property="paymentDate" column="payment_date"/>
+		<result property="status" column="status"/>
+		<result property="roomName" column="room_name"/>
+    	<result property="lodgmentName" column="lodgment_name"/>
+	</resultMap>
 </mapper>

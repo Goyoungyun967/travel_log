@@ -23,7 +23,7 @@ const InqList = () => {
   return (
     <>
       <div className="seller-inq-box-wrap">
-        <h3>문의 정보</h3>
+        <h3>내가 쓴 문의 조회</h3>
         <div className="inq-btn-wrap">
           <Link to={`/seller/inq`} className="inq-btn">
             문의 하기

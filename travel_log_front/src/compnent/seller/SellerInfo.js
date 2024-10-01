@@ -25,7 +25,7 @@ const SellerInfo = () => {
             <div class="item">
               <h3>은행 정보</h3>
               <div>
-                <p>우리은행</p>
+                <p>수빈은행</p>
                 <p>1002-123-123456</p>
               </div>
             </div>

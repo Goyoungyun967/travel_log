@@ -51,4 +51,6 @@ public interface SellerLodgmentDao {
 
 	InquiryDTO selectInqView(int inqNo);
 
+	List selectReserve(int sellerNo);
+
 }

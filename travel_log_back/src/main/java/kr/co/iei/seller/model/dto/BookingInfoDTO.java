@@ -6,6 +6,7 @@ import org.apache.ibatis.type.Alias;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import kr.co.iei.lodgment.model.dto.LodgmentDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,6 +43,6 @@ public class BookingInfoDTO {
 	private int status;
 	
 	
-	private String lodgmentName;	// 호텔 이름
-	private String roomName;		// 객실 이름
+	private String lodgmentName;	// 호텔 이름, 주소 찾기 위함
+	private String roomName;		// 객실 이름, 가격 찾기 위함
 }

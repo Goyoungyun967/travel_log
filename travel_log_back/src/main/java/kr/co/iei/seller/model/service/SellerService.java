@@ -196,5 +196,10 @@ public class SellerService {
 		return id;
 	}
 
+	public List selectReserveList(int sellerNo) {
+		List list = sellerLodgmentDao.selectReserve(sellerNo);
+		return list;
+	}
+
 
 }
