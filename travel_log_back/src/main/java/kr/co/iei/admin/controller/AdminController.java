@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.admin.model.servcie.AdminService;
 import kr.co.iei.faq.model.dto.FaqDTO;
+import kr.co.iei.seller.model.dto.SellerDTO;
 
 
 @RestController
@@ -36,6 +38,7 @@ public class AdminController {
 		return ResponseEntity.ok(map);
 	}
 	@GetMapping(value="/faq/{faqNo}")
+	@Operation(summary = "faq 조회",description = "faq 번호를 받아서 faq 수정용 정보 조회")
 	public ResponseEntity<FaqDTO> selectAdminFaq(@PathVariable int faqNo){
 		FaqDTO faq = adminService.selectAdminFaq(faqNo);
 		return ResponseEntity.ok(faq);
@@ -60,5 +63,16 @@ public class AdminController {
 	public ResponseEntity<Integer> deleteFaq(@PathVariable int faqNo){
 		int result = adminService.deleteFaq(faqNo);
 		return ResponseEntity.ok(result);
+	}
+	@GetMapping(value="/seller/list/{reqPage}/{sellerApp}")
+	@Operation(summary = "판매자 리스트 조회",description = "페이지 번호,판매자 승인여부를 받아서 판매자 리스트 조회")
+	public ResponseEntity<Map> selectSellerList(@PathVariable int reqPage,@PathVariable int sellerApp){
+		Map map = adminService.selectSellerList(reqPage,sellerApp);
+		return ResponseEntity.ok(map);
+	}
+	@PatchMapping(value="/seller")
+	public ResponseEntity<Boolean> updateSellerApp(@RequestBody int[] sellerNo){
+		int result = adminService.updateSellerApp(sellerNo);
+		return ResponseEntity.ok(result == sellerNo.length);
 	}
 }

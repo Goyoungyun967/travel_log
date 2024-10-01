@@ -181,24 +181,29 @@ public class BoardController {
     }
     
     
-//    // 댓글 목록 조회
-//    @GetMapping("/commentList/{boardNo}")
-//    public ResponseEntity<List<BoardCommentDTO>> getCommentList(@PathVariable int boardNo) {
-//        List<BoardCommentDTO> comments = boardService.getCommentList(boardNo);
-//        return ResponseEntity.ok(comments);
-//    }
-//
-//    // 댓글 추가
-//    @PostMapping("/AddComment/{memberNickname}")
-//    public ResponseEntity<BoardCommentDTO> addComment(@RequestBody BoardCommentDTO comment , @PathVariable String memberNickName) {
-//    	String commentWriter = memberNickName;
-//        boolean isAdded = boardService.addComment(comment,commentWriter);
-//        if (isAdded) {
-//            return ResponseEntity.ok(comment); // 댓글이 추가되었을 때
-//        } else {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 추가 실패 시
-//        }
-//    }
+    // 댓글 목록 조회
+    @GetMapping("/commentList/{boardNo}")
+    public ResponseEntity<List<BoardCommentDTO>> getCommentList(@PathVariable int boardNo) {
+        List<BoardCommentDTO> comments = boardService.getCommentList(boardNo);
+        return ResponseEntity.ok(comments);
+    }
+
+    // 댓글 추가
+    @PostMapping("/insertComment")
+    public ResponseEntity<BoardCommentDTO> addComment(@ModelAttribute BoardCommentDTO comment,
+			@ModelAttribute String memberNickname,
+			@ModelAttribute int boardNo ) {
+    	System.out.println(comment.getCommentContent()); 
+    	 if (comment.getCommentRef() == 0) {
+    	        comment.setCommentRef(0);
+    	    }
+        boolean isAdded = boardService.addComment(boardNo,memberNickname,comment);
+        if (isAdded) {
+            return ResponseEntity.ok(comment); // 댓글이 추가되었을 때
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 추가 실패 시
+        }
+    }
 //
 //    // 댓글 수정
 //    @PatchMapping("/editComment/{commentId}")
@@ -214,6 +219,8 @@ public class BoardController {
 //        boolean result = boardService.deleteComment(commentId);
 //        return ResponseEntity.ok(result);
 //    }
+    
+    
 	
     
     

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.co.iei.seller.model.dao.SellerDao">
+
+	<!-- 형묵 - sellerId 중복체크  -->
+	<select id="checkSellerId" resultType="int">
+ 		select count(*) from seller where business_no=#{businessNo}
+ 	</select>
+ 	
+ 	<!-- 형묵 seller 회원가입 -->
+	<insert id="insertSeller">
+		insert into seller values(seller_seq.nextval,#{businessNo},#{representativeName},#{sellerPhone},#{bankName},#{accountNumber},sysdate,0,#{sellerPw},#{businessName})
+    </insert>
+    
+    <!-- 형묵 seller 사실뭐하는건진 잘 모름 일단함-->
+    <select id="selectLoginSeller" resultType="seller">
+    	select seller_no,seller_pw,business_name from seller where business_no=#{businessNo}
+    </select>
+    
+    <!-- 형묵 seller refresh하는부분 -->
+    <select id="selectOneSeller" resultType="seller">
+		select * from seller where seller_no=#{sellerNo}
+	</select>
+</mapper>

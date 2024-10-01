@@ -1,10 +1,6 @@
 const PayMentUserInfo = (props) => {
-  const guest = props.guest;
-  const setGuest = props.setGuest;
-  const changeInfo = (e) => {
-    const name = e.target.name;
-    setGuest({ ...guest, [name]: e.target.value });
-  };
+  const valueChange = props.valueChange;
+
   return (
     <ul>
       <li className="text-paymentName-info">
@@ -19,7 +15,8 @@ const PayMentUserInfo = (props) => {
           className="payment-input"
           id="paymentName"
           name="gusetName"
-          onChange={changeInfo}
+          onChange={valueChange}
+          placeholder="투수객 이름을 입력해주세요."
         />
       </li>
       <li>
@@ -31,7 +28,9 @@ const PayMentUserInfo = (props) => {
           className="payment-input"
           id="paymentPhone"
           name="guestPhone"
-          onChange={changeInfo}
+          onChange={valueChange}
+          placeholder="투수객 번호 입력해주세요."
+          maxLength={13}
         />
       </li>
       <li>
@@ -41,8 +40,9 @@ const PayMentUserInfo = (props) => {
         <textarea
           className="payment-textarea"
           name="guestReq"
-          onChange={changeInfo}
+          onChange={valueChange}
           maxLength={100}
+          placeholder="요청사항이 있으면 입력해주세요."
         />
       </li>
     </ul>

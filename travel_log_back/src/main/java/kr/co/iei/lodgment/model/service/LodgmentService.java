@@ -60,7 +60,7 @@ public class LodgmentService {
 		//배열 번호로 foreach 문 통해서 룸 배열 저장 
 		List<RoomSearchDTO> roomSearchList = new ArrayList();
 		for (Integer roomNo : roomNoList) { // roomNo의 타입을 Integer로 지정
-		    System.out.println(roomNo); // 각 방 번호를 출력
+		    //System.out.println(roomNo); // 각 방 번호를 출력
 		    RoomSearchDTO roomList = lodgmentDao.getRoomList(roomNo, lodgmentNo, startDate.substring(0, 10), endDate.substring(0, 10));
 			roomSearchList.add(roomList);
 		}

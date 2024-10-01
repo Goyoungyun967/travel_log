@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.iei.inquiry.model.dto.InquiryDTO;
-import kr.co.iei.member.model.dto.LoginMemberDTO;
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dao.SellerDao;
+import kr.co.iei.seller.model.dao.SellerLodgmentDao;
 import kr.co.iei.seller.model.dto.BookingInfoDTO;
 import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
@@ -36,6 +36,8 @@ import kr.co.iei.util.SellerJwtUtils;
 public class SellerService {
 	@Autowired
 	private SellerDao sellerDao;
+	@Autowired
+	private SellerLodgmentDao sellerLodgmentDao;
 
 	@Autowired
 	private BCryptPasswordEncoder encoder;
@@ -51,13 +53,13 @@ public class SellerService {
 
 	// 메인(등록한 호텔 정보)
 	public List selectLodgmentList(int sellerNo) {
-		List list = sellerDao.selectLodgmentList(sellerNo);
+		List list = sellerLodgmentDao.selectLodgmentList(sellerNo);
 		return list;
 	}
 
 	// 기존 숙소 검색
 	public List selectXlsxHotelInfo(String searchInfo) {
-		List list = sellerDao.selectXlsxHotelInfo(searchInfo);
+		List list = sellerLodgmentDao.selectXlsxHotelInfo(searchInfo);
 		return list;
 	}
 
@@ -69,17 +71,17 @@ public class SellerService {
 
 	// 호텔 정보 출력
 	public LodgmentStorageDTO selectOneLodgment(int lodgmentNo) {
-		LodgmentStorageDTO ls = sellerDao.selectOneLodgment(lodgmentNo);
+		LodgmentStorageDTO ls = sellerLodgmentDao.selectOneLodgment(lodgmentNo);
 		return ls;
 	}
 
 	// 호텔 등록
 	@Transactional
 	public int insertLodgment(LodgmentStorageDTO ls) {
-		LodgmentStorageDTO lg = sellerDao.selectOneLodgment(ls.getLodgmentNo());
+		LodgmentStorageDTO lg = sellerLodgmentDao.selectOneLodgment(ls.getLodgmentNo());
 		if (lg == null) {
-			int result = sellerDao.insertLodgment(ls);
-			int rs = sellerDao.deleteLodgment(ls.getLodgmentNo());
+			int result = sellerLodgmentDao.insertLodgment(ls);
+			int rs = sellerLodgmentDao.deleteLodgment(ls.getLodgmentNo());
 			return result;
 		}
 		return 0;
@@ -89,8 +91,8 @@ public class SellerService {
 	public Map selectHotelInfo(int lodgmentNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		LodgmentStorageDTO ls = sellerDao.selectOneLodgment(lodgmentNo); // 호텔 정보 출력
-		List<RoomDTO> list = sellerDao.selectRoomInfo(lodgmentNo); // 객실 정보 출력
+		LodgmentStorageDTO ls = sellerLodgmentDao.selectOneLodgment(lodgmentNo); // 호텔 정보 출력
+		List<RoomDTO> list = sellerLodgmentDao.selectRoomInfo(lodgmentNo); // 객실 정보 출력
 		System.out.println(list);
 
 		map.put("lodgment", ls);
@@ -102,8 +104,8 @@ public class SellerService {
 	// 객실 상세
 	public Map selectRoomInfo(int lodgmentNo, int roomNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		LodgmentStorageDTO ls = sellerDao.selectOneLodgment(lodgmentNo); // 호텔 정보 출력 (호텔 이름, 체크인, 체크 아웃, 주소 들고 오기)
-		RoomDTO rd = sellerDao.selectRoomViewInfo(roomNo);
+		LodgmentStorageDTO ls = sellerLodgmentDao.selectOneLodgment(lodgmentNo); // 호텔 정보 출력 (호텔 이름, 체크인, 체크 아웃, 주소 들고 오기)
+		RoomDTO rd = sellerLodgmentDao.selectRoomViewInfo(roomNo);
 		map.put("lodgment",ls);
 		map.put("room",rd);
 		return map;
@@ -112,11 +114,11 @@ public class SellerService {
 	// 객실 등록(객실 정보, 파일, 해시태그 동시 처리)
 	@Transactional
 	public int insertRoom(InsertRoomDTO room, List<RoomFileDTO> roomFileList) {
-		int result = sellerDao.insertRoom(room);
+		int result = sellerLodgmentDao.insertRoom(room);
 		System.out.println(room);
 		for (RoomFileDTO roomFile : roomFileList) {
 			roomFile.setRoomNo(room.getRoomNo());
-			result += sellerDao.insertRoomFile(roomFile);
+			result += sellerLodgmentDao.insertRoomFile(roomFile);
 		}
 		// 체크가 null 값이 아닐 때만 (해시태그가 비어있을 수도 있으니까...)
 		if (room.getServiceTag() != null) {
@@ -125,7 +127,7 @@ public class SellerService {
 				rst.setRoomNo(room.getRoomNo());
 				rst.setServiceTagNo(serviceTagNo); // 태그 값을 설정
 
-				result += sellerDao.insertServiceTag(rst); // 서비스 태그 DB에 삽입
+				result += sellerLodgmentDao.insertServiceTag(rst); // 서비스 태그 DB에 삽입
 			}
 		}
 
@@ -134,23 +136,23 @@ public class SellerService {
 
 	// 예약 상세 조회
 	public BookingInfoDTO bookInfo(int bookNo) {
-		BookingInfoDTO bid = sellerDao.bookInfo(bookNo);
+		BookingInfoDTO bid = sellerLodgmentDao.bookInfo(bookNo);
 		return bid;
 	}
 
 	// 판매자 정산
 	public List<StmInfoDTO> selectStmInfo(StmInfoDTO st) {
-		List<StmInfoDTO> ls = sellerDao.selectStmInfo(st);
+		List<StmInfoDTO> ls = sellerLodgmentDao.selectStmInfo(st);
 		return ls;
 	}
 
 	// 판매자 문의 글 리스트 조회
 	public List<StmInfoDTO> selectStmSearchInfo(StmInfoDTO st) {
-		List<StmInfoDTO> ls = sellerDao.selectStmInfo(st);
+		List<StmInfoDTO> ls = sellerLodgmentDao.selectStmInfo(st);
 		return ls;
 	}
 	public List<InquiryDTO> selectInqList(InquiryDTO iqd) {
-		List<InquiryDTO> ls = sellerDao.selectInqList(iqd);
+		List<InquiryDTO> ls = sellerLodgmentDao.selectInqList(iqd);
 		return ls;
 	}
 
@@ -169,9 +171,10 @@ public class SellerService {
 		return result;
 	}
 
- //형묵 seller-login 완
+	//형묵 seller-login 완
 	public LoginSellerDTO login(SellerDTO seller) {
 		SellerDTO s = sellerDao.selectLoginSeller(seller.getBusinessNo());
+		System.out.println(s);
 		if(s!=null && encoder.matches(seller.getSellerPw(),s.getSellerPw())) {
 			String accessToken = sellerJwtUtils.createAccessToken(s.getSellerNo());
 			String refreshToken = sellerJwtUtils.createRefreshToken(s.getSellerNo());
@@ -188,7 +191,7 @@ public class SellerService {
 
 	// 판매자 문의 글 상세
 	public InquiryDTO selectInqView(int inqNo) {
-		InquiryDTO id = sellerDao.selectInqView(inqNo);
+		InquiryDTO id = sellerLodgmentDao.selectInqView(inqNo);
 		return id;
 	}
 	

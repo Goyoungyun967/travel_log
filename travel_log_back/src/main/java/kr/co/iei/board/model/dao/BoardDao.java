@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import kr.co.iei.board.model.dto.BoardCommentDTO;
 import kr.co.iei.board.model.dto.BoardDTO;
@@ -39,32 +41,28 @@ public interface BoardDao {
 
 	int deleteBoardFile(int[] delBoardFileNo);
 
+	int selectLikeBoard(int boardNo, int memberNo);
+
 	int insertLikeBoard(int memberNo, int boardNo );
 
-	int selectLikeBoard(int boardNo);
+	int selectUnlikeBoard(int boardNo, int memberNo);
 
 	int deleteUnlikeBoard(int memberNo, int boardNo );
 	
-	int selectUnlikeBoard(int boardNo);
+
+
 	
 
-//	List<BoardCommentDTO> selectCommentList(int boardNo);
-//
-//	int insertComment(BoardCommentDTO comment, String commentWriter);
+	List<BoardCommentDTO> selectCommentList(int boardNo);
+
+	int insertComment(@PathVariable int boardNo, @PathVariable String memberNickname,@RequestBody BoardCommentDTO comment);
 //
 //	int updateComment(int commentId, String newContent);
 //
 //	int deleteComment(int commentId);
 	
-//	<!-- 댓글 목록 조회 -->
-//    <select id="selectCommentList" resultType="boardComment">
-//        SELECT * FROM board_comment WHERE board_no = #{boardNo}
-//    </select>
-//
-//    <!-- 댓글 추가 -->
-//   <insert id="insertComment">
-//    INSERT INTO board_comment VALUES (board_comment_seq.nextval, #{commentWriter}, #{commentDate}, #{commentRef}, #{commentContent}, #{boardNo})
-//	</insert>
+
+   
 //
 //    <!-- 댓글 수정 -->
 //    <update id="updateComment">
