@@ -8,13 +8,19 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import {
+  loginBusinessNameState,
+  loginNicknameState,
   loginNoState,
   memberLevelState,
   sellerLoginNoState,
 } from "../utils/RecoilData";
 
 const Login = (props) => {
-  const setLoginNickname = props.setLoginNickname;
+  const [loginBusinessName, setLoginBusinessName] = useRecoilState(
+    loginBusinessNameState
+  );
+  const [loginNickname, setLoginNickname] = useRecoilState(loginNicknameState);
+
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
   const [sellerLoginNo, setSellerLoginNo] = useRecoilState(sellerLoginNoState);
   const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
@@ -51,6 +57,21 @@ const Login = (props) => {
       .then((res) => {
         console.log(res);
         setSellerLoginNo(res.data.sellerNo);
+        setLoginBusinessName(res.data.businessName);
+        setMemberLevel(4);
+        //로그인 이후 axios 요청 시 발급받은 토큰값을 자동으로 axios에 추가하는 설정
+        axios.defaults.headers.common["Authorization"] = res.data.accessToken;
+        //로그인 상태를 지속적으로 유지시키기위해 발급받은 refreshToken을 브라우저에 저장
+        window.localStorage.setItem(
+          "sellerRefreshToken",
+          res.data.refreshToken
+        );
+        Swal.fire({
+          title: "회원가입을 축하합니다 ! ",
+          icon: "success",
+          text: "어세오세요!",
+        });
+        navigate("/");
       })
       .catch((err) => {
         console.log(err);
@@ -80,6 +101,7 @@ const Login = (props) => {
         axios.defaults.headers.common["Authorization"] = res.data.accessToken;
         //로그인 상태를 지속적으로 유지시키기위해 발급받은 refreshToken을 브라우저에 저장
         window.localStorage.setItem("refreshToken", res.data.refreshToken);
+
         navigate("/");
       })
       .catch((err) => {
@@ -148,6 +170,14 @@ const Login = (props) => {
                     value={member.memberPw}
                     onChange={changeMember}
                   />
+                  <div className="link-group">
+                    <Link to="/searchId" className="link-btn">
+                      아이디 찾기
+                    </Link>
+                    <Link to="/searchpw" className="link-btn">
+                      비밀번호 찾기
+                    </Link>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -181,14 +211,6 @@ const Login = (props) => {
               로그인
             </button>
           </form>
-          <div className="link-group">
-            <Link to="/searchId" className="link-btn">
-              아이디 찾기
-            </Link>
-            <Link to="/searchpw" className="link-btn">
-              비밀번호 찾기
-            </Link>
-          </div>
         </div>
       </div>
     </div>

@@ -106,6 +106,10 @@
   margin-right: 11px;
 }
 
+.login-input-group > .link-group {
+  margin-bottom: 25px;
+}
+
 .login-input-group .business-zone {
   margin-right: 32px;
 }
@@ -138,7 +142,7 @@
 }
 
 .link-group {
-  margin-top: 40px; /* 로그인 버튼과의 간격을 늘림 */
+  margin-top: 20px; /* 로그인 버튼과의 간격을 늘림 */
   display: flex;
   justify-content: center; /* 중앙 정렬 */
   align-items: center; /* 수직 중앙 정렬 */
@@ -153,6 +157,7 @@
   text-decoration: none; /* 기본 밑줄 제거 */
   transition: background-color 0.3s, transform 0.2s; /* 전환 효과 */
   margin: 0 10px; /* 링크 간격 */
+  margin-top: 0px;
 }
 
 .link-btn:hover {

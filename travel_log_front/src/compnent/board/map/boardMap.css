@@ -44,3 +44,12 @@
   border-style: solid;
   border-color: #007bff transparent transparent transparent; /* 화살표 색상 */
 }
+.diary_content_list {
+  text-align: left;
+}
+.diary-textarea {
+  width: 100%;
+  border-radius: 10px;
+  border: none;
+  border-bottom: 1px solid var(--main4);
+}

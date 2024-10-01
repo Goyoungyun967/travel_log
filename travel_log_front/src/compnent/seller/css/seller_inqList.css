@@ -140,3 +140,36 @@
   color: #ccc;
   padding: 6px;
 }
+
+/*---------------------------------------*/
+.seller-reserve-box-wrap {
+  padding: 30px;
+  width: 1000px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.seller-reserve-box-wrap > h3 {
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+}
+
+.seller-reserve-box-wrap > .reserve-btn-wrap {
+  margin: 20px;
+  color: #fff;
+}
+.seller-reserve-box-wrap > .reserve-btn-wrap > .reserve-btn {
+  background-color: dodgerblue;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.seller-reserve-box-wrap > .reserve-btn-wrap > .reserve-btn:hover {
+  background-color: navy;
+  cursor: pointer;
+}
+
+/*---------------------------*/

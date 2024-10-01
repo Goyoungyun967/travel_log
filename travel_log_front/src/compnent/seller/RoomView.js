@@ -5,6 +5,12 @@ import { Link, useParams } from "react-router-dom";
 import KakaoMap from "./sellerUtil/KakaoMap";
 import { SlideImg } from "./sellerUtil/SlideImg";
 
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+
 const RoomView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const params = useParams();
@@ -14,6 +20,14 @@ const RoomView = () => {
   const [roomInfo, setRoomInfo] = useState({}); // 객실 정보 + 파일 + 해시태그
   const [roomFile, setRoomFile] = useState([]); // 객실 이미지
   const [serviceTag, setServiceTag] = useState([]);
+
+  //
+  const [value, setValue] = useState("1");
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue); // 상태 업데이트
+  };
+
   console.log(roomInfo);
   useEffect(() => {
     axios
@@ -73,16 +87,35 @@ const RoomView = () => {
           </div>
         </div>
         <div className="seller-room-sc-wrap">
-          <h3>위치</h3>
-          <KakaoMap lodgmentAddr={lodgmentInfo.lodgmentAddr} />
+          <Box sx={{ width: "100%", typography: "body1" }}>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  <Tab label="숙소 위치" value="1" />
+                  <Tab label="공지사항" value="2" />
+                  <Tab label="리뷰" value="3" />
+                </TabList>
+              </Box>
+              <TabPanel value="1">
+                <KakaoMap lodgmentAddr={lodgmentInfo.lodgmentAddr} />
+              </TabPanel>
+              <TabPanel value="2">
+                <div className="item-notice">
+                  <h3>공지사항</h3>
+                  <div
+                    className="ql-editor notice-ed"
+                    dangerouslySetInnerHTML={{ __html: roomInfo.roomInfo }}
+                  />
+                </div>
+              </TabPanel>
+              <TabPanel value="3">Item Three</TabPanel>
+            </TabContext>
+          </Box>
         </div>
-        <div className="item-notice">
-          <h3>공지사항</h3>
-          <div
-            className="ql-editor notice-ed"
-            dangerouslySetInnerHTML={{ __html: roomInfo.roomInfo }}
-          />
-        </div>
+
         <div className="seller-btn-div">
           <div className="seller-update-btn">
             <Link
