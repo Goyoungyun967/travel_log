@@ -5,14 +5,13 @@ const loginNoState = atom({
   default: -1,
 });
 
-const sellerLoginNoState = atom({
-  key: "sellerLoginNoState",
-  default: -1,
-});
-
 const memberLevelState = atom({
   key: "memberLevelState",
   default: -1,
+});
+const loginNicknameState = atom({
+  key: "loginNicknameState",
+  default: "",
 });
 
 const isLoginState = selector({
@@ -20,9 +19,21 @@ const isLoginState = selector({
   get: (state) => {
     const loginNo = state.get(loginNoState);
     const memberLevel = state.get(memberLevelState);
+    const SellerNo = state.get(sellerLoginNoState);
 
-    return loginNo !== -1 && memberLevel !== -1;
+    return (loginNo !== -1 || SellerNo !== -1) && memberLevel !== -1;
   },
+});
+
+//seller 부분 recoil
+const sellerLoginNoState = atom({
+  key: "sellerLoginNoState",
+  default: -1,
+});
+
+const loginBusinessNameState = atom({
+  key: " loginBusinessNameState",
+  default: "",
 });
 
 const isSellerLoginState = selector({
@@ -38,4 +49,6 @@ export {
   isLoginState,
   sellerLoginNoState,
   isSellerLoginState,
+  loginNicknameState,
+  loginBusinessNameState,
 };

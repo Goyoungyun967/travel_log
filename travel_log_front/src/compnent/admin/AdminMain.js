@@ -3,6 +3,8 @@ import "./admin.css";
 import InquiryList from "../inquiry/InquiryList";
 import InquiryView from "../inquiry/InquiryView";
 import AdminSellerList from "./AdminSellerList";
+import MemberChart from "./MemberChart";
+
 const AdminMain = () => {
   const changeMenu = (e) => {
     e.currentTarget.nextSibling.classList.toggle("active");
@@ -28,7 +30,7 @@ const AdminMain = () => {
               <NavLink to="1">회원 관리</NavLink>
             </li>
             <li>
-              <NavLink to="2">회원 이용 관리</NavLink>
+              <NavLink to="memberChart">회원 이용 관리</NavLink>
             </li>
             <li>
               <NavLink to="inquiryList">1대1 문의 처리</NavLink>
@@ -70,6 +72,7 @@ const AdminMain = () => {
             <Route path="inquiryList" element={<InquiryList />} />
             <Route path="inquiryView/:inquiryNo" element={<InquiryView />} />
             <Route path="sellerList" element={<AdminSellerList />} />
+            <Route path="memberChart" element={<MemberChart />} />
           </Routes>
         </div>
       </div>

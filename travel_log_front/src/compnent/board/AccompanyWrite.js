@@ -1,15 +1,12 @@
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useState } from "react";
-import BoardFrm from "./BoardFrm";
-import UqillEditor from "../utils/UqillEditor";
 import { useNavigate } from "react-router-dom";
 import AccompanyFrm from "./AccompanyFrm";
 import dayjs from "dayjs";
 import { loginNoState } from "../utils/RecoilData";
 import { useRecoilState } from "recoil";
-import AccompanyDate from "./AccompanyDate";
-import BoardDate from "./BoardDate";
+import BoardUqillEditor from "./../utils/BoardUqillEditor";
 
 const AccompanyWrite = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -40,11 +37,11 @@ const AccompanyWrite = () => {
   ]);
   const [selectedArea, setSelectedArea] = useState("");
   //일정
-  // 기본 날짜 세팅
+  //기본 날짜 세팅
   const startDay = dayjs().add(1, "day").toDate();
   const endDay = dayjs().add(2, "day").toDate();
 
-  // 시작날짜, 끝 날짜
+  //체크인 날짜 , 체크아웃 날짜
   const [startDate, setStartDate] = useState(startDay);
   const [endDate, setEndDate] = useState(endDay);
 
@@ -59,13 +56,15 @@ const AccompanyWrite = () => {
   ]);
   const [selectedType, setSelectedType] = useState("");
 
+  //동행
+  const [accompanyContent, setAccompanyContent] = useState("");
   const inputTitle = (e) => {
     setBoardTitle(e.target.value);
   };
   const inputContent = (e) => {
     setBoardContent(e.target.value);
   };
-
+  // 빽으로 보내줘야하는것들 제목,기본 글,지역, 동행날짜 , 동행지역? ,동행내용
   const writeBoard = () => {
     if (boardTitle !== "" && boardContent !== "") {
       const form = new FormData();
@@ -137,10 +136,13 @@ const AccompanyWrite = () => {
           setAccompanyType={setAccompanyType}
           selectedType={selectedType}
           setSelectedType={setSelectedType}
+          accompanyContent={accompanyContent}
+          setAccompanyContent={setAccompanyContent}
         />
 
         <div className="board-editer-wrap">
-          <UqillEditor
+          <BoardUqillEditor
+            className="board-UpilEditor"
             boardContent={boardContent}
             setBoardContent={setBoardContent}
           />

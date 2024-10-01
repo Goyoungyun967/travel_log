@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import ReactQuill from "react-quill";
 
-const UqillEditor = (props) => {
+const BoardUqillEditor = (props) => {
   const { boardContent, setBoardContent } = props;
   const editorRef = useRef(null);
 
@@ -36,10 +36,10 @@ const UqillEditor = (props) => {
       ref={editorRef}
       value={boardContent}
       onChange={changeValue}
-      style={{ width: "700px", height: "400px" }}
+      style={{ width: "100%", height: "400px" }}
       modules={modules}
     />
   );
 };
 
-export default UqillEditor;
+export default BoardUqillEditor;

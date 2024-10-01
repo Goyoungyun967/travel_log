@@ -24,7 +24,7 @@ public class SellerJwtUtils {
 	public int expireHourRefresh;
 	
 	//1시간짜리 토큰생성
-	public String createAccessToken(String businessNo) {
+	public String createAccessToken(int sellerNo) {
 		//1. 작성해둔 키값을 이용해서 암호화 코드 생성
 		SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
 		//2. 토큰 생성시간 및 만료시간 설정 
@@ -38,13 +38,13 @@ public class SellerJwtUtils {
 						.issuedAt(startTime)		//토큰 발생 시작시간	
 						.expiration(expireTime)		//토큰만료 시간
 						.signWith(key)				//암호화 서명
-						.claim("businessNo",businessNo)	//토큰에 포함할 회원정보 세팅 (key=value)					
+						.claim("sellerNo",sellerNo)	//토큰에 포함할 회원정보 세팅 (key=value)					
 					    .compact();					//생성
 			return token;
 	}
 	
 	//8760짜리(1년) accessToken
-	public String createRefreshToken(String businessNo) {
+	public String createRefreshToken(int sellerNo) {
 		//1. 작성해둔 키값을 이용해서 암호화 코드 생성
 		SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
 		//2. 토큰 생성시간 및 만료시간 설정 
@@ -57,7 +57,7 @@ public class SellerJwtUtils {
 						.issuedAt(startTime)		//토큰 발생 시작시간	
 						.expiration(expireTime)		//토큰만료 시간
 						.signWith(key)				//암호화 서명
-						.claim("businessNo",businessNo)	//토큰에 포함할 회원정보 세팅 (key=value)
+						.claim("sellerNo",sellerNo)	//토큰에 포함할 회원정보 세팅 (key=value)
 					    .compact();					//생성
 			return token;
 	}
@@ -71,10 +71,10 @@ public class SellerJwtUtils {
 										.build()	
 										.parse(token)
 										.getPayload();		
-		String businessNo = (String)claims.get("businessNo");
+		int sellerNo = (int)claims.get("sellerNo");
 		
 		LoginSellerDTO loginSeller = new LoginSellerDTO();
-		loginSeller.setBusinessNo(businessNo);
+		loginSeller.setSellerNo(sellerNo);
 		
 		return loginSeller;
 	}									

@@ -30,34 +30,7 @@
     			sb)
     where rnum BETWEEN #{start} and #{end}
 	</select>
-			<select id="accompanyTotalCount" resultType="int">
-				SELECT COUNT(*) FROM board WHERE board_type= #{type}
-			</select>	
-		<select id="selectAccompanyList" resultType="board">
-			select * from
-				(select rownum as rnum, sb.* from
-					(SELECT 
-					 	b.board_no,
-					    b.board_title,
-					    b.board_content,
-					    b.board_area,
-					    b.reg_date,
-					    b.board_thumb,
-					    b.read_count,
-					    b.board_type,
-					    (select member_IMAGE from member m where m.member_no = b.member_no) as member_IMAGE,
-					    (select MEMBER_NICKNAME from member m where m.member_no = b.member_no) as member_NICKNAME,
-					
-					FROM 
-		    			board b
-		    		WHERE 
-		    			 board_type = #{type}
-		    	    order by
-		          		board_no desc
-		               ) 
-		    			sb)
-			where rnum BETWEEN #{start} and #{end}
-		</select>
+		
 		<insert id="insertBoard">
 			 insert into board values(board_seq.nextval,#{boardTitle},#{boardContent},#{boardArea},sysdate,1,#{boardThumb},#{memberNo},0)
 			<selectKey resultType="int" keyProperty="boardNo" order="AFTER">
@@ -164,6 +137,38 @@
 	
 		
 		
+		
+		<!-- 동행 게시판  -->
+		<!-- 동행 게시판 select  -->
+			<select id="accompanyTotalCount" resultType="int">
+				SELECT COUNT(*) FROM board WHERE board_type= #{type}
+			</select>	
+		<select id="selectAccompanyList" resultType="board">
+			select * from
+				(select rownum as rnum, sb.* from
+					(SELECT 
+					 	b.board_no,
+					    b.board_title,
+					    b.board_content,
+					    b.board_area,
+					    b.reg_date,
+					    b.board_thumb,
+					    b.read_count,
+					    b.board_type,
+					    (select member_IMAGE from member m where m.member_no = b.member_no) as member_IMAGE,
+					    (select MEMBER_NICKNAME from member m where m.member_no = b.member_no) as member_NICKNAME,
+					
+					FROM 
+		    			board b
+		    		WHERE 
+		    			 board_type = #{type}
+		    	    order by
+		          		board_no desc
+		               ) 
+		    			sb)
+			where rnum BETWEEN #{start} and #{end}
+		</select>
+		<!-- 동행 게시판 insert  -->
 		
 		
 			

@@ -1,167 +1,144 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./boardMap.css";
+import "./boardMap.css"; // CSS 파일을 추가하세요.
+import DaumPostcode from "react-daum-postcode";
 
 const BoardMap = (props) => {
   const mapRef = useRef(null);
-  const markerCount = useRef(0);
-  const markers = useRef([]);
-  const distances = useRef([]);
-  const totalDistance = useRef(0);
-  const polylines = useRef([]);
-  const [distanceInfo, setDistanceInfo] = useState([]);
-  const [isAddingMarker, setIsAddingMarker] = useState(false);
-
-  //최초 지역
-  const boardArea = props.boardArea;
-  const setBoardArea = props.setBoardArea;
-  const boardAreas = [
-    { title: "서울", position: { lat: 37.5665, lng: 126.978 } },
-    { title: "경기", position: { lat: 37.3942, lng: 126.982 } },
-    { title: "부산", position: { lat: 35.1796, lng: 129.0756 } },
-    { title: "대구", position: { lat: 35.8714, lng: 128.6014 } },
-    { title: "인천", position: { lat: 37.4563, lng: 126.7052 } },
-    { title: "대전", position: { lat: 36.3504, lng: 127.3845 } },
-    { title: "광주", position: { lat: 35.1595, lng: 126.8526 } },
-    { title: "울산", position: { lat: 35.5372, lng: 129.3116 } },
-    { title: "세종", position: { lat: 36.4805, lng: 127.2892 } },
-    { title: "강원", position: { lat: 37.8225, lng: 128.1556 } },
-    { title: "충북", position: { lat: 36.6358, lng: 127.4896 } },
-    { title: "충남", position: { lat: 36.6452, lng: 126.7076 } },
-    { title: "경북", position: { lat: 36.5778, lng: 128.9995 } },
-    { title: "경남", position: { lat: 35.2372, lng: 128.6901 } },
-    { title: "전북", position: { lat: 35.8105, lng: 127.1084 } },
-    { title: "제주", position: { lat: 33.4996, lng: 126.5312 } },
-  ];
+  const markerRef = useRef(null);
+  const [itinerary, setItinerary] = useState([]);
+  const daysDifference = props.daysDifference;
+  const accompanyContent = props.accompanyContent;
+  const setAccompanyContent = props.setAccompanyContent;
+  const [addresses, setAddresses] = useState([]);
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const [postcodeVisible, setPostcodeVisible] = useState(false);
 
   useEffect(() => {
     const loadMap = () => {
-      const naver = window.naver;
-      if (!naver) {
-        console.error("Naver Maps API is not loaded.");
+      const kakao = window.kakao;
+      if (!kakao) {
+        console.error("Kakao Maps API is not loaded.");
         return;
       }
 
       const mapOptions = {
-        center: new naver.maps.LatLng(37.5666103, 126.9783882),
-        zoom: 14,
-        logoControl: false,
-        mapDataControl: false,
-        scaleControl: true,
-        zoomControl: false,
+        center: new kakao.maps.LatLng(37.5666103, 126.9783882), // 서울 시청
+        level: 4,
       };
 
-      mapRef.current = new naver.maps.Map("map", mapOptions);
+      mapRef.current = new kakao.maps.Map(
+        document.getElementById("map"),
+        mapOptions
+      );
 
-      naver.maps.Event.addListener(mapRef.current, "click", (event) => {
-        if (isAddingMarker) {
-          const latLng = event.coord;
-          if (latLng) {
-            const markerNumber = markerCount.current + 1;
-
-            // 화살표 모양 마커 HTML
-            const customIcon = {
-              content: `
-                <div className="accompany_cs_mapbridge">
-                  <div className="accompany_map_marker" data-number="${markerNumber}">
-                    ${markerNumber}
-                  </div>
-                </div>`,
-              size: new naver.maps.Size(40, 40), // 크기 조정
-              anchor: new naver.maps.Point(20, 40), // 앵커 포인트 조정
-            };
-
-            const newMarker = new naver.maps.Marker({
-              position: latLng,
-              map: mapRef.current,
-              title: `마커 위치: ${latLng.lat()}, ${latLng.lng()}`,
-              icon: customIcon,
-              draggable: true,
-            });
-
-            markers.current.push(newMarker);
-            markerCount.current += 1;
-
-            if (markers.current.length > 1) {
-              const previousMarker =
-                markers.current[markers.current.length - 2];
-              const distance = calculateDistance(
-                previousMarker.getPosition(),
-                newMarker.getPosition()
-              );
-
-              distances.current.push(distance);
-              totalDistance.current += distance;
-
-              const polyline = new naver.maps.Polyline({
-                path: [previousMarker.getPosition(), newMarker.getPosition()],
-                map: mapRef.current,
-                strokeColor: "#FF0000",
-                strokeOpacity: 0.8,
-                strokeWeight: 3,
-              });
-
-              polylines.current.push(polyline);
-              updateDistanceInfo();
-            }
-          }
-        }
+      // 초기 마커 설정
+      markerRef.current = new kakao.maps.Marker({
+        position: mapOptions.center,
+        map: mapRef.current,
       });
+
+      setMapLoaded(true);
     };
 
-    const checkNaverMap = setInterval(() => {
-      if (window.naver) {
-        clearInterval(checkNaverMap);
+    // Kakao Maps API 로드 확인
+    const checkKakaoMap = setInterval(() => {
+      if (window.kakao && window.kakao.maps) {
+        clearInterval(checkKakaoMap);
         loadMap();
       }
     }, 100);
 
-    return () => clearInterval(checkNaverMap);
-  }, [isAddingMarker]);
+    return () => clearInterval(checkKakaoMap);
+  }, []);
 
-  const calculateDistance = (pos1, pos2) => {
-    const R = 6371; // 지구 반지름 (킬로미터)
-    const lat1 = pos1.lat() * (Math.PI / 180);
-    const lon1 = pos1.lng() * (Math.PI / 180);
-    const lat2 = pos2.lat() * (Math.PI / 180);
-    const lon2 = pos2.lng() * (Math.PI / 180);
+  useEffect(() => {
+    if (mapLoaded && mapRef.current) {
+      // 스타일이 변경된 후에 relayout() 호출
+      mapRef.current.relayout();
+    }
+  }, [mapLoaded]);
 
-    const dLat = lat2 - lat1;
-    const dLon = lon2 - lon1;
+  const handleAddressSearch = (address) => {
+    const kakao = window.kakao;
+    if (!kakao || !kakao.maps || !kakao.maps.services) {
+      console.error("Kakao Maps API is not properly loaded.");
+      return;
+    }
 
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    return R * c; // 거리 반환
-  };
-
-  const updateDistanceInfo = () => {
-    const info = distances.current.map((distance, index) => ({
-      segment: `${index + 1} ~ ${index + 2}`,
-      distance: distance.toFixed(2),
-    }));
-    info.push({
-      segment: "총 거리",
-      distance: totalDistance.current.toFixed(2),
+    const geocoder = new kakao.maps.services.Geocoder();
+    geocoder.addressSearch(address, (results, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        const coords = new kakao.maps.LatLng(results[0].y, results[0].x);
+        mapRef.current.setCenter(coords); // 지도 중심 이동
+        markerRef.current.setPosition(coords); // 마커 위치 변경
+        setAddresses((prev) => [...prev, address]); // 주소 목록 업데이트
+        setPostcodeVisible(false); // 주소 검색 창 닫기
+      } else {
+        console.error("주소 검색 실패");
+      }
     });
-    setDistanceInfo(info);
   };
 
-  const handleAddMarkerClick = () => {
-    setIsAddingMarker((prev) => !prev);
+  const handleItineraryChange = (index, event) => {
+    const newItinerary = [...itinerary];
+    newItinerary[index] = event.target.value;
+    setItinerary(newItinerary);
+    setAccompanyContent(newItinerary);
   };
+
+  useEffect(() => {
+    if (daysDifference > 0) {
+      const initialItinerary = new Array(daysDifference).fill("");
+      setItinerary(initialItinerary);
+      setAccompanyContent(initialItinerary);
+    }
+  }, [daysDifference, setAccompanyContent]);
 
   return (
     <div>
-      <button onClick={handleAddMarkerClick} className="accompany-marker-btn">
-        {isAddingMarker ? "마커 추가 중지" : "마커 추가 시작"}
-      </button>
-      <div id="map" style={{ width: "100%", height: "300px" }} />
-      <div className="distance-info">
-        {distanceInfo.map((info, index) => (
+      <div className="address-search">
+        <button onClick={() => setPostcodeVisible(true)}>주소 검색</button>
+        {postcodeVisible && (
+          <DaumPostcode
+            onComplete={(data) => {
+              const address = data.address;
+              handleAddressSearch(address);
+            }}
+          />
+        )}
+      </div>
+
+      <div className="map-container">
+        <div
+          id="map"
+          style={{
+            width: "100%",
+            height: "400px",
+            display: mapLoaded ? "block" : "none",
+          }}
+        />
+      </div>
+
+      <div>
+        <h3>여행일정</h3>
+        {itinerary.map((entry, index) => (
+          <div key={index} className="diary_content_list">
+            <label>{index + 1}일차</label>
+            <textarea
+              className="diary-textarea"
+              value={entry}
+              onChange={(event) => handleItineraryChange(index, event)}
+              placeholder={`Day ${index + 1}`}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="address-list">
+        <h3>검색한 주소</h3>
+        {addresses.map((address, index) => (
           <div key={index}>
-            {info.segment}: {info.distance} km
+            <span>{index + 1}:</span>
+            <span>{address}</span>
           </div>
         ))}
       </div>

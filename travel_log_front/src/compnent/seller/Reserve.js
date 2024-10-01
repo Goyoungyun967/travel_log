@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import "./css/reserve.css";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const Reserve = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [bookInfo, setBookInfo] = useState({});
+  const [guestRequest, setGuestRequest] = useState();
   console.log(bookInfo);
+  const { bookNo } = useParams();
   // startDate를 Date 객체로 변환
   //   const endDate = new Date(bookInfo.endDate).toISOString().split("T")[0];
 
   useEffect(() => {
     axios
-      .get(`${backServer}/seller/reserve/22`) // *** 일단 예약번호 1로 보냄 나중에 변경
+      .get(`${backServer}/seller/reserve/${bookNo}`) // *** 일단 예약번호 1로 보냄 나중에 변경
       .then((res) => {
         console.log(res);
         setBookInfo(res.data);
+        setGuestRequest(res.data.guestRequest);
       })
       .catch((err) => {
         console.log(err);
@@ -64,7 +68,16 @@ const Reserve = () => {
         </div>
         <div className="item request-wrap">
           <h3>요청사항</h3>
-          <div className="request-box">{bookInfo.guestRequest}</div>
+          {guestRequest !== null ? (
+            <div className="request-box">{bookInfo.guestRequest}</div>
+          ) : (
+            <div
+              className="request-no"
+              style={{ textAlign: "center", margin: "20px", color: "#ccc" }}
+            >
+              요청사항 없음
+            </div>
+          )}
         </div>
       </div>
     </div>
