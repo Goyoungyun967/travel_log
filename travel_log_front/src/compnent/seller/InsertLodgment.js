@@ -6,6 +6,12 @@ import UqillEditor from "../utils/UqillEditor";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Fade from "@mui/material/Fade";
+import Button from "@mui/material/Button";
+
 const InsertLodgment = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
@@ -97,9 +103,6 @@ const InsertLodgment = () => {
 
   const [deAddress, setDeAddress] = useState(""); // 상세주소
   // 우편번호랑 주소 input에 넣기
-  const completeHandler = (data) => {
-    setAddress(data.address);
-  };
 
   // 임시 데이터
   const [loginNo, setLoginNo] = useState(1);
@@ -265,14 +268,7 @@ const InsertLodgment = () => {
                 <div className="addr-api">
                   <div className="addr-block">
                     <div className="addr-search-api">
-                      {!isReadOnly ? (
-                        <DaumPostcode
-                          onComplete={completeHandler}
-                          autoClose={false}
-                        />
-                      ) : (
-                        ""
-                      )}
+                      {!isReadOnly ? <ModalAddr setAddress={setAddress} /> : ""}
                     </div>
                     <div className="addr-api-input">
                       <label htmlFor="addrText">주소</label>
@@ -416,6 +412,56 @@ const SearchHotelList = (props) => {
     <div className="search-item" onClick={inputHotelInfo}>
       <div className="item-title">{hotel.xlodgmentName}</div>
       <div className="item-addr">{hotel.xlodgmentAddr}</div>
+    </div>
+  );
+};
+
+// 모달로 띄울 주소 검색 api
+const ModalAddr = (props) => {
+  const setAddress = props.setAddress;
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const completeHandler = (data) => {
+    setAddress(data.address);
+  };
+
+  return (
+    <div>
+      <Button onClick={handleOpen} className="btn primary">
+        주소 검색
+      </Button>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <Box sx={style}>
+            <DaumPostcode onComplete={completeHandler} autoClose={false} />
+          </Box>
+        </Fade>
+      </Modal>
     </div>
   );
 };

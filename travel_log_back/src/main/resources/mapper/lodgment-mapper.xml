@@ -54,15 +54,15 @@
 	<!-- 객실 정보 조회 (객실 정보 + 파일들) -->
 	<select id="selectRoomInfo" resultMap="RoomResultMap">
 		SELECT
-		r.room_no AS room_no,
-		r.lodgment_no AS lodgment_no,
-		r.room_name AS room_name,
-		r.room_qua AS room_qua,
-		r.room_max_capacity AS room_max_capacity,
-		r.room_price AS room_price,
-		r.room_info AS room_info,
-		rf.room_file_no AS room_file_no,
-		rf.room_img AS room_img
+			r.room_no AS room_no,
+			r.lodgment_no AS lodgment_no,
+			r.room_name AS room_name,
+			r.room_qua AS room_qua,
+			r.room_max_capacity AS room_max_capacity,
+			r.room_price AS room_price,
+			r.room_info AS room_info,
+			rf.room_file_no AS room_file_no,
+			rf.room_img AS room_img
 		FROM
 		room r
 		LEFT JOIN
@@ -90,15 +90,15 @@
 	<!-- 객실 상세 (객실 정보 + 파일 + 해시태그) -->
 	<select id="selectRoomViewInfo" resultMap="RoomViewMap">
 		SELECT
-		r.room_no AS room_no,
-		r.lodgment_no AS lodgment_no,
-		r.room_name AS room_name,
-		r.room_qua AS room_qua,
-		r.room_max_capacity AS room_max_capacity,
-		r.room_price AS room_price,
-		r.room_info AS room_info,
-		st.service_tag_type AS serviceTagType,
-		rf.room_img AS room_img
+			r.room_no AS room_no,
+			r.lodgment_no AS lodgment_no,
+			r.room_name AS room_name,
+			r.room_qua AS room_qua,
+			r.room_max_capacity AS room_max_capacity,
+			r.room_price AS room_price,
+			r.room_info AS room_info,
+			st.service_tag_type AS serviceTagType,
+			rf.room_img AS room_img
 		FROM
 		room r
 		LEFT JOIN
