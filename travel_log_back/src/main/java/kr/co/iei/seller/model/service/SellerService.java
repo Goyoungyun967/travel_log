@@ -104,10 +104,11 @@ public class SellerService {
 	// 객실 상세
 	public Map selectRoomInfo(int lodgmentNo, int roomNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		LodgmentStorageDTO ls = sellerLodgmentDao.selectOneLodgment(lodgmentNo); // 호텔 정보 출력 (호텔 이름, 체크인, 체크 아웃, 주소 들고 오기)
+		LodgmentStorageDTO ls = sellerLodgmentDao.selectOneLodgment(lodgmentNo); // 호텔 정보 출력 (호텔 이름, 체크인, 체크 아웃, 주소 들고
+																					// 오기)
 		RoomDTO rd = sellerLodgmentDao.selectRoomViewInfo(roomNo);
-		map.put("lodgment",ls);
-		map.put("room",rd);
+		map.put("lodgment", ls);
+		map.put("room", rd);
 		return map;
 	}
 
@@ -145,6 +146,7 @@ public class SellerService {
 		List<StmInfoDTO> ls = sellerLodgmentDao.selectStmInfo(st);
 		return ls;
 	}
+
 	public List<InquiryDTO> selectInqList(InquiryDTO iqd) {
 		List<InquiryDTO> ls = sellerLodgmentDao.selectInqList(iqd);
 		return ls;
@@ -158,18 +160,18 @@ public class SellerService {
 		int result = sellerDao.insertSeller(seller);
 		return result;
 	}
-	
-	//형묵 seller- id 중복체크 
+
+	// 형묵 seller- id 중복체크
 	public int checkSellerId(String businessNo) {
 		int result = sellerDao.checkSellerId(businessNo);
 		return result;
 	}
 
-	//형묵 seller-login 완
+	// 형묵 seller-login 완
 	public LoginSellerDTO login(SellerDTO seller) {
 		SellerDTO s = sellerDao.selectLoginSeller(seller.getBusinessNo());
 		System.out.println(s);
-		if(s!=null && encoder.matches(seller.getSellerPw(),s.getSellerPw())) {
+		if (s != null && encoder.matches(seller.getSellerPw(), s.getSellerPw())) {
 			String accessToken = sellerJwtUtils.createAccessToken(s.getSellerNo());
 			String refreshToken = sellerJwtUtils.createRefreshToken(s.getSellerNo());
 			LoginSellerDTO loginSeller = new LoginSellerDTO();
@@ -182,43 +184,39 @@ public class SellerService {
 		return null;
 	}
 
-
 	// 판매자 문의 글 상세
 	public InquiryDTO selectInqView(int inqNo) {
 		InquiryDTO id = sellerLodgmentDao.selectInqView(inqNo);
 		return id;
 	}
-	
-	
-	//seller refresh 형묵
+
+	// seller refresh 형묵
 	public LoginSellerDTO refresh(String token) {
 		try {
 			LoginSellerDTO loginSeller = sellerJwtUtils.checkToken(token);
-			String accessToken
-			= sellerJwtUtils.createAccessToken(loginSeller.getSellerNo());
-			String refreshToken
-			= sellerJwtUtils.createRefreshToken(loginSeller.getSellerNo());
+			String accessToken = sellerJwtUtils.createAccessToken(loginSeller.getSellerNo());
+			String refreshToken = sellerJwtUtils.createRefreshToken(loginSeller.getSellerNo());
 			loginSeller.setAccessToken(accessToken);
 			loginSeller.setRefreshToken(refreshToken);
 			SellerDTO s = sellerDao.selectOneSeller(loginSeller.getSellerNo());
 			loginSeller.setBusinessName(s.getBusinessName());
 			return loginSeller;
-		}catch(Exception e) {
+		} catch (Exception e) {
 
-
-	}
+		}
 		return null;
 
+	}
 
-}
 	// 예약 리스트 조회
 	public List selectReserveList(int sellerNo) {
 		List list = sellerLodgmentDao.selectReserve(sellerNo);
 		return list;
 	}
-	
+
 	// 예약 상세 조회
 	public BookingInfoDTO bookInfo(int bookNo) {
 		BookingInfoDTO bid = sellerLodgmentDao.bookInfo(bookNo);
 		return bid;
 	}
+}
