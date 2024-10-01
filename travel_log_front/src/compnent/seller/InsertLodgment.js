@@ -440,7 +440,7 @@ const ModalAddr = (props) => {
 
   return (
     <div>
-      <Button onClick={handleOpen} className="btn primary">
+      <Button onClick={handleOpen} className="Addrbtn">
         주소 검색
       </Button>
       <Modal
