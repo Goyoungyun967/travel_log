@@ -29,6 +29,8 @@ public class RoomDTO {
 	private int roomPrice;
 	@Schema(description = "객실 정보",type="String")
 	private String roomInfo;
+	@Schema(description = "객실 삭제 여부",type="int")
+	private int roomDelete;
 	
 	@Schema(description = "객실 사진 리스트",type="List<RoomFileDTO>")
 	private List<RoomFileDTO> fileList;

@@ -23,6 +23,20 @@ const LodgmentView = () => {
         console.log(err);
       });
   }, []);
+
+  // 삭제지만.. 1(보여지는거) => 0으로 바뀌게 해야하므로 패치 사용
+  const deleteLodgment = () => {
+    axios
+      .patch(`${backServer}/seller/delLodgment`, null, {
+        params: { lodgmentNo: lodgmentNo },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
   return (
     <div className="lv-box-wrap box-radius">
       <div className="lv-item-fr-wrap">
@@ -62,6 +76,9 @@ const LodgmentView = () => {
           >
             호텔 수정
           </Link>
+          <button type="button" onClick={deleteLodgment}>
+            호텔 삭제
+          </button>
         </div>
       </div>
       <div className="item-sc-wrap">

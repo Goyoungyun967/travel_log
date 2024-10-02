@@ -184,4 +184,20 @@
 	column: fileList에서 매핑할 데이터베이스 열 이름을 지정
 	javaType: 매핑될 Java 타입을 지정
 	ofType: fileList의 각 요소 타입을 지정 -->
+	
+	<select id="lodgmentCollection" resultType="int">
+		select 
+			count(*) 
+		from 
+			lodgment_collection 
+		where 
+			lodgment_no = #{lodgmentNo} and member_no = #{loginNo}	
+	</select>
+	
+	<insert id="insertCollect">
+		insert into lodgment_collection values(#{loginNo}, #{lodgmentNo})
+	</insert>
+	<delete id="deleteCollect">
+		delete from lodgment_collection where lodgment_no = #{lodgmentNo} and member_no= #{loginNo}
+	</delete>
 </mapper>

@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.co.iei.board.model.dto.BoardAccompanyDTO;
 import kr.co.iei.board.model.dto.BoardCommentDTO;
 import kr.co.iei.board.model.dto.BoardDTO;
 import kr.co.iei.board.model.dto.BoardFileDTO;
@@ -223,7 +224,34 @@ public class BoardController {
   		    return ResponseEntity.ok(map);
   		}
   //동행 게시판 등록
-    
+  	@PostMapping("/insertAccompany")
+  		public ResponseEntity<Boolean> insertAccompany(@ModelAttribute BoardAccompanyDTO boardAccompany , @ModelAttribute MultipartFile thumnail, @ModelAttribute MultipartFile[] boardFile){
+  		if(thumnail != null) {
+			String savepath = root+"/board/thumb/";
+			String filepath = fileUtils.upload(savepath,thumnail);
+			boardAccompany.setBoardThumb(filepath);
+		}
+		List<BoardFileDTO> boardFileList = new ArrayList<BoardFileDTO>();
+		if(boardFile != null) {
+			String savepath = root + "/board/";
+			for(MultipartFile file : boardFile) {
+				BoardFileDTO fileDTO = new BoardFileDTO();
+				String filename = file.getOriginalFilename();
+				String filepath = fileUtils.upload(savepath, file);
+				fileDTO.setFilename(filename);
+				fileDTO.setFilepath(filepath);
+				boardFileList.add(fileDTO);
+			}
+		}
+		int result = boardService.insertAcoompanyBoard(boardAccompany,boardFileList);
+		System.out.println(boardAccompany);
+		System.out.println("00000000"+result);
+		System.out.println("boardFileList.size()"+boardFileList.size());
+	    return ResponseEntity.ok(result == 1 + boardFileList.size());
+  		
+  	}
+  	
+
     
     
 }

@@ -31,7 +31,7 @@ const RoomView = () => {
   console.log(roomInfo);
   useEffect(() => {
     axios
-      .get(`${backServer}/seller/roomView/${lodgmentNo}/${roomNo}`) // *** 임시로 판매자 번호 1로 넣어둠
+      .get(`${backServer}/seller/roomView/${lodgmentNo}/${roomNo}`)
       .then((res) => {
         console.log(res);
         setlodgmentInfo(res.data.lodgment);

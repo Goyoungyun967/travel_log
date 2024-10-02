@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import kr.co.iei.board.model.dao.BoardDao;
+import kr.co.iei.board.model.dto.AccompanyTag;
+import kr.co.iei.board.model.dto.BoardAccompanyDTO;
 import kr.co.iei.board.model.dto.BoardCommentDTO;
 import kr.co.iei.board.model.dto.BoardDTO;
 import kr.co.iei.board.model.dto.BoardFileDTO;
@@ -168,10 +170,34 @@ public class BoardService {
 		map.put("pi", pi);
 		return map;
 	}
-	//동행게시판 등록
-	
-	
-	
-	
-	
+	@Transactional
+	public int insertAcoompanyBoard(BoardAccompanyDTO boardAccompany, List<BoardFileDTO> boardFileList) {
+	    int result = boardDao.insertBoardAccompany(boardAccompany);
+	    	if(result>0) {
+	    		for(BoardFileDTO boardFile : boardFileList) {
+	    			boardFile.setBoardNo(boardAccompany.getBoardNo());
+	    			System.out.println(1);
+	    			result += boardDao.insertBoardFile(boardFile);
+	    		}
+	    		for(int AccompanyTagNo : boardAccompany.getAccompanyTagNo()) {
+	    			AccompanyTag at = new AccompanyTag();
+	    			at.setBoardNo(boardAccompany.getBoardNo());
+	    			at.setAccompanyTagNo(AccompanyTagNo);
+	    			result += boardDao.insertAccompanyType(boardAccompany);
+	    			System.out.println(2);
+	    		}
+	    		for(int i=0; i<boardAccompany.getAccompanyDate();i++) {
+	    			BoardAccompanyDTO bad = new BoardAccompanyDTO();
+	    			System.out.println(3);
+	    			result += boardDao.insertAccompany(boardAccompany);
+	    			
+	    		}
+	    		
+
+	    	}
+	    
+	    	
+	    return result; // 초기 삽입 실패 시 0 반환
+	}
 }
+

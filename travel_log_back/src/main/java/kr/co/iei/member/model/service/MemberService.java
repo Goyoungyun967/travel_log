@@ -69,10 +69,16 @@ public class MemberService {
 		int result = memberDao.checkSellerId(businessNo);
 		return result;
 	}
+	
 	@Transactional
 	public boolean updateProfile(MemberDTO member) {
-		
 		int result = memberDao.updateProfile(member);
+		
 		return result == 1;
+	}
+	
+	public MemberDTO selectOneUser(int memberNo) {
+		MemberDTO member = memberDao.selectOneUser(memberNo);
+		return member;
 	}
 }

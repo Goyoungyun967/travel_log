@@ -16,6 +16,7 @@ import kr.co.iei.seller.model.dto.StmInfoDTO;
 @Mapper
 public interface SellerLodgmentDao {
 
+//	List selectLodgmentList(int sellerNo);
 	List selectLodgmentList(int sellerNo);
 
 	List selectXlsxHotelInfo(String searchInfo);
@@ -44,10 +45,14 @@ public interface SellerLodgmentDao {
 	
 	RoomDTO selectRoomViewInfo(int roomNo);
 
-	List<InquiryDTO> selectInqList(InquiryDTO iqd);
+	List<InquiryDTO> selectInqList(int sellerNo);
 
 	InquiryDTO selectInqView(int inqNo);
 
 	List selectReserve(int sellerNo);
+
+	int delUpLodgment(int lodgmentNo);
+
+	
 
 }

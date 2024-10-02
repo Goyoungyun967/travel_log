@@ -14,7 +14,7 @@ const Reserve = () => {
 
   useEffect(() => {
     axios
-      .get(`${backServer}/seller/reserve/${bookNo}`) // *** 일단 예약번호 1로 보냄 나중에 변경
+      .get(`${backServer}/seller/reserve/${bookNo}`)
       .then((res) => {
         console.log(res);
         setBookInfo(res.data);

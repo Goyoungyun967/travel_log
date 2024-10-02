@@ -33,10 +33,10 @@ const AccompanyFrm = (props) => {
   const accompanyType = props.accompanyType;
   const setAccompanyType = props.setAccompanyType;
 
+  //동행
   const selectedType = props.selectedType;
   const setSelectedType = props.setSelectedType;
 
-  //동행
   const accompanyContent = props.accompanyContent;
   const setAccompanyContent = props.setAccompanyContent;
 
@@ -308,10 +308,15 @@ const AccompanyFrm = (props) => {
                         type="checkbox"
                         id={`type-${type.accompany_tag_no}`}
                         checked={selectedType.includes(type.accompany_tag_no)}
-                        onChange={() => handleTypeChange(type.accompany_tag_no)}
+                        onChange={() =>
+                          handleTypeChange(
+                            type.accompany_tag_no,
+                            type.accompany_type
+                          )
+                        }
                       />
                       <label htmlFor={`type-${type.accompany_tag_no}`}>
-                        {type.accompany_type} ({type.accompany_tag_no})
+                        {type.accompany_type}
                       </label>
                     </div>
                   ))}
