@@ -25,5 +25,7 @@
  		update member set member_image=#{memberImage} where member_no=#{memberNo}
  	</update>
 
-
+	<select id="getMemberId" resultType="String">
+		select member_id from member where member_no = #{memberNo}
+	</select>
 </mapper>

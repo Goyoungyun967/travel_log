@@ -1,5 +1,5 @@
 const PayMentUserInfo = (props) => {
-  const valueChange = props.valueChange;
+  const { valueChange, bookingInfo } = props; // bookingInfo 추가
 
   return (
     <ul>
@@ -17,6 +17,7 @@ const PayMentUserInfo = (props) => {
           name="guestName"
           onChange={valueChange}
           placeholder="투수객 이름을 입력해주세요."
+          value={bookingInfo.guestName}
         />
       </li>
       <li>
@@ -31,6 +32,7 @@ const PayMentUserInfo = (props) => {
           onChange={valueChange}
           placeholder="투수객 번호 입력해주세요."
           maxLength={13}
+          value={bookingInfo.guestPhone}
         />
       </li>
       <li>
@@ -43,6 +45,7 @@ const PayMentUserInfo = (props) => {
           onChange={valueChange}
           maxLength={100}
           placeholder="요청사항이 있으면 입력해주세요."
+          value={bookingInfo.guestRequest}
         />
       </li>
     </ul>

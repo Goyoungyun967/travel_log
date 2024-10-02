@@ -6,14 +6,18 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { loginNoState } from "../utils/RecoilData";
 import { useRecoilState } from "recoil";
+import Swal from "sweetalert2";
 
 const PaymentPage = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
-
+  //console.log(loginNo);
   const { state } = useLocation();
   const navigate = useNavigate();
-  console.log(state);
+  //console.log(state);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     // 외부 스크립트 로드 함수
@@ -44,19 +48,39 @@ const PaymentPage = () => {
     guestName: "",
     guestPhone: "",
     guestRequest: "",
-    gusetCount: state.guest,
+    guestCount: state.guest,
     startDate: state.checkIn,
     endDate: state.checkOut,
     roomNo: state.room.roomNo,
     sellerNo: state.lodgmentInfo.sellerNo,
-    memberNo: loginNo,
+    memberNo: loginNo, //왜 디폴트값이 들어갈까?
+    portoneimpuid: "",
   });
+  //console.log(bookingInfo.memberNo);
 
-  console.log(bookingInfo);
+  //console.log(bookingInfo);
   // 투숙객 정보 입력 변환
   const valueChange = (e) => {
     const { name, value } = e.target;
-    setBookingInfo((prev) => ({ ...prev, [name]: value }));
+    if (name === "guestName" && value.length > 5) {
+      Swal.fire({
+        title: "이름 오류",
+        text: "이름은 5자 이내로 입력해주세요.",
+        icon: "info",
+        confirmButtonText: "확인",
+      });
+      return;
+    }
+
+    if (name === "guestPhone") {
+      const phoneNumber = value
+        .replace(/[^0-9]/g, "") // 숫자만 남기기
+        .replace(/^(\d{3})(\d{3,4})(\d{4})$/, "$1-$2-$3"); // 형식 맞추기
+
+      setBookingInfo((prev) => ({ ...prev, [name]: phoneNumber }));
+    } else {
+      setBookingInfo((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   // 약관 동의
@@ -103,6 +127,16 @@ const PaymentPage = () => {
 
   // 서버에 결제 정보를 전달
   const payBtn = async () => {
+    if (bookingInfo.guestName === "" || bookingInfo.guestPhone === "") {
+      Swal.fire({
+        title: "투수객 정보를 입력해주세요.",
+        text: "이름과 전화번호를 확인해주세요.",
+        icon: "warning",
+        confirmButtonText: "확인",
+      });
+      return;
+    }
+
     //window.IMP.init("imp17705812"); // 이 값은 계정 고유번호이므로 고정
     window.IMP.request_pay(
       {
@@ -122,13 +156,14 @@ const PaymentPage = () => {
       (rsp) => {
         //console.log(rsp);
         if (rsp.success) {
-          // 결제 성공 시 서버에 요청
-          setBookingInfo(
-            { ...bookingInfo, portoneimpuid: rsp.merchant_uid } // 결제 ID 추가
-          );
-
+          // 결제 성공 시 서버에ㅌ 요청
+          const updatedBookingInfo = {
+            ...bookingInfo,
+            portoneimpuid: rsp.merchant_uid,
+          };
+          console.log(updatedBookingInfo);
           axios
-            .post(`${BackServer}/booking`, bookingInfo)
+            .post(`${BackServer}/booking`, updatedBookingInfo)
             .then((res) => {
               // 결제 완료 처리
             })
@@ -215,7 +250,7 @@ const PaymentPage = () => {
         <BookingLoom />
       </div>
       <div className="payment-user-info-wrap">
-        <PayMentUserInfo valueChange={valueChange} />
+        <PayMentUserInfo valueChange={valueChange} bookingInfo={bookingInfo} />
       </div>
 
       <div className="terms-and-conditions">
