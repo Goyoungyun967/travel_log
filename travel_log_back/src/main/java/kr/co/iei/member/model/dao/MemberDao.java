@@ -17,7 +17,6 @@ public interface MemberDao {
 
 	int checkSellerId(String businessNo);
 
-
 	int updateProfile(MemberDTO member);
 
 	String getMemberId(String memberNo);

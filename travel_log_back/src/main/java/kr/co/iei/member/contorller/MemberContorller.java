@@ -138,6 +138,7 @@ public class MemberContorller {
 			String filepath = fileUtil.upload(savepath, memberImage);
 			member.setMemberImage(filepath);
 			boolean result = memberService.updateProfile(member);
+			
 			return ResponseEntity.ok(result);
 		}
 		return ResponseEntity.ok(false);
