@@ -51,6 +51,8 @@ public interface SellerLodgmentDao {
 
 	List selectReserve(int sellerNo);
 
+	int delUpLodgment(int lodgmentNo);
+
 	
 
 }

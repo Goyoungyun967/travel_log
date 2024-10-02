@@ -13,11 +13,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -231,6 +233,14 @@ public class SellerController {
 		System.out.println("gg");
 		BookingInfoDTO bid = sellerService.bookInfo(bookNo);
 		return ResponseEntity.ok(bid);
+	}
+	
+	// 호텔 삭제 (완전 삭제가 아님 (1에서 0으로 update))
+	@Operation(summary = "호텔 삭제", description = "호텔 삭제(완전 삭제가 아니라 1에서 0으로 update)")
+	@PatchMapping("/delLodgment")
+	public ResponseEntity<Integer> delUpLodgment(@RequestParam int lodgmentNo){
+		int result = sellerService.delUpLodgment(lodgmentNo);
+		return ResponseEntity.ok(null);
 	}
 	
 }

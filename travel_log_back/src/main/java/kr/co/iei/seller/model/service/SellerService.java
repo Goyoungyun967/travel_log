@@ -238,4 +238,13 @@ public class SellerService {
 		BookingInfoDTO bid = sellerLodgmentDao.bookInfo(bookNo);
 		return bid;
 	}
+
+
+	// 삭제 (찐 삭제는 아님)
+	@Transactional
+	public int delUpLodgment(int lodgmentNo) {
+		int result = sellerLodgmentDao.delUpLodgment(lodgmentNo);
+//		result += sellerLodgmentDao.delUpRoom(lod)
+		return 0;
+	}
 }

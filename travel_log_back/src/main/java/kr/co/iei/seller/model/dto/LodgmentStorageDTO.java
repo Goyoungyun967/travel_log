@@ -33,4 +33,6 @@ public class LodgmentStorageDTO {
 	private String lodgmentCheckIn;
 	@Schema(description = "숙소 체크아웃",type="String")
 	private String lodgmentCheckOut;
+	@Schema(description = "숙소 삭제 여부",type="Number")
+	private int lodgmentDelte;
 }
