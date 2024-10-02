@@ -42,21 +42,7 @@ public class BoardService {
 		return map;
 	}
 
-	public Map selectAccompanyList(int type, int reqPage) {
-		int numPerPage = 10;
-		int pageNaviSize = 5;
-		int accompanyCount = boardDao.accompanyTotalCount(type);// 게시물 수
-		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, accompanyCount);
-		Map<String, Object> m = new HashMap<String, Object>();
-		m.put("start", pi.getStart());
-		m.put("end", pi.getEnd());
-		m.put("type", type);
-		List list = boardDao.selectAccompanyList(m);
-		Map<String, Object> map = new HashMap<String,Object>();
-		map.put("list",list);
-		map.put("pi", pi);
-		return map;
-	}
+
 	//여행 게시판 등록
 	@Transactional
 	public int insertBoard(BoardDTO board, List<BoardFileDTO> boardFileList) {
@@ -166,7 +152,23 @@ public class BoardService {
 //	    return result == 1; // 성공 여부 반환
 //	}
 	
-	
+	//동행게시판 
+	public Map selectAccompanyList(int type, int reqPage) {
+		int numPerPage = 10;
+		int pageNaviSize = 5;
+		int accompanyCount = boardDao.accompanyTotalCount(type);// 게시물 수
+		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, accompanyCount);
+		Map<String, Object> m = new HashMap<String, Object>();
+		m.put("start", pi.getStart());
+		m.put("end", pi.getEnd());
+		m.put("type", type);
+		List list = boardDao.selectAccompanyList(m);
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("list",list);
+		map.put("pi", pi);
+		return map;
+	}
+	//동행게시판 등록
 	
 	
 	

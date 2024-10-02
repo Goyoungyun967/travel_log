@@ -2,37 +2,40 @@ import { useState, useRef } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { isLoginState, loginNoState } from "../utils/RecoilData";
-import Swal from "sweetalert2";
+
 import axios from "axios";
 
 const MemberMain = () => {
   const navigate = useNavigate();
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [memberNo, setMemberNo] = useRecoilState(loginNoState);
-  const [member, setMember] = useState({ memberImg: "" });
+  const [member, setMember] = useState({ memberImage: "" });
+  //back으로 보낼 이미지
+  const [memberImage, setMemberImage] = useState();
 
   const thumbnailRef = useRef(null);
 
-  // 이미지 선택 핸들러
   const changeMember = (e) => {
     const file = e.currentTarget.files[0];
+
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setMember((prev) => ({ ...prev, memberImg: reader.result }));
+        setMemberImage(reader.result);
+        setMember((prev) => ({ ...prev, memberImage: reader.result }));
       };
       reader.readAsDataURL(file);
       const form = new FormData();
       form.append("memberNo", memberNo);
-      form.append("memberImage", file);
+      form.append("memberImage", memberImage);
       console.log("멤버넘버 : ", memberNo);
-      console.log("파일:", file);
+      console.log("멤버이미지:", memberImage);
 
       axios
         .post(`${backServer}/member/profile`, form, {
           headers: {
             contentType: "multipart/form-data",
-            processType: false,
+            processData: false,
           },
         })
         .then((res) => {
@@ -61,10 +64,10 @@ const MemberMain = () => {
           onClick={changeImg} // 이미지 클릭 시 changeImg 호출
           style={{ cursor: "pointer" }}
         >
-          {member.memberImg ? (
+          {member.memberImage ? (
             <img
               className="profile-size"
-              src={member.memberImg}
+              src={member.memberImage}
               alt="회원 이미지"
             />
           ) : (

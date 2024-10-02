@@ -53,13 +53,7 @@ public class BoardController {
 		Map map = boardService.selectBoardList(type,reqPage);
 	    return ResponseEntity.ok(map);
 	}
-	//동행게시판리스트
-	@GetMapping("/accompanyList/{type}/{reqPage}")
-	public ResponseEntity<Map> accompanyList(
-		    @PathVariable int type, @PathVariable int reqPage) {
-		    Map map = boardService.selectAccompanyList(type,reqPage);
-		    return ResponseEntity.ok(map);
-		}
+	
 	//일반게시판 등록 
 	//회원 번호 아직 안줌
 	@PostMapping
@@ -221,7 +215,14 @@ public class BoardController {
 //    }
     
     
-	
+  //동행게시판리스트
+  	@GetMapping("/accompanyList/{type}/{reqPage}")
+  	public ResponseEntity<Map> accompanyList(
+  		    @PathVariable int type, @PathVariable int reqPage) {
+  		    Map map = boardService.selectAccompanyList(type,reqPage);
+  		    return ResponseEntity.ok(map);
+  		}
+  //동행 게시판 등록
     
     
     

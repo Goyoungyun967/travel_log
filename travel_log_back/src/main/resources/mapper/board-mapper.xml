@@ -156,8 +156,7 @@
 					    b.read_count,
 					    b.board_type,
 					    (select member_IMAGE from member m where m.member_no = b.member_no) as member_IMAGE,
-					    (select MEMBER_NICKNAME from member m where m.member_no = b.member_no) as member_NICKNAME,
-					
+					    (select MEMBER_NICKNAME from member m where m.member_no = b.member_no) as member_NICKNAME
 					FROM 
 		    			board b
 		    		WHERE 
@@ -179,3 +178,4 @@
 	
   
 </mapper>
+
