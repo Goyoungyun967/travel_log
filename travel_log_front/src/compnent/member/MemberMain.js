@@ -10,7 +10,7 @@ const MemberMain = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [memberNo, setMemberNo] = useRecoilState(loginNoState);
   const [member, setMember] = useState({ memberImage: "" });
-  const [memberImage, setMemberImage] = useState(); // 초기 상태 설정 back으로 보낼거임
+  const [memberImage, setMemberImage] = useState(); // 초기 상태 설정
 
   const thumbnailRef = useRef(null);
 
@@ -27,38 +27,44 @@ const MemberMain = () => {
     }
   };
 
-  // 이미지 클릭 시 파일 입력 클릭
   const changeImg = () => {
     thumbnailRef.current.click();
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (memberImage && memberNo !== -1) {
+
+    const file = thumbnailRef.current.files[0]; // 여기서 file 가져옴 ?
+
+    if (file && memberNo !== -1) {
       const form = new FormData();
       form.append("memberNo", memberNo);
-      form.append("memberImage", memberImage);
+      form.append("file", file); // 파일을 추가
 
       console.log("멤버 번호:", memberNo);
-      console.log("멤버 이미지:", memberImage);
+      console.log("멤버 이미지:", file);
 
       axios
         .post(`${backServer}/member/profile`, form, {
           headers: {
-            contentType: "multipart/form-data",
-            processData: false,
+            "Content-Type": "multipart/form-data",
           },
         })
         .then((res) => {
           console.log(res);
           Swal.fire({
             title: "성공.",
-            text: "원인을 찾으세요",
-            icon: "error",
+            text: "프로필 사진이 업데이트 되었습니다.",
+            icon: "success",
           });
         })
         .catch((err) => {
           console.log(err);
+          Swal.fire({
+            title: "오류.",
+            text: "업데이트에 실패했습니다.",
+            icon: "error",
+          });
         });
     } else {
       console.log("잘못된 입력입니다.");
@@ -74,7 +80,7 @@ const MemberMain = () => {
         <form onSubmit={handleSubmit}>
           <div
             className="image-space"
-            onClick={changeImg} // 이미지 클릭 시 changeImg 호출
+            onClick={changeImg}
             style={{ cursor: "pointer" }}
           >
             {member.memberImage ? (
