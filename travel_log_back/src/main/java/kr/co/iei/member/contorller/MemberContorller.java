@@ -30,7 +30,7 @@ import kr.co.iei.util.FileUtils;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping(value="member")
+@RequestMapping(value="/member")
 @Tag(name="member",description = "MEMBER API")
 public class MemberContorller {
 	
