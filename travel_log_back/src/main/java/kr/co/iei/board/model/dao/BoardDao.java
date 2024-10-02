@@ -19,10 +19,7 @@ public interface BoardDao {
 
 	List selectBoardList(Map<String, Object> m);
 
-	int accompanyTotalCount(int type);
-
-	List selectAccompanyList(Map<String, Object> m);
-
+	
 	int insertBoard(BoardDTO board);
 
 	int insertBoardFile(BoardFileDTO boardFile);
@@ -48,10 +45,6 @@ public interface BoardDao {
 	int selectUnlikeBoard(int boardNo, int memberNo);
 
 	int deleteUnlikeBoard(int memberNo, int boardNo );
-	
-
-
-	
 
 	List<BoardCommentDTO> selectCommentList(int boardNo);
 
@@ -76,7 +69,11 @@ public interface BoardDao {
 //        DELETE FROM board_comment WHERE comment_id = #{commentId}
 //    </delete>
 // 
-	
+	//동행게시판 리스트
+	int accompanyTotalCount(int type);
+
+	List selectAccompanyList(Map<String, Object> m);
+	//동행 게시판 등록
 	
 
 }

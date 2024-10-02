@@ -1,146 +1,179 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./boardMap.css"; // CSS 파일을 추가하세요.
-import DaumPostcode from "react-daum-postcode";
 
 const BoardMap = (props) => {
+  const [search, setSearch] = useState("");
+  const [isOpen, setIsOpen] = useState(true);
   const mapRef = useRef(null);
-  const markerRef = useRef(null);
-  const [itinerary, setItinerary] = useState([]);
-  const daysDifference = props.daysDifference;
-  const accompanyContent = props.accompanyContent;
-  const setAccompanyContent = props.setAccompanyContent;
-  const [addresses, setAddresses] = useState([]);
-  const [mapLoaded, setMapLoaded] = useState(false);
-  const [postcodeVisible, setPostcodeVisible] = useState(false);
+  const markers = useRef([]);
 
   useEffect(() => {
-    const loadMap = () => {
-      const kakao = window.kakao;
-      if (!kakao) {
-        console.error("Kakao Maps API is not loaded.");
-        return;
-      }
+    const script = document.createElement("script");
+    script.src =
+      "//dapi.kakao.com/v2/maps/sdk.js?appkey=eef52b7c2be400520af4dc7b24836680&libraries=services&autoload=false";
+    document.head.appendChild(script);
 
-      const mapOptions = {
-        center: new kakao.maps.LatLng(37.5666103, 126.9783882), // 서울 시청
-        level: 4,
-      };
+    script.onload = () => {
+      window.kakao.maps.load(() => {
+        const container = document.getElementById("map");
+        const options = {
+          center: new window.kakao.maps.LatLng(38.2313466, 128.2139293),
+          level: 1,
+        };
+        mapRef.current = new window.kakao.maps.Map(container, options);
 
-      mapRef.current = new kakao.maps.Map(
-        document.getElementById("map"),
-        mapOptions
-      );
-
-      // 초기 마커 설정
-      markerRef.current = new kakao.maps.Marker({
-        position: mapOptions.center,
-        map: mapRef.current,
+        // 초기 마커 설정
+        const markerPosition = new window.kakao.maps.LatLng(
+          38.2313466,
+          128.2139293
+        );
+        const marker = new window.kakao.maps.Marker({
+          position: markerPosition,
+        });
+        marker.setMap(mapRef.current);
       });
-
-      setMapLoaded(true);
     };
-
-    // Kakao Maps API 로드 확인
-    const checkKakaoMap = setInterval(() => {
-      if (window.kakao && window.kakao.maps) {
-        clearInterval(checkKakaoMap);
-        loadMap();
-      }
-    }, 100);
-
-    return () => clearInterval(checkKakaoMap);
   }, []);
 
-  useEffect(() => {
-    if (mapLoaded && mapRef.current) {
-      // 스타일이 변경된 후에 relayout() 호출
-      mapRef.current.relayout();
-    }
-  }, [mapLoaded]);
-
-  const handleAddressSearch = (address) => {
-    const kakao = window.kakao;
-    if (!kakao || !kakao.maps || !kakao.maps.services) {
-      console.error("Kakao Maps API is not properly loaded.");
+  const searchPlaces = () => {
+    // 카카오 API가 로드된 후에만 실행
+    if (!window.kakao || !window.kakao.maps || !window.kakao.maps.services) {
+      alert("지도를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
       return;
     }
 
-    const geocoder = new kakao.maps.services.Geocoder();
-    geocoder.addressSearch(address, (results, status) => {
-      if (status === kakao.maps.services.Status.OK) {
-        const coords = new kakao.maps.LatLng(results[0].y, results[0].x);
-        mapRef.current.setCenter(coords); // 지도 중심 이동
-        markerRef.current.setPosition(coords); // 마커 위치 변경
-        setAddresses((prev) => [...prev, address]); // 주소 목록 업데이트
-        setPostcodeVisible(false); // 주소 검색 창 닫기
-      } else {
-        console.error("주소 검색 실패");
-      }
-    });
-  };
-
-  const handleItineraryChange = (index, event) => {
-    const newItinerary = [...itinerary];
-    newItinerary[index] = event.target.value;
-    setItinerary(newItinerary);
-    setAccompanyContent(newItinerary);
-  };
-
-  useEffect(() => {
-    if (daysDifference > 0) {
-      const initialItinerary = new Array(daysDifference).fill("");
-      setItinerary(initialItinerary);
-      setAccompanyContent(initialItinerary);
+    if (!search.trim()) {
+      alert("키워드를 입력해주세요!");
+      return;
     }
-  }, [daysDifference, setAccompanyContent]);
+
+    const ps = new window.kakao.maps.services.Places();
+    ps.keywordSearch(search, placesSearchCB);
+  };
+
+  const placesSearchCB = (data, status) => {
+    if (status === window.kakao.maps.services.Status.OK) {
+      displayPlaces(data);
+      const bounds = new window.kakao.maps.LatLngBounds();
+      data.forEach((place) => {
+        displayMarker(place);
+        bounds.extend(new window.kakao.maps.LatLng(place.y, place.x));
+      });
+      mapRef.current.setBounds(bounds);
+    } else {
+      alert(
+        status === window.kakao.maps.services.Status.ZERO_RESULT
+          ? "검색 결과가 존재하지 않습니다."
+          : "검색 결과 중 오류가 발생했습니다."
+      );
+    }
+  };
+
+  const displayMarker = (place) => {
+    const marker = new window.kakao.maps.Marker({
+      map: mapRef.current,
+      position: new window.kakao.maps.LatLng(place.y, place.x),
+    });
+
+    window.kakao.maps.event.addListener(marker, "click", () => {
+      props.setAddress(place);
+      const infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
+      infowindow.setContent(`<span>${place.place_name}</span>`);
+      infowindow.open(mapRef.current, marker);
+      mapRef.current.panTo(new window.kakao.maps.LatLng(place.y, place.x));
+    });
+
+    markers.current.push(marker);
+  };
+
+  const displayPlaces = (places) => {
+    const listEl = document.getElementById("placesList");
+    removeAllChildNodes(listEl);
+    removeMarker();
+
+    const fragment = document.createDocumentFragment();
+    places.forEach((place, index) => {
+      const itemEl = getListItem(index, place);
+      fragment.appendChild(itemEl);
+    });
+
+    listEl.appendChild(fragment);
+  };
+
+  const getListItem = (index, place) => {
+    const el = document.createElement("li");
+    el.className = "item";
+    el.innerHTML = `
+      <span class="markerbg marker_${index + 1}"></span>
+      <div class="info">
+        <h5>${place.place_name}</h5>
+        ${
+          place.road_address_name
+            ? `<span>${place.road_address_name}</span><span class="jibun gray">${place.address_name}</span>`
+            : `<span>${place.address_name}</span>`
+        }
+        <span class="tel">${place.phone || "정보 없음"}</span>
+      </div>
+    `;
+    return el;
+  };
+
+  const removeMarker = () => {
+    markers.current.forEach((marker) => marker.setMap(null));
+    markers.current = [];
+  };
+
+  const removeAllChildNodes = (el) => {
+    while (el.hasChildNodes()) {
+      el.removeChild(el.lastChild);
+    }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    searchPlaces();
+  };
 
   return (
-    <div>
-      <div className="address-search">
-        <button onClick={() => setPostcodeVisible(true)}>주소 검색</button>
-        {postcodeVisible && (
-          <DaumPostcode
-            onComplete={(data) => {
-              const address = data.address;
-              handleAddressSearch(address);
-            }}
-          />
-        )}
-      </div>
+    <div className="map_wrap" style={{ display: isOpen ? "block" : "none" }}>
+      <div id="map" style={{ width: "100%", height: "400px" }}></div>
 
-      <div className="map-container">
-        <div
-          id="map"
-          style={{
-            width: "100%",
-            height: "400px",
-            display: mapLoaded ? "block" : "none",
-          }}
-        />
-      </div>
+      <div id="menuDiv">
+        <div id="menu_wrap" className="bg_white">
+          <div className="option">
+            <div>
+              <div id="map_title">
+                <div>주소 검색</div>
+              </div>
 
-      <div>
-        <h3>여행일정</h3>
-        {itinerary.map((entry, index) => (
-          <div key={index} className="diary_content_list">
-            <label>{index + 1}일차</label>
-            <textarea
-              className="diary-textarea"
-              value={entry}
-              onChange={(event) => handleItineraryChange(index, event)}
-              placeholder={`Day ${index + 1}`}
-            />
+              <div id="form">
+                <input
+                  type="text"
+                  value={search}
+                  id="keyword"
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                <button id="submit_btn" type="submit" onClick={handleSearch}>
+                  검색
+                </button>
+              </div>
+            </div>
           </div>
-        ))}
-      </div>
-      <div className="address-list">
-        <h3>검색한 주소</h3>
-        {addresses.map((address, index) => (
-          <div key={index}>
-            <span>{index + 1}:</span>
-            <span>{address}</span>
+
+          <ul id="placesList"></ul>
+          <div id="pagination"></div>
+        </div>
+
+        <div id="btnDiv">
+          <div id="btnOn">
+            <button
+              id="searchBtn"
+              onClick={() => setIsOpen(!isOpen)}
+              type="button"
+            >
+              {isOpen ? "접기" : "펼치기"}
+            </button>
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );

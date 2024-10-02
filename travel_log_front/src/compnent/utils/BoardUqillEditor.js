@@ -2,43 +2,47 @@ import { useEffect, useRef } from "react";
 import ReactQuill from "react-quill";
 
 const BoardUqillEditor = (props) => {
-  const { boardContent, setBoardContent } = props;
+  // 보여줄 내용
+  const boardContent = props.boardContent;
+  // 수정할 내용
+  const setBoardContent = props.setBoardContent;
   const editorRef = useRef(null);
-
-  const changeValue = (value) => {
-    setBoardContent(value); // 텍스트 내용을 상태에 설정
+  //style 지정
+  const width = props.width;
+  const height = props.height;
+  // 값이 바뀔때 마다 set
+  const changeValue = () => {
+    const editorData = editorRef.current.getInstance().getHTML();
+    setBoardContent(editorData);
   };
 
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, false] }],
-      ["bold", "underline", "italic", "strike"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ indent: "-1" }, { indent: "+1" }],
-      [{ align: [] }],
-      ["clean"],
+      ["bold", "underline", "italic", "strike"], // 글꼴 서식
+      [{ list: "ordered" }, { list: "bullet" }], // 리스트
+      [{ indent: "-1" }, { indent: "+1" }], // 들여쓰기
+      [{ align: [] }], // 정렬
+      ["clean"], // 서식 지우기
     ],
   };
-
-  // Quill Editor 초기화
-  useEffect(() => {
-    if (editorRef.current) {
-      editorRef.current
-        .getEditor()
-        .setContents(
-          editorRef.current.getEditor().clipboard.convert(boardContent)
-        );
-    }
-  }, [boardContent]);
-
   return (
-    <ReactQuill
-      ref={editorRef}
-      value={boardContent}
-      onChange={changeValue}
-      style={{ width: "100%", height: "400px" }}
-      modules={modules}
-    />
+    <>
+      {boardContent || boardContent === "" ? (
+        <ReactQuill
+          ref={editorRef}
+          value={boardContent}
+          onChange={setBoardContent}
+          style={{
+            width: width ? width : "100%",
+            height: height ? height : "400px",
+          }}
+          modules={modules}
+        />
+      ) : (
+        ""
+      )}
+    </>
   );
 };
 

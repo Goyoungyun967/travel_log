@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import ko from "date-fns/locale/ko"; // 한국어 로케일
 import { TextField } from "@mui/material";
 import differenceInDays from "date-fns/differenceInDays";
-import DaumPostcode from "react-daum-postcode";
+import AccompanyDate from "./AccompanyDate";
 
 const AccompanyFrm = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -39,6 +39,9 @@ const AccompanyFrm = (props) => {
   //동행
   const accompanyContent = props.accompanyContent;
   const setAccompanyContent = props.setAccompanyContent;
+
+  const accompanyArea = props.accompanyArea;
+  const setAccompanyArea = props.setAccompanyArea;
 
   const handleTypeChange = (tagNo) => {
     setSelectedType((prev) => {
@@ -100,8 +103,8 @@ const AccompanyFrm = (props) => {
     start: null,
     end: null,
   }); // 날짜 상태 관리
-  const [daysDifference, setDaysDifference] = useState(0); // 날짜 차이 상태 관리
-
+  const setDaysDifference = props.setDaysDifference;
+  const daysDifference = props.daysDifference;
   const handleDateChange = (newValue) => {
     if (clickCount === 0) {
       setSelectedDates({ ...selectedDates, start: newValue });
@@ -322,9 +325,20 @@ const AccompanyFrm = (props) => {
               <td>
                 <div className="accmpany-address"></div>
                 <BoardMap
-                  daysDifference={daysDifference}
+                  setAccompanyArea={setAccompanyArea}
+                  accompanyArea={accompanyArea}
+                />
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <div className="accompany--date-content-title">동행 일정</div>
+              </th>
+              <td>
+                <AccompanyDate
                   accompanyContent={accompanyContent}
                   setAccompanyContent={setAccompanyContent}
+                  daysDifference={daysDifference}
                 />
               </td>
             </tr>
