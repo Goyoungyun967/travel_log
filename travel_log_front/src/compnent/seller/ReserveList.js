@@ -3,14 +3,16 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { SellerReserveList } from "./sellerUtil/RowList";
+import { useRecoilState } from "recoil";
+import { sellerLoginNoState } from "../utils/RecoilData";
 
 const ReserveList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [reserveList, setReserveList] = useState([]);
-
+  const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState); // 리코일에서 판매자 번호 줍줍
   useEffect(() => {
     axios
-      .post(`${backServer}/seller/reserveList/1`) // *** 일단 임시로 1 넣어서 보냄
+      .get(`${backServer}/seller/reserveList`)
       .then((res) => {
         console.log(res);
         setReserveList(res.data);

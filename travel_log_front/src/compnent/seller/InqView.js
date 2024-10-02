@@ -25,7 +25,7 @@ const InqView = () => {
       .get(`${backServer}/seller/searchView/${inqNo}`)
       .then((res) => {
         setInqView(res.data);
-        setFileList(res.data.inquiryFileList || []);
+        setFileList(res.data.inquiryFileList || []); // 배열
         setData(formatDate(res.data.regDate));
         setReplyDate(
           res.data.inquiryReply

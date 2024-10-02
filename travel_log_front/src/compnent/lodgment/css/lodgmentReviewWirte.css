@@ -1,0 +1,66 @@
+.lodgment-review-list-wrap {
+  width: 100%; /* 에디터 너비를 90%로 설정 */
+  height: auto; /* 높이를 자동으로 조정 */
+  display: flex;
+  flex-direction: column; /* 세로 방향으로 정렬 */
+  align-items: center; /* 수평 중앙 정렬 */
+  display: flex; /* Flexbox 사용 */
+  flex-direction: column; /* 세로 방향으로 정렬 */
+  align-items: center; /* 수평 중앙 정렬 */
+  margin-bottom: 100px; /* 에디터와 버튼 사이 여백 추가 */
+}
+.lodgment-review-write-rwap {
+  width: 90%;
+}
+.lodgment-review-write-btn {
+  width: 100px;
+  height: 50px;
+  border-radius: 15px;
+  box-sizing: border-box;
+  border: 1px solid var(--gray5);
+  font-size: 18px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+.lodgment-review-img-wrap {
+  display: flex; /* Flexbox 사용 */
+  justify-content: center; /* 수평 중앙 정렬 */
+  margin: 20px 0; /* 위아래 여백 */
+}
+.lodgment-review-btn-wrap {
+  display: flex; /* Flexbox 사용 */
+  justify-content: center; /* 수평 가운데 정렬 */
+  margin-top: 20px; /* 버튼과 에디터 사이의 간격 */
+}
+.img-insert-div {
+  width: 90%;
+  height: 50px;
+  background-color: var(--gray5);
+  text-align: center;
+  line-height: 50px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.lodgment-revie-imgbox-wrap {
+  display: flex; /* Flexbox를 사용하여 수평 정렬 */
+  overflow-x: auto; /* 가로 스크롤 허용 */
+  white-space: nowrap; /* 줄 바꿈 방지 */
+  padding: 10px 0; /* 위아래 패딩 추가 */
+}
+
+.lodgment-revie-imgbox-wrap > div {
+  display: inline-block; /* 각 이미지 박스가 인라인 블록 요소로 동작 */
+  width: 20%; /* 각 이미지 박스의 너비 */
+  margin-right: 10px; /* 이미지 간 간격 설정 */
+}
+
+.lodgment-revie-imgbox-wrap img {
+  width: 100%; /* 이미지 너비를 100%로 설정 */
+  height: auto; /* 비율을 유지하여 높이를 자동으로 조정 */
+  border-radius: 10px; /* 이미지 모서리를 둥글게 */
+}
+.review-star-box {
+  display: flex;
+  justify-content: center; /* 수평 가운데 정렬 */
+}

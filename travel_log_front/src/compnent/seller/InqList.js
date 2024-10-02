@@ -7,11 +7,10 @@ import axios from "axios";
 const InqList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [inqList, setInqList] = useState([]);
+  console.log(inqList.length === 0);
   useEffect(() => {
-    const form = new FormData();
-    form.append("sellerNo", 1);
     axios
-      .post(`${backServer}/seller/inqList`, form)
+      .post(`${backServer}/seller/inqList`)
       .then((res) => {
         console.log(res);
         setInqList(res.data);
@@ -25,7 +24,7 @@ const InqList = () => {
       <div className="seller-inq-box-wrap">
         <h3>내가 쓴 문의 조회</h3>
         <div className="inq-btn-wrap">
-          <Link to={`/seller/inq`} className="inq-btn">
+          <Link to={`/seller/insertInq`} className="inq-btn">
             문의 하기
           </Link>
         </div>

@@ -12,6 +12,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import kr.co.iei.member.model.dto.LoginMemberDTO;
+import kr.co.iei.seller.model.dto.LoginSellerDTO;
 
 @Component
 public class JwtUtils {
@@ -79,6 +80,25 @@ public class JwtUtils {
 		loginMember.setMemberNo(memberNo);
 		loginMember.setMemberLevel(memberLevel);
 		return loginMember;
-	}									
+	}	
+	
+	
+	// 판매자 토큰
+	public LoginSellerDTO sellerCheckToken(String token) {
+		//1. 토큰 해석을 위한 암호화 키 세팅 
+		SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
+		// 토큰 해석할 수 있는거 만들고, 매개변수로 받은 토큰 전달받아서 그의 값을 들고 옴
+		Claims claims = (Claims) Jwts.parser()				//토큰해석 시작
+										.verifyWith(key)	//암호화키
+										.build()	
+										.parse(token) 		// 매개변수로 받은 토큰 전달
+										.getPayload();		// 매개변수로 받은 토큰 의 값 들고옴
+		int sellerNo = (int)claims.get("sellerNo");
+		
+		// LoginMemberDTO에 member정보 넣어서 리턴하기
+		LoginSellerDTO loginSeller = new LoginSellerDTO();
+		loginSeller.setSellerNo(sellerNo);
+		return loginSeller;
 	}
+}
 
