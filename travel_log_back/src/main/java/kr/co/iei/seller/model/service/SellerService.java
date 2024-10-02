@@ -163,8 +163,9 @@ public class SellerService {
 		return ls;
 	}
 
-	public List<InquiryDTO> selectInqList(InquiryDTO iqd) {
-		List<InquiryDTO> ls = sellerLodgmentDao.selectInqList(iqd);
+	public List<InquiryDTO> selectInqList(String token) {
+		LoginSellerDTO loginSeller = jwtUtil.sellerCheckToken(token);
+		List<InquiryDTO> ls = sellerLodgmentDao.selectInqList(loginSeller.getSellerNo());
 		return ls;
 	}
 
@@ -225,8 +226,10 @@ public class SellerService {
 	}
 
 	// 예약 리스트 조회
-	public List selectReserveList(int sellerNo) {
-		List list = sellerLodgmentDao.selectReserve(sellerNo);
+	public List selectReserveList(String token) {
+		LoginSellerDTO loginSeller = jwtUtil.sellerCheckToken(token);
+		List list = sellerLodgmentDao.selectReserve(loginSeller.getSellerNo());
+		System.out.println("list"+list);
 		return list;
 	}
 

@@ -56,19 +56,8 @@ public class SellerController {
 	public ResponseEntity<List> lodgmentList(@RequestHeader("Authorization") String token){
 		System.out.println(token);
 		List list = sellerService.selectLodgmentList(token);
-//		List list = sellerService.selectLodgmentList(sellerNo);
 		return ResponseEntity.ok(list);
-//		return ResponseEntity.ok(null);
 	}
-	/* - 회원가입 처리 완료되면 post로 조회
-	@Operation(summary="등록한 숙소 리스트", description = "(메인) 등록한 호텔 정보 (숙소 이름, 숙소 주소, 숙소 이미지 경로, 성급)만 조회")
-	@PostMapping(value="lodgmentList")
-//	public ResponseEntity<List> refresh(@RequestHeader("Authorization") String token){ => 토큰 처리 완료되면 token사용해서 판매자 번호로 리스트 조회하기
-	public ResponseEntity<List> lodgmentList(@RequestBody int seller_no){ // 임시로 판매자 번호 넘겨주기
-		List list = sellerService.lodgmentList(seller_no);
-		return ResponseEntity.ok(list);
-	} 
-	 */
 	
 	// 기존 호텔 조회
 	@Operation(summary="기존 호텔 검색", description="호텔 등록시 호텔 이름이나 주소를 입력하면 기존에 저장되어있는 호텔 정보 select (호텔 번호, 이름, 주소, 등급)")
@@ -170,8 +159,9 @@ public class SellerController {
 	@Operation(summary = "판매자 문의 리스트 조회", description = "판매자 문의 리스트 출력")
 	@PostMapping(value = "/inqList")
 //	public ResponseEntity<List> searchInqList(@RequestHeader("Authorization") String token){ => 토큰 처리 완료되면 token사용해서 판매자 번호로 리스트 조회하기
-	public ResponseEntity<List> searchInqList(@ModelAttribute InquiryDTO iqd){
-		List<InquiryDTO> ls = sellerService.selectInqList(iqd); // 나중에 토큰으로 바꿀겨
+	public ResponseEntity<List> searchInqList(@RequestHeader("Authorization") String token){
+		System.out.println(token);
+		List<InquiryDTO> ls = sellerService.selectInqList(token); // 나중에 토큰으로 바꿀겨
 		return ResponseEntity.ok(ls);
 	}
 	
@@ -227,10 +217,10 @@ public class SellerController {
 	
 	// 판매자 예약 리스트 조회
 	@Operation(summary="판매자 예약 리스트", description="판매자 예약 리스트 판매자 번호 받아서 조회")
-	@PostMapping(value="/reserveList/{sellerNo}") // 일단 1로 설정!!
+	@GetMapping(value="/reserveList") // 일단 1로 설정!!
 //	public ResponseEntity<List> searchBookList(@RequestHeader("Authorization") String token){ => 토큰 처리 완료되면 token사용해서 판매자 번호로 리스트 조회하기
-	public ResponseEntity<List> searchBookList(@PathVariable int sellerNo){
-		List list = sellerService.selectReserveList(sellerNo);
+	public ResponseEntity<List> searchBookList(@RequestHeader("Authorization") String token){
+		List list = sellerService.selectReserveList(token);
 		return ResponseEntity.ok(list);
 	}
 	

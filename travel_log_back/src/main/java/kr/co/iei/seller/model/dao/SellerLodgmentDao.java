@@ -45,10 +45,12 @@ public interface SellerLodgmentDao {
 	
 	RoomDTO selectRoomViewInfo(int roomNo);
 
-	List<InquiryDTO> selectInqList(InquiryDTO iqd);
+	List<InquiryDTO> selectInqList(int sellerNo);
 
 	InquiryDTO selectInqView(int inqNo);
 
 	List selectReserve(int sellerNo);
+
+	
 
 }

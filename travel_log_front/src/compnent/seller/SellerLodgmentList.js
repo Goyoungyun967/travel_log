@@ -13,7 +13,7 @@ const SellerLodgmentList = () => {
   console.log(loginNo);
   useEffect(() => {
     axios
-      .get(`${backServer}/seller/lodgmentList`) // *** 임시로 판매자 번호 1로 넣어둠
+      .get(`${backServer}/seller/lodgmentList`)
       .then((res) => {
         console.log("r:", res);
         setLodgmentList(res.data);

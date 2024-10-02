@@ -28,7 +28,7 @@ const SellerMain = () => {
       {/* 호텔 누르면 해당 호텔 상세로 이동 */}
       <Route path="lodgmentView/:lodgmentNo" element={<LodgmentView />} />
 
-      {/* 예약 -  -> 토큰, post해서 조회 (일단 post로 판매자 번호 1 부여함 수정해야함)  */}
+      {/* 예약 -  -> 토큰 조회 */}
       <Route path="bookList" element={<ReserveList />} />
 
       {/* 예약 - 예약 번호 보내서 조회 */}
@@ -40,7 +40,7 @@ const SellerMain = () => {
       {/* 매출 - 매출 조회 */}
       <Route path="stm" element={<StmSeller />} />
 
-      {/* 문의 - 판매자 문의 조회 -> 토큰, post해서 조회*/}
+      {/* 문의 - 판매자 문의 조회 -> 토큰, post해서 조회****/}
       <Route path="inqList" element={<InqList />} />
 
       {/* 문의 - 문의 상세*/}

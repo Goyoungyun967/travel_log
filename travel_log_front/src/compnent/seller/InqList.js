@@ -7,11 +7,10 @@ import axios from "axios";
 const InqList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [inqList, setInqList] = useState([]);
+  console.log(inqList.length === 0);
   useEffect(() => {
-    const form = new FormData();
-    form.append("sellerNo", 1);
     axios
-      .post(`${backServer}/seller/inqList`, form)
+      .post(`${backServer}/seller/inqList`)
       .then((res) => {
         console.log(res);
         setInqList(res.data);

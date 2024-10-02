@@ -106,7 +106,7 @@ const InsertLodgment = () => {
   const [deAddress, setDeAddress] = useState(""); // 상세주소
   // 우편번호랑 주소 input에 넣기
 
-  // 임시 데이터
+  // 리코일 사용해서 줍줍
   const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
   // 보내줄 data
   const hotelData = {
