@@ -20,5 +20,7 @@ public interface MemberDao {
 
 	int updateProfile(MemberDTO member);
 
+	String getMemberId(String memberNo);
+
 
 }
