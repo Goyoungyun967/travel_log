@@ -1,11 +1,24 @@
 .lodgment-detail-img {
   width: 90%;
   margin: 0 auto;
+  position: relative;
 }
 .lodgment-detail-img img {
   width: 100%;
   border-radius: 10px;
 }
+.lodgment-storage-btn {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-color: var(--gray7);
+  border-radius: 50%;
+  right: 0; /* 오른쪽 끝으로 이동 */
+  margin-top: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
 .lodgment-detail-info {
   padding-left: 80px;
   padding-right: 80px;

@@ -130,14 +130,13 @@ public class MemberContorller {
 	
 	@PostMapping(value="/profile")
 	public ResponseEntity<Boolean> updateProfile(@ModelAttribute MemberDTO member,
-												 @ModelAttribute MultipartFile memberImage){
-		System.out.println(member);
-		System.out.println(memberImage);
-		if(memberImage != null) {
+												 @ModelAttribute MultipartFile file){
+		if(file != null) {
 			String savepath = root+"/member/profile/";
-			String filepath = fileUtil.upload(savepath, memberImage);
+			String filepath = fileUtil.upload(savepath, file);
 			member.setMemberImage(filepath);
 			boolean result = memberService.updateProfile(member);
+			
 			return ResponseEntity.ok(result);
 		}
 		return ResponseEntity.ok(false);

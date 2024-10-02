@@ -79,17 +79,35 @@ public class LodgmentController {
 	}
 	
 	
-	@GetMapping(value = "/roomInfo/{lodgmentNo}/{startDate}/{endDate}")
+	@GetMapping(value = "/roomInfo/{lodgmentNo}/{startDate}/{endDate}/{loginNo}")
 	@Operation(summary = "숙박업체 룸 디테일 정보 가져오기",description ="숙박업체 번호, 체크인,체크아웃 날짜로 수박업체 정보 받아오기") 
 	public ResponseEntity<Map> roomInfo(
 			@PathVariable int lodgmentNo,
 			@PathVariable String startDate,
-			@PathVariable String endDate			
+			@PathVariable String endDate,	
+			@PathVariable int loginNo		
 			){
 		//System.out.println(lodgmentNo);
-		Map map = lodgmentService.getRoomInfo(lodgmentNo,startDate,endDate);
+		Map map = lodgmentService.getRoomInfo(lodgmentNo,startDate,endDate,loginNo);
 		return ResponseEntity.ok(map);
 	}
+	
+	@GetMapping(value = "/collect/{lodgmentNo}/{loginNo}")
+	@Operation(summary = "숙소 보관함",description ="숙소번호, 회원번호로 보관함에 저장") 
+	public ResponseEntity<Integer> insertCollect(
+			@PathVariable int lodgmentNo, @PathVariable int loginNo){
+		//System.out.println("lodgmnetNo"+lodgmentNo+"   "+loginNo);
+		int result = lodgmentService.insertCollect(lodgmentNo, loginNo);
+		return ResponseEntity.ok(result);
+	}
 
+	@GetMapping(value = "/unCollect/{lodgmentNo}/{loginNo}")
+	@Operation(summary = "숙소 보관함 취소",description ="숙소번호, 회원번호로 보관함에 저장 취소") 
+	public ResponseEntity<Integer> deledtCollect(
+			@PathVariable int lodgmentNo, @PathVariable int loginNo){
+		//System.out.println("lodgmnetNo"+lodgmentNo+"   "+loginNo);
+		int result = lodgmentService.deleteCollect(lodgmentNo, loginNo);
+		return ResponseEntity.ok(result);
+	}
 
 }

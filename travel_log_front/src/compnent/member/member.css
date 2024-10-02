@@ -575,7 +575,7 @@
 .my-info-zone {
   padding: 15px;
   overflow: hidden;
-
+  border-top: 3px solid #36c3fe;
   margin: 0 auto;
 }
 
@@ -686,4 +686,24 @@
 .my-account-zone:hover {
   transform: scale(1.05); /* 호버 시 확대 효과 */
   cursor: pointer;
+}
+
+.profile-btn {
+  padding: 12px 20px; /* 버튼 크기 조정 */
+  font-size: 18px;
+  color: #fff;
+  background-color: #36c3fe;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s; /* 전환 효과 추가 */
+
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+
+.profile-btn:hover {
+  background-color: #6592fe;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 효과 */
 }
