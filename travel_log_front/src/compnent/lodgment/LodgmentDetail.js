@@ -27,6 +27,7 @@ const LodgmentDetail = () => {
   const [loginNo] = useRecoilState(loginNoState);
   const [lodgmentCollection, sestLodgmentCollection] = useState("");
   const [result, setResult] = useState(true);
+  //console.log("디테일 :" + lodgmentNo);
   //console.log(loginNo);
   useEffect(() => {
     //console.log("loginNo" + loginNo);
@@ -238,7 +239,22 @@ const LodgmentDetail = () => {
           justify
         >
           <Tab eventKey="home" title="이용후기">
-            Tab content for Home
+            <div className="lodgment-review-rwap">
+              <div className="lodgment-review-btn-wrap">
+                <button
+                  className="review-btn"
+                  onClick={() => {
+                    navigate(`/lodgment/reviewWrite`, {
+                      state: { lodgmentNo },
+                    });
+                  }}
+                >
+                  리뷰작성
+                </button>
+              </div>
+              <div className="lodgment-review-img-wrap"></div>
+              <div className="lodgment-review-list-wrap"></div>
+            </div>
           </Tab>
           <Tab eventKey="profile" title="문의하기">
             Tab content for Profile
