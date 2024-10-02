@@ -6,9 +6,7 @@
   float: left;
 }
 /*---- 기능 ----*/
-.content {
-  align-items: center;
-}
+
 .seller-lodgment-list {
   width: 1000px;
   padding: 10px;
@@ -17,40 +15,40 @@
   justify-content: center;
   align-items: center;
 }
-
-.seller-lodgment-list .item-wrap {
-  width: 100%;
+.seller-lodgment-list > .item-wrap {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
+  justify-content: space-around;
 }
-.seller-lodgment-list .item-wrap .item {
-  width: 400px;
-  padding: 20px;
+.seller-lodgment-list > .item-wrap > .item {
   border: 1px solid #ccc;
-  border-radius: 10px;
+  width: 300px;
   margin: 10px;
 }
-.seller-lodgment-list > .item-wrap > .item > .item-img {
-  width: 250px;
-  height: 250px;
-  padding: 10px;
-}
-.seller-lodgment-list > .item-wrap > .item > .item-img > img {
-  width: 250px;
-  border-radius: 10px;
-}
-.btn {
-  width: 100px;
-  border-radius: 10px;
-  border: none;
-  padding: 5px;
-}
-.primary {
-  background-color: var(--main5);
-  color: var(--main2);
+.seller-lodgment-list > .item-wrap > .item:hover {
+  cursor: pointer;
+  opacity: 0.5;
 }
 
-/*--- 지울거 ---*/
+.seller-lodgment-list > .item-wrap > .item > .item-img > img {
+  padding: 10px;
+  width: 280px;
+  height: 220px;
+  object-fit: cover;
+}
+.seller-lodgment-list > .item-wrap > .item > .item-tx {
+  padding: 10px;
+}
+.seller-lodgment-list > .item-wrap > .item > .item-tx > .lodgment-addr {
+  font-size: 13px;
+}
+.seller-lodgment-list > .item-wrap > .item > .item-tx > .lodgment-star {
+  display: flex;
+  justify-content: flex-end;
+}
+.seller-lodgment-list > .item-wrap > .item > .item-tx > .lodgment-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}

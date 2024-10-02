@@ -2,16 +2,20 @@ import { useEffect, useState } from "react";
 import "./css/lodgment_list.css";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { sellerLoginNoState } from "../utils/RecoilData";
 const SellerLodgmentList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
   const [lodgmentList, setLodgmentList] = useState([]);
+  const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
+  console.log(loginNo);
   useEffect(() => {
     axios
-      .get(`${backServer}/seller/list/1`) // *** 임시로 판매자 번호 1로 넣어둠
+      .get(`${backServer}/seller/lodgmentList`) // *** 임시로 판매자 번호 1로 넣어둠
       .then((res) => {
-        console.log(res);
+        console.log("r:", res);
         setLodgmentList(res.data);
       })
       .catch((err) => {
@@ -60,10 +64,12 @@ const ListItem = (props) => {
           />
         </div>
         <div className="item-tx">
-          <p>{list.lodgmentAddr}</p>
-          <span>{list.lodgmentStarGrade}</span>
-          <span>성급</span>
-          <h3>{list.lodgmentName}</h3>
+          <p className="lodgment-addr">{list.lodgmentAddr}</p>
+          <div className="lodgment-star">
+            <span>{list.lodgmentStarGrade}</span>
+            <span>성급</span>
+          </div>
+          <h3 className="lodgment-title">{list.lodgmentName}</h3>
         </div>
       </div>
     </>
