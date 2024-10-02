@@ -55,9 +55,10 @@ public class SellerController {
 	@GetMapping(value="/lodgmentList")
 	public ResponseEntity<List> lodgmentList(@RequestHeader("Authorization") String token){
 		System.out.println(token);
+		List list = sellerService.selectLodgmentList(token);
 //		List list = sellerService.selectLodgmentList(sellerNo);
-//		return ResponseEntity.ok(list);
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(list);
+//		return ResponseEntity.ok(null);
 	}
 	/* - 회원가입 처리 완료되면 post로 조회
 	@Operation(summary="등록한 숙소 리스트", description = "(메인) 등록한 호텔 정보 (숙소 이름, 숙소 주소, 숙소 이미지 경로, 성급)만 조회")

@@ -11,6 +11,8 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
+import { useRecoilState } from "recoil";
+import { sellerLoginNoState } from "../utils/RecoilData";
 
 const InsertLodgment = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -105,7 +107,7 @@ const InsertLodgment = () => {
   // 우편번호랑 주소 input에 넣기
 
   // 임시 데이터
-  const [loginNo, setLoginNo] = useState(1);
+  const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
   // 보내줄 data
   const hotelData = {
     hotelName,
