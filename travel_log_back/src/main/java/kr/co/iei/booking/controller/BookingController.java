@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.booking.model.dto.BookingDTO;
 import kr.co.iei.booking.model.service.BookingService;
@@ -21,9 +22,11 @@ public class BookingController {
 	@Autowired
 	private BookingService bookingService;
 	
+	@Operation(summary="숙소 예약", description = "숙소 결제 정보 저장")
 	@PostMapping  //requestBody 는 한개의 객체만 가능 여러개 사용 못함 
-	public ResponseEntity<String> insertBooking(@RequestBody BookingDTO bookingInfo){
-		System.out.println(bookingInfo);
+	public ResponseEntity<String> insertBooking(@RequestBody BookingDTO updatedBookingInfo){
+		System.out.println(updatedBookingInfo);
+		int result = bookingService.insertBooking(updatedBookingInfo);
 		return ResponseEntity.ok("안녕");
 	}
 }
