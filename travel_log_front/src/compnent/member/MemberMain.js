@@ -1,7 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { loginNoState } from "../utils/RecoilData";
+import { isLoginState, loginNoState } from "../utils/RecoilData";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -10,9 +10,21 @@ const MemberMain = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [memberNo, setMemberNo] = useRecoilState(loginNoState);
   const [member, setMember] = useState({ memberImage: "" });
-  const [memberImage, setMemberImage] = useState(); // 초기 상태 설정
-
+  const [memberImage, setMemberImage] = useState(null); // 초기 상태 설정
   const thumbnailRef = useRef(null);
+  console.log("로그인 확인" + memberNo);
+  const [fileImg, setFileImg] = useState();
+  useEffect(() => {
+    if (memberNo != -1) {
+      axios
+        .get(`${backServer}/member/oneMember/${memberNo}`)
+        .then((res) => {
+          console.log(res);
+          setMember(res.data);
+        })
+        .catch((err) => {});
+    }
+  }, [memberNo]);
 
   const changeMember = (e) => {
     const file = e.currentTarget.files[0];
@@ -53,7 +65,7 @@ const MemberMain = () => {
         .then((res) => {
           console.log(res);
           Swal.fire({
-            title: "성공.",
+            title: "성공 !",
             text: "프로필 사진이 업데이트 되었습니다.",
             icon: "success",
           });
@@ -83,10 +95,16 @@ const MemberMain = () => {
             onClick={changeImg}
             style={{ cursor: "pointer" }}
           >
-            {member.memberImage ? (
+            {member.memberImage && memberImage === null ? (
               <img
                 className="profile-size"
-                src={member.memberImage}
+                src={`${backServer}/member/profile/${member.memberImage}`}
+                alt="회원 이미지"
+              />
+            ) : memberImage !== null ? (
+              <img
+                className="profile-size"
+                src={memberImage}
                 alt="회원 이미지"
               />
             ) : (

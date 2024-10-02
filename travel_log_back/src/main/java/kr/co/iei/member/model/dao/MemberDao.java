@@ -21,5 +21,5 @@ public interface MemberDao {
 
 	String getMemberId(String memberNo);
 
-
+	MemberDTO selectOneUser(int memberNo);
 }

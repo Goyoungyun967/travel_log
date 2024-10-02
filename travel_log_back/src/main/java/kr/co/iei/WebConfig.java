@@ -43,7 +43,7 @@ public class WebConfig implements WebMvcConfigurer{
 				
 		//member 프로필사진
 				registry
-				.addResourceHandler("/member/**")
+				.addResourceHandler("/member/profile/**")
 				.addResourceLocations("file:///"+root+"/member/profile/");
 						
 	}

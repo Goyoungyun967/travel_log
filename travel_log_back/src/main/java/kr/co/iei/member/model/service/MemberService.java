@@ -76,4 +76,9 @@ public class MemberService {
 		
 		return result == 1;
 	}
+	
+	public MemberDTO selectOneUser(int memberNo) {
+		MemberDTO member = memberDao.selectOneUser(memberNo);
+		return member;
+	}
 }

@@ -65,6 +65,11 @@ public class MemberContorller {
 	public String email() {
 		return "etc/email";
 	}
+	@GetMapping(value="/oneMember/{memberNo}")
+	public ResponseEntity<MemberDTO> selectOneUser(@PathVariable int memberNo){
+		MemberDTO member = memberService.selectOneUser(memberNo);
+		return ResponseEntity.ok(member);
+	}
 	
 	@GetMapping(value="/sendEmail/{memberEmail}")
 	public ResponseEntity<String> sendEamil(@PathVariable String memberEmail) {
@@ -141,5 +146,8 @@ public class MemberContorller {
 		}
 		return ResponseEntity.ok(false);
 	}
-												
 }
+	
+	
+	
+
