@@ -5,8 +5,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import SearchDate from "./sellerUtil/SearchDate";
 import "./css/component_css.css";
+import { useRecoilState } from "recoil";
+import { sellerLoginNoState } from "../utils/RecoilData";
 
 const StmSeller = () => {
+  const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [stmInfo, setStmInfo] = useState([]);
   console.log("stmInfo - ", stmInfo);
@@ -18,7 +21,7 @@ const StmSeller = () => {
 
   useEffect(() => {
     const form = new FormData();
-    form.append("sellerNo", 1);
+    form.append("sellerNo", loginNo);
     console.log(startDate);
     axios
       .post(`${backServer}/seller/stm`, form) // *** 리코일 만들어지면 post로 판매자 번호 보내기 (개인정보라서 post로 조회)
@@ -55,7 +58,7 @@ const StmSeller = () => {
 
     // 값 묶어서 보내기
     const form = new FormData();
-    form.append("sellerNo", 1); // *** 리코일 만들어지면 post로 판매자 번호 보내기 (개인정보라서 post로 조회)
+    form.append("sellerNo", loginNo); // *** 리코일 만들어지면 post로 판매자 번호 보내기 (개인정보라서 post로 조회)
     form.append("startDate", sDate);
     form.append("endDate", eDate);
 

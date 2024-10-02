@@ -19,11 +19,11 @@
 	<select id="selectOneLodgment" resultType="lodgmentStorage">
 		select * from
 		lodgment_storage
-		where lodgment_no = #{lodgmentNo}
+		where lodgment_no = #{lodgmentNo} and lodgment_delete=1
 	</select>
 
 	<!-- 호텔 등록 -->
-	<!-- lodgmentNo가 0이면 기존 호텔에 없는 번호이므로 시퀀스 돌리기 -->
+	<!-- lodgmentNo가 0이면 기존 호텔에 없는 번호이므로 시퀀스 돌리기, 숙소 등록하면 일단 1로! -->
 	<insert id="insertLodgment">
 		insert into lodgment_storage VALUES (
 		<if test="lodgmentNo == 0">
@@ -41,10 +41,12 @@
 		#{lodgmentStarGrade},
 		#{lodgmentNotice},
 		#{lodgmentCheckIn},
-		#{lodgmentCheckOut}
+		#{lodgmentCheckOut},
+		1
 		)
 	</insert>
 
+	<!-- 기존 호텔 삭제 -->
 	<!-- 호텔 등록하면 기존 호텔 테이블에서 삭제해주어야함 (제약조건 걸려있어서 호텔 번호 중복 불가) -->
 	<delete id="deleteLodgment">
 		delete from HOTEL_XLSX where
@@ -108,7 +110,7 @@
 		LEFT JOIN
 			SERVICE_TAG st ON st.SERVICE_TAG_NO = rst.SERVICE_TAG_NO
 		WHERE
-			r.room_no = #{roomNo}
+		r.room_no = #{roomNo} and r.room_delete=1
 	</select>
 	<resultMap type="room" id="RoomViewMap">
 		<id column="room_no" property="roomNo" />
@@ -134,9 +136,10 @@
 
 
 	<!-- 객실 등록 -->
+	<!-- 마지막에 1은 삭제 여부 (0: 삭제, 1: 삭제X) -->
 	<insert id="insertRoom">
 		insert into room values(room_seq.nextval,
-		#{lodgmentNo},#{roomName},#{roomQua},#{maxCapacity},#{roomPrice},#{boardContent})
+		#{lodgmentNo},#{roomName},#{roomQua},#{maxCapacity},#{roomPrice},#{boardContent},1)
 		<selectKey resultType="int" keyProperty="roomNo"
 			order="AFTER">
 			select max(room_no) from room

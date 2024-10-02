@@ -30,6 +30,7 @@ import kr.co.iei.seller.model.dto.SellerDTO;
 import kr.co.iei.seller.model.dto.ServiceTagDTO;
 import kr.co.iei.seller.model.dto.StmInfoDTO;
 import kr.co.iei.util.FileUtils;
+import kr.co.iei.util.JwtUtils;
 import kr.co.iei.util.SellerJwtUtils;
 
 @Service
@@ -47,16 +48,31 @@ public class SellerService {
 
 	@Autowired
 	private FileUtils fileUtil;
+	
+	@Autowired
+	private JwtUtils jwtUtil;
 
 	@Value("${file.root}")
 	public String root;
 
 	// 메인(등록한 호텔 정보)
-	public List selectLodgmentList(int sellerNo) {
-		List list = sellerLodgmentDao.selectLodgmentList(sellerNo);
+//	public List selectLodgmentList(int sellerNo) {
+//		List list = sellerLodgmentDao.selectLodgmentList(sellerNo);
+//		return list;
+//	}
+	public List selectLodgmentList(String token) {
+		// 로그인시 받은 토큰을 검증한 후 회원아이디랑 등급을 추출해서 리턴받음
+		// 토큰 체크
+		LoginSellerDTO loginSeller = jwtUtil.sellerCheckToken(token);
+		System.out.println(loginSeller);
+		// 토큰 해석으로 받은 아이디를 통해서 DB에서 회원정보 조회
+		List list = sellerLodgmentDao.selectLodgmentList(loginSeller.getSellerNo());
+		System.out.println(list);
 		return list;
+//		return null;
 	}
-
+	
+	
 	// 기존 숙소 검색
 	public List selectXlsxHotelInfo(String searchInfo) {
 		List list = sellerLodgmentDao.selectXlsxHotelInfo(searchInfo);
@@ -147,8 +163,9 @@ public class SellerService {
 		return ls;
 	}
 
-	public List<InquiryDTO> selectInqList(InquiryDTO iqd) {
-		List<InquiryDTO> ls = sellerLodgmentDao.selectInqList(iqd);
+	public List<InquiryDTO> selectInqList(String token) {
+		LoginSellerDTO loginSeller = jwtUtil.sellerCheckToken(token);
+		List<InquiryDTO> ls = sellerLodgmentDao.selectInqList(loginSeller.getSellerNo());
 		return ls;
 	}
 
@@ -209,8 +226,10 @@ public class SellerService {
 	}
 
 	// 예약 리스트 조회
-	public List selectReserveList(int sellerNo) {
-		List list = sellerLodgmentDao.selectReserve(sellerNo);
+	public List selectReserveList(String token) {
+		LoginSellerDTO loginSeller = jwtUtil.sellerCheckToken(token);
+		List list = sellerLodgmentDao.selectReserve(loginSeller.getSellerNo());
+		System.out.println("list"+list);
 		return list;
 	}
 
@@ -218,5 +237,14 @@ public class SellerService {
 	public BookingInfoDTO bookInfo(int bookNo) {
 		BookingInfoDTO bid = sellerLodgmentDao.bookInfo(bookNo);
 		return bid;
+	}
+
+
+	// 삭제 (찐 삭제는 아님)
+	@Transactional
+	public int delUpLodgment(int lodgmentNo) {
+		int result = sellerLodgmentDao.delUpLodgment(lodgmentNo);
+//		result += sellerLodgmentDao.delUpRoom(lod)
+		return 0;
 	}
 }

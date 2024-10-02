@@ -46,7 +46,7 @@ const InsertRoom = () => {
 
   useEffect(() => {
     axios
-      .get(`${backServer}/seller/lodgmentInfo/${lodgmentNo}`) // *** 임시로 숙소 번호 1로 넣어둠
+      .get(`${backServer}/seller/lodgmentInfo/${lodgmentNo}`)
       .then((res) => {
         console.log(res);
         setLodgmentList(res.data);
