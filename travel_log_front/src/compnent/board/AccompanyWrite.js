@@ -36,16 +36,16 @@ const AccompanyWrite = () => {
     { title: "전북" },
     { title: "제주" },
   ]);
-  const [selectedArea, setSelectedArea] = useState("");
-  //일정
-  //기본 날짜 세팅
-  const startDay = dayjs().add(1, "day").toDate();
-  const endDay = dayjs().add(2, "day").toDate();
+  const [selectedArea, setSelectedArea] = useState([]);
+  // 초기 일정 설정
+  const startDay = dayjs().add(1, "day");
+  const endDay = dayjs().add(2, "day");
 
-  //체크인 날짜 , 체크아웃 날짜
-  const [startDate, setStartDate] = useState(startDay);
-  const [endDate, setEndDate] = useState(endDay);
-  //동행
+  // 체크인 날짜, 체크아웃 날짜 상태 관리
+  const [startDate, setStartDate] = useState(startDay.format("YYYY-MM-DD"));
+  const [endDate, setEndDate] = useState(endDay.format("YYYY-MM-DD"));
+
+  // 날짜 변경 핸들러
 
   //타입
   const [accompanyType, setAccompanyType] = useState([
@@ -56,27 +56,39 @@ const AccompanyWrite = () => {
     { accompany_tag_no: 5, accompany_type: "식사 동행" },
     { accompany_tag_no: 6, accompany_type: "공동 구매" },
   ]);
-  const [selectedType, setSelectedType] = useState(""); //실제 바뀐 값
+
+  const [selectedType, setSelectedType] = useState([]); //실제 바뀐 값
 
   const [daysDifference, setDaysDifference] = useState(0); // 날짜 차이 상태 관리
 
-  const [accompanyContent, setAccompanyContent] = useState("");
+  const [accompanyContent, setAccompanyContent] = useState([]);
   const inputTitle = (e) => {
     setBoardTitle(e.target.value);
   };
+
   const inputContent = (e) => {
     setBoardContent(e.target.value);
   };
-  const [accompanyArea, setAccompanyArea] = useState("");
+  const [accompanyArea, setAccompanyArea] = useState("1");
 
   // 빽으로 보내줘야하는것들 제목,기본 글,지역, 동행날짜 , 동행지역? ,동행내용
   const writeBoard = () => {
     if (boardTitle !== "" && boardContent !== "") {
+      console.log(daysDifference);
+      console.log(selectedType);
+      console.log(startDate);
+      console.log(endDate);
+      console.log(accompanyContent);
       const form = new FormData();
       form.append("boardTitle", boardTitle);
       form.append("boardContent", boardContent);
       form.append("boardArea", selectedArea);
       form.append("memberNo", loginNo);
+      form.append("accompanyDate", daysDifference);
+      form.append("accompanyContent", accompanyContent);
+      form.append("accompanyTagNo ", selectedType);
+      form.append("startDay", startDay);
+      form.append("endDay", endDay);
       //썸네일이 첨부된 경우에만 추가
       console.log(selectedArea);
       if (thumbnail !== null) {
@@ -88,7 +100,7 @@ const AccompanyWrite = () => {
         form.append("boardFile", boardFile[i]);
       }
       axios
-        .post(`${backServer}/board`, form, {
+        .post(`${backServer}/board/insertAccompany`, form, {
           headers: {
             contentType: "multipart/form-data",
             processData: false,
