@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { isLoginState, loginNoState } from "../utils/RecoilData";
 import axios from "axios";
@@ -124,11 +124,21 @@ const MemberMain = () => {
           </button>
         </form>
         <div className="my-info-zone">
-          <div className="update-zone">정보 수정</div>
-          <div className="my-board-zone">내가 쓴 게시글</div>
-          <div className="my-reservation-zone">내 예약정보</div>
-          <div className="my-comment-zone">내가 쓴 댓글</div>
-          <div className="my-account-zone">총 결재액</div>
+          <Link to="/updateMmeber" className="update-zone">
+            정보 수정
+          </Link>
+          <Link to="/myboard" className="my-board-zone">
+            내가 쓴 게시글
+          </Link>
+          <Link to="/myReservation" className="my-reservation-zone">
+            내 예약정보
+          </Link>
+          <Link to="/myComment" className="my-comment-zone">
+            내가 쓴 댓글
+          </Link>
+          <Link to="/myAllPayment" className="my-account-zone">
+            총 결재액
+          </Link>
         </div>
       </div>
     </section>
