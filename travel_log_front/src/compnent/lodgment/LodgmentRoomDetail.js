@@ -48,10 +48,6 @@ const LodgmentRoomDetail = (props) => {
           navigate("/lodgment/paymentPage", {
             state: { room, guest, checkIn, checkOut, lodgmentInfo },
           });
-        } else {
-          Swal.fire({
-            text: "예약이 취소되었습니다.",
-          });
         }
       });
     }

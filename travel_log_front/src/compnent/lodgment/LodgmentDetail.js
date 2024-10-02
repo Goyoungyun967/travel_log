@@ -8,6 +8,7 @@ import LodgmentRoomDetail from "./LodgmentRoomDetail";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 const LodgmentDetail = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
@@ -36,6 +37,9 @@ const LodgmentDetail = () => {
   return (
     <section className="section lodgmentDetail">
       <div className="lodgment-detail-img">
+        <div className="lodgment-storage-btn" onClick={() => {}}>
+          <FavoriteBorderIcon sx={{ fontSize: 40 }} />
+        </div>
         <img
           src={
             lodgmentInfo.lodgmentImgPath

@@ -100,15 +100,15 @@
 			st.service_tag_type AS serviceTagType,
 			rf.room_img AS room_img
 		FROM
-		room r
+			room r
 		LEFT JOIN
-		room_file rf ON r.room_no = rf.room_no
+			room_file rf ON r.room_no = rf.room_no
 		LEFT JOIN
-		ROOM_SERVICE_TAG rst ON r.room_no = rst.room_no
+			ROOM_SERVICE_TAG rst ON r.room_no = rst.room_no
 		LEFT JOIN
-		SERVICE_TAG st ON st.SERVICE_TAG_NO = rst.SERVICE_TAG_NO
+			SERVICE_TAG st ON st.SERVICE_TAG_NO = rst.SERVICE_TAG_NO
 		WHERE
-		r.room_no = #{roomNo}
+			r.room_no = #{roomNo}
 	</select>
 	<resultMap type="room" id="RoomViewMap">
 		<id column="room_no" property="roomNo" />

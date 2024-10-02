@@ -16,7 +16,7 @@ const LodgmentList = () => {
   const navigate = useNavigate();
   //main=>LodgmentList 에서 가져온 검색정보
   const { state } = useLocation();
-  //console.log(state);
+
   const BackServer = process.env.REACT_APP_BACK_SERVER;
   //하단으로 가면 자동으로 페이지 10개씩 가져오게하는 넘버링
   const [reqPage, setReqPage] = useState(1);
@@ -55,11 +55,8 @@ const LodgmentList = () => {
       .get(`${BackServer}/lodgment/service`)
       .then((res) => {
         setServiceTag(res.data);
-        //console.log(res);
       })
-      .catch((err) => {
-        //console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
   //선택된 태그 저장
@@ -221,6 +218,10 @@ const LodgmentList = () => {
                   name="simple-controlled"
                   value={starValue}
                   onChange={(event, newValue) => {
+                    if (newValue === null) {
+                      setStarValue(0);
+                      return;
+                    }
                     setStarValue(newValue);
                   }}
                 />
@@ -393,6 +394,12 @@ const LegdmentInfo = (props) => {
                   <p className="lodgment-price-day">1박당/</p>
                   <p className="lodgment-price">{info.roomPrice}원~</p>
                 </div>
+                {/*
+                *시간이 되면 리스트에서도 보관함 구현 - 먼저 디테일에서 보관함 구현 
+                <div className="lodgment-storage-btn" onClick={() => {}}>
+                  <BookmarkBorderIcon />
+                </div>
+                */}
               </div>
             ))
           ) : (
