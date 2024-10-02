@@ -40,8 +40,10 @@ public class WebConfig implements WebMvcConfigurer{
 		//bard 첨부파일
 				registry.addResourceHandler("/board/*")
 				.addResourceLocations("file:///"+root+"/board/");
-		//member		
-				registry.addResourceHandler("/member/**")
+				
+		//member 프로필사진
+				registry
+				.addResourceHandler("/member/**")
 				.addResourceLocations("file:///"+root+"/member/profile/");
 						
 	}
