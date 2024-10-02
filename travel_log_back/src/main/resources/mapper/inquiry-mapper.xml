@@ -81,4 +81,37 @@
   <select id="selectInquiryReply" resultType="inquiryReply">
   	select inquiry_reply_no,inquiry_reply_content,to_char(reg_date,'yyyy-mm-dd') as reg_date from inquiry_reply where inquiry_no=#{inquiryNo}
   </select>
+  
+  <!-- 임시 -->
+  <select id="getLodgmentResionData" resultType="string">
+  	select distinct(substr(lodgment_addr,0,2)) from lodgment_storage
+  </select>
+  <select id="getLodgmentResionMemberData" resultType="map">
+  	select 
+	    (case
+	        when member_age >= 70 then '70대 이상'
+	        when member_age >= 60 then '60대'
+			when member_age >= 50 then '50대'
+			when member_age >= 40 then '40대'
+			when member_age >= 30 then '30대'
+			when member_age >= 20 then '20대'
+			when member_age >= 10 then '10대'
+	    end) as "age",
+	    member_gender as "gender",
+		count(*) as "memberCount"
+	from 
+		booking join member using (member_id) join room using (room_no) join lodgment_storage using (lodgment_no)
+	where lodgment_addr like #{region}||'%'
+	group by 
+		(case
+		    when member_age >= 70 then '70대 이상'
+			when member_age >= 60 then '60대'
+			when member_age >= 50 then '50대'
+			when member_age >= 40 then '40대'
+			when member_age >= 30 then '30대'
+			when member_age >= 20 then '20대'
+			when member_age >= 10 then '10대'
+		end),
+		member_gender
+  </select>
 </mapper>

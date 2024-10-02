@@ -91,9 +91,24 @@ public class AdminService {
 		return result;
 	}
 
-	public Map getMemberChartData() {
-		Map<String, Object> map = new HashMap<String, Object>();
-		return map;
+	public List getMemberEnrollData() {
+		List list = memberDao.getMemberEnrollData();
+		return list;
+	}
+
+	public List getMemberData() {
+		List list = memberDao.getMemberData();
+		return list;
+	}
+
+	public List getLodgmentResionData() {
+		List list = inquiryDao.getLodgmentResionData();
+		return list;
+	}
+
+	public List getLodgmentResionMemberData(String region) {
+		List list = inquiryDao.getLodgmentResionMemberData(region);
+		return list;
 	}
 
 }

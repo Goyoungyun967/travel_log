@@ -32,6 +32,10 @@ public interface InquiryDao {
 
 	int insertInquiryReply(InquiryReplyDTO inquiryReply);
 
+	List getLodgmentResionData();
+
+	List getLodgmentResionMemberData(String region);
+
 	
 
 }
