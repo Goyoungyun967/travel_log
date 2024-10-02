@@ -22,11 +22,11 @@ const LodgmentRoomDetail = (props) => {
       : "";
   const checkOut =
     typeof endDate === "string" ? format(new Date(endDate), "yyyy-MM-dd") : "";
-  console.log("startDate:", startDate); // 추가
-  console.log("endDate:", endDate); // 추가
+  //console.log("startDate:", startDate); // 추가
+  //console.log("endDate:", endDate); // 추가
 
-  console.log("Check-in:", checkIn); // 추가
-  console.log("Check-out:", checkOut); // 추가
+  //console.log("Check-in:", checkIn); // 추가
+  //console.log("Check-out:", checkOut); // 추가
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
 
   const bookingNow = (room) => {

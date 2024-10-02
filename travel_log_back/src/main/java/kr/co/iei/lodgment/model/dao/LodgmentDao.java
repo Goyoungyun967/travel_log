@@ -30,6 +30,14 @@ public interface LodgmentDao {
 
 	RoomSearchDTO getRoomList(int roomNo, int lodgmentNo, String startDate, String endDate);
 
+	int getCollectLodgmentNum(int loginNo, int lodgmentNo);
+
+	int lodgmentCollection(int loginNo, int lodgmentNo);
+
+	int insertCollect(int lodgmentNo, int loginNo);
+
+	int deleteCollect(int lodgmentNo, int loginNo);
+
 	//List<RoomDTO> getRoomInfoList(int lodgmentNo, String startDate, String endDate, int guset);
 	
 }
