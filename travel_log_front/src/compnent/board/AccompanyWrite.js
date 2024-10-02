@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import { loginNoState } from "../utils/RecoilData";
 import { useRecoilState } from "recoil";
 import BoardUqillEditor from "./../utils/BoardUqillEditor";
+import AccompanyDate from "./AccompanyDate";
 
 const AccompanyWrite = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -44,6 +45,7 @@ const AccompanyWrite = () => {
   //체크인 날짜 , 체크아웃 날짜
   const [startDate, setStartDate] = useState(startDay);
   const [endDate, setEndDate] = useState(endDay);
+  //동행
 
   //타입
   const [accompanyType, setAccompanyType] = useState([
@@ -54,9 +56,10 @@ const AccompanyWrite = () => {
     { accompany_tag_no: 5, accompany_type: "식사 동행" },
     { accompany_tag_no: 6, accompany_type: "공동 구매" },
   ]);
-  const [selectedType, setSelectedType] = useState("");
+  const [selectedType, setSelectedType] = useState(""); //실제 바뀐 값
 
-  //동행
+  const [daysDifference, setDaysDifference] = useState(0); // 날짜 차이 상태 관리
+
   const [accompanyContent, setAccompanyContent] = useState("");
   const inputTitle = (e) => {
     setBoardTitle(e.target.value);
@@ -64,6 +67,8 @@ const AccompanyWrite = () => {
   const inputContent = (e) => {
     setBoardContent(e.target.value);
   };
+  const [accompanyArea, setAccompanyArea] = useState("");
+
   // 빽으로 보내줘야하는것들 제목,기본 글,지역, 동행날짜 , 동행지역? ,동행내용
   const writeBoard = () => {
     if (boardTitle !== "" && boardContent !== "") {
@@ -138,6 +143,10 @@ const AccompanyWrite = () => {
           setSelectedType={setSelectedType}
           accompanyContent={accompanyContent}
           setAccompanyContent={setAccompanyContent}
+          daysDifference={daysDifference}
+          setDaysDifference={setDaysDifference}
+          accompanyArea={accompanyArea}
+          setAccompanyArea={setAccompanyArea}
         />
 
         <div className="board-editer-wrap">
@@ -147,6 +156,7 @@ const AccompanyWrite = () => {
             setBoardContent={setBoardContent}
           />
         </div>
+
         <div className="board-btn-zone">
           <button type="submit" className="boardWrite-btn">
             등록하기
