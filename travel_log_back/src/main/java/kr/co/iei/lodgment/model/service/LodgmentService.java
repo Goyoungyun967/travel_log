@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.iei.lodgment.model.dao.LodgmentDao;
 import kr.co.iei.lodgment.model.dto.LodgmentDTO;
@@ -50,10 +51,20 @@ public class LodgmentService {
 
 		return list;
 	}
-	public Map getRoomInfo(int lodgmentNo, String startDate, String endDate) {
+	
+	//상세페이지 방 정보 불러오기 
+	public Map getRoomInfo(int lodgmentNo, String startDate, String endDate, int loginNo) {
 		//List<RoomSearchDTO> roomSearchList = lodgmentDao.getRoomInfo(lodgmentNo, startDate.substring(0, 10), endDate.substring(0, 10) );
 		LodgmentDTO lodgmentInfo = lodgmentDao.getLodgmentInfo(lodgmentNo);
 		
+		//보관함 여부 조회  -1 은 로그인이 안되어있을때의 디폴트 값 
+		int lodgmentCollection = -1;
+		//System.out.println(loginNo);
+		if(loginNo != -1) {			
+			//0(보관함 x) 이거나 1(보관함 O) 
+			lodgmentCollection = lodgmentDao.lodgmentCollection(loginNo, lodgmentNo);
+			//System.out.println("lodgmentCollection"+lodgmentCollection);
+		}
 		//숙박업체에 해당되는 룸번호 배열 
 		List<Integer> roomNoList = lodgmentDao.getRoomNo(lodgmentNo); 
 		
@@ -64,10 +75,25 @@ public class LodgmentService {
 		    RoomSearchDTO roomList = lodgmentDao.getRoomList(roomNo, lodgmentNo, startDate.substring(0, 10), endDate.substring(0, 10));
 			roomSearchList.add(roomList);
 		}
-		
 		lodgmentInfo.setRoomSearchList(roomSearchList);
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 	    map.put("lodgmentInfo", lodgmentInfo);
+	    map.put("lodgmentCollection", lodgmentCollection);
 		return map;
+	}
+	
+	//숙박 업체 보관함 저장 
+	@Transactional
+	public int insertCollect(int lodgmentNo, int loginNo) {
+		int result = lodgmentDao.insertCollect(lodgmentNo, loginNo);
+		return result;
+	}
+	
+	//숙박 업체 보관한 저장 취소 
+	@Transactional
+	public int deleteCollect(int lodgmentNo, int loginNo) {
+		int result = lodgmentDao.deleteCollect(lodgmentNo, loginNo);
+		return result;
 	}
 }

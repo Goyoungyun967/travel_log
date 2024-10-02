@@ -26,6 +26,6 @@
  	</update>
 
 	<select id="getMemberId" resultType="String">
-		select member_id from member where member_no = #{memberNo}
+		select member_id from member where member_no = #{loginNo}
 	</select>
 </mapper>
