@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import {
   Bar,
+  BarChart,
   CartesianGrid,
   ComposedChart,
   Legend,
@@ -20,6 +21,7 @@ const MemberChart = () => {
   const [regions, setRegions] = useState(null);
   const [region, setRegion] = useState("서울");
   const [regionData, setRegionData] = useState([]);
+  const [regionsData, setRegionsData] = useState([]);
   const getChartData = (data, setChartData) => {
     const newMemberData = new Array();
     for (let i = 0; i < 7; i++) {
@@ -73,6 +75,28 @@ const MemberChart = () => {
       .get(`${backServer}/admin/lodgment/region`)
       .then((res) => {
         setRegions(res.data);
+        axios
+          .get(`${backServer}/admin/lodgment/region/member`)
+          .then((response) => {
+            const newChartData = new Array();
+            for (let i = 0; i < res.data.length; i++) {
+              const data = {
+                name: res.data[i],
+                이용자수: 0,
+              };
+              newChartData.push(data);
+            }
+            response.data.forEach((item) => {
+              const index = newChartData.findIndex(
+                (obj) => obj.name === item.region
+              );
+              newChartData[index].이용자수 = item.memberCount;
+            });
+            setRegionsData(newChartData);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -92,14 +116,12 @@ const MemberChart = () => {
     axios
       .get(`${backServer}/admin/lodgment/region/member/${region}`)
       .then((res) => {
-        console.log(res.data);
         getChartData(res.data, setRegionData);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [region]);
-  console.log(region);
   return (
     <>
       <LineChart
@@ -145,6 +167,25 @@ const MemberChart = () => {
         <Bar dataKey="여성" barSize={20} fill="#ff8e99" />
         <Line type="monotone" dataKey="총이용자" stroke="#ff7300" />
       </ComposedChart>
+      <BarChart
+        width={800}
+        height={450}
+        data={regionsData}
+        margin={{ top: 40, right: 20, left: 20, bottom: 30 }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis
+          label={{
+            value: "지역별 이용자",
+            offset: 17,
+            position: "top",
+          }}
+        />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="이용자수" barSize={25} fill="#8884d8" />
+      </BarChart>
       {regions ? (
         <FormControl style={{ width: "200px", marginTop: "50px" }}>
           <InputLabel id="regions">지역 선택</InputLabel>
@@ -182,7 +223,6 @@ const MemberChart = () => {
             offset: 17,
             position: "top",
           }}
-          domain={[0, (dataMax) => Math.floor(dataMax * 1.5)]}
         />
         <Tooltip />
         <Legend />

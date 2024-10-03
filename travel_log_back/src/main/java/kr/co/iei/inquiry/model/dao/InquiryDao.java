@@ -34,7 +34,19 @@ public interface InquiryDao {
 
 	List getLodgmentResionData();
 
-	List getLodgmentResionMemberData(String region);
+	List getLodgmentResionSearchMemberData(String region);
+
+	List getLodgmentResionMemberData();
+
+	List getSellerList();
+
+	List getSellerListSales(Map<String, Object> map);
+
+	List getSellerSales(int sellerNo);
+
+	List getSellerSalesGender(int sellerNo);
+
+	List getSellerSalesAge(int sellerNo);
 
 	
 
