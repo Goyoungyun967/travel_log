@@ -4,6 +4,7 @@ import AccompanyWrite from "./AccompanyWrite";
 import BoardWrite from "./BoardWrite";
 import BoardView from "./BoardView";
 import BoardUpdate from "./BoardUpdate";
+import AccompanyList from "./AccompanyList";
 
 const BoardMain = () => {
   return (
@@ -16,6 +17,7 @@ const BoardMain = () => {
         element={<BoardView />}
       />
       <Route path="update/:boardNo" element={<BoardUpdate />} />
+      <Route path="accompanyList" element={<AccompanyList />} />
     </Routes>
   );
 };

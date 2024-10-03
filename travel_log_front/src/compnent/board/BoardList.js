@@ -15,7 +15,7 @@ import Image from "react-bootstrap/Image";
 import AccompanyWrite from "./AccompanyWrite";
 import ModalInput from "./BoardModal";
 import { useRecoilState } from "recoil";
-import { loginNoState } from "../utils/RecoilData";
+import { loginNicknameState, loginNoState } from "../utils/RecoilData";
 
 const BoardList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -23,6 +23,7 @@ const BoardList = () => {
   const [boardList, setBoardList] = useState([]);
   const [accompanyList, setAccompanyList] = useState([]);
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
+  const [loginNickname, setLoginNicName] = useRecoilState(loginNicknameState);
 
   const [areaSearch, setAreaSearch] = useState([
     { title: "서울" },
@@ -130,10 +131,10 @@ const BoardList = () => {
         console.log(err);
       });
   }, []);
-  // 더보기 누를때 마다 화면 타입으로 바꿔주기
-  // const handleMoreClick = () => {
-  //   setBoardType((prevType) => (prevType === 1 ? 2 : 1)); // 타입 토글
-  // };
+  // 더보기 누르면 여행 게시판으로 이동
+  const handleMoreClick = () => {
+    navigate("/board/accompanyList");
+  };
 
   // 모달창
   const handleLinkClick = (link) => {
@@ -184,7 +185,7 @@ const BoardList = () => {
       <div className="board-preview-container">
         <div className="board-page-title flex-spbetw">
           <span>최신 여행 동행</span>
-          <span className="board-next">
+          <span className="board-next" onClick={handleMoreClick}>
             {/* onClick={handleMoreClick} */}
             더보기 <ArrowForwardIcon style={{ paddingBottom: "4px" }} />
           </span>
@@ -193,7 +194,11 @@ const BoardList = () => {
         <div className="scrollable-container" ref={scrollContainerRef}>
           <div className="board-preview-wrap width-box">
             {accompanyList.map((accompany, i) => (
-              <AccompanyItem key={"accompany-" + i} accompany={accompany} />
+              <AccompanyItem
+                key={"accompany-" + i}
+                accompany={accompany}
+                loginNickname={loginNickname}
+              />
             ))}
           </div>
         </div>
@@ -210,13 +215,14 @@ const BoardList = () => {
               setLikeCount={setLikeCount}
               isLike={isLike}
               setIsLike={setIsLike}
+              loginNickname={loginNickname}
             />
           ))}
         </div>
       </div>
-      <div className="board-paging-wrap">
+      {/* <div className="board-paging-wrap">
         <PageNavi pi={pi} reqPage={reqPage} setReqPage={setReqPage} />
-      </div>
+      </div> */}
       <div className="write-box">
         <Link to="/board/AccompanyWrite" className="accompany-write sub-item">
           동행 게시판 글 작성
@@ -249,7 +255,7 @@ const SearchList = (props) => {
 const AccompanyItem = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const accompany = props.accompany;
-
+  const loginNickname = props.loginNickname;
   const navigate = useNavigate();
   return (
     <div
@@ -272,7 +278,7 @@ const AccompanyItem = (props) => {
         <div className="board-preview-title">{accompany.boardTitle}</div>
         <div className="member flex-spbetw ">
           <div className="memberId-age-gender text-min">
-            <span></span>
+            <span>{loginNickname}-</span>
             <span>28</span>
             <span>남</span>
           </div>
@@ -291,6 +297,7 @@ const BoardItem = (props) => {
   const setIsLike = props.setIsLike;
   const likeCount = props.likeCount;
   const setLikeCount = props.setLikeCount;
+  const loginNickname = props.loginNickname;
   const navigate = useNavigate();
 
   //작성 시간
@@ -382,7 +389,7 @@ const BoardItem = (props) => {
               />
             </Col>
             <Col xs={10} md={10} style={{ padding: 0 }}>
-              <div className="board-memberId">{board.memberNickName}</div>
+              <div className="board-memberId">{loginNickname}</div>
               <div className="board-regDate text-min">{timeString}</div>
             </Col>
           </Container>

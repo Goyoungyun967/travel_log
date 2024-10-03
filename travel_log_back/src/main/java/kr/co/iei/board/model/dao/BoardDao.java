@@ -50,27 +50,15 @@ public interface BoardDao {
 
 	List<BoardCommentDTO> selectCommentList(int boardNo);
 
-	int insertComment(@PathVariable int boardNo, @PathVariable String memberNickname,@RequestBody BoardCommentDTO comment);
-//
-//	int updateComment(int commentId, String newContent);
-//
-//	int deleteComment(int commentId);
+	int insertComment(BoardCommentDTO comment);
+
+	int updateComment(int commentNo, String commentContent);
+
+	int deleteComment(int commentNo);
 	
 
    
-//
-//    <!-- 댓글 수정 -->
-//    <update id="updateComment">
-//        UPDATE board_comment
-//        SET content = #{newContent}
-//        WHERE comment_id = #{commentId}
-//    </update>
-//
-//    <!-- 댓글 삭제 -->
-//    <delete id="deleteComment">
-//        DELETE FROM board_comment WHERE comment_id = #{commentId}
-//    </delete>
-// 
+
 	//동행게시판 리스트
 	int accompanyTotalCount(int type);
 	List selectAccompanyList(Map<String, Object> m);

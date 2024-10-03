@@ -187,40 +187,47 @@ public class BoardController {
     @GetMapping("/commentList/{boardNo}")
     public ResponseEntity<List<BoardCommentDTO>> getCommentList(@PathVariable int boardNo) {
         List<BoardCommentDTO> comments = boardService.getCommentList(boardNo);
+        System.out.println(comments);
         return ResponseEntity.ok(comments);
     }
 
     // 댓글 추가
     @PostMapping("/insertComment")
-    public ResponseEntity<BoardCommentDTO> addComment(@ModelAttribute BoardCommentDTO comment,
-			@ModelAttribute String memberNickname,
-			@ModelAttribute int boardNo ) {
-    	System.out.println(comment.getCommentContent()); 
+    public ResponseEntity<BoardCommentDTO> addComment(@ModelAttribute BoardCommentDTO comment
+		
+			 ) {
+//    	System.out.println(comment.getCommentContent()); 
+//    	System.out.println(comment.getCommentWriter());
+    	
     	 if (comment.getCommentRef() == 0) {
     	        comment.setCommentRef(0);
     	    }
-        boolean isAdded = boardService.addComment(boardNo,memberNickname,comment);
+        boolean isAdded = boardService.addComment(comment);
+//        System.out.println(comment);
         if (isAdded) {
+        	System.out.println(comment);
             return ResponseEntity.ok(comment); // 댓글이 추가되었을 때
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 추가 실패 시
         }
     }
-//
-//    // 댓글 수정
-//    @PatchMapping("/editComment/{commentId}")
-//    public ResponseEntity<Boolean> editComment(@PathVariable int commentId, @RequestBody Map<String, String> request) {
-//        String newContent = request.get("content");
-//        boolean result = boardService.editComment(commentId, newContent);
-//        return ResponseEntity.ok(result);
-//    }
-//
-//    // 댓글 삭제
-//    @DeleteMapping("/deleteComment/{commentId}")
-//    public ResponseEntity<Boolean> deleteComment(@PathVariable int commentId) {
-//        boolean result = boardService.deleteComment(commentId);
-//        return ResponseEntity.ok(result);
-//    }
+
+    // 댓글 수정
+    @PatchMapping("/editComment/{commentNo}")
+    public ResponseEntity<Boolean> editComment(@PathVariable int commentNo, @RequestBody Map<String, String> request) {
+        String commentContent = request.get("content");
+        boolean result = boardService.editComment(commentNo, commentContent);
+        return ResponseEntity.ok(result);
+    }
+
+    // 댓글 삭제
+    @DeleteMapping("/deleteComment/{commentNo}")
+    public ResponseEntity<Boolean> deleteComment(@PathVariable int commentNo) {
+    	System.out.println(commentNo);
+        boolean result = boardService.deleteComment(commentNo);
+        System.out.println(result);
+        return ResponseEntity.ok(result);
+    }
     
     
   //동행게시판리스트
