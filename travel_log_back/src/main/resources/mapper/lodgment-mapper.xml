@@ -3,7 +3,7 @@
 <mapper namespace="kr.co.iei.seller.model.dao.SellerLodgmentDao">
 	<!-- 등록한 호텔 조회 -->
 	<select id="selectLodgmentList" resultType="lodgmentStorage">
-		select * from LODGMENT_STORAGE where seller_no=#{sellerNo}
+		select * from LODGMENT_STORAGE where seller_no=#{sellerNo} and lodgment_delete=1
 	</select>
 
 	<!-- 기존 호텔 검색 - 이름이나 주소에 해당 단어 섞여 있으면 조회 (리스트) -->
@@ -70,7 +70,7 @@
 		LEFT JOIN
 		room_file rf ON r.room_no = rf.room_no
 		WHERE
-		r.lodgment_no = #{lodgmentNo}
+		r.lodgment_no = #{lodgmentNo} and room_delete=1
 	</select>
 
 	<!-- 객실 정보와 파일 정보를 묶어주는 ResultMap -->
@@ -295,4 +295,19 @@
 		<result property="roomName" column="room_name"/>
 	</resultMap>
 	 -->
+	 
+	 <!-- 호텔 삭제 시 해당 호텔의 객실 모두 0으로 전환 -->
+	 <update id="delUpLodgmentRoom">
+	 	update room set room_delete=0 where LODGMENT_NO=#{lodgmentNo}
+	 </update>
+	 
+	 <!-- 호텔 삭제(0으로 전환) -->
+	 <update id="delUpLodgment">
+	 	update LODGMENT_STORAGE set LODGMENT_DELETE=0 where LODGMENT_NO=#{lodgmentNo}
+	 </update>
+	 
+	 <!-- 객실만 삭제 0으로 전환  -->
+	 <update id="delUpRoom">
+	 	update room set room_delete=0 where room_no=#{roomNo}
+	 </update>
 </mapper>

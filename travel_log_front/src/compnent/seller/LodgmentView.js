@@ -3,10 +3,12 @@ import "./css/lodgment_view.css";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
+import Swal from "sweetalert2";
 import KakaoMap from "./sellerUtil/KakaoMap";
 
 const LodgmentView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
   const [lodgmentList, setLodgmentList] = useState({});
@@ -26,16 +28,30 @@ const LodgmentView = () => {
 
   // 삭제지만.. 1(보여지는거) => 0으로 바뀌게 해야하므로 패치 사용
   const deleteLodgment = () => {
-    axios
-      .patch(`${backServer}/seller/delLodgment`, null, {
-        params: { lodgmentNo: lodgmentNo },
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    Swal.fire({
+      icon: "warning",
+      title: "호텔 삭제",
+      text: "삭제하시겠습니까? 이미 예약된 고객은 ...",
+      showCancelButton: true,
+      confirmButtonText: "삭제하기",
+      cancelButtonText: "취소",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        axios
+          .patch(`${backServer}/seller/delLodgment`, null, {
+            params: { lodgmentNo: lodgmentNo },
+          })
+          .then((res) => {
+            console.log(res);
+            if (res.data !== 0) {
+              navigate("/seller/list");
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    });
   };
   return (
     <div className="lv-box-wrap box-radius">

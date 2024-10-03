@@ -54,10 +54,9 @@ public class SellerController {
 	
 	// 등록한 호텔 조회 (메인)
 	@Operation(summary="등록한 숙소 리스트", description = "등록한 호텔 정보 조회(회원가입 처리 완료 되면 post로 조회)")
-	@GetMapping(value="/lodgmentList")
-	public ResponseEntity<List> lodgmentList(@RequestHeader("Authorization") String token){
-		System.out.println(token);
-		List list = sellerService.selectLodgmentList(token);
+	@PostMapping(value="/lodgmentList")
+	public ResponseEntity<List> lodgmentList(@RequestParam int loginNo){
+		List list = sellerService.selectLodgmentList(loginNo);
 		return ResponseEntity.ok(list);
 	}
 	
@@ -107,7 +106,6 @@ public class SellerController {
 	@Operation(summary = "호텔 상세", description = "호텔 정보 출력(호텔 + 객실(객실 사진))")
 	@GetMapping(value="/lodgmentView/{lodgmentNo}")
 	public ResponseEntity<Map> list(@PathVariable int lodgmentNo){
-		System.out.println(lodgmentNo);
 		Map map = sellerService.selectHotelInfo(lodgmentNo);
 		return ResponseEntity.ok(map);
 	}
@@ -160,12 +158,12 @@ public class SellerController {
 	// 판매자 문의 글 리스트 조회
 	@Operation(summary = "판매자 문의 리스트 조회", description = "판매자 문의 리스트 출력")
 	@PostMapping(value = "/inqList")
-//	public ResponseEntity<List> searchInqList(@RequestHeader("Authorization") String token){ => 토큰 처리 완료되면 token사용해서 판매자 번호로 리스트 조회하기
-	public ResponseEntity<List> searchInqList(@RequestHeader("Authorization") String token){
-		System.out.println(token);
-		List<InquiryDTO> ls = sellerService.selectInqList(token); // 나중에 토큰으로 바꿀겨
+	public ResponseEntity<List> searchInqList(@RequestParam int loginNo){
+		List<InquiryDTO> ls = sellerService.selectInqList(loginNo);
 		return ResponseEntity.ok(ls);
 	}
+	
+	
 	
 	//seller-join 형묵
 	@PostMapping(value="/sellerJoin")
@@ -219,10 +217,10 @@ public class SellerController {
 	
 	// 판매자 예약 리스트 조회
 	@Operation(summary="판매자 예약 리스트", description="판매자 예약 리스트 판매자 번호 받아서 조회")
-	@GetMapping(value="/reserveList") // 일단 1로 설정!!
-//	public ResponseEntity<List> searchBookList(@RequestHeader("Authorization") String token){ => 토큰 처리 완료되면 token사용해서 판매자 번호로 리스트 조회하기
-	public ResponseEntity<List> searchBookList(@RequestHeader("Authorization") String token){
-		List list = sellerService.selectReserveList(token);
+	@PostMapping(value="/reserveList")
+	public ResponseEntity<List> searchBookList(@RequestParam int loginNo){
+		System.out.println(loginNo);
+		List list = sellerService.selectReserveList(loginNo);
 		return ResponseEntity.ok(list);
 	}
 	
@@ -239,8 +237,18 @@ public class SellerController {
 	@Operation(summary = "호텔 삭제", description = "호텔 삭제(완전 삭제가 아니라 1에서 0으로 update)")
 	@PatchMapping("/delLodgment")
 	public ResponseEntity<Integer> delUpLodgment(@RequestParam int lodgmentNo){
+		System.out.println(lodgmentNo);
 		int result = sellerService.delUpLodgment(lodgmentNo);
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(result);
+	}
+	
+	// 객실 삭제 (1에서 0으로 update)
+	@Operation(summary = "객실 삭제", description = "객실 삭제(완전 삭제가 아니라 1에서 0으로 update)")
+	@PatchMapping("/delRoom")
+	public ResponseEntity<Integer> delUpRoom(@RequestParam int roomNo){
+		System.out.println(roomNo);
+		int result = sellerService.delUpRoom(roomNo);
+		return ResponseEntity.ok(result);
 	}
 	
 }

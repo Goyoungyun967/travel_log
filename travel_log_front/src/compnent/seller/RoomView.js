@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import "./css/room_view.css";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import KakaoMap from "./sellerUtil/KakaoMap";
 import { SlideImg } from "./sellerUtil/SlideImg";
+import Swal from "sweetalert2";
 
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -13,6 +14,7 @@ import TabPanel from "@mui/lab/TabPanel";
 
 const RoomView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
   const roomNo = params.roomNo;
@@ -28,6 +30,7 @@ const RoomView = () => {
     setValue(newValue); // 상태 업데이트
   };
 
+  // 객실 상세
   console.log(roomInfo);
   useEffect(() => {
     axios
@@ -43,6 +46,35 @@ const RoomView = () => {
         console.log(err);
       });
   }, []);
+
+  // 객실 삭제
+  const deleteRoom = () => {
+    Swal.fire({
+      icon: "warning",
+      title: "객실 삭제",
+      text: "삭제하시겠습니까? 이미 예약된 고객은 ...",
+      showCancelButton: true,
+      confirmButtonText: "삭제하기",
+      cancelButtonText: "취소",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        axios
+          .patch(`${backServer}/seller/delRoom`, null, {
+            params: { roomNo: roomNo },
+          })
+          .then((res) => {
+            console.log(res);
+            if (res.data !== 0) {
+              navigate(`/seller/lodgmentView/${lodgmentNo}`);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    });
+  };
+
   return (
     <>
       <div className="seller-room-wrap">
@@ -96,7 +128,7 @@ const RoomView = () => {
                 >
                   <Tab label="숙소 위치" value="1" />
                   <Tab label="공지사항" value="2" />
-                  <Tab label="리뷰" value="3" />
+                  <Tab label="문의" value="3" />
                 </TabList>
               </Box>
               <TabPanel value="1">
@@ -126,12 +158,9 @@ const RoomView = () => {
             </Link>
           </div>
           <div className="seller-del-btn">
-            <Link
-              to={`/seller/deleteRoom/${roomInfo.roomNo}`}
-              className="d-btn"
-            >
+            <button type="button" onClick={deleteRoom}>
               객실 삭제
-            </Link>
+            </button>
           </div>
         </div>
       </div>
