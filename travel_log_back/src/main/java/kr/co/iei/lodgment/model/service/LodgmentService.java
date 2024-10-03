@@ -9,9 +9,12 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.iei.lodgment.model.dao.LodgmentDao;
 import kr.co.iei.lodgment.model.dto.LodgmentDTO;
+import kr.co.iei.lodgment.model.dto.LodgmentReviewDTO;
+import kr.co.iei.lodgment.model.dto.LodgmentReviewFileDTO;
 import kr.co.iei.lodgment.model.dto.RoomSearchDTO;
 import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
@@ -95,6 +98,19 @@ public class LodgmentService {
 	@Transactional
 	public int deleteCollect(int lodgmentNo, int loginNo) {
 		int result = lodgmentDao.deleteCollect(lodgmentNo, loginNo);
+		return result;
+	}
+	
+	//리뷰 등록 
+	@Transactional
+	public int insertReview(LodgmentReviewDTO lodgmentReview, List<LodgmentReviewFileDTO> fileSave) {
+		int result = lodgmentDao.insertReview(lodgmentReview);
+		if(!fileSave.isEmpty()) {
+			for (LodgmentReviewFileDTO file : fileSave) {
+				file.setReviewNo(lodgmentReview.getReviewNo());
+				result += lodgmentDao.insertReviewFile(file);
+			}
+		}
 		return result;
 	}
 }
