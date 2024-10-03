@@ -3,10 +3,12 @@ import "./css/lodgment_view.css";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
+import Swal from "sweetalert2";
 import KakaoMap from "./sellerUtil/KakaoMap";
 
 const LodgmentView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
   const [lodgmentList, setLodgmentList] = useState({});
@@ -15,9 +17,15 @@ const LodgmentView = () => {
     axios
       .get(`${backServer}/seller/lodgmentView/${lodgmentNo}`)
       .then((res) => {
-        console.log(res);
-        setLodgmentList(res.data.lodgment);
-        setRoomList(res.data.list);
+        console.log("lodgment res", res);
+        // 호텔 삭제하고 뒤로가기를 누르면 호텔 정보가 null값이 되어서 오류가 뜸
+        // 호텔 정보가 null값이면 호텔 리스트로 이동하게 함
+        if (res.data.lodgment !== null) {
+          setLodgmentList(res.data.lodgment);
+          setRoomList(res.data.list);
+        } else {
+          navigate("/seller/list");
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -26,16 +34,30 @@ const LodgmentView = () => {
 
   // 삭제지만.. 1(보여지는거) => 0으로 바뀌게 해야하므로 패치 사용
   const deleteLodgment = () => {
-    axios
-      .patch(`${backServer}/seller/delLodgment`, null, {
-        params: { lodgmentNo: lodgmentNo },
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    Swal.fire({
+      icon: "warning",
+      title: "호텔 삭제",
+      text: "삭제하시겠습니까? 객실까지 같이 지워져영~",
+      showCancelButton: true,
+      confirmButtonText: "삭제하기",
+      cancelButtonText: "취소",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        axios
+          .patch(`${backServer}/seller/delLodgment`, null, {
+            params: { lodgmentNo: lodgmentNo },
+          })
+          .then((res) => {
+            console.log(res);
+            if (res.data !== 0) {
+              navigate("/seller/list");
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    });
   };
   return (
     <div className="lv-box-wrap box-radius">

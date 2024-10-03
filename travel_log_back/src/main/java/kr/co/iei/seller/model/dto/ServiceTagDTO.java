@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Schema(description="서비스 태그 객체")
 public class ServiceTagDTO {
 	@Schema(description = "서비스 태그 번호",type="int")
-	private int serviceTageNo;
+	private int serviceTagNo;
 	@Schema(description = "서비스 태그 타입",type="String")
 	private String serviceTagType;
 }

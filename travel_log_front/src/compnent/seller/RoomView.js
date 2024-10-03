@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import "./css/room_view.css";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import KakaoMap from "./sellerUtil/KakaoMap";
 import { SlideImg } from "./sellerUtil/SlideImg";
+import Swal from "sweetalert2";
 
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -13,6 +14,7 @@ import TabPanel from "@mui/lab/TabPanel";
 
 const RoomView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
   const roomNo = params.roomNo;
@@ -28,21 +30,57 @@ const RoomView = () => {
     setValue(newValue); // 상태 업데이트
   };
 
+  // 객실 상세
   console.log(roomInfo);
   useEffect(() => {
     axios
       .get(`${backServer}/seller/roomView/${lodgmentNo}/${roomNo}`)
       .then((res) => {
-        console.log(res);
+        console.log("r", res);
         setlodgmentInfo(res.data.lodgment);
-        setRoomInfo(res.data.room);
-        setRoomFile(res.data.room.fileList);
-        setServiceTag(res.data.room.serviceTagList);
+        // 객실 삭제하고 뒤로가기를 누르면 객실 정보가 null값이 되어서 오류가 뜸
+        // 객실 정보가 null값이면 호텔 상세로 이동하게 함
+        if (res.data.room !== null) {
+          setRoomInfo(res.data.room);
+          setRoomFile(res.data.room.fileList);
+          setServiceTag(res.data.room.serviceTagList);
+        } else {
+          navigate(`/seller/lodgmentView/${lodgmentNo}`);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+  // 객실 삭제
+  const deleteRoom = () => {
+    Swal.fire({
+      icon: "warning",
+      title: "객실 삭제",
+      text: "삭제하시겠습니까? 이미 예약된 고객은 ...",
+      showCancelButton: true,
+      confirmButtonText: "삭제하기",
+      cancelButtonText: "취소",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        axios
+          .patch(`${backServer}/seller/delRoom`, null, {
+            params: { roomNo: roomNo },
+          })
+          .then((res) => {
+            console.log(res);
+            if (res.data !== 0) {
+              navigate(`/seller/lodgmentView/${lodgmentNo}`);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    });
+  };
+
   return (
     <>
       <div className="seller-room-wrap">
@@ -96,7 +134,7 @@ const RoomView = () => {
                 >
                   <Tab label="숙소 위치" value="1" />
                   <Tab label="공지사항" value="2" />
-                  <Tab label="리뷰" value="3" />
+                  <Tab label="문의" value="3" />
                 </TabList>
               </Box>
               <TabPanel value="1">
@@ -119,19 +157,16 @@ const RoomView = () => {
         <div className="seller-btn-div">
           <div className="seller-update-btn">
             <Link
-              to={`/seller/updateRoom/${roomInfo.roomNo}`}
+              to={`/seller/updateRoom/${lodgmentNo}/${roomInfo.roomNo}`}
               className="s-btn"
             >
               객실 수정
             </Link>
           </div>
           <div className="seller-del-btn">
-            <Link
-              to={`/seller/deleteRoom/${roomInfo.roomNo}`}
-              className="d-btn"
-            >
+            <button type="button" onClick={deleteRoom}>
               객실 삭제
-            </Link>
+            </button>
           </div>
         </div>
       </div>
