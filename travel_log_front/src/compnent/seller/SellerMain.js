@@ -11,6 +11,7 @@ import InqList from "./InqList";
 import InqView from "./InqView";
 import ReserveList from "./ReserveList";
 import InsertInq from "./InsertInq";
+import UpdateRoom from "./UpdateRoom";
 const SellerMain = () => {
   return (
     <Routes>
@@ -47,8 +48,11 @@ const SellerMain = () => {
       {/* 문의 - 문의 상세*/}
       <Route path="inqView/:inqNo" element={<InqView />} />
 
-      {/* 문의 - 문의 등록 */}
+      {/* 문의 - 문의 등록 - 미완 */}
       <Route path="insertInq" element={<InsertInq />} />
+
+      {/* 객실 수정 */}
+      <Route path="updateRoom/:lodgmentNo/:roomNo" element={<UpdateRoom />} />
     </Routes>
   );
 };

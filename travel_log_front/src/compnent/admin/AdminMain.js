@@ -4,6 +4,7 @@ import InquiryList from "../inquiry/InquiryList";
 import InquiryView from "../inquiry/InquiryView";
 import AdminSellerList from "./AdminSellerList";
 import MemberChart from "./MemberChart";
+import SellerChart from "./SellerChart";
 
 const AdminMain = () => {
   const changeMenu = (e) => {
@@ -45,7 +46,7 @@ const AdminMain = () => {
               <NavLink to="sellerList">판매자 관리</NavLink>
             </li>
             <li>
-              <NavLink to="7">판매자 매출</NavLink>
+              <NavLink to="sellerChart">판매자 매출</NavLink>
             </li>
             <li>
               <NavLink to="8">판매자 정산</NavLink>
@@ -72,7 +73,8 @@ const AdminMain = () => {
             <Route path="inquiryList" element={<InquiryList />} />
             <Route path="inquiryView/:inquiryNo" element={<InquiryView />} />
             <Route path="sellerList" element={<AdminSellerList />} />
-            <Route path="memberChart" element={<MemberChart />} />
+            <Route path="memberChart" element={<MemberChart />} />c
+            <Route path="sellerChart" element={<SellerChart />} />
           </Routes>
         </div>
       </div>

@@ -12,7 +12,9 @@ const ReserveList = () => {
   const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState); // 리코일에서 판매자 번호 줍줍
   useEffect(() => {
     axios
-      .get(`${backServer}/seller/reserveList`)
+      .post(`${backServer}/seller/reserveList`, null, {
+        params: { loginNo: loginNo },
+      })
       .then((res) => {
         console.log(res);
         setReserveList(res.data);
@@ -20,7 +22,7 @@ const ReserveList = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [loginNo]);
   return (
     <>
       <div className="seller-reserve-box-wrap">

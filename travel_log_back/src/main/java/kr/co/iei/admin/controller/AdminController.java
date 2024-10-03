@@ -97,8 +97,39 @@ public class AdminController {
 	}
 	@GetMapping(value="/lodgment/region/member/{region}")
 	@Operation(summary = "차트용 해당지역 회원 이용자 정보 조회",description = "지역을 받아서 해당 지역의 숙소를 이용하는 나이별,성별 회원수 리스트 조회")
-	public ResponseEntity<List> getLodgmentResionMemberData(@PathVariable String region){
-		List list = adminService.getLodgmentResionMemberData(region);
+	public ResponseEntity<List> getLodgmentResionSearchMemberData(@PathVariable String region){
+		List list = adminService.getLodgmentResionSearchMemberData(region);
 		return ResponseEntity.ok(list);
 	}
+	@GetMapping(value="/lodgment/region/member")
+	public ResponseEntity<List> getLodmentResionMemberData(){
+		List list = adminService.getLodgmentResionMemberData();
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/seller/list")
+	public ResponseEntity<List> getSellerList(){
+		List list = adminService.getSellerList();
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/seller/sales/{type}/{date}")
+	public ResponseEntity<List> getSellerListSales(@PathVariable String type,@PathVariable String date){
+		List list = adminService.getSellerListSales(type,date);
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/seller/sales/{sellerNo}")
+	public ResponseEntity<List> getSellerSales(@PathVariable int sellerNo){
+		List list = adminService.getSellerSales(sellerNo);
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/seller/sales/gender/{sellerNo}")
+	public ResponseEntity<List> getSellerSalesGender(@PathVariable int sellerNo){
+		List list = adminService.getSellerSalesGender(sellerNo);
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/seller/sales/age/{sellerNo}")
+	public ResponseEntity<List> getSellerSalesAge(@PathVariable int sellerNo){
+		List list = adminService.getSellerSalesAge(sellerNo);
+		return ResponseEntity.ok(list);
+	}
+	
 }
