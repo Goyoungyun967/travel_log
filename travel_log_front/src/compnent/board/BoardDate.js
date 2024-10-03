@@ -8,6 +8,7 @@ import { ko } from "date-fns/locale";
 
 const BoardDate = (props) => {
   const { startDate, setStartDate, endDate, setEndDate } = props;
+  console.log(startDate, setStartDate, endDate, setEndDate);
   const [dateDropdownOpen, setDateDropdownOpen] = useState(false);
   const datepickerRef = useRef(null);
 
@@ -38,7 +39,7 @@ const BoardDate = (props) => {
           }`}
           onClick={(e) => {
             e.stopPropagation();
-            setDateDropdownOpen(!dateDropdownOpen);
+            setDateDropdownOpen((prev) => !prev);
           }}
           readOnly
         />

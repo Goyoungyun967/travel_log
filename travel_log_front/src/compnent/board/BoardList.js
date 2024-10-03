@@ -260,6 +260,7 @@ const AccompanyItem = (props) => {
     >
       <div className="board-preview-thumb">
         <img
+          style={{ width: "250px" }}
           src={
             accompany.boardThumb
               ? `${backServer}/board/thumb/${accompany.boardThumb}`
