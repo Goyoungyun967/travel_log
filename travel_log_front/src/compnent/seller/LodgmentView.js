@@ -17,9 +17,15 @@ const LodgmentView = () => {
     axios
       .get(`${backServer}/seller/lodgmentView/${lodgmentNo}`)
       .then((res) => {
-        console.log(res);
-        setLodgmentList(res.data.lodgment);
-        setRoomList(res.data.list);
+        console.log("lodgment res", res);
+        // 호텔 삭제하고 뒤로가기를 누르면 호텔 정보가 null값이 되어서 오류가 뜸
+        // 호텔 정보가 null값이면 호텔 리스트로 이동하게 함
+        if (res.data.lodgment !== null) {
+          setLodgmentList(res.data.lodgment);
+          setRoomList(res.data.list);
+        } else {
+          navigate("/seller/list");
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -31,7 +37,7 @@ const LodgmentView = () => {
     Swal.fire({
       icon: "warning",
       title: "호텔 삭제",
-      text: "삭제하시겠습니까? 이미 예약된 고객은 ...",
+      text: "삭제하시겠습니까? 객실까지 같이 지워져영~",
       showCancelButton: true,
       confirmButtonText: "삭제하기",
       cancelButtonText: "취소",

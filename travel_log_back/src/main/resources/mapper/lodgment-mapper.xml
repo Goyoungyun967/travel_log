@@ -99,6 +99,7 @@
 			r.room_max_capacity AS room_max_capacity,
 			r.room_price AS room_price,
 			r.room_info AS room_info,
+			st.service_tag_no AS serviceTagNo,
 			st.service_tag_type AS serviceTagType,
 			rf.room_img AS room_img
 		FROM
@@ -124,6 +125,7 @@
 		<!-- 서비스 태그 리스트 -->
 		<collection property="serviceTagList" ofType="serviceTag"
 			javaType="java.util.List">
+			<result property="serviceTagNo" column="serviceTagNo" />
 			<result property="serviceTagType" column="serviceTagType" />
 		</collection>
 

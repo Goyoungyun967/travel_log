@@ -36,11 +36,17 @@ const RoomView = () => {
     axios
       .get(`${backServer}/seller/roomView/${lodgmentNo}/${roomNo}`)
       .then((res) => {
-        console.log(res);
+        console.log("r", res);
         setlodgmentInfo(res.data.lodgment);
-        setRoomInfo(res.data.room);
-        setRoomFile(res.data.room.fileList);
-        setServiceTag(res.data.room.serviceTagList);
+        // 객실 삭제하고 뒤로가기를 누르면 객실 정보가 null값이 되어서 오류가 뜸
+        // 객실 정보가 null값이면 호텔 상세로 이동하게 함
+        if (res.data.room !== null) {
+          setRoomInfo(res.data.room);
+          setRoomFile(res.data.room.fileList);
+          setServiceTag(res.data.room.serviceTagList);
+        } else {
+          navigate(`/seller/lodgmentView/${lodgmentNo}`);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -151,7 +157,7 @@ const RoomView = () => {
         <div className="seller-btn-div">
           <div className="seller-update-btn">
             <Link
-              to={`/seller/updateRoom/${roomInfo.roomNo}`}
+              to={`/seller/updateRoom/${lodgmentNo}/${roomInfo.roomNo}`}
               className="s-btn"
             >
               객실 수정
