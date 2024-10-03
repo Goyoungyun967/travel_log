@@ -106,8 +106,41 @@ public class AdminService {
 		return list;
 	}
 
-	public List getLodgmentResionMemberData(String region) {
-		List list = inquiryDao.getLodgmentResionMemberData(region);
+	public List getLodgmentResionSearchMemberData(String region) {
+		List list = inquiryDao.getLodgmentResionSearchMemberData(region);
+		return list;
+	}
+
+	public List getLodgmentResionMemberData() {
+		List list = inquiryDao.getLodgmentResionMemberData();
+		return list;
+	}
+
+
+	public List getSellerList() {
+		List list = inquiryDao.getSellerList();
+		return list;
+	}
+	public List getSellerListSales(String type, String date) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("type", type);
+		map.put("date", date);
+		List list = inquiryDao.getSellerListSales(map);
+		return list;
+	}
+
+	public List getSellerSales(int sellerNo) {
+		List list = inquiryDao.getSellerSales(sellerNo);
+		return list;
+	}
+
+	public List getSellerSalesGender(int sellerNo) {
+		List list = inquiryDao.getSellerSalesGender(sellerNo);
+		return list;
+	}
+
+	public List getSellerSalesAge(int sellerNo) {
+		List list = inquiryDao.getSellerSalesAge(sellerNo);
 		return list;
 	}
 

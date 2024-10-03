@@ -48,9 +48,9 @@ const PaymentPage = () => {
     guestName: "",
     guestPhone: "",
     guestRequest: "",
-    //uestCount: state.guest,
-    //startDate: state.checkIn,
-    //endDate: state.checkOut,
+    uestCount: state.guest,
+    startDate: state.checkIn,
+    endDate: state.checkOut,
     roomNo: state.room.roomNo,
     sellerNo: state.lodgmentInfo.sellerNo,
     memberNo: loginNo, //왜 디폴트값이 들어갈까?

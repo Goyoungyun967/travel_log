@@ -12,6 +12,7 @@ import kr.co.iei.lodgment.model.dto.RoomSearchDTO;
 import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
+import kr.co.iei.util.PageInfo;
 
 @Mapper
 public interface LodgmentDao {
@@ -43,6 +44,12 @@ public interface LodgmentDao {
 	int insertReview(LodgmentReviewDTO lodgmentReview);
 
 	int insertReviewFile(LodgmentReviewFileDTO file);
+
+	//List<LodgmentReviewDTO> getReviewList(int lodgmentNo);
+
+	int totalCount(int lodgmentNo);
+
+	List selectReviewList(int start, int end, int lodgmentNo);
 
 	//List<RoomDTO> getRoomInfoList(int lodgmentNo, String startDate, String endDate, int guset);
 	

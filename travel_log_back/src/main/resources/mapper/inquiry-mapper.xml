@@ -82,11 +82,11 @@
   	select inquiry_reply_no,inquiry_reply_content,to_char(reg_date,'yyyy-mm-dd') as reg_date from inquiry_reply where inquiry_no=#{inquiryNo}
   </select>
   
-  <!-- 임시 -->
+  <!-- 임시 회원 차트 -->
   <select id="getLodgmentResionData" resultType="string">
   	select distinct(substr(lodgment_addr,0,2)) from lodgment_storage
   </select>
-  <select id="getLodgmentResionMemberData" resultType="map">
+  <select id="getLodgmentResionSearchMemberData" resultType="map">
   	select 
 	    (case
 	        when member_age >= 70 then '70대 이상'
@@ -113,5 +113,104 @@
 			when member_age >= 10 then '10대'
 		end),
 		member_gender
+  </select>
+  <select id="getLodgmentResionMemberData" resultType="map">
+  	select 
+	    substr(lodgment_addr,0,2) "region",
+		count(*) as "memberCount"
+	from 
+		booking join member using (member_id) join room using (room_no) join lodgment_storage using (lodgment_no)
+	group by 
+		substr(lodgment_addr,0,2)
+  </select>
+  <!-- 임시 판매자 차트 -->
+  <select id="getSellerList" resultType="seller">
+  	select seller_no,business_name from seller
+  </select>
+  <select id="getSellerListSales" resultType="map">
+  	select 
+  		business_name as "businessName", sum(room_price)as "sales"
+  	from 
+  		booking
+  	join 
+  		room using (room_no) 
+  	join
+  		seller using (seller_no)
+  	where
+  	<choose>
+  		<when test="type.equals('year')">
+  			payment_date between trunc(add_months(to_date(#{date},'yyyy'),-12),'year') and trunc(add_months(to_date(#{date},'yyyy'),12),'year')-1 and
+  		</when>
+  		<when test="type.equals('month')">
+  			payment_date between to_date(#{date},'yyyymm') and last_day(to_date(#{date},'yyyymm')) and
+  		</when>
+  	</choose> 
+  		status=1
+  	group by 
+  		business_name
+  </select>
+  <select id="getSellerSales" resultType="map">
+  	select 
+  		to_char(payment_date,'yyyy-mm') as "date",
+  		sum(room_price) as "sales",
+  		sum(sum(room_price)) over (order by to_char(payment_date, 'yyyy-mm')) as "sum"
+  	from 
+  		booking 
+  	join 
+  		room using (room_no) 
+  	where 
+  		payment_date between trunc(add_months(sysdate,-12),'year') and trunc(add_months(sysdate,12),'year')-1 
+  		and 
+  		status=1
+  		and
+  		seller_no=#{sellerNo} 
+  	group by to_char(payment_date,'yyyy-mm')
+  </select>
+  <select id="getSellerSalesAge" resultType="map">
+  	select 
+  		count(*) as "sales",
+  		(case
+    		when member_age >= 70 then '70대 이상'
+			when member_age >= 60 then '60대'
+			when member_age >= 50 then '50대'
+			when member_age >= 40 then '40대'
+			when member_age >= 30 then '30대'
+			when member_age >= 20 then '20대'
+			when member_age >= 10 then '10대'
+		end) as "age"
+	from 
+		booking 
+	join 
+		seller using (seller_no) 
+	join 
+		member using (member_id) 
+	where 
+		seller_no=#{sellerNo} 
+	group by 
+		(case
+		    when member_age >= 70 then '70대 이상'
+			when member_age >= 60 then '60대'
+			when member_age >= 50 then '50대'
+			when member_age >= 40 then '40대'
+			when member_age >= 30 then '30대'
+			when member_age >= 20 then '20대'
+			when member_age >= 10 then '10대'
+		end)
+		order by 1 desc
+  </select>
+  <select id="getSellerSalesGender" resultType="map">
+  	select 
+  		count(*) as "sales",
+  		decode(member_gender,'m','남성','f','여성') as "gender"
+	from 
+		booking 
+	join 
+		seller using (seller_no) 
+	join 
+		member using (member_id) 
+	where 
+		seller_no=#{sellerNo} 
+	group by 
+		decode(member_gender,'m','남성','f','여성')
   </select>
 </mapper>

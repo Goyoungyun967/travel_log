@@ -203,7 +203,7 @@
 	
 	<insert id="insertReview" >
 		insert into lodgment_review 
-		values (lodgment_review_seq.nextval, #{memberNo}, #{lodgmentNo}, #{reviewContent}, #{rating})
+		values (lodgment_review_seq.nextval, #{memberNo}, #{bookNo} #{lodgmentNo}, #{reviewContent}, #{rating})
 		<selectKey resultType="int" keyProperty="reviewNo" order="AFTER">
 			select max(review_no) from lodgment_review
 		</selectKey>
@@ -213,4 +213,37 @@
 		insert into lodgment_review_file 
 		values (lodgment_review_file_seq.nextval, #{reviewNo}, #{reviewImgPath})
 	</insert>
+	
+	
+	<select id="totalCount" resultType="int">
+		select count(*) from lodgment_review where lodgment_no=#{lodgmentNo}
+	</select>
+	
+	<select id="selectReviewList" resultMap="getReviewFile">
+	 SELECT 
+    	review_no, member_id, member_no, review_content, rating, start_date
+	FROM (
+	    SELECT rownum AS rnum, lr.review_no, lr.member_no, lr.review_content, lr.rating, b.book_no, b.start_date, b.end_date, m.member_id
+   		FROM lodgment_review lr
+   	 	LEFT JOIN booking b ON lr.book_no = b.book_no -- booking의 book_no와 조인
+   	 	left join member m on b.member_id = m.member_id
+   	 	WHERE lr.lodgment_no = #{lodgmentNo}
+		) 
+	WHERE rnum BETWEEN #{start} AND #{end}
+	</select>
+
+	<resultMap type="lodgmentReview" id="getReviewFile">
+	    <result column="review_no" property="reviewNo"/>
+	    <collection 
+	        property="fileList" 
+	        select="selectOneReviewFileList" 
+	        column="review_no"
+	        javaType="java.util.List"
+	        ofType="lodgmentReviewFile"
+	    />
+	</resultMap>
+	<select id="selectOneReviewFileList" parameterType="int" resultType="lodgmentReviewFile">
+    	select * from lodgment_review_file where review_no = #{reviewNo}
+	</select>
+
 </mapper>
