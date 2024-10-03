@@ -200,4 +200,17 @@
 	<delete id="deleteCollect">
 		delete from lodgment_collection where lodgment_no = #{lodgmentNo} and member_no= #{loginNo}
 	</delete>
+	
+	<insert id="insertReview" >
+		insert into lodgment_review 
+		values (lodgment_review_seq.nextval, #{memberNo}, #{lodgmentNo}, #{reviewContent}, #{rating})
+		<selectKey resultType="int" keyProperty="reviewNo" order="AFTER">
+			select max(review_no) from lodgment_review
+		</selectKey>
+	</insert>
+	
+	<insert id="insertReviewFile">
+		insert into lodgment_review_file 
+		values (lodgment_review_file_seq.nextval, #{reviewNo}, #{reviewImgPath})
+	</insert>
 </mapper>

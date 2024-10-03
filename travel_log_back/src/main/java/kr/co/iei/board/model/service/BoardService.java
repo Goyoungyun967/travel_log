@@ -170,28 +170,32 @@ public class BoardService {
 		map.put("pi", pi);
 		return map;
 	}
+	
 	@Transactional
 	public int insertAcoompanyBoard(BoardAccompanyDTO boardAccompany, List<BoardFileDTO> boardFileList) {
 	    int result = boardDao.insertBoardAccompany(boardAccompany);
+
 	    	if(result>0) {
+	    		// 파일 삽입
 	    		for(BoardFileDTO boardFile : boardFileList) {
 	    			boardFile.setBoardNo(boardAccompany.getBoardNo());
 	    			System.out.println(1);
 	    			result += boardDao.insertBoardFile(boardFile);
+	    			System.out.println("1"+boardAccompany);
 	    		}
+	            // 동행 태그 삽입
 	    		for(int AccompanyTagNo : boardAccompany.getAccompanyTagNo()) {
 	    			AccompanyTag at = new AccompanyTag();
 	    			at.setBoardNo(boardAccompany.getBoardNo());
 	    			at.setAccompanyTagNo(AccompanyTagNo);
-	    			result += boardDao.insertAccompanyType(boardAccompany);
+	    			result += boardDao.insertAccompanyType(at);
 	    			System.out.println(2);
+	    			System.out.println("2"+boardAccompany);
 	    		}
-	    		for(int i=0; i<boardAccompany.getAccompanyDate();i++) {
-	    			BoardAccompanyDTO bad = new BoardAccompanyDTO();
-	    			System.out.println(3);
+	            // 동행 일정 삽입
 	    			result += boardDao.insertAccompany(boardAccompany);
-	    			
-	    		}
+	    			System.out.println(3);
+	    			System.out.println("3"+boardAccompany);
 	    		
 
 	    	}

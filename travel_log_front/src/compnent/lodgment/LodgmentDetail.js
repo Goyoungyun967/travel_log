@@ -13,6 +13,7 @@ import { loginNoState } from "../utils/RecoilData";
 import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { format } from "date-fns";
 
 const LodgmentDetail = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
@@ -29,12 +30,16 @@ const LodgmentDetail = () => {
   const [result, setResult] = useState(true);
   //console.log("디테일 :" + lodgmentNo);
   //console.log(loginNo);
+
+  const formattedStartDate = format(new Date(startDate), "yyyy-MM-dd");
+  const formattedEndDate = format(new Date(endDate), "yyyy-MM-dd");
+
   useEffect(() => {
     //console.log("loginNo" + loginNo);
 
     axios
       .get(
-        `${BackServer}/lodgment/roomInfo/${lodgmentNo}/${startDate}/${endDate}/${loginNo}`
+        `${BackServer}/lodgment/roomInfo/${lodgmentNo}/${formattedStartDate}/${formattedEndDate}/${loginNo}`
       )
       .then((res) => {
         console.log(res);
