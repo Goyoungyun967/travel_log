@@ -16,7 +16,7 @@ public class LodgmentReviewFileDTO {
 	@Schema(description = "리뷰사진 번호",type="int")
 	private int reviewFileNo;
 	@Schema(description = "리뷰 번호",type="int")
-	private int ReviewNo;
-	@Schema(description = "리뷰 사진 경로",type="Stirng")
+	private int reviewNo;
+	@Schema(description = "리뷰 사진 경로",type="String")
 	private String reviewImgPath;
 }

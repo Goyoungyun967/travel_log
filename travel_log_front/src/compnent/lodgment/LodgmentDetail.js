@@ -14,6 +14,7 @@ import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { format } from "date-fns";
+import LodgmentReviewList from "./LodgmentReviewList";
 
 const LodgmentDetail = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
@@ -28,6 +29,8 @@ const LodgmentDetail = () => {
   const [loginNo] = useRecoilState(loginNoState);
   const [lodgmentCollection, sestLodgmentCollection] = useState("");
   const [result, setResult] = useState(true);
+  const [previewImg, setPreviewImg] = useState([]);
+  const [review, setReview] = useState([]);
   //console.log("디테일 :" + lodgmentNo);
   //console.log(loginNo);
 
@@ -46,6 +49,12 @@ const LodgmentDetail = () => {
         setLodgmentInfo(res.data.lodgmentInfo);
         setRoomSearchList(res.data.lodgmentInfo.roomSearchList);
         sestLodgmentCollection(res.data.lodgmentCollection);
+        if (res.data.reviewList.length > 0) {
+          setReview(res.data.reviewList);
+          for (let i = 0; i < res.data.reviewList.length; i++) {
+            const review = res.data.reviewList[i];
+          }
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -244,6 +253,7 @@ const LodgmentDetail = () => {
           justify
         >
           <Tab eventKey="home" title="이용후기">
+            <LodgmentReviewList lodgmentNo={lodgmentNo} />
             <div className="lodgment-review-rwap">
               <div className="lodgment-review-btn-wrap">
                 <button

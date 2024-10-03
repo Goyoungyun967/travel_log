@@ -191,7 +191,10 @@
 				select max(board_no) from board
 			</selectKey>
 		</insert>
-	
+		
+		<select id="getReviewList">
+			select * from lodgment_review where review_no=#{lodgmentNo}
+		</select>
 	
 	
 	

@@ -19,12 +19,17 @@ import kr.co.iei.lodgment.model.dto.RoomSearchDTO;
 import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
+import kr.co.iei.util.PageInfo;
+import kr.co.iei.util.PageUtil;
 
 @Service
 public class LodgmentService {
 
 	@Autowired
 	private LodgmentDao lodgmentDao;
+	
+	@Autowired
+	private PageUtil pageUtil;
 	
 	//서비스 태그 가져오기
 	public List serviceList() {
@@ -43,6 +48,7 @@ public class LodgmentService {
 
 
 	//reqPage 작업도 같이 해서 보냄 
+	//숙소 리스트 
 	public List<SearchLodgmentDTO> getLodgmentList(int reqPage, String lodgment, String startDate, String endDate,
 		 int guest, int minPrice, int maxPrice, int[] selectedServiceTagsArry, int starValue, int order, int lodgmentType) {
 		 int limit = 10;  //한페이지당 열개 
@@ -57,17 +63,9 @@ public class LodgmentService {
 	
 	//상세페이지 방 정보 불러오기 
 	public Map getRoomInfo(int lodgmentNo, String startDate, String endDate, int loginNo) {
-		//List<RoomSearchDTO> roomSearchList = lodgmentDao.getRoomInfo(lodgmentNo, startDate.substring(0, 10), endDate.substring(0, 10) );
+		//호텔 정보 가져오기
 		LodgmentDTO lodgmentInfo = lodgmentDao.getLodgmentInfo(lodgmentNo);
 		
-		//보관함 여부 조회  -1 은 로그인이 안되어있을때의 디폴트 값 
-		int lodgmentCollection = -1;
-		//System.out.println(loginNo);
-		if(loginNo != -1) {			
-			//0(보관함 x) 이거나 1(보관함 O) 
-			lodgmentCollection = lodgmentDao.lodgmentCollection(loginNo, lodgmentNo);
-			//System.out.println("lodgmentCollection"+lodgmentCollection);
-		}
 		//숙박업체에 해당되는 룸번호 배열 
 		List<Integer> roomNoList = lodgmentDao.getRoomNo(lodgmentNo); 
 		
@@ -81,9 +79,23 @@ public class LodgmentService {
 		}
 		lodgmentInfo.setRoomSearchList(roomSearchList);
 		
+		//리뷰 가져오기 다른 컴포넌트에서 작업
+		//List<LodgmentReviewDTO> reviewList = lodgmentDao.getReviewList(lodgmentNo);
+		
+		//보관함 여부
+		//보관함 여부 조회  -1 은 로그인이 안되어있을때의 디폴트 값 
+		int lodgmentCollection = -1;
+		//로그인이 되어있을 때 멤버의 보관함 유무 확인
+		if(loginNo != -1) {			
+			//0(보관함 x) 이거나 1(보관함 O) 
+			lodgmentCollection = lodgmentDao.lodgmentCollection(loginNo, lodgmentNo);
+			//System.out.println("lodgmentCollection"+lodgmentCollection);
+		}
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 	    map.put("lodgmentInfo", lodgmentInfo);
 	    map.put("lodgmentCollection", lodgmentCollection);
+	    //map.put("reviewList",reviewList);
 		return map;
 	}
 	
@@ -112,5 +124,20 @@ public class LodgmentService {
 			}
 		}
 		return result;
+	}
+	
+	//리뷰리스트
+	public Map reveiwList(int lodgmentNo, int reqPage) {
+ 		int numPerPage = 5;	
+		int pageNaviSize = 5;	//페이지네비 길이
+		int totalCount = lodgmentDao.totalCount(lodgmentNo);//전체 게시물 수
+		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
+		System.out.println(pi);
+		List list = lodgmentDao.selectReviewList(pi.getStart(), pi.getEnd(), lodgmentNo);
+		Map<String, Object> map = new HashMap<String, Object>();
+	    
+		map.put("list", list);
+		map.put("pi", pi);
+		return map;
 	}
 }
