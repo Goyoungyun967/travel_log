@@ -41,4 +41,6 @@ public class BookingDTO {
 	private int status;
 	@Schema(description = "포트원 환불 번호", type = "String")
 	private String portoneimpuid;
+	@Schema(description = "방 삭제 여부", type = "int")
+	private int roomDelete;
 }
