@@ -16,7 +16,7 @@ public class BoardAccompanyDTO {
 	private int accompanyNo;
 	private int accompanyDate;        // 동행 스케줄 표
 	private String accompanyArea;	     // 상세 지역
-	private  List<String> accompanyContent;	 // 각각의 스케줄에 들어갈 설명
+	private String accompanyContent;	 // 각각의 스케줄에 들어갈 설명
 	private String startDay;
 	private String endDay;
 	

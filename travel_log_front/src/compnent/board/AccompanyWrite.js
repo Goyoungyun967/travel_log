@@ -45,6 +45,9 @@ const AccompanyWrite = () => {
   const [startDate, setStartDate] = useState(startDay.format("YYYY-MM-DD"));
   const [endDate, setEndDate] = useState(endDay.format("YYYY-MM-DD"));
 
+  console.log(startDate);
+  console.log(endDate);
+
   // 날짜 변경 핸들러
 
   //타입
@@ -87,8 +90,13 @@ const AccompanyWrite = () => {
       form.append("accompanyDate", daysDifference);
       form.append("accompanyContent", accompanyContent);
       form.append("accompanyTagNo ", selectedType);
-      form.append("startDay", startDay);
-      form.append("endDay", endDay);
+      form.append("accompanyArea", accompanyArea);
+      // form.append("startDay", startDay);
+      // form.append("endDay", endDay);
+      // Format startDate and endDate before appending to FormData
+      form.append("startDay", dayjs(startDate).format("YYYY-MM-DD"));
+      form.append("endDay", dayjs(endDate).format("YYYY-MM-DD"));
+
       //썸네일이 첨부된 경우에만 추가
       console.log(selectedArea);
       if (thumbnail !== null) {
@@ -108,18 +116,15 @@ const AccompanyWrite = () => {
         })
         .then((res) => {
           console.log(res);
-          if (res.data) {
-            navigate("/board/list");
-          } else {
-            Swal.fire({
-              title: "에러",
-              text: "원인찾아",
-              icon: "error",
-            });
-          }
+          navigate("/board/list");
         })
         .catch((err) => {
           console.log(err);
+          Swal.fire({
+            title: "에러",
+            text: "원인찾아",
+            icon: "error",
+          });
         });
     }
   };
