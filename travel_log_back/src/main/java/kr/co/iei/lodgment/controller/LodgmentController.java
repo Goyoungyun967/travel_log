@@ -157,7 +157,7 @@ public class LodgmentController {
 	@Operation(summary = "리뷰 리스트",description = "숙소 번호, 페이지넘버, 로그인 여부에 따라 후기 여부")
 	public ResponseEntity<Map> reviewList(@PathVariable int lodgmentNo, @PathVariable int reqPage, @PathVariable int loginNo ){
 	System.out.println(lodgmentNo);
-		Map map = lodgmentService.reveiwList(lodgmentNo, reqPage, loginNo);
+		Map map = lodgmentService.reveiwList(lodgmentNo, reqPage,loginNo);
 		return ResponseEntity.ok(map);
 	}
 
