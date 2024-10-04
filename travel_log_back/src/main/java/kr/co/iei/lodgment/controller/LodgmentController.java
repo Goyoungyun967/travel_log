@@ -1,22 +1,32 @@
 package kr.co.iei.lodgment.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.co.iei.lodgment.model.dto.LodgmentReviewDTO;
+import kr.co.iei.lodgment.model.dto.LodgmentReviewFileDTO;
+import kr.co.iei.lodgment.model.dto.RoomSearchDTO;
 import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
 import kr.co.iei.lodgment.model.service.LodgmentService;
+import kr.co.iei.util.FileUtils;
 
 
 
@@ -28,6 +38,12 @@ public class LodgmentController {
 
 	@Autowired
 	private LodgmentService lodgmentService;
+	
+	@Autowired
+	private FileUtils fileUtil;
+	
+	@Value("${file.root}")
+	public String root;
 	
 	//서비스 태그 가져오기
 	@GetMapping(value = "/service")
@@ -79,20 +95,21 @@ public class LodgmentController {
 		
 	}
 	
-	
-	@GetMapping(value = "/roomInfo/{lodgmentNo}/{startDate}/{endDate}/{loginNo}")
+	//검색 -> 숙소 상세페이지 
+	@GetMapping(value = "/roomInfo/{lodgmentNo}/{formattedStartDate}/{formattedEndDate}/{loginNo}")
 	@Operation(summary = "숙박업체 룸 디테일 정보 가져오기",description ="숙박업체 번호, 체크인,체크아웃 날짜로 수박업체 정보 받아오기") 
 	public ResponseEntity<Map> roomInfo(
 			@PathVariable int lodgmentNo,
-			@PathVariable String startDate,
-			@PathVariable String endDate,	
+			@PathVariable String formattedStartDate,
+			@PathVariable String formattedEndDate,	
 			@PathVariable int loginNo		
 			){
 		//System.out.println(lodgmentNo);
-		Map map = lodgmentService.getRoomInfo(lodgmentNo,startDate,endDate,loginNo);
+		Map map = lodgmentService.getRoomInfo(lodgmentNo,formattedStartDate,formattedEndDate,loginNo);
 		return ResponseEntity.ok(map);
 	}
 	
+	//숙소 보관함  
 	@GetMapping(value = "/collect/{lodgmentNo}/{loginNo}")
 	@Operation(summary = "숙소 보관함",description ="숙소번호, 회원번호로 보관함에 저장") 
 	public ResponseEntity<Integer> insertCollect(
@@ -101,7 +118,8 @@ public class LodgmentController {
 		int result = lodgmentService.insertCollect(lodgmentNo, loginNo);
 		return ResponseEntity.ok(result);
 	}
-
+	
+	//숙소 보관함 취소
 	@GetMapping(value = "/unCollect/{lodgmentNo}/{loginNo}")
 	@Operation(summary = "숙소 보관함 취소",description ="숙소번호, 회원번호로 보관함에 저장 취소") 
 	public ResponseEntity<Integer> deledtCollect(
@@ -111,5 +129,36 @@ public class LodgmentController {
 		return ResponseEntity.ok(result);
 	}
 
-	//@PostMapping(value = )
+	//리뷰 등록 
+	// FE 에서 formDate를 보낼때 키값이 객체 변수명과 동일하면 객체로받을수 있다. 
+	@PostMapping(value ="/review")
+	@Operation(summary = "리뷰 등록하기",description = "회원번호, 숙소번호, 글내용, 사진(비어있을수도 있음)")
+	public ResponseEntity<Boolean> insertReview(@ModelAttribute LodgmentReviewDTO lodgmentReview,@ModelAttribute MultipartFile[] reviewImg ){
+		System.out.println(lodgmentReview);
+		
+		//사진데이터 저장 리스트
+		List<LodgmentReviewFileDTO> fileSave = new ArrayList<LodgmentReviewFileDTO>();
+		//동일한 파일 없도록 라벨링 후 지정된 경로에 업로드 됨 
+		if(reviewImg != null) {
+			String savepath = root + "/review/";
+			for(MultipartFile file :reviewImg) {
+				LodgmentReviewFileDTO roomImgSave = new LodgmentReviewFileDTO();
+				String filepath = fileUtil.upload(savepath, file);
+				roomImgSave.setReviewImgPath(filepath);
+				fileSave.add(roomImgSave);
+			}
+		}
+		int result = lodgmentService.insertReview(lodgmentReview, fileSave);
+		return ResponseEntity.ok(result == (1 + (reviewImg != null ? reviewImg.length : 0)));
+	}
+	
+	//리뷰 페이징
+	@GetMapping(value = "/reviewList/{lodgmentNo}/{reqPage}/{loginNo}")
+	@Operation(summary = "리뷰 리스트",description = "숙소 번호, 페이지넘버, 로그인 여부에 따라 후기 여부")
+	public ResponseEntity<Map> reviewList(@PathVariable int lodgmentNo, @PathVariable int reqPage, @PathVariable int loginNo ){
+	System.out.println(lodgmentNo);
+		Map map = lodgmentService.reveiwList(lodgmentNo, reqPage, loginNo);
+		return ResponseEntity.ok(map);
+	}
+
 }

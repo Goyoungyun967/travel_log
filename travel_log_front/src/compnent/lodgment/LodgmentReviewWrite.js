@@ -4,13 +4,14 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { loginNoState } from "../utils/RecoilData";
 import { useRecoilState } from "recoil";
 import axios from "axios";
 
 const LodgmentReviewWirte = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
   const { state } = useLocation();
   const [loginNo] = useRecoilState(loginNoState);
   const lodgmentNo = state?.lodgmentNo;
@@ -31,12 +32,14 @@ const LodgmentReviewWirte = () => {
   const [showReviewImg, setShowReviewImg] = useState([]);
   //리뷰 보내기 저장
   const [reviewImg, setReviewImg] = useState([]);
+  console.log(reviewImg);
   const [reviewContent, setReviewContent] = useState("");
   //사진 등록시 작동할 함수
   function addBoardFile(e) {
     const files = e.currentTarget.files;
     console.log(files);
 
+    //이미지는 5개까지 저장 가능
     if (files.length > 5) {
       Swal.fire({
         text: "이미지는 5개까지 등록 가능합니다.",
@@ -45,56 +48,77 @@ const LodgmentReviewWirte = () => {
       setShowReviewImg([]);
       return;
     } else {
+      //임시 이미지 url 담을 배열
       const fileReaders = [];
+      const updateImg = [];
+      //올린 사진만큼 배열만큼 저장
       for (let i = 0; files.length > i; i++) {
-        setReviewImg(files[i]);
-        console.log(reviewImg);
+        //서버에 보낼 데이터 저장
+        updateImg.push(files[i]);
+        //console.log(reviewImg);
+        //임시 이미지url 생성
         const reader = new FileReader();
         reader.readAsDataURL(files[i]);
         reader.onloadend = () => {
           fileReaders.push(reader.result); // 읽은 결과를 배열에 추가
           if (fileReaders.length === files.length) {
             setShowReviewImg(fileReaders); // 모든 파일이 읽힌 후 상태를 업데이트
+            setReviewImg(updateImg);
           }
-          console.log("showReviewImg" + showReviewImg);
+          //console.log("showReviewImg" + showReviewImg);
         };
-        setReviewImg();
       }
     }
   }
+
+  //에디터 내용 저장
   const changeContent = (contnet) => {
     setReviewContent(contnet);
   };
-  console.log("내용" + reviewContent);
+  //console.log("내용" + reviewContent);
 
-  //사진 없으면 글많있는 페이지로~
+  //사진 없으면 글만 있는 리뷰도 가능
   function insertReview() {
-    if (reviewContent === "" && value === 0) {
+    if (reviewContent === "" || value === 0) {
       Swal.fire({
         text: "리뷰와 별점을 입력해주세요.",
       });
       return;
     }
+
     const form = new FormData();
     form.append("rating", value);
     form.append("reviewContent", reviewContent);
-    form.append("loginNo", loginNo);
+    form.append("memberNo", loginNo);
     form.append("lodgmentNo", lodgmentNo);
     for (let i = 0; i < reviewImg.length; i++) {
-      form.append("img", reviewImg[i]);
+      form.append("reviewImg", reviewImg[i]);
     }
     axios
       .post(`${backServer}/lodgment/review`, form, {
         headers: {
-          ContentType: "multipart/form-data",
-          processData: false,
+          "Content-Type": "multipart/form-data", // "ContentType"을 "Content-Type"으로 수정
         },
       })
       .then((res) => {
         console.log(res);
+        if (res.data) {
+          Swal.fire({
+            text: "리뷰 등록이 완료되었습니다.",
+            icon: "success", // 성공 아이콘 추가
+          }).then(() => {
+            navigate(`/`); // 성공 후 홈으로 네비게이션
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
+        Swal.fire({
+          text: "서버 오류.",
+          icon: "error", // 오류 아이콘 추가
+        }).then(() => {
+          navigate(`/`); // 오류 후 홈으로 네비게이션
+        });
       });
   }
 

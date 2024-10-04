@@ -55,7 +55,7 @@ const SearchBar = (props) => {
 
   const formattedStartDate = startDate ? format(startDate, "yyyy-MM-dd") : "";
   const formattedEndDate = endDate ? format(endDate, "yyyy-MM-dd") : "";
-
+  //console.log(startDate);
   const lodgmentChange = (e) => {
     const value = e.target.value;
     setLodgment(value);

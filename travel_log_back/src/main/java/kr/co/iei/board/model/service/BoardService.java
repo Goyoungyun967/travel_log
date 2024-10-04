@@ -132,27 +132,32 @@ public class BoardService {
 	// 댓글 목록 조회
 	public List<BoardCommentDTO> getCommentList(int boardNo ) {
 	    List<BoardCommentDTO> comments = boardDao.selectCommentList(boardNo);
+	    System.out.println(comments);
 	    return comments; // 댓글 목록 반환
 	}
 
 	// 댓글 추가
-	public boolean addComment(int boardNo, String memberNickname, BoardCommentDTO comment) {
-	    int result = boardDao.insertComment( boardNo,memberNickname,comment);
+	@Transactional
+	public boolean addComment(BoardCommentDTO comment) {
+	    int result = boardDao.insertComment(comment);
 	    return result > 0; // 성공 여부 반환
 	}
 
 	
-//	// 댓글 수정
-//	public boolean editComment(int commentId, String newContent) {
-//	    int result = boardDao.updateComment(commentId, newContent);
-//	    return result == 1; // 성공 여부 반환
-//	}
-//
-//	// 댓글 삭제
-//	public boolean deleteComment(int commentId) {
-//	    int result = boardDao.deleteComment(commentId);
-//	    return result == 1; // 성공 여부 반환
-//	}
+	// 댓글 수정
+	@Transactional
+	public boolean editComment(int commentId, String commentContent) {
+	    int result = boardDao.updateComment(commentId, commentContent);
+	    return result == 1; // 성공 여부 반환
+	}
+
+	// 댓글 삭제
+	@Transactional
+	public boolean deleteComment(int commentNo) {
+	    int result = boardDao.deleteComment(commentNo);
+	    System.out.println("ss"+result);
+	    return result == 1; // 성공 여부 반환
+	}
 	
 	//동행게시판 
 	public Map selectAccompanyList(int type, int reqPage) {
@@ -170,28 +175,32 @@ public class BoardService {
 		map.put("pi", pi);
 		return map;
 	}
+	
 	@Transactional
 	public int insertAcoompanyBoard(BoardAccompanyDTO boardAccompany, List<BoardFileDTO> boardFileList) {
 	    int result = boardDao.insertBoardAccompany(boardAccompany);
+
 	    	if(result>0) {
+	    		// 파일 삽입
 	    		for(BoardFileDTO boardFile : boardFileList) {
 	    			boardFile.setBoardNo(boardAccompany.getBoardNo());
 	    			System.out.println(1);
 	    			result += boardDao.insertBoardFile(boardFile);
+	    			System.out.println("1"+boardAccompany);
 	    		}
+	            // 동행 태그 삽입
 	    		for(int AccompanyTagNo : boardAccompany.getAccompanyTagNo()) {
 	    			AccompanyTag at = new AccompanyTag();
 	    			at.setBoardNo(boardAccompany.getBoardNo());
 	    			at.setAccompanyTagNo(AccompanyTagNo);
-	    			result += boardDao.insertAccompanyType(boardAccompany);
+	    			result += boardDao.insertAccompanyType(at);
 	    			System.out.println(2);
+	    			System.out.println("2"+boardAccompany);
 	    		}
-	    		for(int i=0; i<boardAccompany.getAccompanyDate();i++) {
-	    			BoardAccompanyDTO bad = new BoardAccompanyDTO();
-	    			System.out.println(3);
+	            // 동행 일정 삽입
 	    			result += boardDao.insertAccompany(boardAccompany);
-	    			
-	    		}
+	    			System.out.println(3);
+	    			System.out.println("3"+boardAccompany);
 	    		
 
 	    	}

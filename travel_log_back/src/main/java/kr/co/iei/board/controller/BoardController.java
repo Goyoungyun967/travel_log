@@ -3,8 +3,14 @@ package kr.co.iei.board.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.board.model.dto.BoardAccompanyDTO;
@@ -180,40 +187,47 @@ public class BoardController {
     @GetMapping("/commentList/{boardNo}")
     public ResponseEntity<List<BoardCommentDTO>> getCommentList(@PathVariable int boardNo) {
         List<BoardCommentDTO> comments = boardService.getCommentList(boardNo);
+        System.out.println(comments);
         return ResponseEntity.ok(comments);
     }
 
     // 댓글 추가
     @PostMapping("/insertComment")
-    public ResponseEntity<BoardCommentDTO> addComment(@ModelAttribute BoardCommentDTO comment,
-			@ModelAttribute String memberNickname,
-			@ModelAttribute int boardNo ) {
-    	System.out.println(comment.getCommentContent()); 
+    public ResponseEntity<BoardCommentDTO> addComment(@ModelAttribute BoardCommentDTO comment
+		
+			 ) {
+//    	System.out.println(comment.getCommentContent()); 
+//    	System.out.println(comment.getCommentWriter());
+    	
     	 if (comment.getCommentRef() == 0) {
     	        comment.setCommentRef(0);
     	    }
-        boolean isAdded = boardService.addComment(boardNo,memberNickname,comment);
+        boolean isAdded = boardService.addComment(comment);
+//        System.out.println(comment);
         if (isAdded) {
+        	System.out.println(comment);
             return ResponseEntity.ok(comment); // 댓글이 추가되었을 때
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 추가 실패 시
         }
     }
-//
-//    // 댓글 수정
-//    @PatchMapping("/editComment/{commentId}")
-//    public ResponseEntity<Boolean> editComment(@PathVariable int commentId, @RequestBody Map<String, String> request) {
-//        String newContent = request.get("content");
-//        boolean result = boardService.editComment(commentId, newContent);
-//        return ResponseEntity.ok(result);
-//    }
-//
-//    // 댓글 삭제
-//    @DeleteMapping("/deleteComment/{commentId}")
-//    public ResponseEntity<Boolean> deleteComment(@PathVariable int commentId) {
-//        boolean result = boardService.deleteComment(commentId);
-//        return ResponseEntity.ok(result);
-//    }
+
+    // 댓글 수정
+    @PatchMapping("/editComment/{commentNo}")
+    public ResponseEntity<Boolean> editComment(@PathVariable int commentNo, @RequestBody Map<String, String> request) {
+        String commentContent = request.get("content");
+        boolean result = boardService.editComment(commentNo, commentContent);
+        return ResponseEntity.ok(result);
+    }
+
+    // 댓글 삭제
+    @DeleteMapping("/deleteComment/{commentNo}")
+    public ResponseEntity<Boolean> deleteComment(@PathVariable int commentNo) {
+    	System.out.println(commentNo);
+        boolean result = boardService.deleteComment(commentNo);
+        System.out.println(result);
+        return ResponseEntity.ok(result);
+    }
     
     
   //동행게시판리스트
@@ -226,11 +240,14 @@ public class BoardController {
   //동행 게시판 등록
   	@PostMapping("/insertAccompany")
   		public ResponseEntity<Boolean> insertAccompany(@ModelAttribute BoardAccompanyDTO boardAccompany , @ModelAttribute MultipartFile thumnail, @ModelAttribute MultipartFile[] boardFile){
+  		
+  		
   		if(thumnail != null) {
 			String savepath = root+"/board/thumb/";
 			String filepath = fileUtils.upload(savepath,thumnail);
 			boardAccompany.setBoardThumb(filepath);
 		}
+  		
 		List<BoardFileDTO> boardFileList = new ArrayList<BoardFileDTO>();
 		if(boardFile != null) {
 			String savepath = root + "/board/";
@@ -243,10 +260,30 @@ public class BoardController {
 				boardFileList.add(fileDTO);
 			}
 		}
+		
+	    // accompanyContent를 하나의 문자열로 변환
+//		String accompanyContentStr = String.join(",", boardAccompany.getAccompanyContent());
+//		boardAccompany.setAccompanyContent(Collections.singletonList(accompanyContentStr)); 
+
+		
+		// 시작일과 종료일 변환
+//		String startDayStr = boardAccompany.getStartDay(); // "Fri, 04 Oct 2024 01:32:34 GMT"
+//	    String endDayStr = boardAccompany.getEndDay(); // "Sat, 05 Oct 2024 01:32:34 GMT"
+//
+//	    DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'", Locale.ENGLISH);
+//	    DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+	    // 시작일 및 종료일 변환
+//	    LocalDateTime startDate = LocalDateTime.parse(startDayStr, inputFormatter);
+//	    LocalDateTime endDate = LocalDateTime.parse(endDayStr, inputFormatter);
+	    
+	    // 변환된 날짜를 DTO에 설정
+//	    boardAccompany.setStartDay(outputFormatter.format(startDate));
+//	    boardAccompany.setEndDay(outputFormatter.format(endDate));
+
 		int result = boardService.insertAcoompanyBoard(boardAccompany,boardFileList);
-		System.out.println(boardAccompany);
 		System.out.println("00000000"+result);
-		System.out.println("boardFileList.size()"+boardFileList.size());
+		System.out.println("boardFileLists.size()"+boardFileList.size());
 	    return ResponseEntity.ok(result == 1 + boardFileList.size());
   		
   	}

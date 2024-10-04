@@ -13,6 +13,7 @@ import kr.co.iei.faq.model.dto.FaqDTO;
 import kr.co.iei.inquiry.model.dao.InquiryDao;
 import kr.co.iei.member.model.dao.MemberDao;
 import kr.co.iei.seller.model.dao.SellerDao;
+import kr.co.iei.seller.model.dto.SellerDTO;
 import kr.co.iei.util.PageInfo;
 import kr.co.iei.util.PageUtil;
 
@@ -91,9 +92,94 @@ public class AdminService {
 		return result;
 	}
 
-	public Map getMemberChartData() {
+	public List getMemberEnrollData() {
+		List list = memberDao.getMemberEnrollData();
+		return list;
+	}
+
+	public List getMemberData() {
+		List list = memberDao.getMemberData();
+		return list;
+	}
+
+	public List getLodgmentResionData() {
+		List list = inquiryDao.getLodgmentResionData();
+		return list;
+	}
+
+	public List getLodgmentResionSearchMemberData(String region) {
+		List list = inquiryDao.getLodgmentResionSearchMemberData(region);
+		return list;
+	}
+
+	public List getLodgmentResionMemberData() {
+		List list = inquiryDao.getLodgmentResionMemberData();
+		return list;
+	}
+
+
+	public List getSellerList() {
+		List list = inquiryDao.getSellerList();
+		return list;
+	}
+	public List getSellerListSales(String type, String date) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("type", type);
+		map.put("date", date);
+		List list = inquiryDao.getSellerListSales(map);
+		return list;
+	}
+
+	public List getSellerSales(int sellerNo) {
+		List list = inquiryDao.getSellerSales(sellerNo);
+		return list;
+	}
+
+	public List getSellerSalesGender(int sellerNo) {
+		List list = inquiryDao.getSellerSalesGender(sellerNo);
+		return list;
+	}
+
+	public List getSellerSalesAge(int sellerNo) {
+		List list = inquiryDao.getSellerSalesAge(sellerNo);
+		return list;
+	}
+
+	public List getSellerSalesList() {
+		List list = inquiryDao.getSellerSalesList();
+		return list;
+	}
+
+	@Transactional
+	public void insertSellerStm() {
+		List<SellerDTO> list = inquiryDao.selectSellerSales();
+		System.out.println(list);
+		int result = 0;
+		for (SellerDTO sellerDTO : list) {
+			result = inquiryDao.insertSellerStm(sellerDTO);
+		}
+		System.out.println(result);
+	}
+
+	public Map getSellerStmList(int reqPage, int status) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> m = new HashMap<String, Object>();
+		int numPerPage = 10;
+		int pageNaviSize = 5;
+		int totalCount = inquiryDao.getSellerStmCount(status);
+		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
+		m.put("start", pi.getStart());
+		m.put("end", pi.getEnd());
+		m.put("status", status);
+		List list = inquiryDao.getSellerStmList(m);
+		map.put("pi", pi);
+		map.put("list", list);
 		return map;
+	}
+
+	public int updateStm(int[] stmNum) {
+		int result = inquiryDao.updateStm(stmNum);
+		return result;
 	}
 
 }

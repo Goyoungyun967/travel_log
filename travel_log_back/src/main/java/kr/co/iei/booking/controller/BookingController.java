@@ -24,9 +24,9 @@ public class BookingController {
 	
 	@Operation(summary="숙소 예약", description = "숙소 결제 정보 저장")
 	@PostMapping  //requestBody 는 한개의 객체만 가능 여러개 사용 못함 
-	public ResponseEntity<String> insertBooking(@RequestBody BookingDTO updatedBookingInfo){
+	public ResponseEntity<Integer> insertBooking(@RequestBody BookingDTO updatedBookingInfo){
 		System.out.println(updatedBookingInfo);
 		int result = bookingService.insertBooking(updatedBookingInfo);
-		return ResponseEntity.ok("안녕");
+		return ResponseEntity.ok(result);
 	}
 }

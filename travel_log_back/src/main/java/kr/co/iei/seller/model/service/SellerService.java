@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.iei.inquiry.model.dto.InquiryDTO;
+import kr.co.iei.lodgment.model.dto.LodgmentReviewDTO;
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dao.SellerDao;
 import kr.co.iei.seller.model.dao.SellerLodgmentDao;
@@ -31,18 +32,24 @@ import kr.co.iei.seller.model.dto.ServiceTagDTO;
 import kr.co.iei.seller.model.dto.StmInfoDTO;
 import kr.co.iei.util.FileUtils;
 import kr.co.iei.util.JwtUtils;
+import kr.co.iei.util.PageInfo;
+import kr.co.iei.util.PageUtil;
 import kr.co.iei.util.SellerJwtUtils;
 
 @Service
 public class SellerService {
 	@Autowired
 	private SellerDao sellerDao;
+	
 	@Autowired
 	private SellerLodgmentDao sellerLodgmentDao;
 
 	@Autowired
 	private BCryptPasswordEncoder encoder;
 
+	@Autowired
+	private PageUtil pageUtil;
+	
 	@Autowired
 	private SellerJwtUtils sellerJwtUtils;
 
@@ -60,16 +67,22 @@ public class SellerService {
 //		List list = sellerLodgmentDao.selectLodgmentList(sellerNo);
 //		return list;
 //	}
-	public List selectLodgmentList(String token) {
-		// 로그인시 받은 토큰을 검증한 후 회원아이디랑 등급을 추출해서 리턴받음
-		// 토큰 체크
-		LoginSellerDTO loginSeller = jwtUtil.sellerCheckToken(token);
-		System.out.println(loginSeller);
-		// 토큰 해석으로 받은 아이디를 통해서 DB에서 회원정보 조회
-		List list = sellerLodgmentDao.selectLodgmentList(loginSeller.getSellerNo());
-		System.out.println(list);
+//	public List selectLodgmentList(String token) {
+//		// 로그인시 받은 토큰을 검증한 후 회원아이디랑 등급을 추출해서 리턴받음
+//		// 토큰 체크
+//		LoginSellerDTO loginSeller = jwtUtil.sellerCheckToken(token);
+//		System.out.println(loginSeller);
+//		// 토큰 해석으로 받은 아이디를 통해서 DB에서 회원정보 조회
+//		List list = sellerLodgmentDao.selectLodgmentList(loginSeller.getSellerNo());
+//		System.out.println(list);
+//		return list;
+////		return null;
+//	}
+	
+	// 메인(등록한 호텔 정보)
+	public List selectLodgmentList(int loginNo) {
+		List list = sellerLodgmentDao.selectLodgmentList(loginNo);
 		return list;
-//		return null;
 	}
 	
 	
@@ -104,15 +117,25 @@ public class SellerService {
 	}
 
 	// 호텔 상세 (호텔 + 객실 상세)
-	public Map selectHotelInfo(int lodgmentNo) {
+	public Map selectHotelInfo(int lodgmentNo, int reqPage) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		LodgmentStorageDTO ls = sellerLodgmentDao.selectOneLodgment(lodgmentNo); // 호텔 정보 출력
-		List<RoomDTO> list = sellerLodgmentDao.selectRoomInfo(lodgmentNo); // 객실 정보 출력
-		System.out.println(list);
+		LodgmentStorageDTO ls = sellerLodgmentDao.selectOneLodgment(lodgmentNo); // 호텔 정보 조회
+		List<RoomDTO> list = sellerLodgmentDao.selectRoomInfo(lodgmentNo); // 객실 정보 조회
+		
+		int numPerPage=5; 	// 한 페이지당 게시물 수
+		int pageNaviSize=5;	// 페이지네비 길이
+		int totalCount = sellerLodgmentDao.totalCount();	// 전체 리뷰 수
+		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
+		
+//		List<LodgmentReviewDTO> review = sellerLodgmentDao.selectLodgmentReview(lodgmentNo,pi); // 호텔 리뷰 조회
+		List<LodgmentReviewDTO> review = sellerLodgmentDao.selectLodgmentReview(lodgmentNo,pi.getStart(), pi.getEnd()); // 호텔 리뷰 조회
+		System.out.println(review);
 
 		map.put("lodgment", ls);
 		map.put("list", list);
+		map.put("review",review);
+		map.put("pi", pi);
 
 		return map;
 	}
@@ -163,11 +186,20 @@ public class SellerService {
 		return ls;
 	}
 
-	public List<InquiryDTO> selectInqList(String token) {
-		LoginSellerDTO loginSeller = jwtUtil.sellerCheckToken(token);
-		List<InquiryDTO> ls = sellerLodgmentDao.selectInqList(loginSeller.getSellerNo());
+//	public List<InquiryDTO> selectInqList(String token) {
+//		LoginSellerDTO loginSeller = jwtUtil.sellerCheckToken(token);
+//		List<InquiryDTO> ls = sellerLodgmentDao.selectInqList(loginSeller.getSellerNo());
+//		return ls;
+//	}
+
+	// 판매자 문의 글 리스트 조회
+	public List<InquiryDTO> selectInqList(int loginNo) {
+		List<InquiryDTO> ls = sellerLodgmentDao.selectInqList(loginNo);
 		return ls;
 	}
+	
+	
+	
 
 	@Transactional
 	// 형묵 seller-회원가입
@@ -226,9 +258,14 @@ public class SellerService {
 	}
 
 	// 예약 리스트 조회
-	public List selectReserveList(String token) {
-		LoginSellerDTO loginSeller = jwtUtil.sellerCheckToken(token);
-		List list = sellerLodgmentDao.selectReserve(loginSeller.getSellerNo());
+//	public List selectReserveList(String token) {
+//		LoginSellerDTO loginSeller = jwtUtil.sellerCheckToken(token);
+//		List list = sellerLodgmentDao.selectReserve(loginSeller.getSellerNo());
+//		System.out.println("list"+list);
+//		return list;
+//	}
+	public List selectReserveList(int loginNo) {
+		List list = sellerLodgmentDao.selectReserve(loginNo);
 		System.out.println("list"+list);
 		return list;
 	}
@@ -240,11 +277,36 @@ public class SellerService {
 	}
 
 
-	// 삭제 (찐 삭제는 아님)
+	// 호텔 및 객실 삭제 (찐 삭제는 아님 1에서 0으로 전환), 호텔 삭제하면 그 호텔에 해당된 객실도 0으로 전환
 	@Transactional
 	public int delUpLodgment(int lodgmentNo) {
-		int result = sellerLodgmentDao.delUpLodgment(lodgmentNo);
-//		result += sellerLodgmentDao.delUpRoom(lod)
+		// 지우려는 호텔의 객실까지 모두 0으로 전환 update
+		int result = sellerLodgmentDao.delUpLodgmentRoom(lodgmentNo);
+		if(result>0) {			
+			result += sellerLodgmentDao.delUpLodgment(lodgmentNo);
+			return result;
+		}
 		return 0;
 	}
+
+	// 객실만 삭제 (1에서 0으로 전환)
+	@Transactional
+	public int delUpRoom(int roomNo) {
+		int result =sellerLodgmentDao.delUpRoom(roomNo);
+		return result;
+	}
+
+
+	@Transactional
+	public int updateComment(LodgmentReviewDTO ld) {
+		int result = sellerLodgmentDao.updatecomment(ld);
+		return result;
+	}
+
+
+
+
+
+
+
 }

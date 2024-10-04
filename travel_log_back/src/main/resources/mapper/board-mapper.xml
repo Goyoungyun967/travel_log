@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.co.iei.board.model.dao.BoardDao">
 	<select id="totalCount" resultType="int">
-		SELECT COUNT(*) FROM board WHERE board_type=#{type}
+		SELECT COUNT(*) FROM board WHERE board_type=1
 	</select>
 	<select id="selectBoardList" resultType="board">
 	select * from
@@ -23,7 +23,7 @@
 			FROM 
     			board b
     		WHERE 
-    			 board_type = #{type}
+    			 board_type = 1
     	    order by
           		board_no desc
                ) 
@@ -130,10 +130,22 @@
 		 
 		 <!-- 댓글 추가 -->
    		<insert id="insertComment">
-   			 INSERT INTO board_comment VALUES (board_comment_seq.nextval, #{memberNickname}, sysdate, 0, #{commentContent}, #{boardNo})
+   			 INSERT INTO board_comment VALUES (board_comment_seq.nextval, #{commentWriter}, sysdate, 0, #{commentContent}, #{boardNo})
 		</insert>
 		
 		
+		 <!-- 댓글 수정 -->
+		 <update id="updateComment">
+		        UPDATE board_comment
+		        SET comment_Content = #{commentContent}
+		        WHERE comment_No = #{commentNo}
+		 </update>
+		
+		 <!-- 댓글 삭제 -->
+		 <delete id="deleteComment">
+		        DELETE FROM board_comment WHERE comment_No = #{commentNo}
+		 </delete>
+ 
 	
 		
 		
@@ -186,12 +198,15 @@
 			
 		<insert id="insertAccompany">
 			insert into board_accompany values
-			(board_accompany.seq,#{accompanyDate},#{accompanyArea},#{accompanyContent},  TO_CHAR(SYSDATE + 1, 'Dy Mon DD YYYY HH24:MI:SS') || ' GMT+0900',TO_CHAR(SYSDATE + 2, 'Dy Mon DD YYYY HH24:MI:SS') || ' GMT+0900'))
+			(board_accompany_seq.nextval, #{accompanyDate}, #{accompanyArea}, #{accompanyContent}, #{boardNo}, #{startDay}, #{endDay})
 			<selectKey resultType="int" keyProperty="boardNo" order="AFTER">
 				select max(board_no) from board
 			</selectKey>
 		</insert>
-	
+		
+		<select id="getReviewList">
+			select * from lodgment_review where review_no=#{lodgmentNo}
+		</select>
 	
 	
 	

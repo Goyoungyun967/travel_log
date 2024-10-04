@@ -13,6 +13,8 @@ import { loginNoState } from "../utils/RecoilData";
 import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { format } from "date-fns";
+import LodgmentReviewList from "./LodgmentReviewList";
 
 const LodgmentDetail = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
@@ -25,19 +27,28 @@ const LodgmentDetail = () => {
   const [lodgmentInfo, setLodgmentInfo] = useState({});
   const [roomSearchList, setRoomSearchList] = useState([]);
   const [loginNo] = useRecoilState(loginNoState);
+
+  //보관함 여부
   const [lodgmentCollection, sestLodgmentCollection] = useState("");
+
+  //보관함 좋아요 성공실패
   const [result, setResult] = useState(true);
+
   //console.log("디테일 :" + lodgmentNo);
   //console.log(loginNo);
+
+  const formattedStartDate = format(new Date(startDate), "yyyy-MM-dd");
+  const formattedEndDate = format(new Date(endDate), "yyyy-MM-dd");
+
   useEffect(() => {
     //console.log("loginNo" + loginNo);
 
     axios
       .get(
-        `${BackServer}/lodgment/roomInfo/${lodgmentNo}/${startDate}/${endDate}/${loginNo}`
+        `${BackServer}/lodgment/roomInfo/${lodgmentNo}/${formattedStartDate}/${formattedEndDate}/${loginNo}`
       )
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setLodgmentInfo(res.data.lodgmentInfo);
         setRoomSearchList(res.data.lodgmentInfo.roomSearchList);
         sestLodgmentCollection(res.data.lodgmentCollection);
@@ -239,22 +250,7 @@ const LodgmentDetail = () => {
           justify
         >
           <Tab eventKey="home" title="이용후기">
-            <div className="lodgment-review-rwap">
-              <div className="lodgment-review-btn-wrap">
-                <button
-                  className="review-btn"
-                  onClick={() => {
-                    navigate(`/lodgment/reviewWrite`, {
-                      state: { lodgmentNo },
-                    });
-                  }}
-                >
-                  리뷰작성
-                </button>
-              </div>
-              <div className="lodgment-review-img-wrap"></div>
-              <div className="lodgment-review-list-wrap"></div>
-            </div>
+            <LodgmentReviewList lodgmentNo={lodgmentNo} />
           </Tab>
           <Tab eventKey="profile" title="문의하기">
             Tab content for Profile

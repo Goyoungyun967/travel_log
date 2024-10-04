@@ -130,3 +130,12 @@
   color: #fff;
   border-radius: 7px;
 }
+.chart-select-box {
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  gap: 100px;
+}
+.pie-chart {
+  display: flex;
+}

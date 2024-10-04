@@ -13,7 +13,9 @@ const SellerLodgmentList = () => {
   console.log(loginNo);
   useEffect(() => {
     axios
-      .get(`${backServer}/seller/lodgmentList`)
+      .post(`${backServer}/seller/lodgmentList`, null, {
+        params: { loginNo: loginNo },
+      })
       .then((res) => {
         console.log("r:", res);
         setLodgmentList(res.data);
@@ -21,7 +23,7 @@ const SellerLodgmentList = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [loginNo]);
 
   // 판매자 메인
   return (

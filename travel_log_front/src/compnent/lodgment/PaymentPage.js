@@ -48,7 +48,7 @@ const PaymentPage = () => {
     guestName: "",
     guestPhone: "",
     guestRequest: "",
-    guestCount: state.guest,
+    uestCount: state.guest,
     startDate: state.checkIn,
     endDate: state.checkOut,
     roomNo: state.room.roomNo,

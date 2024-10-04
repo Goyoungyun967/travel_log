@@ -129,7 +129,7 @@ const LodgmentList = () => {
         },
       })
       .then((res) => {
-        //console.log(res);
+        console.log(res);
         if (reqPage === 1) {
           setLodgmentDetailInfo(res.data);
         } else {

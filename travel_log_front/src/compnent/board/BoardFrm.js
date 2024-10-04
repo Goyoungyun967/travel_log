@@ -3,7 +3,7 @@ import "./board.css";
 
 const BoardFrm = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
-  const loginNo =props.loginNo;
+  const loginNo = props.loginNo;
   const boardTitle = props.boardTitle;
   const setBoardTitle = props.setBoardTitle;
   const thumbnail = props.thumbnail;

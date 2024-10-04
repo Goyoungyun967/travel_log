@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Backspace } from "@mui/icons-material";
+import { useRecoilState } from "recoil";
+import { loginNicknameState } from "../utils/RecoilData";
 
 const BoardComment = ({ board }) => {
   const backServer = process.env.REACT_APP_BACK_SERVER; // 백엔드 서버 주소
@@ -10,13 +11,14 @@ const BoardComment = ({ board }) => {
   const [editCommentId, setEditCommentId] = useState(null); // 수정 중인 댓글 ID
   const [editValue, setEditValue] = useState(""); // 수정 입력값
   const [loading, setLoading] = useState(true); // 로딩 상태
-  const memberNickname = board.memberNickname;
+  const [loginNickname] = useRecoilState(loginNicknameState);
 
   // 댓글 목록 불러오기
   useEffect(() => {
     axios
       .get(`${backServer}/board/commentList/${board.boardNo}`)
       .then((response) => {
+        console.log(response.data);
         setCommentList(response.data);
       })
       .catch((error) => {
@@ -29,45 +31,50 @@ const BoardComment = ({ board }) => {
 
   // 댓글 제출 핸들러
   const handleCommentSubmit = () => {
-    if (commentValue !== "") {
+    if (commentValue.trim() !== "") {
       const form = new FormData();
-      form.append("commentContent", commentValue);
-      form.append("memberNickname", memberNickname);
+      form.append("commentContent", commentValue.trim());
+      form.append("commentWriter", loginNickname);
       form.append("boardNo", board.boardNo);
+
       axios
-        .post(`${Backspace}/board/insertComment`, form, {
+        .post(`${backServer}/board/insertComment`, form, {
           headers: {
-            contentType: "multipart/form-data",
-            processData: false,
+            "Content-Type": "multipart/form-data",
           },
         })
         .then((res) => {
-          console.log(res);
+          // 댓글 추가 후 목록을 다시 불러옴
+          console.log(res.data);
+          setCommentList((prevComments) => [...prevComments, res.data]);
+          setCommentValue(""); // 입력 필드 초기화
         })
         .catch((err) => {
-          console.log(err);
+          console.error("댓글 추가 실패:", err);
         });
+    } else {
+      alert("댓글 내용을 입력하세요.");
     }
   };
 
   // 댓글 수정 핸들러
   const handleCommentEdit = (comment) => {
-    setEditCommentId(comment.comment_no);
-    setEditValue(comment.comment_content);
+    setEditCommentId(comment.commentNo);
+    setEditValue(comment.commentContent);
   };
 
   // 댓글 수정 제출 핸들러
-  const handleEditSubmit = (commentId) => {
+  const handleEditSubmit = (commentNo) => {
     if (editValue.trim()) {
       axios
-        .patch(`${backServer}/board/editComment/${commentId}`, {
-          comment_content: editValue,
+        .patch(`${backServer}/board/editComment/${commentNo}`, {
+          commentContent: editValue.trim(),
         })
         .then(() => {
           setCommentList((prevComments) =>
             prevComments.map((comment) =>
-              comment.comment_no === commentId
-                ? { ...comment, comment_content: editValue }
+              comment.commentNo === commentNo
+                ? { ...comment, commentContent: editValue }
                 : comment
             )
           );
@@ -82,25 +89,25 @@ const BoardComment = ({ board }) => {
   };
 
   // 댓글 삭제 핸들러
-  const handleCommentDelete = (commentId) => {
-    if (window.confirm("댓글을 삭제하시겠습니까?")) {
-      axios
-        .delete(`${backServer}/board/deleteComment/${commentId}`)
-        .then(() => {
-          setCommentList((prevComments) =>
-            prevComments.filter((comment) => comment.comment_no !== commentId)
-          ); // 댓글 목록에서 삭제
-        })
-        .catch((error) => {
-          console.error("댓글 삭제 실패:", error);
-          alert("댓글 삭제에 실패했습니다. 다시 시도해 주세요.");
-        });
-    }
+  const handleCommentDelete = (commentNo) => {
+    console.log(commentNo);
+    axios
+      .delete(`${backServer}/board/deleteComment/${commentNo}`)
+      .then(() => {
+        setCommentList((prevComments) =>
+          prevComments.filter((comment) => comment.commentNo !== commentNo)
+        ); // 댓글 목록에서 삭제
+      })
+      .catch((error) => {
+        console.error("댓글 삭제 실패:", error);
+        alert("댓글 삭제에 실패했습니다. 다시 시도해 주세요.");
+      });
   };
 
   if (loading) {
     return <p>로딩 중...</p>; // 로딩 상태 표시
   }
+  console.log(commentList);
 
   return (
     <div className="board-comment-section">
@@ -132,30 +139,28 @@ const BoardComment = ({ board }) => {
       <div className="comment-list-wrapper">
         {commentList.length > 0 ? (
           commentList.map((comment) => (
-            <div className="comment-item" key={comment.comment_no}>
-              <div className="comment-user">{comment.comment_writer}</div>
+            <div className="comment-item" key={comment.commentNo}>
+              <div className="comment-user">{comment.commentWriter}</div>
               <div className="comment-content">
-                {editCommentId === comment.comment_no ? (
+                {editCommentId === comment.commentNo ? (
                   <>
                     <textarea
                       value={editValue}
                       onChange={(e) => setEditValue(e.target.value)}
                       className="edit-textarea"
                     />
-                    <button
-                      onClick={() => handleEditSubmit(comment.comment_no)}
-                    >
+                    <button onClick={() => handleEditSubmit(comment.commentNo)}>
                       수정 완료
                     </button>
                   </>
                 ) : (
                   <>
-                    <p>{comment.comment_content}</p>
+                    <p>{comment.commentContent}</p>
                     <button onClick={() => handleCommentEdit(comment)}>
                       수정
                     </button>
                     <button
-                      onClick={() => handleCommentDelete(comment.comment_no)}
+                      onClick={() => handleCommentDelete(comment.commentNo)}
                     >
                       삭제
                     </button>

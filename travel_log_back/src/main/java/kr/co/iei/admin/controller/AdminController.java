@@ -1,6 +1,7 @@
 package kr.co.iei.admin.controller;
 
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,13 +72,78 @@ public class AdminController {
 		return ResponseEntity.ok(map);
 	}
 	@PatchMapping(value="/seller")
+	@Operation(summary = "판매자 승인 정보 수정",description = "판매자 번호 배열을 받아서 가입승인 정보 수정")
 	public ResponseEntity<Boolean> updateSellerApp(@RequestBody int[] sellerNo){
 		int result = adminService.updateSellerApp(sellerNo);
 		return ResponseEntity.ok(result == sellerNo.length);
 	}
-	@GetMapping(value="/member/chart")
-	public ResponseEntity<Map> getMemberChartData(){
-		Map map = adminService.getMemberChartData();
+	@GetMapping(value="/member/enroll")
+	@Operation(summary = "차트용 회원 가입수 정보 조회",description = "올해와 작년의 월별기준으로 회원 가입수 리스트 조회")
+	public ResponseEntity<List> getMemberEnrollData(){
+		List list = adminService.getMemberEnrollData();
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/member/age/gender")
+	@Operation(summary = "차트용 회원의 나이,성별별 인원 정보 조회",description = "회원의 나이별,성별 총 회원수 리스트 조회")
+	public ResponseEntity<List> getMemberData(){
+		List list = adminService.getMemberData();
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/lodgment/region")
+	@Operation(summary = "차트용 숙소 지역 리스트 조회",description = "db에 저장된 숙소들의 지역 리스트 조회")
+	public ResponseEntity<List> getLodgmentResionData(){
+		List list = adminService.getLodgmentResionData();
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/lodgment/region/member/{region}")
+	@Operation(summary = "차트용 해당지역 회원 이용자 정보 조회",description = "지역을 받아서 해당 지역의 숙소를 이용하는 나이별,성별 회원수 리스트 조회")
+	public ResponseEntity<List> getLodgmentResionSearchMemberData(@PathVariable String region){
+		List list = adminService.getLodgmentResionSearchMemberData(region);
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/lodgment/region/member")
+	public ResponseEntity<List> getLodmentResionMemberData(){
+		List list = adminService.getLodgmentResionMemberData();
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/seller/list")
+	public ResponseEntity<List> getSellerList(){
+		List list = adminService.getSellerList();
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/seller/sales/{type}/{date}")
+	public ResponseEntity<List> getSellerListSales(@PathVariable String type,@PathVariable String date){
+		List list = adminService.getSellerListSales(type,date);
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/seller/sales/{sellerNo}")
+	public ResponseEntity<List> getSellerSales(@PathVariable int sellerNo){
+		List list = adminService.getSellerSales(sellerNo);
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/seller/sales/gender/{sellerNo}")
+	public ResponseEntity<List> getSellerSalesGender(@PathVariable int sellerNo){
+		List list = adminService.getSellerSalesGender(sellerNo);
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/seller/sales/age/{sellerNo}")
+	public ResponseEntity<List> getSellerSalesAge(@PathVariable int sellerNo){
+		List list = adminService.getSellerSalesAge(sellerNo);
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/seller/salesList")
+	public ResponseEntity<List> getSellerSalesList(){
+		List list = adminService.getSellerSalesList();
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/seller/stmList/{reqPage}/{status}")
+	public ResponseEntity<Map> getSellerStmList(@PathVariable int reqPage,@PathVariable int status){
+		Map map = adminService.getSellerStmList(reqPage,status);
 		return ResponseEntity.ok(map);
+	}
+	@PatchMapping(value="/seller/stm")
+	public ResponseEntity<Boolean> updateStm(@RequestBody int[] stmNum){
+		int result = adminService.updateStm(stmNum);
+		return ResponseEntity.ok(result == stmNum.length);
 	}
 }
