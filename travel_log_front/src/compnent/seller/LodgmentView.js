@@ -22,6 +22,7 @@ const LodgmentView = () => {
   const [lodgmentList, setLodgmentList] = useState({}); // 숙소 정보
   const [roomList, setRoomList] = useState([]); // 객실 리스트
   const [reviewList, setReviewList] = useState([]); // 리뷰 리스트
+  const [sellerText, setSellerText] = useState(""); // 판매자 댓글
 
   // 페이징 처리
   const [reqPage, setReqPage] = useState(1);
@@ -40,6 +41,7 @@ const LodgmentView = () => {
           setLodgmentList(res.data.lodgment);
           setRoomList(res.data.list);
           setReviewList(res.data.review);
+          setSellerText(res.data.review.sellerComment);
           setPi(res.data.pi);
         } else {
           navigate("/seller/list");
@@ -48,7 +50,7 @@ const LodgmentView = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [reqPage]);
+  }, [reqPage, sellerText]);
 
   // 삭제지만.. 1(보여지는거) => 0으로 바뀌게 해야하므로 패치 사용
   const deleteLodgment = () => {
@@ -174,6 +176,8 @@ const LodgmentView = () => {
               setReviewList={setReviewList}
               reqPage={reqPage}
               setReqPage={setReqPage}
+              sellerText={sellerText}
+              setSellerText={setSellerText}
               pi={pi}
             />
           </TabPanel>

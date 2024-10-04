@@ -290,8 +290,16 @@ public class SellerService {
 	}
 
 	// 객실만 삭제 (1에서 0으로 전환)
+	@Transactional
 	public int delUpRoom(int roomNo) {
 		int result =sellerLodgmentDao.delUpRoom(roomNo);
+		return result;
+	}
+
+
+	@Transactional
+	public int updateComment(LodgmentReviewDTO ld) {
+		int result = sellerLodgmentDao.updatecomment(ld);
 		return result;
 	}
 

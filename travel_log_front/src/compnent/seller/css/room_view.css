@@ -116,8 +116,6 @@
   color: #ccc;
 }
 
-.seller-comment-list-r > {
-}
 .seller-comment-list-r > .pagination {
   list-style-type: none;
   display: flex;
@@ -155,6 +153,15 @@
 }
 
 .seller-review-image {
-  max-width: 100%;
-  height: auto;
+  width: 100%; /* 부모 요소의 너비에 맞춤 */
+  height: auto; /* 이미지 비율 유지 */
+  object-fit: cover; /* 필요시 이미지 비율을 유지하며 자를 경우 */
+}
+
+.custom-carousel {
+  width: 100%; /* Carousel 전체 크기 제한 */
+  margin: 0 auto; /* 중앙 정렬 */
+}
+.item-tr-wrap .seller-review-image {
+  height: 300px;
 }

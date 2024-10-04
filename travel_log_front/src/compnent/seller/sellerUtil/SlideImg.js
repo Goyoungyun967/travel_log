@@ -64,7 +64,7 @@ const ReviewSlideImg = (props) => {
   return (
     <>
       {file && file.length > 0 ? ( // 파일이 존재할 때만
-        <Carousel data-bs-theme="dark">
+        <Carousel data-bs-theme="dark" className="custom-carousel">
           {file.map((img, i) => (
             <Carousel.Item key={i}>
               {console.log("img------------", img)}

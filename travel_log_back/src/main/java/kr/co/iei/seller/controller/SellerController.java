@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.inquiry.model.dto.InquiryDTO;
+import kr.co.iei.lodgment.model.dto.LodgmentReviewDTO;
 import kr.co.iei.member.model.dto.LoginMemberDTO;
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dto.BookingInfoDTO;
@@ -250,5 +251,15 @@ public class SellerController {
 		int result = sellerService.delUpRoom(roomNo);
 		return ResponseEntity.ok(result);
 	}
+	
+	// 판매자 호텔 리뷰 댓글
+	@Operation(summary = "호텔 리뷰 댓글", description = "리뷰 댓글 update랑 reviewNo 가져와서 씀")
+	@PatchMapping("/addComment")
+	public ResponseEntity<Integer> addComment(LodgmentReviewDTO ld){
+		System.out.println(ld);
+		int result = sellerService.updateComment(ld);
+		return ResponseEntity.ok(result);
+	}
+	
 	
 }

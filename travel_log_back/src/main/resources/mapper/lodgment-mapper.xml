@@ -355,4 +355,9 @@
 	 <update id="delUpRoom">
 	 	update room set room_delete=0 where room_no=#{roomNo}
 	 </update>
+	 
+	 <!-- 판매자 호텔 리뷰 댓글 달기 -->
+	 <update id="updatecomment">
+	 	update LODGMENT_REVIEW set seller_comment=#{sellerComment} where review_no=#{reviewNo}
+	 </update>
 </mapper>

@@ -64,6 +64,8 @@ public interface SellerLodgmentDao {
 
 	int delUpRoom(int roomNo);
 
+	int updatecomment(LodgmentReviewDTO ld);
+
 	
 	
 
