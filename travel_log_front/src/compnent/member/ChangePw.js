@@ -75,42 +75,52 @@ const ChangePw = () => {
       <div className="changePw-main">
         {isAuth ? (
           <>
-            <label htmlFor="newPw">새 비밀번호 입력 :</label>
-            <input
-              type="password"
-              id="newPw"
-              name="newPw"
-              value={member.memberPw}
-              onChange={changeMemberPw}
-            />
-            <label htmlFor="newPwRe">새 비밀번호 확인 :</label>
-            <input
-              type="password"
-              id="newPwRe"
-              name="newPwRe"
-              value={memberPwRe}
-              onChange={(e) => setMemberPwRe(e.target.value)}
-            />
-            <button
-              type="button"
-              className="pw-check-btn lg"
-              onClick={changePw}
-            >
-              변경하기
-            </button>
+            <div className="pw-update">
+              <label htmlFor="newPw" className="pw-update-text">
+                새 비밀번호 입력 :
+              </label>
+              <input
+                type="password"
+                id="newPw"
+                name="newPw"
+                value={member.memberPw}
+                onChange={changeMemberPw}
+              />
+              <button
+                type="button"
+                className="pw-update-btn"
+                onClick={changePw}
+              >
+                변경하기
+              </button>
+            </div>
+            <div className="pw-update">
+              <label htmlFor="newPwRe" className="pw-update-text">
+                새 비밀번호 확인 :
+              </label>
+              <input
+                type="password"
+                id="newPwRe"
+                name="newPwRe"
+                value={memberPwRe}
+                onChange={(e) => setMemberPwRe(e.target.value)}
+              />
+            </div>
           </>
         ) : (
           <>
-            <label htmlFor="oldPw">기존 비밀번호 입력 :</label>
-            <input
-              type="password"
-              id="oldPw"
-              name="oldPw"
-              value={member.memberPw}
-              onChange={changeMemberPw}
-            />
-            <div className="button-zone">
-              <button type="button" onClick={pwCheck}>
+            <div className="pw-update">
+              <label htmlFor="oldPw" className="pw-update-text">
+                기존 비밀번호 입력 :
+              </label>
+              <input
+                type="password"
+                id="oldPw"
+                name="oldPw"
+                value={member.memberPw}
+                onChange={changeMemberPw}
+              />
+              <button type="button" onClick={pwCheck} className="pw-check-btn">
                 확인
               </button>
             </div>
