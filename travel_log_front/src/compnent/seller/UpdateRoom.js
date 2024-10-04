@@ -59,11 +59,16 @@ const UpdateRoom = () => {
       });
   }, []);
 
+  const UpdateRoom = () => {
+    axios.patch();
+  };
+
   return (
     <>
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          UpdateRoom();
         }}
       >
         <div className="room_box-wrap room_box-radius">
@@ -190,7 +195,7 @@ const FileInfo = (props) => {
       return;
     }
 
-    // 새 파일 목록을 먼저 처리한 후, 미리보기 배열을 업데이트
+    // 새 파일 목록을 먼저 처리한 후, 미리보기 배열 업데이트
     const newShowFiles = [...showRoomFile];
 
     files.forEach((file) => {
@@ -262,7 +267,7 @@ const HashTap = (props) => {
 
   const setHashTag = props.setHashTag;
 
-  // 서비스 태그 리스트 정의
+  // 서비스 태그
   const serviceTagList = [
     { serviceTagNo: 1, serviceTagType: "사우나" },
     { serviceTagNo: 2, serviceTagType: "수영장" },

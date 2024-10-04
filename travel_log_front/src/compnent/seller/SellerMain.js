@@ -30,7 +30,7 @@ const SellerMain = () => {
       {/* 호텔 누르면 해당 호텔 상세로 이동 */}
       <Route path="lodgmentView/:lodgmentNo" element={<LodgmentView />} />
 
-      {/* 예약 -  -> 토큰 조회 */}
+      {/* 예약 리스트 조회 */}
       <Route path="bookList" element={<ReserveList />} />
 
       {/* 예약 - 예약 번호 보내서 조회 */}
