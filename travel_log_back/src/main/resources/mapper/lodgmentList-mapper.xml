@@ -2,293 +2,331 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.co.iei.lodgment.model.dao.LodgmentDao">
 	<select id="serviceList" resultType="lodgmentDetail">
-	 	select * from service_tag
+		select * from service_tag
 	</select>
 	<select id="search" resultType="string">
-		select 
-		substr(lodgment_addr,1,instr(lodgment_addr,' ',1,2)) 
-		from lodgment_storage 
+		select
+		substr(lodgment_addr,1,instr(lodgment_addr,' ',1,2))
+		from
+		lodgment_storage
 		where lodgment_addr like '%'||#{value}||'%'
-		group by substr(lodgment_addr,1,instr(lodgment_addr,' ',1,2))
+		group by
+		substr(lodgment_addr,1,instr(lodgment_addr,' ',1,2))
 	</select>
-	
+
 	<select id="searchLodgment" resultType="string">
-		select 
-		lodgment_name	
-		from lodgment_storage 
+		select
+		lodgment_name
+		from
+		lodgment_storage
 		where lodgment_name like '%'||#{value}||'%'
 	</select>
-	
-	<select id="getLodgmentList" resultType="searchLodgment"> 
-		SELECT 
-			lodgment_no,lodgment_name,lodgment_addr,lodgment_star_grade,lodgment_img_path,lodgment_check_in,
-			lodgment_check_out,room_price,room_max_capacity, lodgment_type_no
-		FROM (
-		    SELECT rownum AS rnum, n.*
-		    FROM (
-		        SELECT 
-		                ls.lodgment_no,
-				        ls.lodgment_name,
-				        ls.lodgment_addr,
-				        ls.lodgment_star_grade,
-				        ls.lodgment_img_path,
-				        ls.lodgment_check_in,
-				        ls.lodgment_check_out,	
-				        ls.lodgment_type_no,
-			            r.room_no,
-			            r.room_name,
-			            r.room_price,
-			            r.room_max_capacity
-		        FROM 
-		            lodgment_storage ls
-		        JOIN 
-		            room r ON ls.lodgment_no = r.lodgment_no
-		        LEFT JOIN 
-		            booking b ON r.room_no = b.room_no AND (
-		                (b.start_date <![CDATA[<]]> to_date(#{endDate},'YYYY-MM-DD') AND b.end_date > to_date(#{startDate},'YYYY-MM-DD')) 
-		            )
-		        WHERE 
-		        r.room_price = (
-		                SELECT MIN(room_price)
-		                FROM room
-		                WHERE lodgment_no = ls.lodgment_no
-		            )
-				AND (ls.lodgment_name LIKE '%' || #{lodgment} || '%' OR ls.lodgment_addr LIKE '%' || #{lodgment} || '%')
-                <if test="selectedServiceTagsArry[0] != 100">
-                AND r.room_no IN (
-                     SELECT room_no
-                     FROM room
-                   	 join room_service_tag using (room_no)
-                     WHERE service_tag_no IN 
-                     <foreach item="tag" index="index" collection="selectedServiceTagsArry" open="(" separator="," close=")">
-                         #{tag}
-                     </foreach>
-                     group by room_no
-                    )
-                </if>
-                <if test="lodgmentType > 0">
-                	and ls.lodgment_type_no =
-                	<choose>
-                		<when test="lodgmentType == 1"> 
-                			1
-                		</when>
-                		<when test="lodgmentType == 2"> 
-                			2
-                		</when>
-                		<when test="lodgmentType == 3"> 
-                			3
-                		</when>
-                		<when test="lodgmentType == 4"> 
-                			4
-                		</when>
-                		<when test="lodgmentType == 5"> 
-                			5
-                		</when>
-                	</choose>
-                </if>
-                <if test="starValue > 0">
-                    AND ls.lodgment_star_grade = #{starValue}
-                </if>
-		        	<choose>
-		        		<when test="minPrice !=0 and maxPrice == 500000">
-		        			AND r.room_price >= #{minPrice}
-		        		</when>
-		        		<when test="minPrice ==0 and maxPrice != 500000">
-		        			AND r.room_price <![CDATA[<]]>= #{maxPrice}
-		        		</when>
-		        		<when test="minPrice !=0 and maxPrice != 500000">
-				    		AND r.room_price >= #{minPrice}
-				    		AND r.room_price <![CDATA[<]]>= #{maxPrice}
-		        		</when>
-		        	</choose>
 
-		        GROUP BY 
-          		  	ls.lodgment_no, ls.lodgment_name, ls.lodgment_addr, ls.lodgment_star_grade, ls.lodgment_img_path, ls.lodgment_check_in, ls.lodgment_check_out,
-          		  	r.room_no, r.room_name, r.room_price, r.room_max_capacity,ls.lodgment_type_no
- 				HAVING 
-          			  (r.room_max_capacity ) >= #{guest} 
-          		<if test="order > 0">
-			        ORDER BY 
-			            <choose>
-			                <when test="order == 1">
-			                    r.room_price ASC  
-			                </when>
-			                <when test="order == 2">
-			                    r.room_price DESC  
-			                </when>
-			                <when test="order == 3">
-			                    ls.lodgment_star_grade 
-			                </when>
-			                <otherwise>
-			                    r.room_price ASC  
-			                </otherwise>
-			            </choose>
-			    </if>	  
-          			  )n
-            )
+	<select id="getLodgmentList" resultType="searchLodgment">
+		SELECT
+		lodgment_no,lodgment_name,lodgment_addr,lodgment_star_grade,lodgment_img_path,lodgment_check_in,
+		lodgment_check_out,room_price,room_max_capacity, lodgment_type_no
+		FROM
+		(
+		SELECT rownum AS rnum, n.*
+		FROM (
+		SELECT
+		ls.lodgment_no,
+		ls.lodgment_name,
+		ls.lodgment_addr,
+		ls.lodgment_star_grade,
+		ls.lodgment_img_path,
+		ls.lodgment_check_in,
+		ls.lodgment_check_out,
+		ls.lodgment_type_no,
+		r.room_no,
+		r.room_name,
+		r.room_price,
+		r.room_max_capacity
+		FROM
+		lodgment_storage ls
+		JOIN
+		room r ON ls.lodgment_no
+		= r.lodgment_no
+		LEFT JOIN
+		booking b ON r.room_no = b.room_no AND (
+		(b.start_date <![CDATA[<]]>
+		to_date(#{endDate},'YYYY-MM-DD') AND b.end_date >
+		to_date(#{startDate},'YYYY-MM-DD'))
+		)
+		WHERE
+		r.room_price = (
+		SELECT
+		MIN(room_price)
+		FROM room
+		WHERE lodgment_no = ls.lodgment_no
+		)
+		AND
+		(ls.lodgment_name LIKE '%' || #{lodgment} || '%' OR ls.lodgment_addr
+		LIKE '%' || #{lodgment} || '%')
+		<if test="selectedServiceTagsArry[0] != 100">
+			AND r.room_no IN (
+			SELECT room_no
+			FROM room
+			join room_service_tag using
+			(room_no)
+			WHERE service_tag_no IN
+			<foreach item="tag" index="index"
+				collection="selectedServiceTagsArry" open="(" separator=","
+				close=")">
+				#{tag}
+			</foreach>
+			group by room_no
+			)
+		</if>
+		<if test="lodgmentType > 0">
+			and ls.lodgment_type_no =
+			<choose>
+				<when test="lodgmentType == 1">
+					1
+				</when>
+				<when test="lodgmentType == 2">
+					2
+				</when>
+				<when test="lodgmentType == 3">
+					3
+				</when>
+				<when test="lodgmentType == 4">
+					4
+				</when>
+				<when test="lodgmentType == 5">
+					5
+				</when>
+			</choose>
+		</if>
+		<if test="starValue > 0">
+			AND ls.lodgment_star_grade = #{starValue}
+		</if>
+		<choose>
+			<when test="minPrice !=0 and maxPrice == 500000">
+				AND r.room_price >= #{minPrice}
+			</when>
+			<when test="minPrice ==0 and maxPrice != 500000">
+				AND r.room_price <![CDATA[<]]>=
+				#{maxPrice}
+			</when>
+			<when test="minPrice !=0 and maxPrice != 500000">
+				AND r.room_price >= #{minPrice}
+				AND r.room_price <![CDATA[<]]>=
+				#{maxPrice}
+			</when>
+		</choose>
+
+		GROUP BY
+		ls.lodgment_no, ls.lodgment_name, ls.lodgment_addr,
+		ls.lodgment_star_grade,
+		ls.lodgment_img_path, ls.lodgment_check_in,
+		ls.lodgment_check_out,
+		r.room_no, r.room_name, r.room_price,
+		r.room_max_capacity,ls.lodgment_type_no
+		HAVING
+		(r.room_max_capacity ) >=
+		#{guest}
+		<if test="order > 0">
+			ORDER BY
+			<choose>
+				<when test="order == 1">
+					r.room_price ASC
+				</when>
+				<when test="order == 2">
+					r.room_price DESC
+				</when>
+				<when test="order == 3">
+					ls.lodgment_star_grade
+				</when>
+				<otherwise>
+					r.room_price ASC
+				</otherwise>
+			</choose>
+		</if>
+		)n
+		)
 		WHERE rnum BETWEEN #{start} AND #{end}
 	</select>
-	
+
 	<select id="getLodgmentInfo" resultType="lodgmentDetail">
-		select * from lodgment_storage where lodgment_no=${lodgmentNo}
+		select * from
+		lodgment_storage where lodgment_no=${lodgmentNo}
 	</select>
-	
-	
+
+
 	<select id="getRoomNo" resultType="int">
-		select 
-			room_no 
+		select
+		room_no
 		from
-			room
-		left join lodgment_storage using (lodgment_no)
-		where lodgment_no = #{lodgmentNo}
+		room
+		left join
+		lodgment_storage using (lodgment_no)
+		where lodgment_no =
+		#{lodgmentNo}
 		order by room_no
 	</select>
-	
-	
+
+
 	<select id="getRoomList" resultMap="roomSearchFile">
-		SELECT 
-		    r.*, 
-		    CASE 
-		        WHEN 
-		            r.room_qua > COALESCE((
-		                SELECT COUNT(*)
-		                FROM 
-		                    lodgment_storage ls
-		                LEFT JOIN 
-		                    room rm ON ls.lodgment_no = rm.lodgment_no
-		                LEFT JOIN 
-		                    booking b ON rm.room_no = b.room_no
-		                WHERE  
-		                    (b.start_date <![CDATA[<]]>= to_date(#{endDate},'YYYY-MM-DD') 
-		                     AND b.end_date > to_date(#{startDate},'YYYY-MM-DD'))
-		                    AND ls.lodgment_no = #{lodgmentNo}
-		                    AND rm.room_no = r.room_no
-		            ), 0) THEN '1' 
-		        ELSE '2'  
-		    END AS ReservationStatus
-		FROM 
-		    room r
-		WHERE 
-		    r.room_no =#{roomNo}
+		SELECT
+		r.*,
+		CASE
+		WHEN
+		r.room_qua > COALESCE((
+		SELECT COUNT(*)
+		FROM
+		lodgment_storage ls
+		LEFT JOIN
+		room rm ON ls.lodgment_no = rm.lodgment_no
+		LEFT JOIN
+		booking b ON rm.room_no = b.room_no
+		WHERE
+		(b.start_date <![CDATA[<]]>=
+		to_date(#{endDate},'YYYY-MM-DD')
+		AND b.end_date >
+		to_date(#{startDate},'YYYY-MM-DD'))
+		AND ls.lodgment_no = #{lodgmentNo}
+		AND rm.room_no = r.room_no
+		), 0) THEN '1'
+		ELSE '2'
+		END AS
+		ReservationStatus
+		FROM
+		room r
+		WHERE
+		r.room_no =#{roomNo}
 	</select>
 	<select id="selectRoomFile" resultType="roomFile">
-		select * from room_file where room_no=#{roomNo}
+		select * from room_file
+		where room_no=#{roomNo}
 	</select>
 	<resultMap type="roomSearch" id="roomSearchFile">
-			<result column="room_no" property="roomNo"/>
-			<result column="lodgment_no" property="lodgmentNo"/>
-			<result column="room_name" property="roomName"/>
-			<result column="room_max_capacity" property="roomMaxCapacity"/>
-			<result column="room_price" property="roomPrice"/>
-			<result column="room_info" property="roomInfo"/>
-			<result column="reservationstatus" property="reservationstatus"/>					
-			<collection 
-				property="fileList" 
-				select="selectRoomFile" 
-				column="room_no"
-				javaType="java.util.List"
-				ofType="roomFile"
-				></collection> <!-- 효율적이지는 않음, 데이터를 불필요한것까지 검색후, 이만큼만 쓸게 -->
+		<result column="room_no" property="roomNo" />
+		<result column="lodgment_no" property="lodgmentNo" />
+		<result column="room_name" property="roomName" />
+		<result column="room_max_capacity" property="roomMaxCapacity" />
+		<result column="room_price" property="roomPrice" />
+		<result column="room_info" property="roomInfo" />
+		<result column="reservationstatus" property="reservationstatus" />
+		<collection property="fileList" select="selectRoomFile"
+			column="room_no" javaType="java.util.List" ofType="roomFile"></collection> <!-- 효율적이지는 않음, 데이터를 불필요한것까지 검색후, 이만큼만 쓸게 -->
 	</resultMap>
-	<!-- 
-	property: 매핑할 Java 객체의 속성 이름
-	select: fileList에 대해 실행할 SQL 쿼리의 ID를 지정
-	column: fileList에서 매핑할 데이터베이스 열 이름을 지정
-	javaType: 매핑될 Java 타입을 지정
-	ofType: fileList의 각 요소 타입을 지정 -->
-	
+	<!-- property: 매핑할 Java 객체의 속성 이름 select: fileList에 대해 실행할 SQL 쿼리의 ID를 지정 
+		column: fileList에서 매핑할 데이터베이스 열 이름을 지정 javaType: 매핑될 Java 타입을 지정 ofType: 
+		fileList의 각 요소 타입을 지정 -->
+
 	<select id="lodgmentCollection" resultType="int">
-		select 
-			count(*) 
-		from 
-			lodgment_collection 
-		where 
-			lodgment_no = #{lodgmentNo} and member_no = #{loginNo}	
+		select
+		count(*)
+		from
+		lodgment_collection
+		where
+		lodgment_no = #{lodgmentNo} and member_no =
+		#{loginNo}
 	</select>
-	
+
 	<insert id="insertCollect">
-		insert into lodgment_collection values(#{loginNo}, #{lodgmentNo})
+		insert into lodgment_collection values(#{loginNo},
+		#{lodgmentNo})
 	</insert>
 	<delete id="deleteCollect">
-		delete from lodgment_collection where lodgment_no = #{lodgmentNo} and member_no= #{loginNo}
+		delete from lodgment_collection where lodgment_no =
+		#{lodgmentNo} and member_no= #{loginNo}
 	</delete>
-	
+
 	<!-- 리뷰 작성하기 -->
-	<insert id="insertReview" >
-		insert into lodgment_review 
-		values (lodgment_review_seq.nextval, #{memberNo}, #{bookNo} #{lodgmentNo}, #{reviewContent}, #{rating}, null)
-		<selectKey resultType="int" keyProperty="reviewNo" order="AFTER">
+	<insert id="insertReview">
+		insert into lodgment_review
+		values (lodgment_review_seq.nextval,
+		#{memberNo}, #{bookNo} #{lodgmentNo},
+		#{reviewContent}, #{rating},
+		null)
+		<selectKey resultType="int" keyProperty="reviewNo"
+			order="AFTER">
 			select max(review_no) from lodgment_review
 		</selectKey>
 	</insert>
-	
+
 	<insert id="insertReviewFile">
-		insert into lodgment_review_file 
-		values (lodgment_review_file_seq.nextval, #{reviewNo}, #{reviewImgPath})
+		insert into lodgment_review_file
+		values
+		(lodgment_review_file_seq.nextval, #{reviewNo}, #{reviewImgPath})
 	</insert>
-	
+
 	<!-- 리뷰 페이징 : 리뷰 총 갯수 -->
 	<select id="totalCount" resultType="int">
-		select count(*) from lodgment_review where lodgment_no=#{lodgmentNo}
+		select count(*) from
+		lodgment_review where lodgment_no=#{lodgmentNo}
 	</select>
-	
+
 	<!-- 리뷰 정보 불러오기 -->
 	<select id="selectReviewList" resultMap="getReviewFile">
-	 SELECT 
-    	review_no, member_id, member_no, review_content, rating, start_date
-	FROM (
-	    SELECT rownum AS rnum, lr.review_no, lr.member_no, lr.review_content, lr.rating, b.book_no, b.start_date, b.end_date, m.member_id
-   		FROM lodgment_review lr
-   	 	LEFT JOIN booking b ON lr.book_no = b.book_no 
-   	 	left join member m on b.member_id = m.member_id
-   	 	WHERE lr.lodgment_no = #{lodgmentNo}
-		) 
-	WHERE rnum BETWEEN #{start} AND #{end}
+		SELECT
+		review_no, member_id, member_no, review_content, rating, start_date,total_like_count,like_count ,report_count
+		FROM (
+		SELECT rownum AS rnum, lr.review_no, lr.member_no, lr.review_content,
+		lr.rating, b.book_no, b.start_date, b.end_date, m.member_id,
+        (select count(*) from lodgment_review_like where review_no=lr.review_no) total_like_count,
+        (select count(*) from lodgment_review_like where member_no=#{loginNo} and review_no=lr.review_no) like_count,
+        (select count(*) from lodgment_review_REPORT where member_no=#{loginNo} and review_no=lr.review_no) report_count
+		FROM lodgment_review lr
+		LEFT JOIN booking b ON lr.book_no = b.book_no
+		left join member m on b.member_id = m.member_id
+		WHERE lr.lodgment_no = #{lodgmentNo}
+		)
+		WHERE rnum BETWEEN #{start} AND #{end}
 	</select>
 	<!-- 리뷰 맵 : selectOneReviewFileList -->
 	<resultMap type="lodgmentReview" id="getReviewFile">
-	    <result column="review_no" property="reviewNo"/>
-	    <collection 
-	        property="fileList" 
-	        select="selectOneReviewFileList" 
-	        column="review_no"
-	        javaType="java.util.List"
-	        ofType="lodgmentReviewFile"
-	    />
+		<result column="review_no" property="reviewNo" />
+		<collection property="fileList"
+			select="selectOneReviewFileList" column="review_no"
+			javaType="java.util.List" ofType="lodgmentReviewFile" />
 	</resultMap>
 	<!-- 맵 사용 : selectOneReviewFileList -->
-	<select id="selectOneReviewFileList" parameterType="int" resultType="lodgmentReviewFile">
-    	select * from lodgment_review_file where review_no = #{reviewNo}
+	<select id="selectOneReviewFileList" parameterType="int"
+		resultType="lodgmentReviewFile">
+		select * from lodgment_review_file where review_no = #{reviewNo}
 	</select>
-	
+
 	<!-- 리뷰 여부 비교 -->
-	<select id="reviewStatus" resultType="reviewStatus">
-		SELECT 
-		    ( SELECT 
-		    COUNT(*) AS used_reviews_count
-		FROM 
-		    booking b
-		LEFT JOIN 
-		    lodgment_review r ON b.book_no = r.book_no
-		JOIN 
-		    lodgment_storage s ON b.seller_no = s.seller_no
-		JOIN 
-		    member m ON b.member_id = m.member_id
-		WHERE 
-		    m.member_no = #{loginNo}
-		    AND s.lodgment_no = #{lodgmentNo}
-		    AND b.end_date <![CDATA[<]]>= SYSDATE
-		    AND r.review_no IS NOT NULL -- 리뷰가 있는 경우만 카운트
-		) AS used_reviews_count,
-		    
-		    (SELECT COUNT(*) 
-		    FROM booking b
-		    LEFT JOIN room r ON b.room_no = r.room_no
-		    LEFT JOIN lodgment_storage s ON r.lodgment_no = s.lodgment_no
-		    LEFT JOIN member m ON b.member_id = m.member_id
-		    WHERE b.end_date <![CDATA[<]]> SYSDATE
-		    AND member_no = #{loginNo} 
-		    AND s.lodgment_no = #{lodgmentNo} ) AS available_reviews_count
+	<select id="reviewStatus" resultType="lodgmentReview">
+		SELECT
+		( SELECT
+		COUNT(*) AS used_reviews_count
+		FROM
+		booking b
+		LEFT JOIN
+		lodgment_review r ON b.book_no = r.book_no
+		JOIN
+		lodgment_storage s ON
+		b.seller_no = s.seller_no
+		JOIN
+		member m ON b.member_id = m.member_id
+		WHERE
+		m.member_no = #{loginNo}
+		AND s.lodgment_no = #{lodgmentNo}
+		AND
+		b.end_date <![CDATA[<]]>=
+		SYSDATE
+		AND r.review_no IS NOT NULL 
+		) AS
+		used_reviews_count,
+
+		(SELECT COUNT(*)
+		FROM booking b
+		LEFT JOIN room r ON
+		b.room_no = r.room_no
+		LEFT JOIN lodgment_storage s ON r.lodgment_no =
+		s.lodgment_no
+		LEFT JOIN member m ON b.member_id = m.member_id
+		WHERE
+		b.end_date <![CDATA[<]]>
+		SYSDATE
+		AND member_no = #{loginNo}
+		AND s.lodgment_no = #{lodgmentNo} )
+		AS available_reviews_count
 		FROM dual
 	</select>
 </mapper>

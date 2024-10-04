@@ -15,6 +15,7 @@ import kr.co.iei.lodgment.model.dao.LodgmentDao;
 import kr.co.iei.lodgment.model.dto.LodgmentDTO;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewDTO;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewFileDTO;
+import kr.co.iei.lodgment.model.dto.Page;
 import kr.co.iei.lodgment.model.dto.ReviewStatus;
 import kr.co.iei.lodgment.model.dto.RoomSearchDTO;
 import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
@@ -127,31 +128,41 @@ public class LodgmentService {
 		}
 		return result;
 	}
+
 	
 	//리뷰리스트
 	public Map reveiwList(int lodgmentNo, int reqPage, int loginNo) {
+		System.out.println(loginNo);  
  		int numPerPage = 5;	
 		int pageNaviSize = 5;	//페이지네비 길이
 		int totalCount = lodgmentDao.totalCount(lodgmentNo);//전체 게시물 수
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
 		//System.out.println(pi);
-		List list = lodgmentDao.selectReviewList(pi.getStart(), pi.getEnd(), lodgmentNo);
+		Page page = new Page(pi.getStart(), pi.getEnd(),loginNo,lodgmentNo);
+		List list = lodgmentDao.selectReviewList(page);
+		System.out.println(page);
 		Map<String, Object> map = new HashMap<String, Object>();
+		//System.out.println(list);
 	    //리뷰 이미지 전부 불러오기
 		//List Imglist = lodgmentDao.selectGetAllReviewImg(lodgmentNo);
 		//리뷰 남기기 가능 여부
 		//작성 가능 리뷰가 있으면 true 로 표시
 		Boolean availableReview = false;
-		System.out.println(loginNo);  
-		
 		if(loginNo != -1 ) {
-			ReviewStatus reviewStatus = lodgmentDao.reviewStatus(lodgmentNo, loginNo);
+			Page lodgmentInfo = new Page();
+			lodgmentInfo.setLodgmentNo(lodgmentNo);
+			lodgmentInfo.setLoginNo(loginNo);
+			ReviewStatus reviewStatus = lodgmentDao.reviewStatus(lodgmentInfo);
 			//System.out.println("리뷰 사용가능 리뷰"+reviewStatus.getAvailableReviewsCount());  
 			//System.out.println("작성된 리뷰"+reviewStatus.getUsedReviewsCount());  
 			if(reviewStatus.getAvailableReviewsCount() > reviewStatus.getUsedReviewsCount()) {
 				availableReview = true;
 			}
 		}
+
+		//int reviewLike = -1;
+		//int reviewReport = -1;
+		//로그인이 되어있을 때 여부
 		map.put("list", list);
 		map.put("pi", pi);
 	    map.put("availableReview",availableReview);

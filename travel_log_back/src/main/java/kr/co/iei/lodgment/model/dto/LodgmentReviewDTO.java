@@ -35,4 +35,10 @@ public class LodgmentReviewDTO {
 	private String memberId;
 	@Schema(description = "예약 날짜",type="String")
 	private String startDate;
+	@Schema(description = "좋아요 여부",type="int")
+	private int likeCount;
+	@Schema(description = "좋아요 총 개수",type="int")
+	private int totalLikeCount;
+	@Schema(description = "신고 여부",type="int")
+	private int reportCount;
 }

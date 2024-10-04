@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { format } from "date-fns";
 import LodgmentReviewList from "./LodgmentReviewList";
+import LodgmentInquire from "./LodgmentInquire";
 
 const LodgmentDetail = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
@@ -48,7 +49,7 @@ const LodgmentDetail = () => {
         `${BackServer}/lodgment/roomInfo/${lodgmentNo}/${formattedStartDate}/${formattedEndDate}/${loginNo}`
       )
       .then((res) => {
-        //console.log(res);
+        console.log(res);
         setLodgmentInfo(res.data.lodgmentInfo);
         setRoomSearchList(res.data.lodgmentInfo.roomSearchList);
         sestLodgmentCollection(res.data.lodgmentCollection);
@@ -60,8 +61,6 @@ const LodgmentDetail = () => {
   //console.log("roomSearchList" + roomSearchList[0].roomNo);
   return (
     <section className="section lodgmentDetail">
-      {loginNo}
-      {lodgmentCollection}
       <div className="lodgment-detail-img">
         {loginNo === -1 ? (
           <div
@@ -253,7 +252,7 @@ const LodgmentDetail = () => {
             <LodgmentReviewList lodgmentNo={lodgmentNo} />
           </Tab>
           <Tab eventKey="profile" title="문의하기">
-            Tab content for Profile
+            <LodgmentInquire />
           </Tab>
           <Tab eventKey="longer-tab" title="공지사항">
             <div

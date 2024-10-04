@@ -9,6 +9,9 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import Rating from "@mui/material/Rating";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import Swal from "sweetalert2";
 
 const LodgmentReviewList = (props) => {
   const navigate = useNavigate();
@@ -19,13 +22,13 @@ const LodgmentReviewList = (props) => {
   const [loginNo] = useRecoilState(loginNoState);
   const [availableReview, setAvailableReview] = useState(false);
   const [viewReview, setViewReview] = useState([]);
+
   useEffect(() => {
     axios
       .get(
         `${backServer}/lodgment/reviewList/${lodgmentNo}/${reqPage}/${loginNo}`
       )
       .then((res) => {
-        console.log(res);
         setPi(res.data.pi);
         setAvailableReview(res.data.availableReview);
         setViewReview(res.data.list);
@@ -33,18 +36,83 @@ const LodgmentReviewList = (props) => {
       .catch((err) => {
         console.log(err);
       });
-  }, [reqPage, loginNo]);
-  // console.log("viewReview" + viewReview[0].reviewContent);
+  }, [reqPage]);
+
   const settings = {
     dots: true,
     lazyLoad: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 1, // 슬라이드 한 번에 보여줄 개수
+    slidesToShow: 1,
     slidesToScroll: 1,
-    initialSlide: 0, // 시작 슬라이드
-    adaptiveHeight: true, // 슬라이드의 높이를 내용에 맞춰 조정
-    // 다른 설정 추가 가능
+    initialSlide: 0,
+    adaptiveHeight: true,
+  };
+
+  const handleLike = (reviewNo, likeCount) => {
+    if (loginNo === -1) {
+      Swal.fire({
+        icon: "info",
+        text: "로그인을 해주세요.",
+      });
+      return;
+    }
+    if (likeCount === 0) {
+      axios
+        .post(`${backServer}/lodgment/reviewLike`, { reviewNo, loginNo })
+        .then((res) => {
+          // 성공 시 UI 업데이트 로직 추가 (예: 상태 재조회)
+          console.log(res.data);
+          // 필요시 상태 업데이트
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios
+        .post(`${backServer}/lodgment/reviewLikeCancle`, { reviewNo, loginNo })
+        .then((res) => {
+          // 성공 시 UI 업데이트 로직 추가 (예: 상태 재조회)
+          console.log(res.data);
+          // 필요시 상태 업데이트
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  const handleReport = (reviewNo, reportCount) => {
+    if (loginNo === -1) {
+      Swal.fire({
+        icon: "info",
+        text: "로그인을 해주세요.",
+      });
+      return;
+    }
+    if (reportCount === 0) {
+      axios
+        .post(`${backServer}/lodgment/report`, { reviewNo, loginNo })
+        .then((res) => {
+          // 성공 시 UI 업데이트 로직 추가 (예: 상태 재조회)
+          console.log(res.data);
+          // 필요시 상태 업데이트
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios
+        .post(`${backServer}/lodgment/reportCancle`, { reviewNo, loginNo })
+        .then((res) => {
+          // 성공 시 UI 업데이트 로직 추가 (예: 상태 재조회)
+          console.log(res.data);
+          // 필요시 상태 업데이트
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (
@@ -92,6 +160,7 @@ const LodgmentReviewList = (props) => {
                       ))}
                     </Slider>
                   )}
+
                   <div>
                     <h4>{review.memberId}</h4>
                   </div>
@@ -99,6 +168,53 @@ const LodgmentReviewList = (props) => {
                     <Rating name="read-only" value={review.rating} readOnly />
                   </div>
                   <div>{review.reviewContent}</div>
+                  <div className="review-text-area">
+                    <span>
+                      <>
+                        {review.likeCount === 0 ? (
+                          <>
+                            <ThumbUpOffAltIcon
+                              onClick={() =>
+                                handleLike(review.reviewNo, review.likeCount)
+                              }
+                            />
+                            {review.totalLikeCount}
+                          </>
+                        ) : review.likeCount === 1 ? (
+                          <>
+                            <ThumbUpAltIcon
+                              onClick={() =>
+                                handleLike(review.reviewNo, review.likeCount)
+                              }
+                            />
+                            {review.totalLikeCount}
+                          </>
+                        ) : null}
+                      </>
+                    </span>
+                    <span> | </span>
+                    {review.reportCount === 0 ? (
+                      <>
+                        <span
+                          onClick={() =>
+                            handleReport(review.reviewNo, review.reportCount)
+                          }
+                        >
+                          신고하기
+                        </span>
+                      </>
+                    ) : review.reportCount === 1 ? (
+                      <>
+                        <span
+                          onClick={() =>
+                            handleReport(review.reviewNo, review.reportCount)
+                          }
+                        >
+                          신고하기
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
                 </div>
               ))}
             </div>
@@ -111,4 +227,5 @@ const LodgmentReviewList = (props) => {
     </div>
   );
 };
+
 export default LodgmentReviewList;
