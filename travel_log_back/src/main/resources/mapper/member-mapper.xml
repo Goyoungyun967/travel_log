@@ -29,6 +29,14 @@
 		select member_id from member where member_no = #{loginNo}
 	</select>
 	<select id="selectOneUser" resultType="member">
-		select member_image from member where member_no = #{memberNo}
+		select * from member where member_no = #{memberNo}
 	</select>
+	
+	<update id="updateMember">
+		update member set member_nickname=#{memberNickname}, member_phone=#{memberPhone} where member_no=#{memberNo}
+	</update>
+	
+	<update id="changePw">
+	update member set member_pw=#{memberPw} where member_no=#{memberNo}
+	</update>
 </mapper>

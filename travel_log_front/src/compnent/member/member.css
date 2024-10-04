@@ -707,3 +707,131 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 효과 */
 }
+
+.update-wrap {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* 그림자 추가 */
+  border-radius: 10px; /* 모서리 둥글게 */
+}
+
+.update-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px; /* 폰트 크기 조정 */
+  color: #333; /* 텍스트 색상 변경 */
+  font-weight: bold; /* 굵은 텍스트 */
+}
+
+.info-nickname {
+  text-align: center;
+  font-size: 30px;
+  margin-bottom: 30px;
+  font-weight: 600; /* 굵게 */
+}
+
+.info-update {
+  width: 550px;
+  background-color: #ffffff;
+  border-radius: 8px; /* 모서리 둥글게 */
+  padding: 20px; /* 패딩 추가 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+  margin-bottom: 20px; /* 하단 여백 추가 */
+  border: 1px solid #36c3fe;
+}
+
+.info-update label {
+  display: block; /* 라벨을 블록으로 설정 */
+  margin-bottom: 5px; /* 아래 여백 추가 */
+  color: #333; /* 색상 변경 */
+  font-weight: 900;
+}
+
+.info-update input {
+  width: calc(100% - 32px); /* 전체 너비 - 패딩 */
+  padding: 10px;
+  border: 1px solid #36c3fe;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  border-radius: 5px; /* 모서리 둥글게 */
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.info-update input:hover {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 1 23, 255, 0.5);
+}
+
+.info-update input {
+  width: calc(100% - 32px); /* 전체 너비 - 패딩 */
+  padding: 10px;
+  border: 1px solid #36c3fe;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  border-radius: 5px; /* 모서리 둥글게 */
+  margin-bottom: 15px;
+  text-align: center;
+}
+.info-update input[type="text"] {
+  font-weight: 600;
+}
+.info-update input:focus {
+  border-color: #0056b3; /* 포커스 시 테두리 색상 변경 */
+  box-shadow: 0 0 10px rgba(0, 86, 179, 0.5); /* 포커스 시 그림자 추가 */
+}
+
+.update-button {
+  background-color: #007bff; /* 버튼 배경 색상 */
+  color: white; /* 버튼 텍스트 색상 */
+  border: none; /* 테두리 없음 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  padding: 10px 20px; /* 상하 및 좌우 패딩 */
+  font-size: 16px; /* 폰트 크기 */
+  cursor: pointer; /* 커서 변경 */
+  transition: background-color 0.3s; /* 배경 색상 전환 효과 */
+  margin-top: 10px; /* 상단 여백 추가 */
+  width: 100%; /* 버튼 너비를 100%로 */
+}
+
+.update-button:hover {
+  background-color: #0056b3; /* 호버 시 색상 변경 */
+}
+
+.changePw-zone {
+  display: inline-block; /* 인라인 블록으로 설정하여 버튼처럼 보이게 함 */
+  margin-top: 20px; /* 상단 여백 추가 */
+  padding: 10px 20px; /* 패딩 추가 */
+  background-color: #007bff; /* 버튼 배경 색상 (파란색) */
+  border-radius: 5px; /* 모서리 둥글게 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+  text-decoration: none; /* 링크의 기본 밑줄 제거 */
+  font-size: 16px; /* 폰트 크기 */
+  transition: background-color 0.3s, transform 0.3s; /* 배경 색상 및 크기 변환 효과 */
+  width: 500px;
+  color: white !important; /* 강제로 색상 적용 */
+}
+
+.changePw-zone:hover {
+  background-color: #0056b3; /* 호버 시 색상 변경 (더 어두운 파란색) */
+  transform: scale(1.05); /* 호버 시 약간의 크기 증가 효과 */
+}
+
+.changePw-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px; /* 폰트 크기 조정 */
+  color: #333; /* 텍스트 색상 변경 */
+  font-weight: bold; /* 굵은 텍스트 */
+}
+
+.changePw-main {
+  background-color: aquamarine;
+}

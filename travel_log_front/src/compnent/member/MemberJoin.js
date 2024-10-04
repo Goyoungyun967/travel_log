@@ -72,6 +72,9 @@ const MemberJoin = () => {
     let value = originalValue; // 수정할 값을 let으로 선언
 
     if (name === "memberPhone") {
+      if (originalValue.length > 13) {
+        return; // 11글자를 초과하면 함수 종료
+      }
       value = value
         .replace(/[^0-9]/g, "") // 숫자만 남김
         .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, "$1-$2-$3")

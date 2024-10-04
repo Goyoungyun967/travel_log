@@ -24,6 +24,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import AdminMain from "./compnent/admin/AdminMain";
 import MemberMain from "./compnent/member/MemberMain";
+import UpdateMember from "./compnent/member/UpdateMember";
 
 function App() {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -70,7 +71,7 @@ function App() {
   };
   const sellerRefreshLogin = () => {
     const refreshToken = window.localStorage.getItem("sellerRefreshToken");
-    console.log(refreshToken);
+
     if (refreshToken != null) {
       axios.defaults.headers.common["Authorization"] = refreshToken;
       axios

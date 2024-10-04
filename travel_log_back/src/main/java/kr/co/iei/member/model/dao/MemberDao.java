@@ -22,4 +22,10 @@ public interface MemberDao {
 	String getMemberId(String memberNo);
 
 	MemberDTO selectOneUser(int memberNo);
+
+	int updateMember(MemberDTO member);
+
+	int changePw(MemberDTO member);
+
+
 }
