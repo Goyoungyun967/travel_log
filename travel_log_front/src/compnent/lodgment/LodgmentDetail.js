@@ -27,10 +27,13 @@ const LodgmentDetail = () => {
   const [lodgmentInfo, setLodgmentInfo] = useState({});
   const [roomSearchList, setRoomSearchList] = useState([]);
   const [loginNo] = useRecoilState(loginNoState);
+
+  //보관함 여부
   const [lodgmentCollection, sestLodgmentCollection] = useState("");
+
+  //보관함 좋아요 성공실패
   const [result, setResult] = useState(true);
-  const [previewImg, setPreviewImg] = useState([]);
-  const [review, setReview] = useState([]);
+
   //console.log("디테일 :" + lodgmentNo);
   //console.log(loginNo);
 
@@ -45,16 +48,10 @@ const LodgmentDetail = () => {
         `${BackServer}/lodgment/roomInfo/${lodgmentNo}/${formattedStartDate}/${formattedEndDate}/${loginNo}`
       )
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setLodgmentInfo(res.data.lodgmentInfo);
         setRoomSearchList(res.data.lodgmentInfo.roomSearchList);
         sestLodgmentCollection(res.data.lodgmentCollection);
-        if (res.data.reviewList.length > 0) {
-          setReview(res.data.reviewList);
-          for (let i = 0; i < res.data.reviewList.length; i++) {
-            const review = res.data.reviewList[i];
-          }
-        }
       })
       .catch((err) => {
         console.log(err);
@@ -254,22 +251,6 @@ const LodgmentDetail = () => {
         >
           <Tab eventKey="home" title="이용후기">
             <LodgmentReviewList lodgmentNo={lodgmentNo} />
-            <div className="lodgment-review-rwap">
-              <div className="lodgment-review-btn-wrap">
-                <button
-                  className="review-btn"
-                  onClick={() => {
-                    navigate(`/lodgment/reviewWrite`, {
-                      state: { lodgmentNo },
-                    });
-                  }}
-                >
-                  리뷰작성
-                </button>
-              </div>
-              <div className="lodgment-review-img-wrap"></div>
-              <div className="lodgment-review-list-wrap"></div>
-            </div>
           </Tab>
           <Tab eventKey="profile" title="문의하기">
             Tab content for Profile

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import kr.co.iei.lodgment.model.dto.LodgmentDTO;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewDTO;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewFileDTO;
+import kr.co.iei.lodgment.model.dto.ReviewStatus;
 import kr.co.iei.lodgment.model.dto.RoomSearchDTO;
 import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
@@ -50,6 +51,10 @@ public interface LodgmentDao {
 	int totalCount(int lodgmentNo);
 
 	List selectReviewList(int start, int end, int lodgmentNo);
+
+	ReviewStatus reviewStatus(int lodgmentNo, int loginNo);
+
+	//List selectGetAllReviewImg(int lodgmentNo);
 
 	//List<RoomDTO> getRoomInfoList(int lodgmentNo, String startDate, String endDate, int guset);
 	
