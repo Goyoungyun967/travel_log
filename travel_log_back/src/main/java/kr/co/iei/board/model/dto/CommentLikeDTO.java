@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Schema(description = "댓글 좋아요 객체")
 public class CommentLikeDTO {
-	private int commentNo;
 	private int memberNo;
+	private int commentNo;
 
 }

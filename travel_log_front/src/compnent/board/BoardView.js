@@ -12,10 +12,11 @@ import ChatBubbleIcon from "@mui/icons-material/ChatBubble"; //댓글
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"; //뒤로가기 모양
 import BoardCommnet from "./BoardComment";
 import { useRecoilState } from "recoil";
-import { loginNoState } from "../utils/RecoilData";
+import { loginNicknameState, loginNoState } from "../utils/RecoilData";
 const BoardView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
+  const [loginNickname, setLoginNicName] = useRecoilState(loginNicknameState);
   const memberNo = loginNo;
   const navigate = useNavigate();
   const params = useParams();
@@ -109,7 +110,7 @@ const BoardView = () => {
                       className="text-medium"
                       style={{ paddingLeft: "23px" }}
                     >
-                      {board.boardWriter} 닉네임
+                      {loginNickname}
                     </div>
                     <div className="text-min" style={{ paddingLeft: "50px" }}>
                       {regDate}

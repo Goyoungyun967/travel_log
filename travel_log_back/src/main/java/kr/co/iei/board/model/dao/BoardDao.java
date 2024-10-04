@@ -47,7 +47,7 @@ public interface BoardDao {
 	int selectUnlikeBoard(int boardNo, int memberNo);
 
 	int deleteUnlikeBoard(int memberNo, int boardNo );
-
+// 댓글
 	List<BoardCommentDTO> selectCommentList(int boardNo);
 
 	int insertComment(BoardCommentDTO comment);
@@ -55,8 +55,13 @@ public interface BoardDao {
 	int updateComment(int commentNo, String commentContent);
 
 	int deleteComment(int commentNo);
-	
-
+	//좋아요 
+	//입력
+	int insertLikeComment(int memberNo, int commentNo);
+	int selectLikeComment(int memberNo, int commentNo);
+	//삭제 
+	int deleteUnlikeComment(int memberNo, int commentNo);
+	int selectUnlikeComment(int memberNo, int commentNo);
    
 
 	//동행게시판 리스트
@@ -68,6 +73,8 @@ public interface BoardDao {
 	int insertAccompany(BoardAccompanyDTO boardAccompany);
 
 	int insertAccompanyType(AccompanyTag at);
+
+
 	
 //	int insertAccompanyType(BoardAccompanyDTO boardAccompany);
 

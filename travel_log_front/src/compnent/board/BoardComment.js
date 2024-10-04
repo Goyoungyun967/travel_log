@@ -1,18 +1,24 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { loginNicknameState } from "../utils/RecoilData";
+import { loginNicknameState, loginNoState } from "../utils/RecoilData";
 import dayjs from "dayjs";
+import FavoriteIcon from "@mui/icons-material/Favorite"; // 채워진 하트
+import { useParams } from "react-router-dom";
 
 const BoardComment = ({ board }) => {
   const backServer = process.env.REACT_APP_BACK_SERVER; // 백엔드 서버 주소
-
+  const [loginNo, setLoginNo] = useRecoilState(loginNoState);
   const [commentList, setCommentList] = useState([]); // 댓글 목록
   const [commentValue, setCommentValue] = useState(""); // 댓글 입력값
   const [editCommentId, setEditCommentId] = useState(null); // 수정 중인 댓글 ID
   const [editValue, setEditValue] = useState(""); // 수정 입력값
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [loginNickname] = useRecoilState(loginNicknameState);
+  //좋아요
+  const { isLike: isLikeParam, likeCount: likeCountParam } = useParams();
+  const [likeCount, setLikeCount] = useState(Number(likeCountParam));
+  const [isLike, setIsLike] = useState(Number(isLikeParam));
 
   // 댓글 목록 불러오기
   useEffect(() => {
@@ -32,7 +38,8 @@ const BoardComment = ({ board }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [board.boardNo, commentValue]);
+  }, [board.boardNo, commentValue, isLike]);
+
   // 댓글 제출 핸들러
   const handleCommentSubmit = () => {
     if (commentValue.trim() !== "") {
@@ -108,6 +115,35 @@ const BoardComment = ({ board }) => {
       });
   };
 
+  // 댓글 좋아요 핸들러
+  const commentLikeClick = (comment, loginNo) => {
+    const commentNo = comment.commentNo;
+    const memberNo = loginNo;
+    if (isLike === 1) {
+      // 좋아요 취소 요청
+      axios
+        .delete(`${backServer}/board/unlikeComment/${memberNo}/${commentNo}`)
+        .then(() => {
+          setLikeCount((prevCount) => prevCount - 1);
+          setIsLike(0);
+        })
+        .catch((err) => {
+          console.error("좋아요 취소 중 오류 발생:", err);
+        });
+    } else {
+      // 좋아요 추가 요청
+      axios
+        .post(`${backServer}/board/likeComment/${memberNo}/${commentNo}`)
+        .then(() => {
+          setLikeCount((prevCount) => prevCount + 1);
+          setIsLike(1);
+        })
+        .catch((err) => {
+          console.error("좋아요 요청 중 오류 발생:", err);
+        });
+    }
+  };
+
   if (loading) {
     return <p>로딩 중...</p>; // 로딩 상태 표시
   }
@@ -131,10 +167,14 @@ const BoardComment = ({ board }) => {
             onChange={(e) => setCommentValue(e.target.value)}
             className="comment-textarea"
             required
+            onKeyPress={(e) => {
+              // 엔터 키가 눌렸을 때
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault(); // 기본 동작 방지
+                handleCommentSubmit(); // 댓글 제출
+              }
+            }}
           />
-          <button type="submit" className="submit-comment-btn">
-            작성
-          </button>
         </div>
       </form>
 
@@ -159,6 +199,18 @@ const BoardComment = ({ board }) => {
                 ) : (
                   <>
                     <p>{comment.commentContent}</p>
+                    <div
+                      className="board-like sub-item"
+                      onClick={() => commentLikeClick(comment, loginNo)}
+                    >
+                      {comment.commentLikeCount === 0 ? (
+                        "좋아요"
+                      ) : (
+                        <>
+                          <FavoriteIcon /> {comment.commentLikeCount}
+                        </>
+                      )}
+                    </div>
                     <button onClick={() => handleCommentEdit(comment)}>
                       수정
                     </button>
@@ -173,9 +225,7 @@ const BoardComment = ({ board }) => {
             </div>
           ))
         ) : (
-          <p className="no-comments-message">
-            댓글이 없습니다. 첫 댓글을 작성해보세요!
-          </p>
+          <p className="no-comments-message">댓글써줭~</p>
         )}
       </div>
     </div>

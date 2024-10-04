@@ -29,5 +29,6 @@ public class BoardCommentDTO {
 	private List<BoardCommentDTO> recomments; // 대댓글
 	
 	 private int boardNo; 
+	 private int commentLikeCount;
 	 
 }
