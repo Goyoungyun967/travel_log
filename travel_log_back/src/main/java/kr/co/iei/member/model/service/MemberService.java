@@ -81,4 +81,31 @@ public class MemberService {
 		MemberDTO member = memberDao.selectOneUser(memberNo);
 		return member;
 	}
+	
+	@Transactional
+	public int updateMember(MemberDTO member) {
+		int result = memberDao.updateMember(member);
+		return result;
+	}
+
+	public int checkPw(MemberDTO member) {
+		MemberDTO m =memberDao.selectOneMember(member.getMemberNo());
+		System.out.println(member);
+		System.out.println(m);
+		if(m!=null && encoder.matches(member.getMemberPw(),m.getMemberPw())) {
+			return 1;
+		}
+		return 0;
+	}
+
+	public int changePw(MemberDTO member) {
+		String encPw = encoder.encode(member.getMemberPw());
+		member.setMemberPw(encPw);
+		int result = memberDao.changePw(member);
+		return result;
+	}
+
+	
+
+
 }

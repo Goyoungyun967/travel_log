@@ -20,9 +20,13 @@ public class StmInfoDTO {
 	@Schema(description = "판매자 번호",type="int")
 	private int sellerNo;
 	@Schema(description = "정산 금액",type="int")
-	private int stmPrice;
+	private String stmPrice;
 	@Schema(description = "정산 날짜",type="String")
 	private String stmDate;
+	@Schema(description = "정산 상태",type="int")
+	private int stmStatus;
+	@Schema(description = "사업자이름", type="String")
+	private String businessName;
 	
 	
 	// --- 검색 시

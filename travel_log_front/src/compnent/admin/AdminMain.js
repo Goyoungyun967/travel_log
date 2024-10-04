@@ -3,8 +3,10 @@ import "./admin.css";
 import InquiryList from "../inquiry/InquiryList";
 import InquiryView from "../inquiry/InquiryView";
 import AdminSellerList from "./AdminSellerList";
-import MemberChart from "./MemberChart";
+
 import SellerChart from "./SellerChart";
+import MemberChart from "./MemberChart";
+import AdminSellerStm from "./SellerStm";
 
 const AdminMain = () => {
   const changeMenu = (e) => {
@@ -49,7 +51,7 @@ const AdminMain = () => {
               <NavLink to="sellerChart">판매자 매출</NavLink>
             </li>
             <li>
-              <NavLink to="8">판매자 정산</NavLink>
+              <NavLink to="sellerStm">판매자 정산</NavLink>
             </li>
           </ul>
           <ul className="admin-main-menu" onClick={changeMenu}>
@@ -75,6 +77,7 @@ const AdminMain = () => {
             <Route path="sellerList" element={<AdminSellerList />} />
             <Route path="memberChart" element={<MemberChart />} />c
             <Route path="sellerChart" element={<SellerChart />} />
+            <Route path="sellerStm" element={<AdminSellerStm />} />
           </Routes>
         </div>
       </div>

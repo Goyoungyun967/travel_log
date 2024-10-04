@@ -27,6 +27,8 @@ public class LodgmentReviewDTO {
 	private String reviewContent;
 	@Schema(description = "숙소별점",type="int")
 	private int rating;
+	@Schema(description = "판매자 댓글",type="String")
+	private String sellerComment;
 	@Schema(description = "숙소 사진",type="LodgmentReviewFileDTO")
 	private List<LodgmentReviewFileDTO> fileList;
 	@Schema(description = "회원 아이디",type="String")

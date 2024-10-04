@@ -131,5 +131,19 @@ public class AdminController {
 		List list = adminService.getSellerSalesAge(sellerNo);
 		return ResponseEntity.ok(list);
 	}
-	
+	@GetMapping(value="/seller/salesList")
+	public ResponseEntity<List> getSellerSalesList(){
+		List list = adminService.getSellerSalesList();
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping(value="/seller/stmList/{reqPage}/{status}")
+	public ResponseEntity<Map> getSellerStmList(@PathVariable int reqPage,@PathVariable int status){
+		Map map = adminService.getSellerStmList(reqPage,status);
+		return ResponseEntity.ok(map);
+	}
+	@PatchMapping(value="/seller/stm")
+	public ResponseEntity<Boolean> updateStm(@RequestBody int[] stmNum){
+		int result = adminService.updateStm(stmNum);
+		return ResponseEntity.ok(result == stmNum.length);
+	}
 }

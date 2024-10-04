@@ -180,6 +180,7 @@ const InsertRoom = () => {
                           type="text"
                           id="roomName"
                           value={roomName}
+                          // 여기서 숫자 검사
                           onChange={(e) => setRoomName(e.target.value)}
                         />
                       </div>

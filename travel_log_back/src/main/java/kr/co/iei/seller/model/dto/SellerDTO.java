@@ -21,7 +21,7 @@ public class SellerDTO {
 	private int sellerApp;
 	private String sellerPw;
 	private String businessName;
-	
+	private int sales;
 	
 
 }

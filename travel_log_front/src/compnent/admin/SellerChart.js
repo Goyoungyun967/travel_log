@@ -59,7 +59,6 @@ const SellerChart = () => {
     axios
       .get(`${backServer}/admin/seller/sales/${type}/${date}`)
       .then((res) => {
-        console.log(res.data);
         const newChartData = new Array();
         res.data.forEach((item) => {
           const data = {
@@ -78,7 +77,6 @@ const SellerChart = () => {
     axios
       .get(`${backServer}/admin/seller/sales/${sellerNo}`)
       .then((res) => {
-        console.log(res.data);
         const newChartData = new Array();
         const date = new Date();
         const year = date.getFullYear() - 2000;
@@ -92,7 +90,6 @@ const SellerChart = () => {
           };
           newChartData.push(data);
         }
-        console.log(year);
         res.data.forEach((item, i) => {
           const index =
             Number(item.date.substr(5, 1)) === 0
@@ -182,6 +179,13 @@ const SellerChart = () => {
       </Text>
     );
   };
+  const cutStr = (str) => {
+    if (str.length > 3) {
+      return str.substr(0, 3) + "...";
+    } else {
+      return str;
+    }
+  };
   return (
     <>
       <div className="chart-select-box">
@@ -252,10 +256,13 @@ const SellerChart = () => {
           width={800}
           height={450}
           data={sellerListSales}
-          margin={{ top: 40, right: 20, left: 20, bottom: 30 }}
+          margin={{ top: 40, right: 20, left: 40, bottom: 30 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
+          <XAxis
+            dataKey="name"
+            label={{ value: "(단위 : 천원)", position: "left", offset: 0 }}
+          />
           <YAxis
             label={{
               value:
@@ -274,54 +281,68 @@ const SellerChart = () => {
         ""
       )}
       {sellerList ? (
-        <FormControl style={{ width: "200px", marginTop: "50px" }}>
-          <InputLabel id="sellerList">판매자 선택</InputLabel>
-          <Select
-            labelId="sellerList"
-            id="sellerList"
-            value={sellerNo}
-            label="sellerNo"
-            onChange={(e) => {
-              setSellerNo(e.target.value);
-            }}
+        <>
+          <FormControl style={{ width: "200px", marginTop: "50px" }}>
+            <InputLabel id="sellerList">판매자 선택</InputLabel>
+            <Select
+              labelId="sellerList"
+              id="sellerList"
+              value={sellerNo}
+              label="sellerNo"
+              onChange={(e) => {
+                setSellerNo(e.target.value);
+              }}
+            >
+              {sellerList.map((seller, index) => {
+                return (
+                  <MenuItem
+                    key={`sellerNo+chart+${index}`}
+                    value={seller.sellerNo}
+                  >
+                    {seller.businessName}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+
+          <ComposedChart
+            width={800}
+            height={450}
+            data={sellerSales}
+            margin={{ top: 40, right: 20, left: 40, bottom: 30 }}
           >
-            {sellerList.map((seller, index) => {
-              return (
-                <MenuItem
-                  key={`sellerNo+chart+${index}`}
-                  value={seller.sellerNo}
-                >
-                  {seller.businessName}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
+            <XAxis
+              dataKey="name"
+              label={{
+                value: "(단위 : 천원)",
+                position: "left",
+                offset: 0,
+              }}
+            />
+            <YAxis
+              label={{
+                value: `${cutStr(
+                  sellerList[
+                    sellerList.findIndex((obj) => obj.sellerNo === sellerNo)
+                  ].businessName
+                )} 매출`,
+                offset: 17,
+                position: "top",
+              }}
+            />
+            <Tooltip />
+            <Legend />
+            <CartesianGrid stroke="#f5f5f5" />
+            <Bar dataKey="작년" barSize={20} fill="#413ea0" />
+            <Bar dataKey="올해" barSize={20} fill="#ff8e99" />
+            <Line type="monotone" dataKey="작년총매출" stroke="#82ca9d" />
+            <Line type="monotone" dataKey="올해총매출" stroke="#ff7300" />
+          </ComposedChart>
+        </>
       ) : (
         ""
       )}
-      <ComposedChart
-        width={800}
-        height={450}
-        data={sellerSales}
-        margin={{ top: 40, right: 20, left: 20, bottom: 30 }}
-      >
-        <XAxis dataKey="name" />
-        <YAxis
-          label={{
-            value: "매출",
-            offset: 17,
-            position: "top",
-          }}
-        />
-        <Tooltip />
-        <Legend />
-        <CartesianGrid stroke="#f5f5f5" />
-        <Bar dataKey="작년" barSize={20} fill="#413ea0" />
-        <Bar dataKey="올해" barSize={20} fill="#ff8e99" />
-        <Line type="monotone" dataKey="작년총매출" stroke="#82ca9d" />
-        <Line type="monotone" dataKey="올해총매출" stroke="#ff7300" />
-      </ComposedChart>
       <div className="pie-chart">
         <PieChart width={400} height={400}>
           <Legend layout="vertical" verticalAlign="top" align="top" />
