@@ -125,12 +125,20 @@
 		
 		 	<!-- 댓글 목록 조회 -->
     	<select id="selectCommentList" resultType="boardComment">
-        	SELECT * FROM board_comment WHERE board_no = #{boardNo}
-   		 </select>
+   			 SELECT * FROM board_comment 
+   			 WHERE board_no = #{boardNo}
+   			 ORDER BY comment_Date DESC
+		</select>
 		 
 		 <!-- 댓글 추가 -->
-   		<insert id="insertComment">
-   			 INSERT INTO board_comment VALUES (board_comment_seq.nextval, #{commentWriter}, sysdate, 0, #{commentContent}, #{boardNo})
+   		<insert id="insertComment" parameterType="boardComment" useGeneratedKeys="true" keyProperty="commentNo">
+		    <!-- 댓글 추가 -->
+		    <selectKey keyProperty="commentNo" resultType="int" order="BEFORE">
+		        SELECT board_comment_seq.nextval FROM dual
+		    </selectKey>
+		    
+		    INSERT INTO board_comment (comment_no, comment_writer, comment_date, comment_ref, comment_content, board_no)
+		    VALUES (#{commentNo}, #{commentWriter}, sysdate, #{commentRef}, #{commentContent}, #{boardNo})
 		</insert>
 		
 		

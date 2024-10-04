@@ -215,7 +215,8 @@ public class BoardController {
     // 댓글 수정
     @PatchMapping("/editComment/{commentNo}")
     public ResponseEntity<Boolean> editComment(@PathVariable int commentNo, @RequestBody Map<String, String> request) {
-        String commentContent = request.get("content");
+        String commentContent = request.get("commentContent");
+        System.out.println(commentContent);
         boolean result = boardService.editComment(commentNo, commentContent);
         return ResponseEntity.ok(result);
     }

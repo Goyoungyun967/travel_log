@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { loginNicknameState } from "../utils/RecoilData";
+import dayjs from "dayjs";
 
 const BoardComment = ({ board }) => {
   const backServer = process.env.REACT_APP_BACK_SERVER; // 백엔드 서버 주소
@@ -18,8 +19,12 @@ const BoardComment = ({ board }) => {
     axios
       .get(`${backServer}/board/commentList/${board.boardNo}`)
       .then((response) => {
-        console.log(response.data);
-        setCommentList(response.data);
+        const commentsWithFormattedDate = response.data.map((comment) => ({
+          ...comment,
+          commentDate: dayjs(comment.commentDate).format("YYYY-MM-DD"), // 'YYYY-MM-DD' 형식으로 포맷
+        }));
+        console.log(commentsWithFormattedDate); // 포맷된 날짜 확인
+        setCommentList(commentsWithFormattedDate);
       })
       .catch((error) => {
         console.error("댓글 불러오기 실패:", error);
@@ -27,8 +32,7 @@ const BoardComment = ({ board }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [board.boardNo]);
-
+  }, [board.boardNo, commentValue]);
   // 댓글 제출 핸들러
   const handleCommentSubmit = () => {
     if (commentValue.trim() !== "") {
@@ -68,7 +72,7 @@ const BoardComment = ({ board }) => {
     if (editValue.trim()) {
       axios
         .patch(`${backServer}/board/editComment/${commentNo}`, {
-          commentContent: editValue.trim(),
+          commentContent: editValue.trim(), // 여기서 commentContent를 사용
         })
         .then(() => {
           setCommentList((prevComments) =>
@@ -107,7 +111,6 @@ const BoardComment = ({ board }) => {
   if (loading) {
     return <p>로딩 중...</p>; // 로딩 상태 표시
   }
-  console.log(commentList);
 
   return (
     <div className="board-comment-section">
