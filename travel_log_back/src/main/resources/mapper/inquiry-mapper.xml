@@ -127,9 +127,9 @@
   <select id="getSellerList" resultType="seller">
   	select seller_no,business_name from seller
   </select>
-  <select id="getSellerListSales" resultType="map">
+  <select id="getSellerListSales" resultType="seller">
   	select 
-  		business_name as "businessName", sum(room_price)as "sales"
+  		business_name , trunc(sum(room_price)/1000) as sales
   	from 
   		booking
   	join 
@@ -145,15 +145,15 @@
   			payment_date between to_date(#{date},'yyyymm') and last_day(to_date(#{date},'yyyymm')) and
   		</when>
   	</choose> 
-  		status=1
+  		status=2
   	group by 
   		business_name
   </select>
   <select id="getSellerSales" resultType="map">
   	select 
   		to_char(payment_date,'yyyy-mm') as "date",
-  		sum(room_price) as "sales",
-  		sum(sum(room_price)) over (order by to_char(payment_date, 'yyyy-mm')) as "sum"
+  		trunc(sum(room_price)/1000) as "sales",
+  		trunc(sum(sum(room_price)) over (order by to_char(payment_date, 'yyyy-mm'))/1000) as "sum"
   	from 
   		booking 
   	join 
@@ -161,7 +161,7 @@
   	where 
   		payment_date between trunc(add_months(sysdate,-12),'year') and trunc(add_months(sysdate,12),'year')-1 
   		and 
-  		status=1
+  		status=2
   		and
   		seller_no=#{sellerNo} 
   	group by to_char(payment_date,'yyyy-mm')
@@ -213,4 +213,28 @@
 	group by 
 		decode(member_gender,'m','남성','f','여성')
   </select>
+  <!-- 정산 -->
+  <select id="selectSellerSales" resultType="seller">
+  	select 
+  		sum(room_price) as sales ,seller_no
+  	from 
+  		booking 
+  	join 
+  		room  using (room_no)
+  	where 
+  		payment_date between add_months(sysdate,-1) and sysdate and status=2 group by seller_no
+  </select>
+  <insert id="insertSellerStm">
+  	insert into stm_tbl values(stm_seq.nextval,#{sellerNo},#{sales},sysdate,0)
+  </insert>
+  <select id="getSellerStmCount" resultType="int">
+  	select count(*) from stm_tbl where stm_status=#{status}
+  </select>
+  <select id="getSellerStmList" resultType="stmInfo">
+  	select * from (select rownum as rnum,s.* from (select stm_num,to_char(stm_price,'FM999,999,999') as stm_price,to_char(stm_date,'yyyy-mm-dd') as stm_date,business_name,stm_status from stm_tbl join seller using (seller_no) where stm_status = #{status} order by stm_date desc)s) where rnum between #{start} and #{end}
+  </select>
+  <update id="updateStm">
+		update stm_tbl set stm_status=1 where stm_num in <foreach collection="array" item="stmNum" open="(" close=")" separator=",">#{stmNum}</foreach>
+	</update>
+  
 </mapper>

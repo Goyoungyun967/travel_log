@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import kr.co.iei.inquiry.model.dto.InquiryDTO;
 import kr.co.iei.inquiry.model.dto.InquiryFileDTO;
 import kr.co.iei.inquiry.model.dto.InquiryReplyDTO;
+import kr.co.iei.seller.model.dto.SellerDTO;
 
 
 
@@ -48,6 +49,16 @@ public interface InquiryDao {
 
 	List getSellerSalesAge(int sellerNo);
 
-	
+	List getSellerSalesList();
+
+	List<SellerDTO> selectSellerSales();
+
+	int insertSellerStm(SellerDTO sellerDTO);
+
+	List getSellerStmList(Map<String, Object> m);
+
+	int getSellerStmCount(int status);
+
+	int updateStm(int[] stmNum);
 
 }
