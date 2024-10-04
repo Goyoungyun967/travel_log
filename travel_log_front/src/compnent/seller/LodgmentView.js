@@ -6,23 +6,41 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 import Swal from "sweetalert2";
 import KakaoMap from "./sellerUtil/KakaoMap";
 
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import Comment from "./sellerUtil/Comment";
+
 const LodgmentView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
-  const [lodgmentList, setLodgmentList] = useState({});
-  const [roomList, setRoomList] = useState([]);
+  const [lodgmentList, setLodgmentList] = useState({}); // 숙소 정보
+  const [roomList, setRoomList] = useState([]); // 객실 리스트
+  const [reviewList, setReviewList] = useState([]); // 리뷰 리스트
+
+  // 페이징 처리
+  const [reqPage, setReqPage] = useState(1);
+  const [pi, setPi] = useState({});
+
+  console.log(reviewList);
   useEffect(() => {
     axios
-      .get(`${backServer}/seller/lodgmentView/${lodgmentNo}`)
+      .get(`${backServer}/seller/lodgmentView/${lodgmentNo}/${reqPage}`)
       .then((res) => {
         console.log("lodgment res", res);
         // 호텔 삭제하고 뒤로가기를 누르면 호텔 정보가 null값이 되어서 오류가 뜸
         // 호텔 정보가 null값이면 호텔 리스트로 이동하게 함
         if (res.data.lodgment !== null) {
+          console.log("lod", res);
           setLodgmentList(res.data.lodgment);
           setRoomList(res.data.list);
+          setReviewList(res.data.review);
+          setPi(res.data.pi);
         } else {
           navigate("/seller/list");
         }
@@ -30,14 +48,14 @@ const LodgmentView = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [reqPage]);
 
   // 삭제지만.. 1(보여지는거) => 0으로 바뀌게 해야하므로 패치 사용
   const deleteLodgment = () => {
     Swal.fire({
       icon: "warning",
       title: "호텔 삭제",
-      text: "삭제하시겠습니까? 객실까지 같이 지워져영~",
+      text: "삭제하시겠습니까? 입력한 객실까지 같이 삭제됩니다.",
       showCancelButton: true,
       confirmButtonText: "삭제하기",
       cancelButtonText: "취소",
@@ -59,6 +77,13 @@ const LodgmentView = () => {
       }
     });
   };
+
+  const [value, setValue] = React.useState("1");
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
     <div className="lv-box-wrap box-radius">
       <div className="lv-item-fr-wrap">
@@ -121,17 +146,38 @@ const LodgmentView = () => {
         </div>
       </div>
       <div className="item-tr-wrap">
-        <div className="item-map">
-          지도 들어갈 자리
-          <KakaoMap lodgmentAddr={lodgmentList.lodgmentAddr} />
-        </div>
-        <div className="item-notice">
-          <h1>공지사항</h1>
-          <div
-            className="ql-editor"
-            dangerouslySetInnerHTML={{ __html: lodgmentList.lodgmentNotice }}
-          />
-        </div>
+        <TabContext value={value}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
+              <Tab label="지도" value="1" />
+              <Tab label="숙소 공지사항" value="2" />
+              <Tab label="리뷰" value="3" />
+            </TabList>
+          </Box>
+          <TabPanel value="1">
+            <KakaoMap lodgmentAddr={lodgmentList.lodgmentAddr} />
+          </TabPanel>
+          <TabPanel value="2">
+            <div className="item-notice">
+              <h1>공지사항</h1>
+              <div
+                className="ql-editor"
+                dangerouslySetInnerHTML={{
+                  __html: lodgmentList.lodgmentNotice,
+                }}
+              />
+            </div>
+          </TabPanel>
+          <TabPanel value="3">
+            <Comment
+              reviewList={reviewList}
+              setReviewList={setReviewList}
+              reqPage={reqPage}
+              setReqPage={setReqPage}
+              pi={pi}
+            />
+          </TabPanel>
+        </TabContext>
       </div>
     </div>
   );

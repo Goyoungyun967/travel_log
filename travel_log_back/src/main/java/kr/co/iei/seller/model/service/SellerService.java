@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.iei.inquiry.model.dto.InquiryDTO;
+import kr.co.iei.lodgment.model.dto.LodgmentReviewDTO;
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dao.SellerDao;
 import kr.co.iei.seller.model.dao.SellerLodgmentDao;
@@ -31,18 +32,24 @@ import kr.co.iei.seller.model.dto.ServiceTagDTO;
 import kr.co.iei.seller.model.dto.StmInfoDTO;
 import kr.co.iei.util.FileUtils;
 import kr.co.iei.util.JwtUtils;
+import kr.co.iei.util.PageInfo;
+import kr.co.iei.util.PageUtil;
 import kr.co.iei.util.SellerJwtUtils;
 
 @Service
 public class SellerService {
 	@Autowired
 	private SellerDao sellerDao;
+	
 	@Autowired
 	private SellerLodgmentDao sellerLodgmentDao;
 
 	@Autowired
 	private BCryptPasswordEncoder encoder;
 
+	@Autowired
+	private PageUtil pageUtil;
+	
 	@Autowired
 	private SellerJwtUtils sellerJwtUtils;
 
@@ -110,15 +117,25 @@ public class SellerService {
 	}
 
 	// 호텔 상세 (호텔 + 객실 상세)
-	public Map selectHotelInfo(int lodgmentNo) {
+	public Map selectHotelInfo(int lodgmentNo, int reqPage) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		LodgmentStorageDTO ls = sellerLodgmentDao.selectOneLodgment(lodgmentNo); // 호텔 정보 출력
-		List<RoomDTO> list = sellerLodgmentDao.selectRoomInfo(lodgmentNo); // 객실 정보 출력
-		System.out.println(list);
+		LodgmentStorageDTO ls = sellerLodgmentDao.selectOneLodgment(lodgmentNo); // 호텔 정보 조회
+		List<RoomDTO> list = sellerLodgmentDao.selectRoomInfo(lodgmentNo); // 객실 정보 조회
+		
+		int numPerPage=5; 	// 한 페이지당 게시물 수
+		int pageNaviSize=5;	// 페이지네비 길이
+		int totalCount = sellerLodgmentDao.totalCount();	// 전체 리뷰 수
+		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
+		
+//		List<LodgmentReviewDTO> review = sellerLodgmentDao.selectLodgmentReview(lodgmentNo,pi); // 호텔 리뷰 조회
+		List<LodgmentReviewDTO> review = sellerLodgmentDao.selectLodgmentReview(lodgmentNo,pi.getStart(), pi.getEnd()); // 호텔 리뷰 조회
+		System.out.println(review);
 
 		map.put("lodgment", ls);
 		map.put("list", list);
+		map.put("review",review);
+		map.put("pi", pi);
 
 		return map;
 	}

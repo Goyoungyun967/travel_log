@@ -104,9 +104,9 @@ public class SellerController {
 	
 	// 호텔 상세
 	@Operation(summary = "호텔 상세", description = "호텔 정보 출력(호텔 + 객실(객실 사진))")
-	@GetMapping(value="/lodgmentView/{lodgmentNo}")
-	public ResponseEntity<Map> list(@PathVariable int lodgmentNo){
-		Map map = sellerService.selectHotelInfo(lodgmentNo);
+	@GetMapping(value="/lodgmentView/{lodgmentNo}/{reqPage}")
+	public ResponseEntity<Map> list(@PathVariable int lodgmentNo, @PathVariable int reqPage){
+		Map map = sellerService.selectHotelInfo(lodgmentNo, reqPage);
 		return ResponseEntity.ok(map);
 	}
 	

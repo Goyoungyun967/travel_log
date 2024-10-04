@@ -56,4 +56,30 @@ const InqSlideImg = (props) => {
   );
 };
 
-export { SlideImg, InqSlideImg };
+// 리뷰 이미지
+const ReviewSlideImg = (props) => {
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+  const file = props.fileList;
+  console.log("file-----", file);
+  return (
+    <>
+      {file && file.length > 0 ? ( // 파일이 존재할 때만
+        <Carousel data-bs-theme="dark">
+          {file.map((img, i) => (
+            <Carousel.Item key={i}>
+              {console.log("img------------", img)}
+              <img
+                className={`d-block seller-review-image`}
+                src={`${backServer}/review/${img.reviewImgPath}`}
+              />
+            </Carousel.Item>
+          ))}
+        </Carousel>
+      ) : (
+        ""
+      )}
+    </>
+  );
+};
+
+export { SlideImg, InqSlideImg, ReviewSlideImg };

@@ -88,6 +88,49 @@
 			<result property="roomImg" column="room_img" />
 		</collection>
 	</resultMap>
+	
+	<!-- 호텔 리뷰 정보 출력 -->
+	<select id="selectLodgmentReview" resultMap="lodgmentReviewMap">
+		select * from
+			(select rownum as rnum, b.*  from
+			    (select review_no,
+					        member_no,
+					        book_no,
+					        rating,
+					        lodgment_no,
+					        review_content,
+					        seller_comment,
+					        review_file_no,
+					        review_img_path,
+			                member_id
+					from LODGMENT_REVIEW lr
+					left join LODGMENT_REVIEW_FILE lrf
+					using(REVIEW_NO)
+			        left join member
+			        using(member_no)
+					where LODGMENT_NO = #{lodgmentNo}
+			order by REVIEW_NO desc)b)
+		where rnum between #{start} and #{end}
+	</select>
+	<resultMap type="lodgmentReview" id="lodgmentReviewMap">
+		<id column="review_no" property="reviewNo"/>
+		<result column="member_no" property="memberNo"/>
+		<result column="book_no" property="bookNo"/>
+		<result column="lodgment_no" property="lodgmentNo"/>
+		<result column="review_content" property="reviewContent"/>
+		<result column="rating" property="rating"/>
+		<result column="seller_comment" property="sellerComment"/>
+		<result column="member_id" property="memberId"/>
+		<collection property="fileList" ofType="lodgmentReviewFile" javaType="java.util.List">
+			<id property="reviewFileNo" column="review_file_no"/>
+			<result property="reviewImgPath" column="review_img_path"/>
+		</collection>
+	</resultMap>
+
+	<!-- 모든 리뷰 수 (페이징 처리 위함)-->
+	<select id="totalCount" resultType="int">
+		select COUNT(*) from LODGMENT_REVIEW
+	</select>
 
 	<!-- 객실 상세 (객실 정보 + 파일 + 해시태그) -->
 	<select id="selectRoomViewInfo" resultMap="RoomViewMap">

@@ -115,3 +115,46 @@
   background-color: #333;
   color: #ccc;
 }
+
+.seller-comment-list-r > {
+}
+.seller-comment-list-r > .pagination {
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.seller-comment-list-r > .pagination > li {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  overflow: hidden;
+}
+.seller-comment-list-r > .pagination.circle-style > li {
+  border-radius: 50%;
+}
+.seller-comment-list-r > .pagination > li > span.page-item {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-size: 18px;
+}
+.seller-comment-list-r > .pagination > li > span.page-item.material-icons {
+  display: block;
+  width: 100%;
+  height: 100%;
+  line-height: 40px;
+}
+.seller-comment-list-r > .pagination .page-item.active-page {
+  border-radius: 20px;
+  background-color: #007bff;
+  color: #fff;
+}
+
+.seller-review-image {
+  max-width: 100%;
+  height: auto;
+}
