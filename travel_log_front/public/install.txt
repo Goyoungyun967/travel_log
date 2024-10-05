@@ -50,3 +50,6 @@ npm install @mui/lab
 npm install react-slick --save
 npm install slick-carousel --save
 
+오시우 2024-10-05 16:28
+npm install exceljs
+npm install --save html2canvas

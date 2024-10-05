@@ -1,5 +1,5 @@
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import PageNavi from "../utils/PageNavi";
 import { useRecoilState } from "recoil";
 import { loginNoState } from "../utils/RecoilData";
@@ -12,16 +12,34 @@ import Rating from "@mui/material/Rating";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import Swal from "sweetalert2";
+import {
+  Modal as MuiModal,
+  Box,
+  Typography,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Button,
+  FormControl,
+  FormLabel,
+} from "@mui/material";
 
 const LodgmentReviewList = (props) => {
   const navigate = useNavigate();
   const lodgmentNo = props.lodgmentNo;
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  //댓글 페이지네비
   const [reqPage, setReqPage] = useState(1);
   const [pi, setPi] = useState({});
   const [loginNo] = useRecoilState(loginNoState);
+
   const [availableReview, setAvailableReview] = useState(false);
   const [viewReview, setViewReview] = useState([]);
+  const [success, setSuccess] = useState(false);
+
+  //신고 모달창
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedReason, setSelectedReason] = useState("");
 
   useEffect(() => {
     axios
@@ -36,8 +54,95 @@ const LodgmentReviewList = (props) => {
       .catch((err) => {
         console.log(err);
       });
-  }, [reqPage]);
+  }, [loginNo, reqPage, success]);
 
+  //댓글 좋아요, 좋아요 취소
+  const handleLike = (reviewNo, likeCount) => {
+    if (loginNo === -1) {
+      Swal.fire({
+        icon: "info",
+        text: "로그인을 해주세요.",
+      });
+      return;
+    }
+
+    const url =
+      likeCount === 0
+        ? `${backServer}/lodgment/reviewLike`
+        : `${backServer}/lodgment/reviewLikeCancle`;
+    axios
+      .post(url, { reviewNo, loginNo })
+      .then((res) => {
+        if (res.data) {
+          setSuccess(!success);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedReason("");
+  };
+
+  //리뷰 신고
+  const handleReportSubmit = (reviewNo, reportCount) => {
+    if (loginNo == -1) {
+      setOpenModal(false);
+      Swal.fire({
+        icon: "warning",
+        text: "로그인을 해주세요.",
+      });
+      return;
+    }
+
+    if (reportCount === 1) {
+      setOpenModal(false);
+      Swal.fire({
+        icon: "warning",
+        text: "신고 완료 된 댓글입니다.",
+      });
+      return;
+    }
+    if (!selectedReason) {
+      setOpenModal(false);
+      Swal.fire({
+        icon: "warning",
+        text: "신고 사유를 선택해주세요.",
+      });
+      return;
+    }
+
+    axios
+      .post(`${backServer}/lodgment/report`, {
+        reviewNo,
+        loginNo,
+        selectedReason,
+      })
+      .then((res) => {
+        console.log("dd" + res);
+        setSuccess(!success);
+        setOpenModal(false);
+        setSelectedReason("");
+      })
+      .catch((err) => {
+        console.log(err);
+        setOpenModal(false);
+      });
+  };
+
+  const reportReasons = [
+    { id: 1, label: "욕설" },
+    { id: 2, label: "타인에게 불편함" },
+    { id: 3, label: "광고성" },
+    { id: 4, label: "기타" },
+  ];
   const settings = {
     dots: true,
     lazyLoad: true,
@@ -48,91 +153,22 @@ const LodgmentReviewList = (props) => {
     initialSlide: 0,
     adaptiveHeight: true,
   };
-
-  const handleLike = (reviewNo, likeCount) => {
-    if (loginNo === -1) {
-      Swal.fire({
-        icon: "info",
-        text: "로그인을 해주세요.",
-      });
-      return;
-    }
-    if (likeCount === 0) {
-      axios
-        .post(`${backServer}/lodgment/reviewLike`, { reviewNo, loginNo })
-        .then((res) => {
-          // 성공 시 UI 업데이트 로직 추가 (예: 상태 재조회)
-          console.log(res.data);
-          // 필요시 상태 업데이트
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      axios
-        .post(`${backServer}/lodgment/reviewLikeCancle`, { reviewNo, loginNo })
-        .then((res) => {
-          // 성공 시 UI 업데이트 로직 추가 (예: 상태 재조회)
-          console.log(res.data);
-          // 필요시 상태 업데이트
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
-
-  const handleReport = (reviewNo, reportCount) => {
-    if (loginNo === -1) {
-      Swal.fire({
-        icon: "info",
-        text: "로그인을 해주세요.",
-      });
-      return;
-    }
-    if (reportCount === 0) {
-      axios
-        .post(`${backServer}/lodgment/report`, { reviewNo, loginNo })
-        .then((res) => {
-          // 성공 시 UI 업데이트 로직 추가 (예: 상태 재조회)
-          console.log(res.data);
-          // 필요시 상태 업데이트
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      axios
-        .post(`${backServer}/lodgment/reportCancle`, { reviewNo, loginNo })
-        .then((res) => {
-          // 성공 시 UI 업데이트 로직 추가 (예: 상태 재조회)
-          console.log(res.data);
-          // 필요시 상태 업데이트
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
-
   return (
     <div>
-      <div className="lodgment-review-rwap">
+      <div className="lodgment-review-wrap">
         {availableReview && (
           <>
             <div className="review-no-comment">
-              예약 가능한 리뷰가 있습니다 리뷰를 남겨주세요
+              예약 가능한 리뷰가 있습니다. 리뷰를 남겨주세요.
             </div>
             <div className="lodgment-review-btn-wrap">
               <button
                 className="review-btn"
                 onClick={() => {
-                  navigate(`/lodgment/reviewWrite`, {
-                    state: { lodgmentNo },
-                  });
+                  navigate(`/lodgment/reviewWrite`, { state: { lodgmentNo } });
                 }}
               >
-                리뷰작성
+                리뷰 작성
               </button>
             </div>
           </>
@@ -154,13 +190,11 @@ const LodgmentReviewList = (props) => {
                         <div key={`file-${index}`} className="slider-item">
                           <img
                             src={`${backServer}/review/${file.reviewImgPath}`}
-                            alt={`Review Image ${index}`}
                           />
                         </div>
                       ))}
                     </Slider>
                   )}
-
                   <div>
                     <h4>{review.memberId}</h4>
                   </div>
@@ -170,50 +204,82 @@ const LodgmentReviewList = (props) => {
                   <div>{review.reviewContent}</div>
                   <div className="review-text-area">
                     <span>
-                      <>
-                        {review.likeCount === 0 ? (
-                          <>
-                            <ThumbUpOffAltIcon
-                              onClick={() =>
-                                handleLike(review.reviewNo, review.likeCount)
-                              }
-                            />
-                            {review.totalLikeCount}
-                          </>
-                        ) : review.likeCount === 1 ? (
-                          <>
-                            <ThumbUpAltIcon
-                              onClick={() =>
-                                handleLike(review.reviewNo, review.likeCount)
-                              }
-                            />
-                            {review.totalLikeCount}
-                          </>
-                        ) : null}
-                      </>
+                      {review.likeCount === 0 ? (
+                        <ThumbUpOffAltIcon
+                          className="lodgment-review-thumb"
+                          onClick={() =>
+                            handleLike(review.reviewNo, review.likeCount)
+                          }
+                        />
+                      ) : (
+                        <ThumbUpAltIcon
+                          className="lodgment-review-thumb"
+                          onClick={() =>
+                            handleLike(review.reviewNo, review.likeCount)
+                          }
+                        />
+                      )}
+                      {review.totalLikeCount}
                     </span>
                     <span> | </span>
-                    {review.reportCount === 0 ? (
-                      <>
-                        <span
+                    <span
+                      onClick={handleOpenModal}
+                      className="lodgment-review-report"
+                    >
+                      신고하기
+                    </span>
+                    <MuiModal
+                      open={openModal === true}
+                      onClose={handleCloseModal}
+                    >
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          width: 400,
+                          bgcolor: "background.paper",
+                          border: "2px solid #000",
+                          boxShadow: 24,
+                          p: 4,
+                          borderRadius: 1,
+                        }}
+                      >
+                        <Typography variant="h6" component="h2" gutterBottom>
+                          신고 사유 선택
+                        </Typography>
+                        <FormControl component="fieldset" fullWidth>
+                          <FormLabel component="legend">신고 사유</FormLabel>
+                          <RadioGroup
+                            value={selectedReason}
+                            onChange={(e) => setSelectedReason(e.target.value)}
+                          >
+                            {reportReasons.map((reason) => (
+                              <FormControlLabel
+                                key={reason.id}
+                                value={reason.id}
+                                control={<Radio />}
+                                label={reason.label}
+                              />
+                            ))}
+                          </RadioGroup>
+                        </FormControl>
+                        <Button
+                          variant="contained"
                           onClick={() =>
-                            handleReport(review.reviewNo, review.reportCount)
+                            handleReportSubmit(
+                              review.reviewNo,
+                              review.reportCount
+                            )
                           }
+                          sx={{ mt: 3 }}
+                          fullWidth
                         >
-                          신고하기
-                        </span>
-                      </>
-                    ) : review.reportCount === 1 ? (
-                      <>
-                        <span
-                          onClick={() =>
-                            handleReport(review.reviewNo, review.reportCount)
-                          }
-                        >
-                          신고하기
-                        </span>
-                      </>
-                    ) : null}
+                          신고 제출
+                        </Button>
+                      </Box>
+                    </MuiModal>
                   </div>
                 </div>
               ))}

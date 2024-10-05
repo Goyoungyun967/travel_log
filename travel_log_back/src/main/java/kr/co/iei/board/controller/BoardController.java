@@ -247,12 +247,13 @@ public class BoardController {
     
     
   //동행게시판리스트
-  	@GetMapping("/accompanyList/{type}/{reqPage}")
-  	public ResponseEntity<Map> accompanyList(
-  		    @PathVariable int type, @PathVariable int reqPage) {
-  		    Map map = boardService.selectAccompanyList(type,reqPage);
-  		    return ResponseEntity.ok(map);
-  		}
+      @GetMapping("/accompanyList/{type}/{reqPage}")
+      public ResponseEntity<Map> accompanyList(
+              @PathVariable int type, @PathVariable int reqPage) {
+          Map map = boardService.selectAccompanyList(type, reqPage);
+          return ResponseEntity.ok(map);
+      }
+
   //동행 게시판 등록
   	@PostMapping("/insertAccompany")
   		public ResponseEntity<Boolean> insertAccompany(@ModelAttribute BoardAccompanyDTO boardAccompany , @ModelAttribute MultipartFile thumnail, @ModelAttribute MultipartFile[] boardFile){
@@ -301,6 +302,24 @@ public class BoardController {
 	    return ResponseEntity.ok(result == 1 + boardFileList.size());
   		
   	}
+  	//동행 게시판 조회수 처리
+  	@PatchMapping("/updateReadCount/{boardNo}")
+  	public ResponseEntity<Boolean> updateReadCount(@PathVariable int boardNo){
+  		 System.out.println(boardNo);
+  		int result = boardService.updateReadCount(boardNo);
+  		return ResponseEntity.ok(result>0);
+  	}
+  	//동행 게시판 상세보기 
+  	@GetMapping(value = "/accompanyNo/{boardNo}")
+  	public ResponseEntity<BoardAccompanyDTO> selectOneBoardAccompany(@PathVariable int boardNo){
+  		BoardAccompanyDTO accompany = boardService.selectOneBoardAccompany(boardNo);
+  		return ResponseEntity.ok(accompany);
+  	}
+  	//삭제는 똑같이 가져감
+  	
+  	
+  	
+
   	
 
     

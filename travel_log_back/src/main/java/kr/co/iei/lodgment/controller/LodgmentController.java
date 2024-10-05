@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewDTO;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewFileDTO;
+import kr.co.iei.lodgment.model.dto.Request;
 import kr.co.iei.lodgment.model.dto.RoomSearchDTO;
 import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
 import kr.co.iei.lodgment.model.service.LodgmentService;
@@ -133,9 +134,7 @@ public class LodgmentController {
 	// FE 에서 formDate를 보낼때 키값이 객체 변수명과 동일하면 객체로받을수 있다. 
 	@PostMapping(value ="/review")
 	@Operation(summary = "리뷰 등록하기",description = "회원번호, 숙소번호, 글내용, 사진(비어있을수도 있음)")
-	public ResponseEntity<Boolean> insertReview(@ModelAttribute LodgmentReviewDTO lodgmentReview,@ModelAttribute MultipartFile[] reviewImg ){
-		System.out.println(lodgmentReview);
-		
+	public ResponseEntity<Boolean> insertReview(@ModelAttribute LodgmentReviewDTO lodgmentReview,@ModelAttribute MultipartFile[] reviewImg ){		
 		//사진데이터 저장 리스트
 		List<LodgmentReviewFileDTO> fileSave = new ArrayList<LodgmentReviewFileDTO>();
 		//동일한 파일 없도록 라벨링 후 지정된 경로에 업로드 됨 
@@ -156,9 +155,36 @@ public class LodgmentController {
 	@GetMapping(value = "/reviewList/{lodgmentNo}/{reqPage}/{loginNo}")
 	@Operation(summary = "리뷰 리스트",description = "숙소 번호, 페이지넘버, 로그인 여부에 따라 후기 여부")
 	public ResponseEntity<Map> reviewList(@PathVariable int lodgmentNo, @PathVariable int reqPage, @PathVariable int loginNo ){
-	System.out.println(lodgmentNo);
 		Map map = lodgmentService.reveiwList(lodgmentNo, reqPage,loginNo);
 		return ResponseEntity.ok(map);
+	}
+	
+	//댓글 좋아요  
+	@PostMapping(value = "/reviewLike")
+	@Operation(summary = "댓글 좋아요",description ="댓글번호, 회원번호로 댓글 좋아요 기능") 
+	public ResponseEntity<Boolean> reviewLike(
+			@RequestBody Request request){
+		int result = lodgmentService.reviewLike(request);
+		return ResponseEntity.ok(1 == result);
+	}
+	
+	//댓글 좋아요 취소
+	@PostMapping(value = "/reviewLikeCancle")
+	@Operation(summary = "댓글 좋아요 취소",description ="댓글번호, 회원번호로 댓글 좋아요 취소 기능") 
+	public ResponseEntity<Boolean> reviewLikeCancle(
+			@RequestBody Request request){	
+		System.out.println(00000);
+
+		int result = lodgmentService.reviewLikeCancle(request);
+		return ResponseEntity.ok(1 == result);
+	}
+	
+	//댓글 좋아요  
+	@PostMapping(value = "/report")
+	@Operation(summary = "댓글 신고",description ="댓글번호, 회원번호, 신고사유로 댓글 신고 기능") 
+	public ResponseEntity<Boolean> reviewReport (@RequestBody Request request){
+		int result = lodgmentService.reviewReport(request);
+		return ResponseEntity.ok(1 == result);
 	}
 
 }

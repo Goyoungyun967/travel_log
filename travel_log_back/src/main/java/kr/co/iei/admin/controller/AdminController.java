@@ -136,9 +136,9 @@ public class AdminController {
 		List list = adminService.getSellerSalesList();
 		return ResponseEntity.ok(list);
 	}
-	@GetMapping(value="/seller/stmList/{reqPage}/{status}")
-	public ResponseEntity<Map> getSellerStmList(@PathVariable int reqPage,@PathVariable int status){
-		Map map = adminService.getSellerStmList(reqPage,status);
+	@GetMapping(value="/seller/stmList/{reqPage}/{state}")
+	public ResponseEntity<Map> getSellerStmList(@PathVariable int reqPage,@PathVariable int state){
+		Map map = adminService.getSellerStmList(reqPage,state);
 		return ResponseEntity.ok(map);
 	}
 	@PatchMapping(value="/seller/stm")
@@ -146,9 +146,14 @@ public class AdminController {
 		int result = adminService.updateStm(stmNum);
 		return ResponseEntity.ok(result == stmNum.length);
 	}
-	@GetMapping(value="/lodgment/list")
-	public ResponseEntity<List> getAdminLodgmentList(){
-		List list = adminService.getAdminLodgmentList();
-		return ResponseEntity.ok(list);
+	@GetMapping(value="/lodgment/list/{reqPage}/{lodgmentDelete}")
+	public ResponseEntity<Map> getAdminLodgmentList(@PathVariable int reqPage,@PathVariable int lodgmentDelete){
+		Map map = adminService.getAdminLodgmentList(reqPage,lodgmentDelete);
+		return ResponseEntity.ok(map);
+	}
+	@PatchMapping(value="/lodgment")
+	public ResponseEntity<Boolean> updateLodgmentDelete(@RequestBody int[] lodgmentNo){
+		int result = adminService.updateLodgmentDelete(lodgmentNo);
+		return ResponseEntity.ok(result == lodgmentNo.length);
 	}
 }
