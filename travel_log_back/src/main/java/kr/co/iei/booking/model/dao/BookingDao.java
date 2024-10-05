@@ -9,4 +9,6 @@ public interface BookingDao {
 
 	int insertBooking(BookingDTO bookingInfo);
 
+	BookingDTO getBookingInfo(int bookNo);
+
 }

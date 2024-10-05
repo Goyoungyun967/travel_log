@@ -18,10 +18,15 @@ public class BookingService {
 	@Transactional
 	public int insertBooking(BookingDTO bookingInfo) {
 		String memberId = memberDao.getMemberId(bookingInfo.getMemberNo());
-		System.out.println(memberId);
+		//System.out.println(memberId);
 		bookingInfo.setMemberId(memberId);
 		int result = bookingDao.insertBooking(bookingInfo);
-		return result;
+		return bookingInfo.getBookNo();
+	}
+
+	public BookingDTO getBookingInfo(int bookNo) {
+		BookingDTO bookingInfo = bookingDao.getBookingInfo(bookNo);
+		return bookingInfo;
 	}
 
 }

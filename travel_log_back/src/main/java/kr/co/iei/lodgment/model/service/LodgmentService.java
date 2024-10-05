@@ -169,6 +169,7 @@ public class LodgmentService {
 		return result;
 	}
 	
+	//다른데서도 쓸일이 있을까? 싶어서
 	public Boolean availableReview(int lodgmentNo, int loginNo) {
 		Boolean availableReview = false;
 		Request lodgmentInfo = new Request();
