@@ -1,6 +1,5 @@
 package kr.co.iei.lodgment.model.service;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,18 +8,15 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.iei.lodgment.model.dao.LodgmentDao;
 import kr.co.iei.lodgment.model.dto.LodgmentDTO;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewDTO;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewFileDTO;
-import kr.co.iei.lodgment.model.dto.Page;
+import kr.co.iei.lodgment.model.dto.Request;
 import kr.co.iei.lodgment.model.dto.ReviewStatus;
 import kr.co.iei.lodgment.model.dto.RoomSearchDTO;
 import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
-import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
-import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.util.PageInfo;
 import kr.co.iei.util.PageUtil;
 
@@ -132,40 +128,63 @@ public class LodgmentService {
 	
 	//리뷰리스트
 	public Map reveiwList(int lodgmentNo, int reqPage, int loginNo) {
-		System.out.println(loginNo);  
  		int numPerPage = 5;	
 		int pageNaviSize = 5;	//페이지네비 길이
 		int totalCount = lodgmentDao.totalCount(lodgmentNo);//전체 게시물 수
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
-		//System.out.println(pi);
-		Page page = new Page(pi.getStart(), pi.getEnd(),loginNo,lodgmentNo);
-		List list = lodgmentDao.selectReviewList(page);
-		System.out.println(page);
-		Map<String, Object> map = new HashMap<String, Object>();
-		//System.out.println(list);
+		Request request = new Request();
+		request.setStart(pi.getStart());
+		request.setEnd(pi.getEnd());
+		request.setLoginNo(loginNo);
+		request.setLodgmentNo(lodgmentNo);
+		List list = lodgmentDao.selectReviewList(request);
 	    //리뷰 이미지 전부 불러오기
 		//List Imglist = lodgmentDao.selectGetAllReviewImg(lodgmentNo);
-		//리뷰 남기기 가능 여부
+		
+		//작성 가능한 리뷰 있는지 확인 여부
 		//작성 가능 리뷰가 있으면 true 로 표시
 		Boolean availableReview = false;
 		if(loginNo != -1 ) {
-			Page lodgmentInfo = new Page();
-			lodgmentInfo.setLodgmentNo(lodgmentNo);
-			lodgmentInfo.setLoginNo(loginNo);
-			ReviewStatus reviewStatus = lodgmentDao.reviewStatus(lodgmentInfo);
-			//System.out.println("리뷰 사용가능 리뷰"+reviewStatus.getAvailableReviewsCount());  
-			//System.out.println("작성된 리뷰"+reviewStatus.getUsedReviewsCount());  
-			if(reviewStatus.getAvailableReviewsCount() > reviewStatus.getUsedReviewsCount()) {
-				availableReview = true;
-			}
+			availableReview = availableReview(lodgmentNo,loginNo);
+			
 		}
-
-		//int reviewLike = -1;
-		//int reviewReport = -1;
-		//로그인이 되어있을 때 여부
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list);
 		map.put("pi", pi);
 	    map.put("availableReview",availableReview);
 		return map;
+	}
+	
+	//리뷰 좋아요 
+	@Transactional
+	public int reviewLike(Request request) {
+		int result = lodgmentDao.reviewLike(request);
+		return result;
+	}
+	
+	//리뷰 좋아요 취소
+	@Transactional
+	public int reviewLikeCancle(Request request) {	
+		int result = lodgmentDao.reviewLikeCancle(request);
+		return result;
+	}
+	
+	public Boolean availableReview(int lodgmentNo, int loginNo) {
+		Boolean availableReview = false;
+		Request lodgmentInfo = new Request();
+		lodgmentInfo.setLodgmentNo(lodgmentNo);
+		lodgmentInfo.setLoginNo(loginNo);
+		ReviewStatus reviewStatus = lodgmentDao.reviewStatus(lodgmentInfo);
+		if(reviewStatus.getAvailableReviewsCount() > reviewStatus.getUsedReviewsCount()) {
+			availableReview = true;
+		}
+		return availableReview;
+	}
+	
+	//리뷰 신고
+	@Transactional
+	public int reviewReport(Request request) {
+		int result = lodgmentDao.reviewReport(request);
+		return result;
 	}
 }

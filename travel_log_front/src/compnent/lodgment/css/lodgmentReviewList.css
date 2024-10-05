@@ -87,3 +87,9 @@
   color: white;
   border: 1px solid navy; /* border 색상을 호버 시에도 변경하여 크기 영향 방지 */
 }
+.lodgment-review-report {
+  cursor: pointer;
+}
+.lodgment-review-thumb {
+  cursor: pointer;
+}
