@@ -24,7 +24,7 @@ public class StmInfoDTO {
 	@Schema(description = "정산 날짜",type="String")
 	private String stmDate;
 	@Schema(description = "정산 상태",type="int")
-	private int stmStatus;
+	private int stmState;
 	@Schema(description = "사업자이름", type="String")
 	private String businessName;
 	

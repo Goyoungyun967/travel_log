@@ -20,6 +20,7 @@ const AdminSellerList = () => {
   const [reqPage, setReqPage] = useState(1);
   const navigate = useNavigate();
   const [state, setState] = useState(true);
+  const [sellerNoList, setSellerNoList] = useState([]);
   useEffect(() => {
     axios
       .get(`${backServer}/admin/seller/list/${reqPage}/${sellerApp}`)
@@ -32,7 +33,6 @@ const AdminSellerList = () => {
         console.log(err);
       });
   }, [reqPage, sellerApp, state]);
-  const [sellerNoList, setSellerNoList] = useState([]);
   const updateSellerApp = () => {
     axios
       .patch(`${backServer}/admin/seller`, sellerNoList)

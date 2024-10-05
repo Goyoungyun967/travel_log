@@ -99,6 +99,7 @@ public class BoardService {
 		}
 		return null;
 	}
+//	좋아요 
 	@Transactional
 	public int likeBoard(int boardNo, int memberNo) {
 		int likeCount = boardDao.selectLikeBoard(boardNo,memberNo);
@@ -113,6 +114,7 @@ public class BoardService {
 		}
 		return 0;
 	}
+//	좋아요 삭제
 	@Transactional
 	public int unlikeBoard(int boardNo, int memberNo) {
 		int unLikeCount = boardDao.selectUnlikeBoard(boardNo,memberNo);
@@ -158,6 +160,36 @@ public class BoardService {
 	    System.out.println("ss"+result);
 	    return result == 1; // 성공 여부 반환
 	}
+	//댓글 좋아요 
+	public int likeComment(int memberNo,int commentNo) {
+		int likeCount = boardDao.selectLikeComment(memberNo,commentNo);
+		if(likeCount==0) {
+			int result = boardDao.insertLikeComment(memberNo,commentNo);
+			if(result>0) {
+				return likeCount;
+			}else {
+				return 0;
+			}
+			
+		}
+		return 0;
+	}
+	//삭제
+	public int unlikeComment(int memberNo,int commentNo) {
+		int unLikeCount = boardDao.selectUnlikeComment(memberNo,commentNo);
+		
+		if(unLikeCount == 1) {
+			int result = boardDao.deleteUnlikeComment(memberNo,commentNo);
+			if(result>0) {
+				return unLikeCount;
+			
+			}else {
+				return 0;
+			}
+		}
+		return 0;
+	}
+
 	
 	//동행게시판 
 	public Map selectAccompanyList(int type, int reqPage) {
@@ -208,5 +240,11 @@ public class BoardService {
 	    	
 	    return result; // 초기 삽입 실패 시 0 반환
 	}
+
+
+	
+
+
+	
 }
 

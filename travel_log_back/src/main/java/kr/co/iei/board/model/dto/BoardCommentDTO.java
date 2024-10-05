@@ -1,5 +1,6 @@
 package kr.co.iei.board.model.dto;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.type.Alias;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Schema(description = "게시판 댓글 객체")
 public class BoardCommentDTO {
 	@Schema(description = "댓글 번호", type = "int")
-	private int commnetNo;
+	private int commentNo;
 	@Schema(description = "댓글 작성자", type = "String")
 	private String commentWriter;
 	@Schema(description = "댓글 내용", type = "String")
@@ -24,8 +25,10 @@ public class BoardCommentDTO {
 	@Schema(description = "댓글 대댓", type = "int")
 	private int commentRef; // 대댓 숫자
 	@Schema(description = "댓글 작성일", type = "String")
-	private String commnetDate;
+	private Date commentDate;
 	private List<BoardCommentDTO> recomments; // 대댓글
 	
 	 private int boardNo; 
+	 private int commentLikeCount;
+	 
 }

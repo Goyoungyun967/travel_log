@@ -16,6 +16,7 @@ import {
   Cell,
   Text,
 } from "recharts";
+import { downloadWorkbook } from "../utils/ExcelChart";
 
 const SellerChart = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -80,13 +81,14 @@ const SellerChart = () => {
         const newChartData = new Array();
         const date = new Date();
         const year = date.getFullYear() - 2000;
+        setMonth(date.getMonth() + 1);
         for (let i = 0; i < 12; i++) {
           const data = {
             name: i + 1 + "월",
-            올해총매출: 0,
-            작년총매출: 0,
             올해: 0,
             작년: 0,
+            작년총매출: 0,
+            올해총매출: 0,
           };
           newChartData.push(data);
         }
@@ -252,31 +254,43 @@ const SellerChart = () => {
         )}
       </div>
       {sellerListSales ? (
-        <BarChart
-          width={800}
-          height={450}
-          data={sellerListSales}
-          margin={{ top: 40, right: 20, left: 40, bottom: 30 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="name"
-            label={{ value: "(단위 : 천원)", position: "left", offset: 0 }}
-          />
-          <YAxis
-            label={{
-              value:
-                type === "year"
-                  ? year.substr(2, 2) + "년 매출"
-                  : year.substr(2, 2) + "년" + month + "월 매출",
-              offset: 17,
-              position: "top",
+        <div className="seller-chart">
+          <button
+            className="excel-down"
+            onClick={(e) => {
+              const target = e.currentTarget.nextSibling;
+              const chart = [target];
+              downloadWorkbook(chart, sellerListSales);
             }}
-          />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="매출" barSize={25} fill="#8884d8" />
-        </BarChart>
+          >
+            엑셀파일
+          </button>
+          <BarChart
+            width={800}
+            height={450}
+            data={sellerListSales}
+            margin={{ top: 40, right: 20, left: 40, bottom: 30 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="name"
+              label={{ value: "(단위 : 천원)", position: "left", offset: 0 }}
+            />
+            <YAxis
+              label={{
+                value:
+                  type === "year"
+                    ? year.substr(2, 2) + "년 매출"
+                    : year.substr(2, 2) + "년" + month + "월 매출",
+                offset: 17,
+                position: "top",
+              }}
+            />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="매출" barSize={25} fill="#8884d8" />
+          </BarChart>
+        </div>
       ) : (
         ""
       )}
@@ -305,80 +319,115 @@ const SellerChart = () => {
               })}
             </Select>
           </FormControl>
-
-          <ComposedChart
-            width={800}
-            height={450}
-            data={sellerSales}
-            margin={{ top: 40, right: 20, left: 40, bottom: 30 }}
-          >
-            <XAxis
-              dataKey="name"
-              label={{
-                value: "(단위 : 천원)",
-                position: "left",
-                offset: 0,
+          <div className="seller-chart">
+            <button
+              className="excel-down"
+              onClick={(e) => {
+                const target = e.currentTarget.nextSibling;
+                const chart = [target];
+                downloadWorkbook(chart, sellerSales);
               }}
-            />
-            <YAxis
-              label={{
-                value: `${cutStr(
-                  sellerList[
-                    sellerList.findIndex((obj) => obj.sellerNo === sellerNo)
-                  ].businessName
-                )} 매출`,
-                offset: 17,
-                position: "top",
-              }}
-            />
-            <Tooltip />
-            <Legend />
-            <CartesianGrid stroke="#f5f5f5" />
-            <Bar dataKey="작년" barSize={20} fill="#413ea0" />
-            <Bar dataKey="올해" barSize={20} fill="#ff8e99" />
-            <Line type="monotone" dataKey="작년총매출" stroke="#82ca9d" />
-            <Line type="monotone" dataKey="올해총매출" stroke="#ff7300" />
-          </ComposedChart>
+            >
+              엑셀파일
+            </button>
+            <ComposedChart
+              width={800}
+              height={450}
+              data={sellerSales}
+              margin={{ top: 40, right: 20, left: 40, bottom: 30 }}
+            >
+              <XAxis
+                dataKey="name"
+                label={{
+                  value: "(단위 : 천원)",
+                  position: "left",
+                  offset: 0,
+                }}
+              />
+              <YAxis
+                label={{
+                  value: `${cutStr(
+                    sellerList[
+                      sellerList.findIndex((obj) => obj.sellerNo === sellerNo)
+                    ].businessName
+                  )} 매출`,
+                  offset: 17,
+                  position: "top",
+                }}
+              />
+              <Tooltip />
+              <Legend />
+              <CartesianGrid stroke="#f5f5f5" />
+              <Bar dataKey="작년" barSize={20} fill="#413ea0" />
+              <Bar dataKey="올해" barSize={20} fill="#ff8e99" />
+              <Line type="monotone" dataKey="작년총매출" stroke="#82ca9d" />
+              <Line type="monotone" dataKey="올해총매출" stroke="#ff7300" />
+            </ComposedChart>
+          </div>
         </>
       ) : (
         ""
       )}
-      <div className="pie-chart">
-        <PieChart width={400} height={400}>
-          <Legend layout="vertical" verticalAlign="top" align="top" />
-          <Tooltip />
-          <Pie
-            data={sellerSalesAge}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={80}
-            dataKey="value"
+      <div className="pieChart">
+        <div className="seller-chart">
+          <button
+            className="excel-down"
+            onClick={(e) => {
+              const target = e.currentTarget.nextSibling;
+              const chart = [target];
+              downloadWorkbook(chart, sellerSalesAge);
+            }}
           >
-            {sellerSalesAge
-              ? sellerSalesAge.map((item, index) => (
-                  <Cell key={`age-cell-${index}`} fill={COLORS[index]} />
-                ))
-              : ""}
-          </Pie>
-        </PieChart>
-        <PieChart width={400} height={400}>
-          <Legend layout="vertical" verticalAlign="top" align="top" />
-          <Tooltip />
-          <Pie
-            data={sellerSalesGender}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={80}
-            dataKey="value"
+            엑셀파일
+          </button>
+          <PieChart width={400} height={400}>
+            <Legend layout="vertical" verticalAlign="top" align="top" />
+            <Tooltip />
+            <Pie
+              data={sellerSalesAge}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              label={renderCustomizedLabel}
+              outerRadius={80}
+              dataKey="value"
+            >
+              {sellerSalesAge
+                ? sellerSalesAge.map((item, index) => (
+                    <Cell key={`age-cell-${index}`} fill={COLORS[index]} />
+                  ))
+                : ""}
+            </Pie>
+          </PieChart>
+        </div>
+        <div className="seller-chart">
+          <button
+            className="excel-down"
+            onClick={(e) => {
+              const target = e.currentTarget.nextSibling;
+              const chart = [target];
+              downloadWorkbook(chart, sellerSalesGender);
+            }}
           >
-            <Cell fill="#ff8e99" />
-            <Cell fill="#413ea0" />
-          </Pie>
-        </PieChart>
+            엑셀파일
+          </button>
+          <PieChart width={400} height={400}>
+            <Legend layout="vertical" verticalAlign="top" align="top" />
+            <Tooltip />
+            <Pie
+              data={sellerSalesGender}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              label={renderCustomizedLabel}
+              outerRadius={80}
+              dataKey="value"
+            >
+              <Cell fill="#ff8e99" />
+              <Cell fill="#413ea0" />
+            </Pie>
+          </PieChart>
+        </div>
       </div>
     </>
   );

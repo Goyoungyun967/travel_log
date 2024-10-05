@@ -125,12 +125,28 @@
 		
 		 	<!-- 댓글 목록 조회 -->
     	<select id="selectCommentList" resultType="boardComment">
-        	SELECT * FROM board_comment WHERE board_no = #{boardNo}
-   		 </select>
+   			 SELECT 
+   			 bc.comment_No,
+   			 bc.comment_Writer,
+   			 bc.comment_Date,
+   			 bc.comment_Ref,
+   			 bc.comment_Content,
+   			 bc.board_No,
+   			 (SELECT COUNT(*) FROM comment_like cl WHERE cl.comment_no = bc.comment_no) AS commentLikeCount
+   			 FROM board_comment bc
+   			 WHERE board_no = #{boardNo}
+   			 ORDER BY comment_Date DESC
+		</select>
 		 
 		 <!-- 댓글 추가 -->
-   		<insert id="insertComment">
-   			 INSERT INTO board_comment VALUES (board_comment_seq.nextval, #{commentWriter}, sysdate, 0, #{commentContent}, #{boardNo})
+   		<insert id="insertComment" parameterType="boardComment" useGeneratedKeys="true" keyProperty="commentNo">
+		    <!-- 댓글 추가 -->
+		    <selectKey keyProperty="commentNo" resultType="int" order="BEFORE">
+		        SELECT board_comment_seq.nextval FROM dual
+		    </selectKey>
+		    
+		    INSERT INTO board_comment (comment_no, comment_writer, comment_date, comment_ref, comment_content, board_no)
+		    VALUES (#{commentNo}, #{commentWriter}, sysdate, #{commentRef}, #{commentContent}, #{boardNo})
 		</insert>
 		
 		
@@ -145,7 +161,20 @@
 		 <delete id="deleteComment">
 		        DELETE FROM board_comment WHERE comment_No = #{commentNo}
 		 </delete>
- 
+ 		<!-- 좋아요  -->
+ 		<insert id="insertLikeComment">
+			insert into comment_like values(#{memberNo},#{commentNo})
+		</insert>
+		<select id="selectLikeComment" resultType="int">
+			select count(*) from comment_like where member_no=#{memberNo} and comment_No = #{commentNo}   
+		</select>
+
+		<delete id="deleteUnlikeComment">
+			delete from comment_like where member_No=#{memberNo} and comment_No=#{commentNo}
+		</delete>
+		<select id="selectUnlikeComment" resultType="int">
+			select count(*) from comment_like where comment_No = #{commentNo}
+		</select>
 	
 		
 		

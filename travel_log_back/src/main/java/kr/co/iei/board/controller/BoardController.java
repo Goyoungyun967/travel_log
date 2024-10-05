@@ -215,7 +215,8 @@ public class BoardController {
     // 댓글 수정
     @PatchMapping("/editComment/{commentNo}")
     public ResponseEntity<Boolean> editComment(@PathVariable int commentNo, @RequestBody Map<String, String> request) {
-        String commentContent = request.get("content");
+        String commentContent = request.get("commentContent");
+        System.out.println(commentContent);
         boolean result = boardService.editComment(commentNo, commentContent);
         return ResponseEntity.ok(result);
     }
@@ -223,11 +224,26 @@ public class BoardController {
     // 댓글 삭제
     @DeleteMapping("/deleteComment/{commentNo}")
     public ResponseEntity<Boolean> deleteComment(@PathVariable int commentNo) {
-    	System.out.println(commentNo);
+//    	System.out.println(commentNo);
         boolean result = boardService.deleteComment(commentNo);
-        System.out.println(result);
+//        System.out.println(result);
         return ResponseEntity.ok(result);
     }
+    //댓글 좋아요 
+  //좋아요 
+  	@PostMapping(value = "/likeComment/{memberNo}/{commentNo}")
+  	public ResponseEntity<Integer> likeComment(@PathVariable int memberNo,@PathVariable int commentNo){
+  		int result = boardService.likeComment(memberNo,commentNo); 
+  		
+  		return ResponseEntity.ok(result);
+  	}
+  	// 좋아요 취소
+      @DeleteMapping("/unlikeComment/{memberNo}/{commentNo}")
+      public ResponseEntity<Integer> unlikeComment(@PathVariable int memberNo,@PathVariable int commentNo) {
+          int result = boardService.unlikeComment(memberNo, commentNo); // 좋아요 취소 처리
+          return ResponseEntity.ok(result); // 처리 결과 반환 (1: 성공, 0: 실패)
+      }
+    
     
     
   //동행게시판리스트
@@ -282,8 +298,6 @@ public class BoardController {
 //	    boardAccompany.setEndDay(outputFormatter.format(endDate));
 
 		int result = boardService.insertAcoompanyBoard(boardAccompany,boardFileList);
-		System.out.println("00000000"+result);
-		System.out.println("boardFileLists.size()"+boardFileList.size());
 	    return ResponseEntity.ok(result == 1 + boardFileList.size());
   		
   	}
