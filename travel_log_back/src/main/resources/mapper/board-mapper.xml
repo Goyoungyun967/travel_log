@@ -197,6 +197,8 @@
 		        ba.accompany_no,
 		        ba.accompany_date,
 		        ba.accompany_area,
+		        ba.start_day,
+		        ba.end_day,
 		        ba.accompany_content,
 		        LISTAGG(att.accompany_type, ',') WITHIN GROUP (ORDER BY att.accompany_type) AS accompany_types,
 		        m.member_IMAGE,
@@ -218,7 +220,7 @@
 		    GROUP BY 
 		        b.board_no, b.board_title, b.board_content, b.board_area,
 		        b.reg_date, b.board_type, b.board_thumb, b.read_count,
-		        ba.accompany_no, ba.accompany_date, ba.accompany_area,
+		        ba.accompany_no, ba.accompany_date, ba.accompany_area,ba.start_day,ba.end_day,
 		        ba.accompany_content,
 		        m.member_IMAGE,       
 		        m.MEMBER_NICKNAME,    
@@ -279,6 +281,8 @@
 	        ba.accompany_date,
 	        ba.accompany_area,
 	        ba.accompany_content,
+	        ba.start_day,
+	        ba.end_day,
 	        att.accompany_tag_no,
 	        att.accompany_type,
 	        m.member_IMAGE,
@@ -328,6 +332,8 @@
 	    <result column="read_count" property="readCount"/>
 	    <result column="accompany_no" property="accompanyNo"/>
 	    <result column="accompany_date" property="accompanyDate"/>
+	    <result column="start_Day" property="startDay"/>
+	    <result column="end_Day" property="endDay"/>
 	    <result column="accompany_area" property="accompanyArea"/>
 	    <result column="accompany_content" property="accompanyContent"/>
 	    <result column="member_IMAGE" property="memberImage"/>

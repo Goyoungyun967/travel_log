@@ -119,7 +119,12 @@ const BoardView = () => {
                 </Container>
               </div>
               <div className="board-flex">
-                <div className="boardList-area-view">{board.boardArea}</div>
+                <div
+                  className="boardList-area-view"
+                  style={{ marginLeft: "auto" }}
+                >
+                  {board.boardArea}
+                </div>
               </div>
             </div>
             <div className="board-view-title">
@@ -127,30 +132,39 @@ const BoardView = () => {
             </div>
             <div className="board-silde-wrap">
               <Carousel interval={2000}>
-                <Carousel.Item>
+                <Carousel.Item
+                  style={{ height: "300px" }}
+                  className="board-carousel-item"
+                >
                   <img
                     src={
                       board.boardThumb
                         ? `${backServer}/board/thumb/${board.boardThumb}`
                         : "/image/board_default_img.png"
                     }
-                    className="board-img-fluid" // 반응형 이미지
+                    className="board-img-fluid"
+                    alt="슬라이드 이미지"
                   />
                 </Carousel.Item>
                 {board.fileList.length > 0 ? (
                   board.fileList.map((file, i) => (
-                    <Carousel.Item key={`img-file-${i}`}>
+                    <Carousel.Item
+                      key={`img-file-${i}`}
+                      className="board-carousel-item"
+                    >
                       <img
                         src={`${backServer}/board/${file.filepath}`}
                         className="board-img-fluid"
+                        alt={`파일 이미지 ${i + 1}`}
                       />
                     </Carousel.Item>
                   ))
                 ) : (
-                  <Carousel.Item>
+                  <Carousel.Item className="board-carousel-item">
                     <img
                       src="/image/board_default_img.png"
                       className="board-img-fluid"
+                      alt="기본 이미지"
                     />
                   </Carousel.Item>
                 )}
@@ -181,7 +195,7 @@ const BoardView = () => {
         </div>
         {/* 좋아요, 댓글 수, 저장 기능 */}
         {/**/}
-        <div className="like-comment-keep view-like-comment-keep">
+        <div className="view-like-comment-keep">
           <div className="board-like sub-item" onClick={likeClick}>
             {board.likeCount === 0 ? (
               "좋아요"

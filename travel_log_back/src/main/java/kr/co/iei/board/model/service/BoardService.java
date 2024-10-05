@@ -134,7 +134,6 @@ public class BoardService {
 	// 댓글 목록 조회
 	public List<BoardCommentDTO> getCommentList(int boardNo ) {
 	    List<BoardCommentDTO> comments = boardDao.selectCommentList(boardNo);
-	    System.out.println(comments);
 	    return comments; // 댓글 목록 반환
 	}
 
@@ -207,6 +206,7 @@ public class BoardService {
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("list", list);
 	    map.put("pi", pi);
+	    System.out.println(map);
 	    
 	    return map;
 	}

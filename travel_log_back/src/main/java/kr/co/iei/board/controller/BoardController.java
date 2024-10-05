@@ -299,6 +299,7 @@ public class BoardController {
 //	    boardAccompany.setEndDay(outputFormatter.format(endDate));
 
 		int result = boardService.insertAcoompanyBoard(boardAccompany,boardFileList);
+		
 	    return ResponseEntity.ok(result == 1 + boardFileList.size());
   		
   	}
@@ -313,6 +314,7 @@ public class BoardController {
   	@GetMapping(value = "/accompanyNo/{boardNo}")
   	public ResponseEntity<BoardAccompanyDTO> selectOneBoardAccompany(@PathVariable int boardNo){
   		BoardAccompanyDTO accompany = boardService.selectOneBoardAccompany(boardNo);
+  		System.out.println(accompany);
   		return ResponseEntity.ok(accompany);
   	}
   	//삭제는 똑같이 가져감

@@ -10,6 +10,8 @@ import Col from "react-bootstrap/Col";
 import SaveIcon from "@mui/icons-material/Save"; //저장 모양
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble"; //댓글
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"; //뒤로가기 모양
+import dayjs from "dayjs";
+import AccompanyComment from "./AccompanyComment";
 
 const AccompanyView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -46,7 +48,14 @@ const AccompanyView = () => {
         console.log(err);
       });
   };
-
+  console.log(accompany);
+  // accompanyContent가 쉼표로 분리된 배열로 변환
+  const accompanyContents = accompany?.accompanyContent
+    ?.split(",")
+    .map((content, index) => ({
+      day: index + 1,
+      description: content.trim(),
+    }));
   return accompany ? (
     <div className="board-view-wrap">
       <div className="board-view-content">
@@ -87,7 +96,12 @@ const AccompanyView = () => {
                 </Container>
               </div>
               <div className="board-flex">
-                <div className="boardList-area-view">{accompany.boardArea}</div>
+                <div
+                  className="boardList-area-view"
+                  style={{ marginLeft: "auto" }}
+                >
+                  {accompany.boardArea}
+                </div>
               </div>
             </div>
             <div className="board-view-title">
@@ -95,30 +109,36 @@ const AccompanyView = () => {
             </div>
             <div className="board-silde-wrap">
               <Carousel interval={2000}>
-                <Carousel.Item>
+                <Carousel.Item style={{ height: "300px" }}>
                   <img
                     src={
                       accompany.boardThumb
                         ? `${backServer}/board/thumb/${accompany.boardThumb}`
                         : "/image/board_default_img.png"
                     }
-                    className="board-img-fluid" // 반응형 이미지
+                    className="board-img-fluid"
+                    alt="슬라이드 이미지"
                   />
                 </Carousel.Item>
                 {accompany.fileList.length > 0 ? (
                   accompany.fileList.map((file, i) => (
-                    <Carousel.Item key={`img-file-${i}`}>
+                    <Carousel.Item
+                      key={`img-file-${i}`}
+                      className="board-carousel-item"
+                    >
                       <img
                         src={`${backServer}/board/${file.filepath}`}
                         className="board-img-fluid"
+                        alt={`파일 이미지 ${i + 1}`}
                       />
                     </Carousel.Item>
                   ))
                 ) : (
-                  <Carousel.Item>
+                  <Carousel.Item className="board-carousel-item">
                     <img
                       src="/image/board_default_img.png"
                       className="board-img-fluid"
+                      alt="기본 이미지"
                     />
                   </Carousel.Item>
                 )}
@@ -130,6 +150,32 @@ const AccompanyView = () => {
             className="board-view-text-wrap"
             dangerouslySetInnerHTML={{ __html: accompany.boardContent }}
           />
+          <div className="accompany-day-wrap">
+            <div className="accompany-day">
+              <span>동행 기간 : </span>
+              <span>
+                {accompany.startDay
+                  ? dayjs(accompany.startDay).format("YYYY-MM-DD")
+                  : ""}
+                부터~
+                {accompany.endDay
+                  ? dayjs(accompany.endDay).format("YYYY-MM-DD")
+                  : ""}
+                까지 총 {accompany.accompanyDate}일
+              </span>
+            </div>
+          </div>
+          <div className="accompany-date-wrap">
+            <div className="accompany-date-list">
+              {accompanyContents &&
+                accompanyContents.map((item) => (
+                  <div key={item.day}>
+                    <strong>{item.day}일: </strong>
+                    {item.description}
+                  </div>
+                ))}
+            </div>
+          </div>
         </div>
 
         <div className="view-btn-zone">
@@ -146,6 +192,9 @@ const AccompanyView = () => {
           >
             삭제
           </button>
+        </div>
+        <div className="board-comment-wrap">
+          <AccompanyComment accompany={accompany} />
         </div>
       </div>
     </div>
