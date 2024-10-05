@@ -169,15 +169,13 @@ props/*글자 사이즈*/
   position: relative;
   width: 250px;
   height: 190px;
-  border-right: 1px solid var(--gray5);
-  border-bottom: 1px solid var(--gray5);
-  border-left: 1px solid var(--gray5);
   border-image: inherit;
   border-top: none;
   border-radius: 10px;
   user-select: none;
   align-items: center;
   cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6); /* 그림자를 더 넓게 만들기 */
 }
 
 .board-preview-title {
@@ -216,7 +214,7 @@ props/*글자 사이즈*/
   width: 100%;
   height: 210px;
   border-radius: 10px;
-  border: 1px solid var(--gray5);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6); /* 그림자를 더 넓게 만들기 */
 }
 .board-memberIcon {
   position: relative;
