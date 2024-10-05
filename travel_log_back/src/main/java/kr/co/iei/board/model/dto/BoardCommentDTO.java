@@ -28,7 +28,14 @@ public class BoardCommentDTO {
 	private Date commentDate;
 	private List<BoardCommentDTO> recomments; // 대댓글
 	
-	 private int boardNo; 
 	 private int commentLikeCount;
+	 
+	 //board관련
+	 	private int boardNo; 
+		
+	//member관련
+		private int memberNo;
+		private String memberImage;
+		private String memberNickname;
 	 
 }
