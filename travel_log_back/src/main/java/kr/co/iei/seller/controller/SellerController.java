@@ -1,5 +1,6 @@
 package kr.co.iei.seller.controller;
 
+import java.io.File;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,8 +122,9 @@ public class SellerController {
 	
 //	// 객실 등록
 	@PostMapping(value="/insertRoom")
-	public ResponseEntity<Boolean> insertRoom(@ModelAttribute InsertRoomDTO room, @ModelAttribute MultipartFile[] roomFile){
+	public ResponseEntity<Boolean> insertRoom(@ModelAttribute RoomDTO room, @ModelAttribute MultipartFile[] roomFile){
 		System.out.println(room);
+		System.out.println(roomFile);
 		List<RoomFileDTO> roomFileList = new ArrayList<RoomFileDTO>();
 		if(roomFile != null) {
 			String savepath = root+"/seller/room/";
@@ -138,6 +140,40 @@ public class SellerController {
 		System.out.println(result);
 		return ResponseEntity.ok(result!=0+roomFileList.size());
 	}
+	
+	// 객실 수정
+	@PatchMapping(value = "/updateRoom")
+	public ResponseEntity<Boolean> updateRoom(@ModelAttribute RoomDTO room, @ModelAttribute MultipartFile[] roomFile){
+        List<RoomFileDTO> roomFileList = new ArrayList<RoomFileDTO>();
+        if(roomFile != null){
+            // 첨부파일이 없으면 null로 값이 오기에 null 체크 먼저
+            String savepath = root+"/seller/room/";
+            for(MultipartFile file : roomFile){
+                RoomFileDTO roomFileDTO = new RoomFileDTO();
+                String filename = file.getOriginalFilename();
+                String filepath = fileUtil.upload(savepath, file);
+                roomFileDTO.setRoomImg(filepath);
+                // 수정같은 경우에는 이미 게시글 번호가 있기 때문에 그걸 가지고 와서 바로 roomFileDTO에 set함
+                roomFileDTO.setRoomNo(room.getRoomNo());
+                roomFileList.add(roomFileDTO);
+            }
+        }
+        List<RoomFileDTO> delFileList = sellerService.updateRoom(room, roomFileList);
+        System.out.println(delFileList);
+        if(delFileList != null){
+            String savepath = root+"/seller/room/";
+            for(RoomFileDTO deleteFile : delFileList){
+                File delFile = new File(savepath + deleteFile.getRoomImg());
+                delFile.delete();
+            }
+            return ResponseEntity.ok(true);
+        }
+        else{
+            //실패시임
+            return ResponseEntity.ok(false);
+        }
+	}
+
 	
 	// 판매자 정산
 	@Operation(summary="판매자 정산", description = "정산 정보 출력")

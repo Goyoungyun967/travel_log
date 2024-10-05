@@ -26,5 +26,6 @@ public class InsertRoomDTO {
     
     private List<Integer> serviceTag; // 서비스태그(해시태그) 배열 형태
     
-    private MultipartFile[] roomFile; // 첨부파일 배열형태
+    private List<RoomFileDTO> roomFile; // 첨부파일 
+    private int[] delRoomFileNo; // 삭제할 파일 번호 베열
 }
