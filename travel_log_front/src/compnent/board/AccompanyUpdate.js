@@ -3,17 +3,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import BoardFrm from "./BoardFrm";
 import { Quill } from "react-quill";
 import BoardUqillEditor from "../utils/BoardUqillEditor";
 import { loginNoState } from "../utils/RecoilData";
-const BoardUpdate = () => {
+import AccompanyFrm from "./AccompanyFrm";
+
+const AccompanyUpdate = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const params = useParams();
   const boardNo = params.boardNo;
   const navigate = useNavigate();
   console.log(boardNo);
-
+  const [loginNo, setLoginNo] = useRecoilState(loginNoState);
   const [boardTitle, setBoardTitle] = useState("");
   const [boardContent, setBoardContent] = useState("");
   const [boardArea, setBoardArea] = useState([
@@ -36,8 +37,6 @@ const BoardUpdate = () => {
     { title: "제주" },
   ]);
   const [selectedArea, setSelectedArea] = useState("");
-
-  const [loginNo, setLoginNo] = useRecoilState(loginNoState);
   //새로 전송하기 위한 state
   const [thumbnail, setThumbnail] = useState(null);
   const [boardFile, setBoardFile] = useState([]);
@@ -46,7 +45,6 @@ const BoardUpdate = () => {
   const [fileList, setFileList] = useState([]);
   //기존 첨부파일을 삭제하면 삭제한 파일 번호를 저장할 배열
   const [delBoardFileNo, setDelBoardFileNo] = useState([]);
-
   const inputTitle = (e) => {
     setBoardTitle(e.target.value);
   };
@@ -86,7 +84,7 @@ const BoardUpdate = () => {
         form.append("delBoardFileNo", delBoardFileNo[i]);
       }
       axios
-        .patch(`${backServer}/board`, form)
+        .patch(`${backServer}/board/AccompanyUpdate`, form)
         .then((res) => {
           if (res.data) {
             navigate(`/board/list/`);
@@ -107,7 +105,7 @@ const BoardUpdate = () => {
           e.preventDefault();
         }}
       >
-        <BoardFrm
+        <AccompanyFrm
           loginNo={loginNo}
           boardArea={boardArea}
           setBoardArea={setBoardArea}
@@ -143,5 +141,4 @@ const BoardUpdate = () => {
     </div>
   );
 };
-
-export default BoardUpdate;
+export default AccompanyUpdate;
