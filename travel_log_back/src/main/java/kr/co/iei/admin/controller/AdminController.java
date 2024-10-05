@@ -146,4 +146,9 @@ public class AdminController {
 		int result = adminService.updateStm(stmNum);
 		return ResponseEntity.ok(result == stmNum.length);
 	}
+	@GetMapping(value="/lodgment/list")
+	public ResponseEntity<List> getAdminLodgmentList(){
+		List list = adminService.getAdminLodgmentList();
+		return ResponseEntity.ok(list);
+	}
 }

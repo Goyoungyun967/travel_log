@@ -222,19 +222,19 @@
   	join 
   		room  using (room_no)
   	where 
-  		payment_date between add_months(sysdate,-1) and sysdate and status=2 group by seller_no
+  		payment_date between add_months(sysdate,-1) and sysdate and state=2 group by seller_no
   </select>
   <insert id="insertSellerStm">
   	insert into stm_tbl values(stm_seq.nextval,#{sellerNo},#{sales},sysdate,0)
   </insert>
   <select id="getSellerStmCount" resultType="int">
-  	select count(*) from stm_tbl where stm_status=#{status}
+  	select count(*) from stm_tbl where stm_state=#{state}
   </select>
   <select id="getSellerStmList" resultType="stmInfo">
-  	select * from (select rownum as rnum,s.* from (select stm_num,to_char(stm_price,'FM999,999,999') as stm_price,to_char(stm_date,'yyyy-mm-dd') as stm_date,business_name,stm_status from stm_tbl join seller using (seller_no) where stm_status = #{status} order by stm_date desc)s) where rnum between #{start} and #{end}
+  	select * from (select rownum as rnum,s.* from (select stm_num,to_char(stm_price,'FM999,999,999') as stm_price,to_char(stm_date,'yyyy-mm-dd') as stm_date,business_name,stm_state from stm_tbl join seller using (seller_no) where stm_state = #{state} order by stm_date desc)s) where rnum between #{start} and #{end}
   </select>
   <update id="updateStm">
-		update stm_tbl set stm_status=1 where stm_num in <foreach collection="array" item="stmNum" open="(" close=")" separator=",">#{stmNum}</foreach>
+		update stm_tbl set stm_state=1 where stm_num in <foreach collection="array" item="stmNum" open="(" close=")" separator=",">#{stmNum}</foreach>
 	</update>
   
 </mapper>

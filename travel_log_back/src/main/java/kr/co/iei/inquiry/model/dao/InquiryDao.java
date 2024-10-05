@@ -61,4 +61,6 @@ public interface InquiryDao {
 
 	int updateStm(int[] stmNum);
 
+	List getAdminLodgmentList();
+
 }

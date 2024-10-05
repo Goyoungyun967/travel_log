@@ -80,6 +80,7 @@ const SellerChart = () => {
         const newChartData = new Array();
         const date = new Date();
         const year = date.getFullYear() - 2000;
+        setMonth(date.getMonth() + 1);
         for (let i = 0; i < 12; i++) {
           const data = {
             name: i + 1 + "월",

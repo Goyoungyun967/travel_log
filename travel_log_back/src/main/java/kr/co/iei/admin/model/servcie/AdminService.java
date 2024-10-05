@@ -161,16 +161,16 @@ public class AdminService {
 		System.out.println(result);
 	}
 
-	public Map getSellerStmList(int reqPage, int status) {
+	public Map getSellerStmList(int reqPage, int state) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Map<String, Object> m = new HashMap<String, Object>();
 		int numPerPage = 10;
 		int pageNaviSize = 5;
-		int totalCount = inquiryDao.getSellerStmCount(status);
+		int totalCount = inquiryDao.getSellerStmCount(state);
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
 		m.put("start", pi.getStart());
 		m.put("end", pi.getEnd());
-		m.put("status", status);
+		m.put("state", state);
 		List list = inquiryDao.getSellerStmList(m);
 		map.put("pi", pi);
 		map.put("list", list);
@@ -180,6 +180,11 @@ public class AdminService {
 	public int updateStm(int[] stmNum) {
 		int result = inquiryDao.updateStm(stmNum);
 		return result;
+	}
+
+	public List getAdminLodgmentList() {
+		List list = inquiryDao.getAdminLodgmentList();
+		return list;
 	}
 
 }
