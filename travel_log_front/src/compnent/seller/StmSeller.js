@@ -46,7 +46,7 @@ const StmSeller = () => {
       .finally(() => {
         setSearch(false); // API 호출 후 search를 false로 설정
       });
-  }, []);
+  }, [loginNo]);
 
   const searchDate = () => {
     // 조회해온 날짜는 String이므로 날짜로 바꾸어야함

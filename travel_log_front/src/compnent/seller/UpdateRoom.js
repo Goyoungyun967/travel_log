@@ -303,7 +303,7 @@ const HashTap = (props) => {
               value={tag.serviceTagNo}
               name={tag.serviceTagType} // serviceTagType을 name으로 사용
               onChange={inputCheckboxChange}
-              checked={hashTag.some((h) => h.serviceTagNo === tag.serviceTagNo)} // hashTag에 있는지 확인
+              checked={hashTag.some((h) => h.serviceTagNo === tag.serviceTagNo)} // hashTag에 있는지 확인 후 체크
             />
             <span className="custom-checkbox">{tag.serviceTagType}</span>
           </label>
