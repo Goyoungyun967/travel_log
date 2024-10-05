@@ -31,7 +31,7 @@ const AdminSellerStm = () => {
         console.log(err);
       });
   }, [reqPage, type, state]);
-  const updateSellerApp = () => {
+  const updateStmState = () => {
     axios
       .patch(`${backServer}/admin/seller/stm`, stmNumList)
       .then((res) => {
@@ -133,7 +133,7 @@ const AdminSellerStm = () => {
           {Number(type) === 0 ? (
             <tr>
               <td colSpan={5}>
-                <button className="admin-seller-btn" onClick={updateSellerApp}>
+                <button className="admin-seller-btn" onClick={updateStmState}>
                   정산하기
                 </button>
               </td>
