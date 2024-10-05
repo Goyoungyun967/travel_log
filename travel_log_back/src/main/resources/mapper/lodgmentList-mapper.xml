@@ -291,7 +291,7 @@
 	</select>
 
 	<!-- 리뷰 여부 비교 -->
-	<select id="reviewStatus" resultType="lodgmentReview">
+	<select id="reviewStatus" resultType="reviewStatus">
 		SELECT
 		( SELECT
 		COUNT(*) AS used_reviews_count
@@ -308,7 +308,7 @@
 		m.member_no = #{loginNo}
 		AND s.lodgment_no = #{lodgmentNo}
 		AND
-		b.end_date <![CDATA[<]]>=
+		b.end_date <![CDATA[<]]>
 		SYSDATE
 		AND r.review_no IS NOT NULL 
 		) AS
@@ -329,4 +329,16 @@
 		AS available_reviews_count
 		FROM dual
 	</select>
+	
+	<insert id="reviewLike">
+		insert into lodgment_review_like values(#{loginNo}, #{reviewNo})
+	</insert>
+	
+	<delete id="reviewLikeCancle">
+		delete from lodgment_review_like where member_no=#{loginNo} and review_no=#{reviewNo}
+	</delete>
+	
+	<insert id="reviewReport">
+		insert into lodgment_review_report values(#{loginNo},#{reviewNo},#{selectedReason})
+	</insert>
 </mapper>

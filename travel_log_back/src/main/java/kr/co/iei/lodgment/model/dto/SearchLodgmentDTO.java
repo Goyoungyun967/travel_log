@@ -35,4 +35,5 @@ public class SearchLodgmentDTO {
 	private String lodgmentCheckOut;
 	@Schema(description = "최저 가격",type="int")
 	private int roomPrice;
+	
 }

@@ -182,9 +182,26 @@ public class AdminService {
 		return result;
 	}
 
-	public List getAdminLodgmentList() {
-		List list = inquiryDao.getAdminLodgmentList();
-		return list;
+	public Map getAdminLodgmentList(int reqPage,int lodgmentDelete) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> m = new HashMap<String, Object>();
+		int numPerPage = 10;
+		int pageNaviSize = 5;
+		int totalCount = inquiryDao.getAdminLodgmentCount(lodgmentDelete);
+		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
+		m.put("start", pi.getStart());
+		m.put("end", pi.getEnd());
+		m.put("lodgmentDelete",lodgmentDelete);
+		List list = inquiryDao.getAdminLodgmentList(m);
+		map.put("pi", pi);
+		map.put("list", list);
+		return map;
+	}
+
+	@Transactional
+	public int updateLodgmentDelete(int[] lodgmentNo) {
+		int result = inquiryDao.updateLodgmentDelete(lodgmentNo);
+		return result;
 	}
 
 }
