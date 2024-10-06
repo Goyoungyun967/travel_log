@@ -16,5 +16,7 @@ public class BoardReportDTO {
 	private int reportNo;
 	private int reportType;
 	private String reportContent;
+	private int memberNo;
+	private int boardNo;
 	
 }

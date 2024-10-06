@@ -39,6 +39,8 @@ import kr.co.iei.board.model.dto.BoardAccompanyDTO;
 import kr.co.iei.board.model.dto.BoardCommentDTO;
 import kr.co.iei.board.model.dto.BoardDTO;
 import kr.co.iei.board.model.dto.BoardFileDTO;
+import kr.co.iei.board.model.dto.BoardReportDTO;
+import kr.co.iei.board.model.dto.CommentReportDTO;
 import kr.co.iei.board.model.service.BoardService;
 import kr.co.iei.util.FileUtils;
 
@@ -215,7 +217,8 @@ public class BoardController {
     // 댓글 수정
     @PatchMapping("/editComment/{commentNo}")
     public ResponseEntity<Boolean> editComment(@PathVariable int commentNo, @RequestBody Map<String, String> request) {
-        String commentContent = request.get("content");
+        String commentContent = request.get("commentContent");
+        System.out.println(commentContent);
         boolean result = boardService.editComment(commentNo, commentContent);
         return ResponseEntity.ok(result);
     }
@@ -223,20 +226,49 @@ public class BoardController {
     // 댓글 삭제
     @DeleteMapping("/deleteComment/{commentNo}")
     public ResponseEntity<Boolean> deleteComment(@PathVariable int commentNo) {
-    	System.out.println(commentNo);
+//    	System.out.println(commentNo);
         boolean result = boardService.deleteComment(commentNo);
-        System.out.println(result);
+//        System.out.println(result);
         return ResponseEntity.ok(result);
+    }
+    //댓글 좋아요 
+  //좋아요 
+  	@PostMapping(value = "/likeComment/{memberNo}/{commentNo}")
+  	public ResponseEntity<Integer> likeComment(@PathVariable int memberNo,@PathVariable int commentNo){
+  		int result = boardService.likeComment(memberNo,commentNo); 
+  		
+  		return ResponseEntity.ok(result);
+  	}
+  	// 좋아요 취소
+      @DeleteMapping("/unlikeComment/{memberNo}/{commentNo}")
+      public ResponseEntity<Integer> unlikeComment(@PathVariable int memberNo,@PathVariable int commentNo) {
+          int result = boardService.unlikeComment(memberNo, commentNo); // 좋아요 취소 처리
+          return ResponseEntity.ok(result); // 처리 결과 반환 (1: 성공, 0: 실패)
+      }
+    //게시판신고고
+      @PostMapping("/report")
+  		public ResponseEntity<Boolean> insertReport(@RequestBody BoardReportDTO report){
+    	  int ressult = boardService.insertReport(report);
+    	  return ResponseEntity.ok(ressult>0);
+      }
+      //댓글 신고
+      @PostMapping("/commentReport")
+		public ResponseEntity<Boolean> insertReport(@RequestBody CommentReportDTO commentReport){
+  	  System.out.println(commentReport);
+  	  
+  	  int ressult = boardService.insertReport(commentReport);
+  	  return ResponseEntity.ok(ressult>0);
     }
     
     
   //동행게시판리스트
-  	@GetMapping("/accompanyList/{type}/{reqPage}")
-  	public ResponseEntity<Map> accompanyList(
-  		    @PathVariable int type, @PathVariable int reqPage) {
-  		    Map map = boardService.selectAccompanyList(type,reqPage);
-  		    return ResponseEntity.ok(map);
-  		}
+      @GetMapping("/accompanyList/{type}/{reqPage}")
+      public ResponseEntity<Map> accompanyList(
+              @PathVariable int type, @PathVariable int reqPage) {
+          Map map = boardService.selectAccompanyList(type, reqPage);
+          return ResponseEntity.ok(map);
+      }
+
   //동행 게시판 등록
   	@PostMapping("/insertAccompany")
   		public ResponseEntity<Boolean> insertAccompany(@ModelAttribute BoardAccompanyDTO boardAccompany , @ModelAttribute MultipartFile thumnail, @ModelAttribute MultipartFile[] boardFile){
@@ -282,11 +314,29 @@ public class BoardController {
 //	    boardAccompany.setEndDay(outputFormatter.format(endDate));
 
 		int result = boardService.insertAcoompanyBoard(boardAccompany,boardFileList);
-		System.out.println("00000000"+result);
-		System.out.println("boardFileLists.size()"+boardFileList.size());
+		
 	    return ResponseEntity.ok(result == 1 + boardFileList.size());
   		
   	}
+  	//동행 게시판 조회수 처리
+  	@PatchMapping("/updateReadCount/{boardNo}")
+  	public ResponseEntity<Boolean> updateReadCount(@PathVariable int boardNo){
+  		 System.out.println(boardNo);
+  		int result = boardService.updateReadCount(boardNo);
+  		return ResponseEntity.ok(result>0);
+  	}
+  	//동행 게시판 상세보기 
+  	@GetMapping(value = "/accompanyNo/{boardNo}")
+  	public ResponseEntity<BoardAccompanyDTO> selectOneBoardAccompany(@PathVariable int boardNo){
+  		BoardAccompanyDTO accompany = boardService.selectOneBoardAccompany(boardNo);
+  		System.out.println(accompany);
+  		return ResponseEntity.ok(accompany);
+  	}
+  	//삭제는 똑같이 가져감
+  	
+  	
+  	
+
   	
 
     

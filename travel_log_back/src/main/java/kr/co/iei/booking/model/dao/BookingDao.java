@@ -12,8 +12,12 @@ public interface BookingDao {
 
 	int insertBooking(BookingDTO bookingInfo);
 
+
 	int totalCount();
 
 	List selectBookingList(PageInfo pi);
+
+	BookingDTO getBookingInfo(int bookNo);
+
 
 }

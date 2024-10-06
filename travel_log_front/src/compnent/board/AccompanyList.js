@@ -109,9 +109,12 @@ const AccompanyItem = (props) => {
   const navigate = useNavigate();
   const loginNickname = props.loginNickname;
 
+  //작성 시간
   const now = new Date();
+  console.log(now);
   const regDate = new Date(accompany.regDate);
   const time = now - regDate;
+  console.log(regDate);
   const seconds = Math.floor(time / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
@@ -119,6 +122,7 @@ const AccompanyItem = (props) => {
   const months = Math.floor(days / 30.44);
   const years = Math.floor(months / 12);
 
+  // 시간 포맷
   let timeString = "";
   if (years > 0) timeString = `${years}년 전`;
   else if (months > 0) timeString = `${months}달 전`;
@@ -126,11 +130,18 @@ const AccompanyItem = (props) => {
   else if (hours > 0) timeString = `${hours}시간 전`;
   else if (minutes > 0) timeString = `${minutes}분 전`;
   else timeString = `방금전`;
+  console.log(timeString);
 
   return (
     <div
       className="boardList-preview"
-      onClick={() => navigate(`/board/view/${accompany.boardNo}`)}
+      onClick={() =>
+        navigate(
+          `/board/AccompanyView/${accompany.boardNo}/${encodeURIComponent(
+            timeString
+          )}`
+        )
+      }
     >
       <div className="boardList-content">
         <div className="boardList-area text-medium">{accompany.boardArea}</div>

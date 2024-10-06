@@ -123,6 +123,7 @@
 	group by 
 		substr(lodgment_addr,0,2)
   </select>
+  
   <!-- 임시 판매자 차트 -->
   <select id="getSellerList" resultType="seller">
   	select seller_no,business_name from seller
@@ -213,6 +214,7 @@
 	group by 
 		decode(member_gender,'m','남성','f','여성')
   </select>
+  
   <!-- 정산 -->
   <select id="selectSellerSales" resultType="seller">
   	select 
@@ -222,19 +224,29 @@
   	join 
   		room  using (room_no)
   	where 
-  		payment_date between add_months(sysdate,-1) and sysdate and status=2 group by seller_no
+  		payment_date between add_months(sysdate,-1) and sysdate and state=2 group by seller_no
   </select>
   <insert id="insertSellerStm">
   	insert into stm_tbl values(stm_seq.nextval,#{sellerNo},#{sales},sysdate,0)
   </insert>
   <select id="getSellerStmCount" resultType="int">
-  	select count(*) from stm_tbl where stm_status=#{status}
+  	select count(*) from stm_tbl where stm_state=#{state}
   </select>
   <select id="getSellerStmList" resultType="stmInfo">
-  	select * from (select rownum as rnum,s.* from (select stm_num,to_char(stm_price,'FM999,999,999') as stm_price,to_char(stm_date,'yyyy-mm-dd') as stm_date,business_name,stm_status from stm_tbl join seller using (seller_no) where stm_status = #{status} order by stm_date desc)s) where rnum between #{start} and #{end}
+  	select * from (select rownum as rnum,s.* from (select stm_num,to_char(stm_price,'FM999,999,999') as stm_price,to_char(stm_date,'yyyy-mm-dd') as stm_date,business_name,stm_state from stm_tbl join seller using (seller_no) where stm_state = #{state} order by stm_date desc)s) where rnum between #{start} and #{end}
   </select>
   <update id="updateStm">
-		update stm_tbl set stm_status=1 where stm_num in <foreach collection="array" item="stmNum" open="(" close=")" separator=",">#{stmNum}</foreach>
+		update stm_tbl set stm_state=1 where stm_num in <foreach collection="array" item="stmNum" open="(" close=")" separator=",">#{stmNum}</foreach>
 	</update>
   
+  <!-- 상품 게시글 관리 -->
+  <select id="getAdminLodgmentCount" resultType="int">
+  	select count(*) from lodgment_storage where lodgment_delete=#{lodgmentDelete}
+  </select>
+  <select id="getAdminLodgmentList" resultType="lodgmentStorage">
+  	select * from (select rownum as rnum, l.* from (select lodgment_no,lodgment_name,lodgment_type_name,lodgment_delete,business_name from lodgment_storage join lodgment_type using (lodgment_type_no) join seller using (seller_no) where lodgment_delete=#{lodgmentDelete})l) where rnum between #{start} and #{end}
+  </select>
+  <update id="updateLodgmentDelete">
+		update lodgment_storage set lodgment_delete=0 where lodgment_no in <foreach collection="array" item="lodgmentNo" open="(" close=")" separator=",">#{lodgmentNo}</foreach>
+	</update>
 </mapper>

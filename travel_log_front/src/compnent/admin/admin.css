@@ -136,6 +136,20 @@
   display: flex;
   gap: 100px;
 }
-.pie-chart {
+.pieChart {
   display: flex;
+}
+
+[class*="-chart"] {
+  display: flex;
+  flex-direction: column;
+}
+.admin-content-wrap .excel-down {
+  align-self: flex-end;
+  cursor: pointer;
+  width: 80px;
+  height: 28px;
+  color: #fff;
+  border: none;
+  background-color: #1e7143;
 }

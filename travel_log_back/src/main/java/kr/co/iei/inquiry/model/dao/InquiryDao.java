@@ -33,12 +33,14 @@ public interface InquiryDao {
 
 	int insertInquiryReply(InquiryReplyDTO inquiryReply);
 
+	//회원 이용 차트
 	List getLodgmentResionData();
 
 	List getLodgmentResionSearchMemberData(String region);
 
 	List getLodgmentResionMemberData();
 
+	//판매자 차트
 	List getSellerList();
 
 	List getSellerListSales(Map<String, Object> map);
@@ -50,7 +52,8 @@ public interface InquiryDao {
 	List getSellerSalesAge(int sellerNo);
 
 	List getSellerSalesList();
-
+	
+	//정산
 	List<SellerDTO> selectSellerSales();
 
 	int insertSellerStm(SellerDTO sellerDTO);
@@ -60,5 +63,14 @@ public interface InquiryDao {
 	int getSellerStmCount(int status);
 
 	int updateStm(int[] stmNum);
+
+	//상품 게시글 관리
+	List getAdminLodgmentList();
+
+	int getAdminLodgmentCount(int lodgmentDelete);
+
+	List getAdminLodgmentList(Map<String, Object> m);
+
+	int updateLodgmentDelete(int[] lodgmentNo);
 
 }

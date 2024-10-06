@@ -35,7 +35,12 @@ public class RoomDTO {
 	@Schema(description = "객실 사진 리스트",type="List<RoomFileDTO>")
 	private List<RoomFileDTO> fileList;
 	
+	@Schema(description = "객실 삭제 리스트",type="int[]")
+	private int[] delRoomFileNo;
+	
 	@Schema(description = "객실 서비스 타입 리스트", type="List<RoomServiceTag>")
 	private List<ServiceTagDTO> serviceTagList;
+	
+    private List<Integer> serviceTag; // 서비스태그(해시태그) 배열 형태
 	
 }

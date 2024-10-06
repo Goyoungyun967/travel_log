@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Alias(value = "commentReport")
-@Schema(description = "게시판 신고 객체")
 public class CommentReportDTO {
 	private int commentReportNo;
 	private int commmentReportType;
 	private String commentReportContent;
-	
+	private int memberNo;
+	private int commentNo;
 
 }

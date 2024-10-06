@@ -3,6 +3,7 @@ import LodgmentList from "./LodgmentList";
 import LodgmentDetail from "./LodgmentDetail";
 import PaymentPage from "./PaymentPage";
 import LodgmentReviewWirte from "./LodgmentReviewWrite";
+import BookingInfo from "./BookingInfo";
 
 const LodgmentMain = () => {
   return (
@@ -14,6 +15,7 @@ const LodgmentMain = () => {
       />
       <Route path="paymentPage" element={<PaymentPage />} />
       <Route path="reviewWrite" element={<LodgmentReviewWirte />} />
+      <Route path="bookingInfo" element={<BookingInfo />} />
     </Routes>
   );
 };

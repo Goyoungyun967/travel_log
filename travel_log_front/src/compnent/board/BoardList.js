@@ -71,42 +71,42 @@ const BoardList = () => {
     setDropdownOpen(!dropdownOpen);
   };
   //스크롤
-  const handleMouseDown = (e) => {
-    isMouseDownRef.current = true;
-    startXRef.current = e.pageX - scrollContainerRef.current.offsetLeft;
-    scrollLeftRef.current = scrollContainerRef.current.scrollLeft;
-  };
+  // const handleMouseDown = (e) => {
+  //   isMouseDownRef.current = true;
+  //   startXRef.current = e.pageX - scrollContainerRef.current.offsetLeft;
+  //   scrollLeftRef.current = scrollContainerRef.current.scrollLeft;
+  // };
 
-  const handleMouseLeave = () => {
-    isMouseDownRef.current = false;
-  };
+  // const handleMouseLeave = () => {
+  //   isMouseDownRef.current = false;
+  // };
 
-  const handleMouseUp = () => {
-    isMouseDownRef.current = false;
-  };
+  // const handleMouseUp = () => {
+  //   isMouseDownRef.current = false;
+  // };
 
-  const handleMouseMove = (e) => {
-    if (!isMouseDownRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - scrollContainerRef.current.offsetLeft;
-    const walk = (x - startXRef.current) * 2; // 조정값 (속도)
-    scrollContainerRef.current.scrollLeft = scrollLeftRef.current - walk;
-  };
+  // const handleMouseMove = (e) => {
+  //   if (!isMouseDownRef.current) return;
+  //   e.preventDefault();
+  //   const x = e.pageX - scrollContainerRef.current.offsetLeft;
+  //   const walk = (x - startXRef.current) * 2; // 조정값 (속도)
+  //   scrollContainerRef.current.scrollLeft = scrollLeftRef.current - walk;
+  // };
 
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    container.addEventListener("mousedown", handleMouseDown);
-    container.addEventListener("mouseleave", handleMouseLeave);
-    container.addEventListener("mouseup", handleMouseUp);
-    container.addEventListener("mousemove", handleMouseMove);
+  // useEffect(() => {
+  //   const container = scrollContainerRef.current;
+  //   container.addEventListener("mousedown", handleMouseDown);
+  //   container.addEventListener("mouseleave", handleMouseLeave);
+  //   container.addEventListener("mouseup", handleMouseUp);
+  //   container.addEventListener("mousemove", handleMouseMove);
 
-    return () => {
-      container.removeEventListener("mousedown", handleMouseDown);
-      container.removeEventListener("mouseleave", handleMouseLeave);
-      container.removeEventListener("mouseup", handleMouseUp);
-      container.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, []);
+  //   return () => {
+  //     container.removeEventListener("mousedown", handleMouseDown);
+  //     container.removeEventListener("mouseleave", handleMouseLeave);
+  //     container.removeEventListener("mouseup", handleMouseUp);
+  //     container.removeEventListener("mousemove", handleMouseMove);
+  //   };
+  // }, []);
   //일반게시판 가져오기
   useEffect(() => {
     axios
@@ -137,20 +137,20 @@ const BoardList = () => {
   };
 
   // 모달창
-  const handleLinkClick = (link) => {
-    setCurrentLink(link); // 클릭한 링크 저장
-    setShowModal(true); // 모달 열기
-  };
+  // const handleLinkClick = (link) => {
+  //   setCurrentLink(link); // 클릭한 링크 저장
+  //   setShowModal(true); // 모달 열기
+  // };
 
-  const handleModalClose = () => {
-    setShowModal(false); // 모달 닫기
-  };
+  // const handleModalClose = () => {
+  //   setShowModal(false); // 모달 닫기
+  // };
 
-  const handleInputValue = (inputValue) => {
-    console.log(`입력된 값: ${inputValue}`);
-    setShowModal(false); // 모달 닫기
-    navigate(currentLink); // 저장된 링크로 이동
-  };
+  // const handleInputValue = (inputValue) => {
+  //   console.log(`입력된 값: ${inputValue}`);
+  //   setShowModal(false); // 모달 닫기
+  //   navigate(currentLink); // 저장된 링크로 이동
+  // };
 
   return (
     <div className="board-list-wrap">
@@ -190,8 +190,8 @@ const BoardList = () => {
             더보기 <ArrowForwardIcon style={{ paddingBottom: "4px" }} />
           </span>
         </div>
-        {/* 가로 리스트 출력 */}
-        <div className="scrollable-container" ref={scrollContainerRef}>
+        {/* 가로 리스트 출력 ref={scrollContainerRef}*/}
+        <div className="scrollable-container">
           <div className="board-preview-wrap width-box">
             {accompanyList.map((accompany, i) => (
               <AccompanyItem
@@ -256,12 +256,48 @@ const AccompanyItem = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const accompany = props.accompany;
   const loginNickname = props.loginNickname;
+
   const navigate = useNavigate();
+  //작성 시간
+  const now = new Date();
+  console.log(now);
+  const regDate = new Date(accompany.regDate);
+  const time = now - regDate;
+  console.log(regDate);
+  const seconds = Math.floor(time / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const months = Math.floor(days / 30.44);
+  const years = Math.floor(months / 12);
+
+  // 시간 포맷
+  let timeString = "";
+  if (years > 0) timeString = `${years}년 전`;
+  else if (months > 0) timeString = `${months}달 전`;
+  else if (days > 0) timeString = `${days}일 전`;
+  else if (hours > 0) timeString = `${hours}시간 전`;
+  else if (minutes > 0) timeString = `${minutes}분 전`;
+  else timeString = `방금전`;
+  console.log(timeString);
   return (
     <div
       className="board-preview-list awbcss"
       onClick={() => {
-        navigate(`/board/view${accompany.boardNo}`);
+        axios
+          .patch(`${backServer}/board/updateReadCount/${accompany.boardNo}`)
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log("조회수 증가 실패", err);
+          });
+
+        navigate(
+          `/board/AccompanyView/${accompany.boardNo}/${encodeURIComponent(
+            timeString
+          )}`
+        );
       }}
     >
       <div className="board-preview-thumb">

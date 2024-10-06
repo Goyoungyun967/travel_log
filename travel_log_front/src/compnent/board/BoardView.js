@@ -6,16 +6,20 @@ import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 import FavoriteIcon from "@mui/icons-material/Favorite"; // 채워진 하트
-import "./board.css";
-import SaveIcon from "@mui/icons-material/Save"; //저장 모양
-import ChatBubbleIcon from "@mui/icons-material/ChatBubble"; //댓글
-import ArrowBackIcon from "@mui/icons-material/ArrowBack"; //뒤로가기 모양
+import SaveIcon from "@mui/icons-material/Save"; // 저장 모양
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble"; // 댓글
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"; // 뒤로가기 모양
+import Modal from "react-modal"; // 모달
 import BoardCommnet from "./BoardComment";
 import { useRecoilState } from "recoil";
-import { loginNoState } from "../utils/RecoilData";
+import { loginNicknameState, loginNoState } from "../utils/RecoilData";
+import "./board.css";
+import ReportModal from "./ReportModal";
+
 const BoardView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
+  const [loginNickname, setLoginNicName] = useRecoilState(loginNicknameState);
   const memberNo = loginNo;
   const navigate = useNavigate();
   const params = useParams();
@@ -25,7 +29,12 @@ const BoardView = () => {
   const [likeCount, setLikeCount] = useState(Number(likeCountParam));
   const [isLike, setIsLike] = useState(Number(isLikeParam));
   const [board, setBoard] = useState(null);
-  console.log(board);
+  //모달창 관련
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const reportBoard = () => {
+    setIsModalOpen(true);
+  };
 
   useEffect(() => {
     axios
@@ -37,12 +46,11 @@ const BoardView = () => {
         console.log(err);
       });
   }, [isLike]);
-  //
+
   const deleteBoard = () => {
     axios
       .delete(`${backServer}/board/delete/${boardNo}`)
       .then((res) => {
-        console.log(res);
         if (res.data === 1) {
           navigate("/board/list");
         }
@@ -54,7 +62,6 @@ const BoardView = () => {
 
   const likeClick = () => {
     if (isLike === 1) {
-      // 좋아요 취소 요청
       axios
         .delete(`${backServer}/board/unlike/${boardNo}/${memberNo}`)
         .then(() => {
@@ -65,7 +72,6 @@ const BoardView = () => {
           console.error("좋아요 취소 중 오류 발생:", err);
         });
     } else {
-      // 좋아요 추가 요청
       axios
         .post(`${backServer}/board/like/${boardNo}/${memberNo}`)
         .then(() => {
@@ -109,7 +115,7 @@ const BoardView = () => {
                       className="text-medium"
                       style={{ paddingLeft: "23px" }}
                     >
-                      {board.boardWriter} 닉네임
+                      {loginNickname}
                     </div>
                     <div className="text-min" style={{ paddingLeft: "50px" }}>
                       {regDate}
@@ -118,7 +124,12 @@ const BoardView = () => {
                 </Container>
               </div>
               <div className="board-flex">
-                <div className="boardList-area-view">{board.boardArea}</div>
+                <div
+                  className="boardList-area-view"
+                  style={{ marginLeft: "auto" }}
+                >
+                  {board.boardArea}
+                </div>
               </div>
             </div>
             <div className="board-view-title">
@@ -126,30 +137,39 @@ const BoardView = () => {
             </div>
             <div className="board-silde-wrap">
               <Carousel interval={2000}>
-                <Carousel.Item>
+                <Carousel.Item
+                  style={{ height: "300px" }}
+                  className="board-carousel-item"
+                >
                   <img
                     src={
                       board.boardThumb
                         ? `${backServer}/board/thumb/${board.boardThumb}`
                         : "/image/board_default_img.png"
                     }
-                    className="board-img-fluid" // 반응형 이미지
+                    className="board-img-fluid"
+                    alt="슬라이드 이미지"
                   />
                 </Carousel.Item>
                 {board.fileList.length > 0 ? (
                   board.fileList.map((file, i) => (
-                    <Carousel.Item key={`img-file-${i}`}>
+                    <Carousel.Item
+                      key={`img-file-${i}`}
+                      className="board-carousel-item"
+                    >
                       <img
                         src={`${backServer}/board/${file.filepath}`}
                         className="board-img-fluid"
+                        alt={`파일 이미지 ${i + 1}`}
                       />
                     </Carousel.Item>
                   ))
                 ) : (
-                  <Carousel.Item>
+                  <Carousel.Item className="board-carousel-item">
                     <img
                       src="/image/board_default_img.png"
                       className="board-img-fluid"
+                      alt="기본 이미지"
                     />
                   </Carousel.Item>
                 )}
@@ -164,6 +184,14 @@ const BoardView = () => {
         </div>
 
         <div className="view-btn-zone">
+          <button  className="board-report-btn" onClick={reportBoard}>신고</button>
+          <ReportModal
+            boardNo={board.boardNo}
+            memberNo={loginNo}
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+          />
+
           <Link
             to={`/board/update/${board.boardNo}`}
             className="board-update-btn"
@@ -178,9 +206,8 @@ const BoardView = () => {
             삭제
           </button>
         </div>
-        {/* 좋아요, 댓글 수, 저장 기능 */}
-        {/**/}
-        <div className="like-comment-keep view-like-comment-keep">
+
+        <div className="view-like-comment-keep">
           <div className="board-like sub-item" onClick={likeClick}>
             {board.likeCount === 0 ? (
               "좋아요"
@@ -209,6 +236,7 @@ const BoardView = () => {
             )}
           </div>
         </div>
+
         <div className="board-comment-wrap">
           <BoardCommnet board={board} />
         </div>
