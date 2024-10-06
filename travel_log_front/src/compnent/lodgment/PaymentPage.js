@@ -10,8 +10,8 @@ import Swal from "sweetalert2";
 
 const PaymentPage = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
-  const [loginNo, setLoginNo] = useRecoilState(loginNoState);
-  //console.log(loginNo);
+  const [loginNo] = useRecoilState(loginNoState);
+  console.log(loginNo);
   const { state } = useLocation();
   const navigate = useNavigate();
   //console.log(state);
@@ -53,10 +53,10 @@ const PaymentPage = () => {
     endDate: state.checkOut,
     roomNo: state.room.roomNo,
     sellerNo: state.lodgmentInfo.sellerNo,
-    memberNo: loginNo, //왜 디폴트값이 들어갈까?
+    memberNo: "",
     portoneimpuid: "",
   });
-  //console.log(bookingInfo.memberNo);
+  console.log("book : " + bookingInfo.memberNo);
 
   //console.log(bookingInfo);
   // 투숙객 정보 입력 변환
@@ -160,12 +160,14 @@ const PaymentPage = () => {
           const updatedBookingInfo = {
             ...bookingInfo,
             portoneimpuid: rsp.merchant_uid,
+            memberNo: loginNo,
           };
-          console.log(updatedBookingInfo);
+          //console.log(updatedBookingInfo);
           axios
             .post(`${BackServer}/booking`, updatedBookingInfo)
             .then((res) => {
-              // 결제 완료 처리
+              console.log(res);
+              navigate(`/lodgment/bookInfo`, { state: { bookNo: res.data } });
             })
             .catch((error) => {
               // 에러 발생 시 처리

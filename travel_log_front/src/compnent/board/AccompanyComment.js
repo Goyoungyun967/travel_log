@@ -5,8 +5,7 @@ import { loginNicknameState, loginNoState } from "../utils/RecoilData";
 import dayjs from "dayjs";
 import FavoriteIcon from "@mui/icons-material/Favorite"; // 채워진 하트
 import { useParams } from "react-router-dom";
-
-const BoardComment = ({ board }) => {
+const AccompanyComment = (accompany) => {
   const backServer = process.env.REACT_APP_BACK_SERVER; // 백엔드 서버 주소
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
   const [commentList, setCommentList] = useState([]); // 댓글 목록
@@ -19,11 +18,11 @@ const BoardComment = ({ board }) => {
   const { isLike: isLikeParam, likeCount: likeCountParam } = useParams();
   const [likeCount, setLikeCount] = useState(Number(likeCountParam));
   const [isLike, setIsLike] = useState(Number(isLikeParam));
-
+  console.log(accompany.accompany.boardNo);
   // 댓글 목록 불러오기
   useEffect(() => {
     axios
-      .get(`${backServer}/board/commentList/${board.boardNo}`)
+      .get(`${backServer}/board/commentList/${accompany.accompany.boardNo}`)
       .then((response) => {
         const commentsWithFormattedDate = response.data.map((comment) => ({
           ...comment,
@@ -38,7 +37,7 @@ const BoardComment = ({ board }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [board.boardNo, commentValue, isLike]);
+  }, [accompany.accompany.boardNo, commentValue, isLike]);
 
   // 댓글 제출 핸들러
   const handleCommentSubmit = () => {
@@ -46,7 +45,7 @@ const BoardComment = ({ board }) => {
       const form = new FormData();
       form.append("commentContent", commentValue.trim());
       form.append("commentWriter", loginNickname);
-      form.append("boardNo", board.boardNo);
+      form.append("boardNo", accompany.accompany.boardNo);
 
       axios
         .post(`${backServer}/board/insertComment`, form, {
@@ -239,5 +238,4 @@ const BoardComment = ({ board }) => {
     </div>
   );
 };
-
-export default BoardComment;
+export default AccompanyComment;

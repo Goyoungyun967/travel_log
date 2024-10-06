@@ -256,12 +256,48 @@ const AccompanyItem = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const accompany = props.accompany;
   const loginNickname = props.loginNickname;
+
   const navigate = useNavigate();
+  //작성 시간
+  const now = new Date();
+  console.log(now);
+  const regDate = new Date(accompany.regDate);
+  const time = now - regDate;
+  console.log(regDate);
+  const seconds = Math.floor(time / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const months = Math.floor(days / 30.44);
+  const years = Math.floor(months / 12);
+
+  // 시간 포맷
+  let timeString = "";
+  if (years > 0) timeString = `${years}년 전`;
+  else if (months > 0) timeString = `${months}달 전`;
+  else if (days > 0) timeString = `${days}일 전`;
+  else if (hours > 0) timeString = `${hours}시간 전`;
+  else if (minutes > 0) timeString = `${minutes}분 전`;
+  else timeString = `방금전`;
+  console.log(timeString);
   return (
     <div
       className="board-preview-list awbcss"
       onClick={() => {
-        navigate(`/board/view${accompany.boardNo}`);
+        axios
+          .patch(`${backServer}/board/updateReadCount/${accompany.boardNo}`)
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log("조회수 증가 실패", err);
+          });
+
+        navigate(
+          `/board/AccompanyView/${accompany.boardNo}/${encodeURIComponent(
+            timeString
+          )}`
+        );
       }}
     >
       <div className="board-preview-thumb">

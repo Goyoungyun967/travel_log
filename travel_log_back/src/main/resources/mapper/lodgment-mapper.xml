@@ -144,6 +144,7 @@
 			r.room_info AS room_info,
 			st.service_tag_no AS serviceTagNo,
 			st.service_tag_type AS serviceTagType,
+			rf.room_file_no AS room_file_no,
 			rf.room_img AS room_img
 		FROM
 			room r
@@ -175,6 +176,7 @@
 		<!-- 파일 리스트 -->
 		<collection property="fileList" ofType="roomFile"
 			javaType="java.util.List">
+			<id property="roomFileNo" column="room_file_no" />
 			<result property="roomImg" column="room_img" />
 		</collection>
 	</resultMap>
@@ -184,7 +186,7 @@
 	<!-- 마지막에 1은 삭제 여부 (0: 삭제, 1: 삭제X) -->
 	<insert id="insertRoom">
 		insert into room values(room_seq.nextval,
-		#{lodgmentNo},#{roomName},#{roomQua},#{maxCapacity},#{roomPrice},#{boardContent},1)
+		#{lodgmentNo},#{roomName},#{roomQua},#{roomMaxCapacity},#{roomPrice},#{roomInfo},1)
 		<selectKey resultType="int" keyProperty="roomNo"
 			order="AFTER">
 			select max(room_no) from room
@@ -206,11 +208,12 @@
 	<!-- 판매자 정산 정보 -->
 	<!-- AND TO_DATE(#{endDate}, 'YY/MM/DD') + 1 - 1/86400 (<- 해당 일의 모든 데이터 
 		추가 (25일 찾으면 24일까지 나와서 추가함)) -->
+	<!-- 정산 여부 추가 되어서 1인 것만 select -->
 	<select id="selectStmInfo" resultMap="stmInfoMap">
 		select stm_num, seller_no, stm_price, to_char(stm_date, 'YYYY-MM-dd')
 		as stm_date
 		from stm_tbl
-		where seller_no = #{sellerNo}
+		where seller_no = #{sellerNo} and stm_state=1
 		<if test="startDate!=null and endDate!=null">
 			and stm_date BETWEEN TO_DATE(#{startDate},'YY/MM/DD')
 			AND TO_DATE(#{endDate}, 'YY/MM/DD') + 1 - 1/86400
@@ -360,4 +363,38 @@
 	 <update id="updatecomment">
 	 	update LODGMENT_REVIEW set seller_comment=#{sellerComment} where review_no=#{reviewNo}
 	 </update>
+	 
+	 <!-- 판매자 객실 수정 -->
+	 <update id="updateRoom">
+	 	update room
+		set room_name=#{roomName},
+		    room_qua=#{roomQua},
+		    ROOM_MAX_CAPACITY=#{roomMaxCapacity},
+		    room_price=#{roomPrice},
+		    room_info=#{roomInfo}
+		where room_no = #{roomNo}
+	 </update>
+	 
+	 <!-- 삭제할 파일 조회 -->
+	 <select id="selectRoomFile" resultType="roomFile">
+	  	select * from room_file
+	  	where room_file_no in 
+	  	<foreach collection="array" item="roomFileNo" open="(" close=")" separator=",">
+	  		#{roomFileNo}
+	  	</foreach>
+	  </select>
+	  
+	 <!-- 조회 후 파일 삭제 -->
+	<delete id="deleteRoomFile">
+		delete from room_file
+		where room_file_no in 
+		<foreach collection="array" item="roomFileNo" open="(" close=")" separator=",">
+			#{roomFileNo}
+		</foreach>
+	</delete>
+	
+	<!-- 서비스 태그 모두 삭제 -->
+	<delete id="delAllServiceTag">
+		delete from ROOM_SERVICE_TAG where room_no=#{roomNo}
+	</delete>
 </mapper>

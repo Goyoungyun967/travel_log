@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import kr.co.iei.board.model.dto.AccompanyTag;
+import kr.co.iei.board.model.dto.AccompanyTypeTag;
 import kr.co.iei.board.model.dto.BoardAccompanyDTO;
 import kr.co.iei.board.model.dto.BoardCommentDTO;
 import kr.co.iei.board.model.dto.BoardDTO;
@@ -66,13 +67,21 @@ public interface BoardDao {
 
 	//동행게시판 리스트
 	int accompanyTotalCount(int type);
-	List selectAccompanyList(Map<String, Object> m);
+	List<BoardAccompanyDTO> selectAccompanyList(Map<String, Object> m);
+
 	//동행 게시판 등록
 	int insertBoardAccompany(BoardAccompanyDTO boardAccompany);
 	//동행 게시판 등록 동행일정 부분
 	int insertAccompany(BoardAccompanyDTO boardAccompany);
 
 	int insertAccompanyType(AccompanyTag at);
+	//게시판 조회수 
+	int updateReadCount(int boardNo);
+	//게시판 상세
+	BoardAccompanyDTO selectBoardAccompany(int boardNo);
+	List<AccompanyTypeTag> selectAccompanyTypeTags(int boardNo);
+	List<BoardFileDTO> selectOneAccompanyList(int boardNo);
+
 
 
 	

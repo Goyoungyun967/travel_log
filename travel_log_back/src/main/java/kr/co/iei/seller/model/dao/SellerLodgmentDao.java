@@ -38,7 +38,7 @@ public interface SellerLodgmentDao {
 
 	List<RoomDTO> selectRoomInfo(int lodgmentNo);
 
-	int insertRoom(InsertRoomDTO room);
+	int insertRoom(RoomDTO room);
 
 	int insertRoomFile(RoomFileDTO roomFile);
 
@@ -65,6 +65,15 @@ public interface SellerLodgmentDao {
 	int delUpRoom(int roomNo);
 
 	int updatecomment(LodgmentReviewDTO ld);
+
+	/**/
+	int updateRoom(RoomDTO room);
+
+	List<RoomFileDTO> selectRoomFile(int[] delRoomFileNo);
+
+	int deleteRoomFile(int[] delRoomFileNo);
+
+	int delAllServiceTag(int roomNo);
 
 	
 	
