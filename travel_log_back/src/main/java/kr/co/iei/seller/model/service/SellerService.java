@@ -142,6 +142,7 @@ public class SellerService {
 	}
 
 	// 호텔 수정
+	@Transactional
 	public int updateLodgment(LodgmentStorageDTO ls) {
 		int result = sellerLodgmentDao.updateLodgment(ls);
 		return result;
@@ -348,6 +349,14 @@ public class SellerService {
 	public int updateComment(LodgmentReviewDTO ld) {
 		int result = sellerLodgmentDao.updatecomment(ld);
 		return result;
+	}
+
+
+	// 회원 정보 
+	public SellerDTO selectOneSeller(String token) {
+		LoginSellerDTO loginSeller = jwtUtil.sellerCheckToken(token);
+		SellerDTO seller = sellerDao.selectOneSeller(loginSeller.getSellerNo());
+		return seller;
 	}
 
 

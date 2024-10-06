@@ -54,8 +54,12 @@ const SellerMain = () => {
 
       {/* 객실 수정 */}
       <Route path="updateRoom/:lodgmentNo/:roomNo" element={<UpdateRoom />} />
-      {/* 객실 수정 */}
+
+      {/* 호텔 수정 */}
       <Route path="updateLodgment/:lodgmentNo" element={<UpdateLodgment />} />
+
+      {/* 판매자 정보 조회 */}
+      <Route path="sellerInfo" element={<SellerInfo />} />
     </Routes>
   );
 };
