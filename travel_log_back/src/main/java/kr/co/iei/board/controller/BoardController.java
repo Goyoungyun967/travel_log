@@ -39,6 +39,7 @@ import kr.co.iei.board.model.dto.BoardAccompanyDTO;
 import kr.co.iei.board.model.dto.BoardCommentDTO;
 import kr.co.iei.board.model.dto.BoardDTO;
 import kr.co.iei.board.model.dto.BoardFileDTO;
+import kr.co.iei.board.model.dto.BoardReportDTO;
 import kr.co.iei.board.model.service.BoardService;
 import kr.co.iei.util.FileUtils;
 
@@ -243,7 +244,14 @@ public class BoardController {
           int result = boardService.unlikeComment(memberNo, commentNo); // 좋아요 취소 처리
           return ResponseEntity.ok(result); // 처리 결과 반환 (1: 성공, 0: 실패)
       }
-    
+    //게시판신고고
+      @PostMapping("/report")
+  		public ResponseEntity<Boolean> insertReport(@RequestBody BoardReportDTO report){
+    	  System.out.println(report);
+    	  
+    	  int ressult = boardService.insertReport(report);
+    	  return ResponseEntity.ok(ressult>0);
+      }
     
     
   //동행게시판리스트

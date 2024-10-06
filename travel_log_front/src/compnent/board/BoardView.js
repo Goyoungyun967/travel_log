@@ -6,13 +6,15 @@ import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 import FavoriteIcon from "@mui/icons-material/Favorite"; // 채워진 하트
-import "./board.css";
-import SaveIcon from "@mui/icons-material/Save"; //저장 모양
-import ChatBubbleIcon from "@mui/icons-material/ChatBubble"; //댓글
-import ArrowBackIcon from "@mui/icons-material/ArrowBack"; //뒤로가기 모양
+import SaveIcon from "@mui/icons-material/Save"; // 저장 모양
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble"; // 댓글
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"; // 뒤로가기 모양
+import Modal from "react-modal"; // 모달
 import BoardCommnet from "./BoardComment";
 import { useRecoilState } from "recoil";
 import { loginNicknameState, loginNoState } from "../utils/RecoilData";
+import "./board.css";
+
 const BoardView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
@@ -26,7 +28,9 @@ const BoardView = () => {
   const [likeCount, setLikeCount] = useState(Number(likeCountParam));
   const [isLike, setIsLike] = useState(Number(isLikeParam));
   const [board, setBoard] = useState(null);
-  console.log(board);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reportType, setReportType] = useState("");
+  const [reportContent, setReportContent] = useState("");
 
   useEffect(() => {
     axios
@@ -38,12 +42,11 @@ const BoardView = () => {
         console.log(err);
       });
   }, [isLike]);
-  //
+
   const deleteBoard = () => {
     axios
       .delete(`${backServer}/board/delete/${boardNo}`)
       .then((res) => {
-        console.log(res);
         if (res.data === 1) {
           navigate("/board/list");
         }
@@ -55,7 +58,6 @@ const BoardView = () => {
 
   const likeClick = () => {
     if (isLike === 1) {
-      // 좋아요 취소 요청
       axios
         .delete(`${backServer}/board/unlike/${boardNo}/${memberNo}`)
         .then(() => {
@@ -66,7 +68,6 @@ const BoardView = () => {
           console.error("좋아요 취소 중 오류 발생:", err);
         });
     } else {
-      // 좋아요 추가 요청
       axios
         .post(`${backServer}/board/like/${boardNo}/${memberNo}`)
         .then(() => {
@@ -76,6 +77,34 @@ const BoardView = () => {
         .catch((err) => {
           console.error("좋아요 요청 중 오류 발생:", err);
         });
+    }
+  };
+
+  const reportBoard = () => {
+    setIsModalOpen(true); // 모달 열기
+  };
+
+  const handleReportSubmit = () => {
+    const boardNo = board.boardNo;
+    console.log(board.boardNo, memberNo, boardNo);
+
+    if (reportType) {
+      axios
+        .post(`${backServer}/board/report`, {
+          reportType,
+          reportContent,
+          boardNo,
+          memberNo,
+        })
+        .then(() => {
+          alert("신고가 접수되었습니다.");
+          setIsModalOpen(false); // 모달 닫기
+        })
+        .catch((err) => {
+          console.error("신고 중 오류 발생:", err);
+        });
+    } else {
+      alert("신고 유형과 내용을 모두 입력해주세요.");
     }
   };
 
@@ -179,6 +208,13 @@ const BoardView = () => {
         </div>
 
         <div className="view-btn-zone">
+          <button
+            type="button"
+            className="board-report-btn"
+            onClick={reportBoard}
+          >
+            신고
+          </button>
           <Link
             to={`/board/update/${board.boardNo}`}
             className="board-update-btn"
@@ -193,8 +229,7 @@ const BoardView = () => {
             삭제
           </button>
         </div>
-        {/* 좋아요, 댓글 수, 저장 기능 */}
-        {/**/}
+
         <div className="view-like-comment-keep">
           <div className="board-like sub-item" onClick={likeClick}>
             {board.likeCount === 0 ? (
@@ -224,9 +259,51 @@ const BoardView = () => {
             )}
           </div>
         </div>
+
         <div className="board-comment-wrap">
           <BoardCommnet board={board} />
         </div>
+
+        {/* 신고 모달 */}
+        <Modal
+          className="board-Modal"
+          isOpen={isModalOpen}
+          onRequestClose={() => setIsModalOpen(false)}
+          ariaHideApp={false}
+        >
+          <h2 className="board-report-type-title">게시물 신고</h2>
+          <div className="board-report-wrap">
+            <label className="board-report-type">신고 유형</label>
+            <select
+              className="board-report-type-select"
+              value={reportType}
+              onChange={(e) => setReportType(e.target.value)}
+            >
+              <option value="">선택</option>
+              <option value="1">비속어</option>
+              <option value="2">혐오성</option>
+              <option value="3">광고성</option>
+            </select>
+          </div>
+          <div className="board-report-content-box">
+            <label className="board-report-title">신고 내용</label>
+            <textarea
+              className="board-report-content"
+              value={reportContent}
+              onChange={(e) => setReportContent(e.target.value)}
+              placeholder="신고 사유를 작성해주세요."
+            />
+          </div>
+          <button className="board-report-insert" onClick={handleReportSubmit}>
+            신고 제출
+          </button>
+          <button
+            className="board-no-report"
+            onClick={() => setIsModalOpen(false)}
+          >
+            취소
+          </button>
+        </Modal>
       </div>
     </div>
   ) : (

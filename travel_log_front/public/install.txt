@@ -53,3 +53,6 @@ npm install slick-carousel --save
 오시우 2024-10-05 16:28
 npm install exceljs
 npm install --save html2canvas
+
+고영윤 2024-10-6 17:05
+npm install react-modal

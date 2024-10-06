@@ -175,6 +175,11 @@
 		<select id="selectUnlikeComment" resultType="int">
 			select count(*) from comment_like where comment_No = #{commentNo}
 		</select>
+		<!-- 게시판 신고 -->
+		<insert id="insertReport">
+		insert into board_report values(board_report_seq.nextval,#{memberNo},#{reportType},#{reportContent},#{boardNo})
+		</insert>
+		
 	
 		
 		
