@@ -14,6 +14,7 @@ import BoardCommnet from "./BoardComment";
 import { useRecoilState } from "recoil";
 import { loginNicknameState, loginNoState } from "../utils/RecoilData";
 import "./board.css";
+import ReportModal from "./ReportModal";
 
 const BoardView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -28,9 +29,12 @@ const BoardView = () => {
   const [likeCount, setLikeCount] = useState(Number(likeCountParam));
   const [isLike, setIsLike] = useState(Number(isLikeParam));
   const [board, setBoard] = useState(null);
+  //모달창 관련
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [reportType, setReportType] = useState("");
-  const [reportContent, setReportContent] = useState("");
+
+  const reportBoard = () => {
+    setIsModalOpen(true);
+  };
 
   useEffect(() => {
     axios
@@ -77,34 +81,6 @@ const BoardView = () => {
         .catch((err) => {
           console.error("좋아요 요청 중 오류 발생:", err);
         });
-    }
-  };
-
-  const reportBoard = () => {
-    setIsModalOpen(true); // 모달 열기
-  };
-
-  const handleReportSubmit = () => {
-    const boardNo = board.boardNo;
-    console.log(board.boardNo, memberNo, boardNo);
-
-    if (reportType) {
-      axios
-        .post(`${backServer}/board/report`, {
-          reportType,
-          reportContent,
-          boardNo,
-          memberNo,
-        })
-        .then(() => {
-          alert("신고가 접수되었습니다.");
-          setIsModalOpen(false); // 모달 닫기
-        })
-        .catch((err) => {
-          console.error("신고 중 오류 발생:", err);
-        });
-    } else {
-      alert("신고 유형과 내용을 모두 입력해주세요.");
     }
   };
 
@@ -208,13 +184,14 @@ const BoardView = () => {
         </div>
 
         <div className="view-btn-zone">
-          <button
-            type="button"
-            className="board-report-btn"
-            onClick={reportBoard}
-          >
-            신고
-          </button>
+          <button  className="board-report-btn" onClick={reportBoard}>신고</button>
+          <ReportModal
+            boardNo={board.boardNo}
+            memberNo={loginNo}
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+          />
+
           <Link
             to={`/board/update/${board.boardNo}`}
             className="board-update-btn"
@@ -263,47 +240,6 @@ const BoardView = () => {
         <div className="board-comment-wrap">
           <BoardCommnet board={board} />
         </div>
-
-        {/* 신고 모달 */}
-        <Modal
-          className="board-Modal"
-          isOpen={isModalOpen}
-          onRequestClose={() => setIsModalOpen(false)}
-          ariaHideApp={false}
-        >
-          <h2 className="board-report-type-title">게시물 신고</h2>
-          <div className="board-report-wrap">
-            <label className="board-report-type">신고 유형</label>
-            <select
-              className="board-report-type-select"
-              value={reportType}
-              onChange={(e) => setReportType(e.target.value)}
-            >
-              <option value="">선택</option>
-              <option value="1">비속어</option>
-              <option value="2">혐오성</option>
-              <option value="3">광고성</option>
-            </select>
-          </div>
-          <div className="board-report-content-box">
-            <label className="board-report-title">신고 내용</label>
-            <textarea
-              className="board-report-content"
-              value={reportContent}
-              onChange={(e) => setReportContent(e.target.value)}
-              placeholder="신고 사유를 작성해주세요."
-            />
-          </div>
-          <button className="board-report-insert" onClick={handleReportSubmit}>
-            신고 제출
-          </button>
-          <button
-            className="board-no-report"
-            onClick={() => setIsModalOpen(false)}
-          >
-            취소
-          </button>
-        </Modal>
       </div>
     </div>
   ) : (
