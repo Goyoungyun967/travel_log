@@ -14,6 +14,7 @@ import kr.co.iei.board.model.dto.BoardCommentDTO;
 import kr.co.iei.board.model.dto.BoardDTO;
 import kr.co.iei.board.model.dto.BoardFileDTO;
 import kr.co.iei.board.model.dto.BoardReportDTO;
+import kr.co.iei.board.model.dto.CommentReportDTO;
 
 
 @Mapper
@@ -67,7 +68,8 @@ public interface BoardDao {
 	
 	//신고
 	int insertReport(BoardReportDTO report);
-
+	//댓글
+	int insertCommentReport(CommentReportDTO commentReport);
 	//동행게시판 리스트
 	int accompanyTotalCount(int type);
 	List<BoardAccompanyDTO> selectAccompanyList(Map<String, Object> m);
@@ -84,6 +86,7 @@ public interface BoardDao {
 	BoardAccompanyDTO selectBoardAccompany(int boardNo);
 	List<AccompanyTypeTag> selectAccompanyTypeTags(int boardNo);
 	List<BoardFileDTO> selectOneAccompanyList(int boardNo);
+
 
 	
 

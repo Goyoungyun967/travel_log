@@ -20,6 +20,7 @@ import kr.co.iei.board.model.dto.BoardCommentDTO;
 import kr.co.iei.board.model.dto.BoardDTO;
 import kr.co.iei.board.model.dto.BoardFileDTO;
 import kr.co.iei.board.model.dto.BoardReportDTO;
+import kr.co.iei.board.model.dto.CommentReportDTO;
 import kr.co.iei.util.PageInfo;
 import kr.co.iei.util.PageUtil;
 
@@ -200,6 +201,15 @@ public class BoardService {
 			}
 			return 0;
 		}
+	//댓글 신고
+	@Transactional
+	public int insertReport(CommentReportDTO commentReport) {
+		int result = boardDao.insertCommentReport(commentReport);
+		if(result>0) {
+			return result;
+		}
+		return 0;
+	}
 	
 	
 	//동행게시판 

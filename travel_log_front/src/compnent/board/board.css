@@ -689,7 +689,7 @@ props/*글자 사이즈*/
 .commnet-like:hover {
   color: #c0392b; /* 호버 시 더 어두운 빨간색 */
 }
-
+.commnet-report-btn,
 .comment-update-btn,
 .comment-del-btn {
   position: absolute;
@@ -703,22 +703,25 @@ props/*글자 사이즈*/
   margin-left: 10px; /* 수정과 삭제 버튼 사이 간격 */
   padding: 0;
 }
-
-.comment-update-btn {
-  right: 50px; /* 수정 버튼과 삭제 버튼이 더 붙도록 조정 */
+.commnet-report-btn {
+  top: 30px;
 }
-
+.comment-update-btn {
+  right: 40px; /* 수정 버튼과 삭제 버튼이 더 붙도록 조정 */
+}
+.commnet-report-btn:hover,
 .comment-update-btn:hover,
 .comment-del-btn:hover {
   color: #95a5a6; /* 호버 시 더 진한 회색 */
 }
 
 /* 밑줄 제거 */
+.commnet-report-btn,
 .comment-update-btn,
 .comment-del-btn {
   text-decoration: none;
 }
-
+.commnet-report-btn:hover,
 .comment-update-btn:hover,
 .comment-del-btn:hover {
   text-decoration: none;

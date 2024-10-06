@@ -3,18 +3,18 @@ import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-const ReportModal = ({ boardNo, memberNo, isOpen, onClose }) => {
-  const [reportType, setReportType] = useState("");
-  const [reportContent, setReportContent] = useState("");
+const CommentReportModal = ({ commentNo, memberNo, isOpen, onClose }) => {
+  const [commmentReportType, setCommmentReportType] = useState("");
+  const [commentReportContent, setCommentReportContent] = useState("");
   const backServer = process.env.REACT_APP_BACK_SERVER; // 백엔드 서버 주소
 
   const handleReportSubmit = () => {
-    if (reportType) {
+    if (commmentReportType) {
       axios
-        .post(`${backServer}/board/report`, {
-          reportType,
-          reportContent,
-          boardNo,
+        .post(`${backServer}/board/commentReport`, {
+          commmentReportType,
+          commentReportContent,
+          commentNo,
           memberNo,
         })
         .then(() => {
@@ -23,7 +23,7 @@ const ReportModal = ({ boardNo, memberNo, isOpen, onClose }) => {
             title: "신고가 접수되었습니다.",
             confirmButtonText: "확인",
           });
-          handleClose(); // 모달 닫기
+          onClose(); // 모달 닫기
         })
         .catch((err) => {
           console.error("신고 중 오류 발생:", err);
@@ -45,8 +45,8 @@ const ReportModal = ({ boardNo, memberNo, isOpen, onClose }) => {
   };
 
   const handleClose = () => {
-    setReportType(""); // 상태 초기화
-    setReportContent(""); // 상태 초기화
+    setCommmentReportType(""); // 상태 초기화
+    setCommentReportContent(""); // 상태 초기화
     onClose(); // 모달 닫기
   };
 
@@ -62,8 +62,8 @@ const ReportModal = ({ boardNo, memberNo, isOpen, onClose }) => {
         <label className="board-report-type">신고 유형</label>
         <select
           className="board-report-type-select"
-          value={reportType}
-          onChange={(e) => setReportType(e.target.value)}
+          value={commmentReportType}
+          onChange={(e) => setCommmentReportType(e.target.value)}
         >
           <option value="">선택</option>
           <option value="1">비속어</option>
@@ -76,8 +76,8 @@ const ReportModal = ({ boardNo, memberNo, isOpen, onClose }) => {
         <label className="board-report-title">신고 내용</label>
         <textarea
           className="board-report-content"
-          value={reportContent}
-          onChange={(e) => setReportContent(e.target.value)}
+          value={commentReportContent}
+          onChange={(e) => setCommentReportContent(e.target.value)}
           placeholder="신고 사유를 작성해주세요."
         />
       </div>
@@ -91,4 +91,4 @@ const ReportModal = ({ boardNo, memberNo, isOpen, onClose }) => {
   );
 };
 
-export default ReportModal;
+export default CommentReportModal;
