@@ -95,9 +95,18 @@ public class SellerController {
 	}
 	// 호텔 수정
 	@Operation(summary = "호텔 수정", description = "호텔 번호 받아서 수정")
-	@PatchMapping(value="/UpdateLodgment")
+	@PatchMapping(value="/updateLodgment")
 	public ResponseEntity<Integer> updateLodgment(@ModelAttribute LodgmentStorageDTO ls, @ModelAttribute MultipartFile lodgmentImg){
-		return ResponseEntity.ok(0);
+		System.out.println(ls);
+		System.out.println(lodgmentImg);
+		if(lodgmentImg != null){
+            // 업로드 위치임
+            String savepath = root+"/seller/lodgment/";
+            String filepath = fileUtil.upload(savepath, lodgmentImg);
+            ls.setLodgmentImgPath(filepath); // 경로 저장
+        }
+		 int result = sellerService.updateLodgment(ls);
+		return ResponseEntity.ok(result);
 	}
 	
 	

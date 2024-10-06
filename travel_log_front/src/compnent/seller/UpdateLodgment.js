@@ -50,7 +50,8 @@ const UpdateLodgment = () => {
   // 미리보기용 이미지
   const [viewImg, setViewImg] = useState(null);
   const [upImg, setUpImg] = useState(null);
-  console.log("미리보기 이미지", viewImg);
+
+  //   console.log("미리보기 이미지", viewImg);
   const lodgmentImgRef = useRef(null);
 
   // 선택된 호텔 타입의 value 값을 저장
@@ -115,6 +116,14 @@ const UpdateLodgment = () => {
             address !== ""
           ) {
             const form = new FormData();
+            form.append("lodgmentName", hotelName);
+            form.append("lodgmentAddr", address);
+            form.append("lodgmentTypeNo", lodgmentType);
+            form.append("lodgmentNo", lodgmentNo);
+            form.append("lodgmentStarGrade", lodgmentStar);
+            form.append("lodgmentCheckIn", checkIn);
+            form.append("lodgmentCheckOut", checkOut);
+            form.append("lodgmentNotice", boardContent);
 
             if (lodgmentImg !== null) {
               // 썸네일 있을 수도 있고 없을 수도 있음 => 첨부된 경우에만 추가
@@ -122,7 +131,7 @@ const UpdateLodgment = () => {
             }
 
             axios
-              .post(`${backServer}/seller`, form, {
+              .patch(`${backServer}/seller/updateLodgment`, form, {
                 headers: {
                   contentType: "multipart/form-data",
                   processData: false,

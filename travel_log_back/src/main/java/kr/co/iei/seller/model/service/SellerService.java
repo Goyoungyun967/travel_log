@@ -141,6 +141,12 @@ public class SellerService {
 		return map;
 	}
 
+	// 호텔 수정
+	public int updateLodgment(LodgmentStorageDTO ls) {
+		int result = sellerLodgmentDao.updateLodgment(ls);
+		return result;
+	}
+	
 	// 객실 상세
 	public Map selectRoomInfo(int lodgmentNo, int roomNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -343,6 +349,8 @@ public class SellerService {
 		int result = sellerLodgmentDao.updatecomment(ld);
 		return result;
 	}
+
+
 
 
 
