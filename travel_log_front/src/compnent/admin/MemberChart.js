@@ -131,7 +131,7 @@ const MemberChart = () => {
           onClick={(e) => {
             const target = e.currentTarget.nextSibling;
             const chart = [target];
-            downloadWorkbook(chart, enrollData);
+            downloadWorkbook(chart, enrollData, "회원 가입자");
           }}
         >
           엑셀파일
@@ -164,7 +164,7 @@ const MemberChart = () => {
           onClick={(e) => {
             const target = e.currentTarget.nextSibling;
             const chart = [target];
-            downloadWorkbook(chart, memberData);
+            downloadWorkbook(chart, memberData, "가입자 나이별 성별 비율");
           }}
         >
           엑셀파일
@@ -198,7 +198,7 @@ const MemberChart = () => {
           onClick={(e) => {
             const target = e.currentTarget.nextSibling;
             const chart = [target];
-            downloadWorkbook(chart, regionsData);
+            downloadWorkbook(chart, regionsData, "지역별 이용자");
           }}
         >
           엑셀파일
@@ -253,7 +253,7 @@ const MemberChart = () => {
           onClick={(e) => {
             const target = e.currentTarget.nextSibling;
             const chart = [target];
-            downloadWorkbook(chart, regionData);
+            downloadWorkbook(chart, regionData, `${region} 이용자`);
           }}
         >
           엑셀파일

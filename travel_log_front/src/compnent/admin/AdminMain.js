@@ -8,6 +8,7 @@ import SellerChart from "./SellerChart";
 import MemberChart from "./MemberChart";
 import AdminSellerStm from "./SellerStm";
 import AdminLodgmentList from "./AdminLodgmentList";
+import LodgmentReportList from "./LodgmentReportList";
 
 const AdminMain = () => {
   const changeMenu = (e) => {
@@ -64,7 +65,7 @@ const AdminMain = () => {
               <NavLink to="lodgmentList">상품 게시글 관리</NavLink>
             </li>
             <li>
-              <NavLink to="4">신고 리뷰 관리</NavLink>
+              <NavLink to="lodgmentReportList">신고 리뷰 관리</NavLink>
             </li>
             <li>
               <NavLink to="5">신고 게시글 관리</NavLink>
@@ -80,6 +81,10 @@ const AdminMain = () => {
             <Route path="sellerChart" element={<SellerChart />} />
             <Route path="sellerStm" element={<AdminSellerStm />} />
             <Route path="lodgmentList" element={<AdminLodgmentList />} />
+            <Route
+              path="lodgmenttReportList"
+              element={<LodgmentReportList />}
+            />
           </Routes>
         </div>
       </div>
