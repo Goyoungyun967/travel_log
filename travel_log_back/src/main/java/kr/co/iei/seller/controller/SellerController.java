@@ -93,6 +93,12 @@ public class SellerController {
 		LodgmentStorageDTO ls = sellerService.selectOneLodgment(lodgmentNo);
 		return ResponseEntity.ok(ls);
 	}
+	// 호텔 수정
+	@Operation(summary = "호텔 수정", description = "호텔 번호 받아서 수정")
+	@PatchMapping(value="/UpdateLodgment")
+	public ResponseEntity<Integer> updateLodgment(@ModelAttribute LodgmentStorageDTO ls, @ModelAttribute MultipartFile lodgmentImg){
+		return ResponseEntity.ok(0);
+	}
 	
 	
 	// 판매자 정보 조회
@@ -111,6 +117,15 @@ public class SellerController {
 		Map map = sellerService.selectHotelInfo(lodgmentNo, reqPage);
 		return ResponseEntity.ok(map);
 	}
+	
+	// 호텔 정보 조회
+	@Operation(summary = "호텔 조회", description = "호텔 번호 받아서 조회")
+	@GetMapping(value="/lodgmentView/{lodgmentNo}")
+	public ResponseEntity<LodgmentStorageDTO> searchLodgmentInfo(@PathVariable int lodgmentNo){
+		LodgmentStorageDTO lg = sellerService.selectOneLodgment(lodgmentNo);
+		return ResponseEntity.ok(lg);
+	}
+	// 호텔 업데이트
 	
 	// 객실 상세
 	@Operation(summary = "객실 상세", description = "객실 상세(호텔+객실+객실태그(서비스태그)+첨부파일) 호텔 번호/객실 번호 받아서 가져옴")

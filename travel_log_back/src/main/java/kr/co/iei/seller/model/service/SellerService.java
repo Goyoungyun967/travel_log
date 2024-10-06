@@ -102,7 +102,7 @@ public class SellerService {
 		LodgmentStorageDTO ls = sellerLodgmentDao.selectOneLodgment(lodgmentNo);
 		return ls;
 	}
-
+	
 	// 호텔 등록
 	@Transactional
 	public int insertLodgment(LodgmentStorageDTO ls) {
@@ -343,6 +343,7 @@ public class SellerService {
 		int result = sellerLodgmentDao.updatecomment(ld);
 		return result;
 	}
+
 
 
 
