@@ -9,6 +9,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import kr.co.iei.board.model.dao.BoardDao;
 import kr.co.iei.board.model.dto.AccompanyTag;
@@ -17,6 +19,8 @@ import kr.co.iei.board.model.dto.BoardAccompanyDTO;
 import kr.co.iei.board.model.dto.BoardCommentDTO;
 import kr.co.iei.board.model.dto.BoardDTO;
 import kr.co.iei.board.model.dto.BoardFileDTO;
+import kr.co.iei.board.model.dto.BoardReportDTO;
+import kr.co.iei.board.model.dto.CommentReportDTO;
 import kr.co.iei.util.PageInfo;
 import kr.co.iei.util.PageUtil;
 
@@ -188,7 +192,25 @@ public class BoardService {
 		}
 		return 0;
 	}
-
+// 게시판 신고
+	@Transactional
+		public int insertReport(BoardReportDTO report) {
+			int result = boardDao.insertReport(report);
+			if(result>0) {
+				return result;
+			}
+			return 0;
+		}
+	//댓글 신고
+	@Transactional
+	public int insertReport(CommentReportDTO commentReport) {
+		int result = boardDao.insertCommentReport(commentReport);
+		if(result>0) {
+			return result;
+		}
+		return 0;
+	}
+	
 	
 	//동행게시판 
 	public Map<String, Object> selectAccompanyList(int type, int reqPage) {
@@ -259,6 +281,8 @@ public class BoardService {
 		
 		return accompany;
 	}
+
+	
 
 
 

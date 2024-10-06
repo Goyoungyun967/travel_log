@@ -19,4 +19,24 @@
 		</selectKey>
 	</insert>
 
+	
+	<select id="totalCount" resultType="int">
+		select count(*) from booking
+	</select>
+	
+	<select id="selectBookingList" resultType="booking">
+	select * from
+		(select rownum as rnum, b.* from
+    		(select
+        		payment_date,
+        		room_no,
+        		seller_no,
+        		status,
+        		room_name,
+        		business_name,
+        	to_char(payment_date,'yyyy-mm-dd') as board_date
+    	from booking join room using(room_no) join seller using(seller_no) order by book_no desc)b)
+	where rnum between #{start} and #{end}
+	</select>
+  
 </mapper>

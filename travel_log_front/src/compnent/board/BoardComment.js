@@ -5,6 +5,7 @@ import { loginNicknameState, loginNoState } from "../utils/RecoilData";
 import dayjs from "dayjs";
 import FavoriteIcon from "@mui/icons-material/Favorite"; // 채워진 하트
 import { useParams } from "react-router-dom";
+import CommentReportModal from "./CommentReportModal";
 
 const BoardComment = ({ board }) => {
   const backServer = process.env.REACT_APP_BACK_SERVER; // 백엔드 서버 주소
@@ -19,6 +20,12 @@ const BoardComment = ({ board }) => {
   const { isLike: isLikeParam, likeCount: likeCountParam } = useParams();
   const [likeCount, setLikeCount] = useState(Number(likeCountParam));
   const [isLike, setIsLike] = useState(Number(isLikeParam));
+  //신고 모달창
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const reportBoard = () => {
+    setIsModalOpen(true);
+  };
 
   // 댓글 목록 불러오기
   useEffect(() => {
@@ -214,6 +221,20 @@ const BoardComment = ({ board }) => {
                           <FavoriteIcon /> {comment.commentLikeCount}
                         </>
                       )}
+                    </div>
+                    <div className="comment-report-div">
+                      <button
+                        className="commnet-report-btn"
+                        onClick={reportBoard}
+                      >
+                        신고
+                      </button>
+                      <CommentReportModal
+                        commentNo={comment.commentNo}
+                        memberNo={loginNo}
+                        isOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                      />
                     </div>
                     <button
                       className="comment-update-btn"
