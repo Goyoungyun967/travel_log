@@ -1,15 +1,22 @@
 package kr.co.iei.member.model.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.iei.booking.model.dao.BookingDao;
 import kr.co.iei.member.model.dao.MemberDao;
 import kr.co.iei.member.model.dto.LoginMemberDTO;
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.util.JwtUtils;
+import kr.co.iei.util.PageInfo;
+import kr.co.iei.util.PageUtil;
 
 @Service
 public class MemberService {
@@ -18,10 +25,16 @@ public class MemberService {
 	private MemberDao memberDao;
 	
 	@Autowired
+	private BookingDao bookingDao;
+	
+	@Autowired
 	private JwtUtils jwtUtil;
 	
 	@Autowired
 	private BCryptPasswordEncoder encoder;
+	
+	@Autowired
+	private PageUtil pageUtil;
 
 	public int checkId(String memberId) {
 		int result = memberDao.checkId(memberId);
@@ -103,6 +116,21 @@ public class MemberService {
 		member.setMemberPw(encPw);
 		int result = memberDao.changePw(member);
 		return result;
+	}
+
+	public Map selectBookingList(int memberNo, int reqPage) {
+		int numPerPage = 12;		//한 페이지당 게시물 수
+		int pageNaviSize = 5;		//페이지네비 길이 
+		int totalCount = bookingDao.totalCount();
+		
+		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
+		List list = bookingDao.selectBookingList(pi);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list",list);
+		map.put("pi", pi);
+		
+		return map;
+		
 	}
 
 	

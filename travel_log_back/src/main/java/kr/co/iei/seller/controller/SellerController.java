@@ -93,6 +93,21 @@ public class SellerController {
 		LodgmentStorageDTO ls = sellerService.selectOneLodgment(lodgmentNo);
 		return ResponseEntity.ok(ls);
 	}
+	// 호텔 수정
+	@Operation(summary = "호텔 수정", description = "호텔 번호 받아서 수정")
+	@PatchMapping(value="/updateLodgment")
+	public ResponseEntity<Integer> updateLodgment(@ModelAttribute LodgmentStorageDTO ls, @ModelAttribute MultipartFile lodgmentImg){
+		System.out.println(ls);
+		System.out.println(lodgmentImg);
+		if(lodgmentImg != null){
+            // 업로드 위치임
+            String savepath = root+"/seller/lodgment/";
+            String filepath = fileUtil.upload(savepath, lodgmentImg);
+            ls.setLodgmentImgPath(filepath); // 경로 저장
+        }
+		 int result = sellerService.updateLodgment(ls);
+		return ResponseEntity.ok(result);
+	}
 	
 	
 	// 판매자 정보 조회
@@ -111,6 +126,15 @@ public class SellerController {
 		Map map = sellerService.selectHotelInfo(lodgmentNo, reqPage);
 		return ResponseEntity.ok(map);
 	}
+	
+	// 호텔 정보 조회
+	@Operation(summary = "호텔 조회", description = "호텔 번호 받아서 조회")
+	@GetMapping(value="/lodgmentView/{lodgmentNo}")
+	public ResponseEntity<LodgmentStorageDTO> searchLodgmentInfo(@PathVariable int lodgmentNo){
+		LodgmentStorageDTO lg = sellerService.selectOneLodgment(lodgmentNo);
+		return ResponseEntity.ok(lg);
+	}
+	// 호텔 업데이트
 	
 	// 객실 상세
 	@Operation(summary = "객실 상세", description = "객실 상세(호텔+객실+객실태그(서비스태그)+첨부파일) 호텔 번호/객실 번호 받아서 가져옴")
@@ -272,7 +296,7 @@ public class SellerController {
 	
 	// 호텔 삭제 (완전 삭제가 아님 (1에서 0으로 update))
 	@Operation(summary = "호텔 삭제", description = "호텔 삭제(완전 삭제가 아니라 1에서 0으로 update)")
-	@PatchMapping("/delLodgment")
+	@PatchMapping(value="/delLodgment")
 	public ResponseEntity<Integer> delUpLodgment(@RequestParam int lodgmentNo){
 		System.out.println(lodgmentNo);
 		int result = sellerService.delUpLodgment(lodgmentNo);
@@ -281,7 +305,7 @@ public class SellerController {
 	
 	// 객실 삭제 (1에서 0으로 update)
 	@Operation(summary = "객실 삭제", description = "객실 삭제(완전 삭제가 아니라 1에서 0으로 update)")
-	@PatchMapping("/delRoom")
+	@PatchMapping(value="/delRoom")
 	public ResponseEntity<Integer> delUpRoom(@RequestParam int roomNo){
 		System.out.println(roomNo);
 		int result = sellerService.delUpRoom(roomNo);
@@ -290,12 +314,19 @@ public class SellerController {
 	
 	// 판매자 호텔 리뷰 댓글
 	@Operation(summary = "호텔 리뷰 댓글", description = "리뷰 댓글 update랑 reviewNo 가져와서 씀")
-	@PatchMapping("/addComment")
+	@PatchMapping(value="/addComment")
 	public ResponseEntity<Integer> addComment(LodgmentReviewDTO ld){
 		System.out.println(ld);
 		int result = sellerService.updateComment(ld);
 		return ResponseEntity.ok(result);
 	}
 	
+	// 판매자 정보 조회
+	@Operation(summary = "판매자 정보 조회", description = "판매자 정보 조회 토큰 사용")
+	@GetMapping(value="/sellerInfo")
+	public ResponseEntity<SellerDTO> sellerInfo(@RequestHeader("Authorization") String token){
+		SellerDTO seller = sellerService.selectOneSeller(token);
+		return ResponseEntity.ok(seller);
+	}
 	
 }

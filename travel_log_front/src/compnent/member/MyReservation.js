@@ -1,9 +1,27 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { isLoginState, loginNoState } from "../utils/RecoilData";
+import { useNavigate } from "react-router-dom";
+
 const MyReservation = () => {
-  const reservations = [
-    { date: "2024-10-01", room: "숙소 A", writer: "홍길동", state: "확정" },
-    { date: "2024-10-05", room: "숙소 B", writer: "김철수", state: "대기중" },
-    { date: "2024-10-10", room: "숙소 C", writer: "이영희", state: "취소" },
-  ];
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+  const [booking, setBooking] = useState([]);
+  const [reqPage, setReqPage] = useState(1);
+  const [pi, setPi] = useState({});
+  const [memberNo, setMemberNo] = useRecoilState(loginNoState);
+  useEffect(() => {
+    axios
+      .get(`${backServer}/member/booking/list/${memberNo}/${reqPage}`)
+      .then((res) => {
+        console.log(res);
+        setBooking(res.data.list);
+        setPi(res.data.pi);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [reqPage]);
   return (
     <div className="mk-reservation-wrap">
       <div className="mk-reservation-title">
@@ -19,24 +37,46 @@ const MyReservation = () => {
           </tr>
         </thead>
         <tbody className="mk-reservation-list">
-          <tr>
-            <td className="mk-reservation-date-list">2024-10-01</td>
-            <td className="mk-reservation-room-list">숙소 A</td>
-            <td className="mk-reservation-write-list">홍길동</td>
-            <td className="mk-reservation-state-list">확정</td>
-          </tr>
+          {booking.map((booking, i) => {
+            return <BookingItem key={"booking" + i} booking={booking} />;
+          })}
         </tbody>
-        {reservations.map((reservation, index) => (
-          <tr key={index}>
-            <td className="mk-reservation-date-list">{reservation.date}</td>
-            <td className="mk-reservation-room-list">{reservation.room}</td>
-            <td className="mk-reservation-write-list">{reservation.writer}</td>
-            <td className="mk-reservation-state-list">{reservation.state}</td>
-          </tr>
-        ))}
       </table>
     </div>
   );
 };
+const BookingItem = (props) => {
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+  const booking = props.booking;
+  const navigate = useNavigate();
 
+  const getStatusText = (status) => {
+    switch (status) {
+      case 1:
+        return "예약 중";
+      case 2:
+        return "이용 완료";
+      case 3:
+        return "예약 취소";
+      default:
+        return "알 수 없음";
+    }
+  };
+
+  return (
+    <tr
+      onClick={() => {
+        //여기 링크만 좀 걸어주세요 ~
+        navigate(`/booking/view/${booking.bookingNo}`);
+      }}
+    >
+      <td className="mk-reservation-date-list">{booking.paymentDate}</td>
+      <td className="mk-reservation-room-list">{booking.roomName}</td>
+      <td className="mk-reservation-write-list">{booking.businessName}</td>
+      <td className="mk-reservation-state-list">
+        {getStatusText(booking.status)}
+      </td>
+    </tr>
+  );
+};
 export default MyReservation;

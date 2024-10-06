@@ -43,4 +43,8 @@ public class BookingDTO {
 	private String portoneimpuid;
 	@Schema(description = "방 삭제 여부", type = "int")
 	private int roomDelete;
+	@Schema(description = "판매 방 이름", type="string")
+	private String roomName;
+	@Schema(description = "호텔 작성자", type="string")
+	private String businessName;
 }

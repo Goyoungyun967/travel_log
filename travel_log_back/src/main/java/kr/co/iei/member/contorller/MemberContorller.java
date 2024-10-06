@@ -2,6 +2,7 @@ package kr.co.iei.member.contorller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,6 +165,12 @@ public class MemberContorller {
 	public ResponseEntity<Integer> changePw(@RequestBody MemberDTO member){
 		int result = memberService.changePw(member);
 		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping(value="/booking/list/{memberNo}/{reqPage}")
+	public ResponseEntity<Map> bookingList (@PathVariable int memberNo, @PathVariable int reqPage){
+		Map map = memberService.selectBookingList(memberNo,reqPage);
+		return ResponseEntity.ok(map);
 	}
 }
 	

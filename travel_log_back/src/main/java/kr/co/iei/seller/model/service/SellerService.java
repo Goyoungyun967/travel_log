@@ -102,7 +102,7 @@ public class SellerService {
 		LodgmentStorageDTO ls = sellerLodgmentDao.selectOneLodgment(lodgmentNo);
 		return ls;
 	}
-
+	
 	// 호텔 등록
 	@Transactional
 	public int insertLodgment(LodgmentStorageDTO ls) {
@@ -141,6 +141,13 @@ public class SellerService {
 		return map;
 	}
 
+	// 호텔 수정
+	@Transactional
+	public int updateLodgment(LodgmentStorageDTO ls) {
+		int result = sellerLodgmentDao.updateLodgment(ls);
+		return result;
+	}
+	
 	// 객실 상세
 	public Map selectRoomInfo(int lodgmentNo, int roomNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -343,6 +350,17 @@ public class SellerService {
 		int result = sellerLodgmentDao.updatecomment(ld);
 		return result;
 	}
+
+
+	// 회원 정보 
+	public SellerDTO selectOneSeller(String token) {
+		LoginSellerDTO loginSeller = jwtUtil.sellerCheckToken(token);
+		SellerDTO seller = sellerDao.selectOneSeller(loginSeller.getSellerNo());
+		return seller;
+	}
+
+
+
 
 
 
