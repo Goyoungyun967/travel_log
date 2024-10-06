@@ -136,22 +136,6 @@ const BoardList = () => {
     navigate("/board/accompanyList");
   };
 
-  // 모달창
-  // const handleLinkClick = (link) => {
-  //   setCurrentLink(link); // 클릭한 링크 저장
-  //   setShowModal(true); // 모달 열기
-  // };
-
-  // const handleModalClose = () => {
-  //   setShowModal(false); // 모달 닫기
-  // };
-
-  // const handleInputValue = (inputValue) => {
-  //   console.log(`입력된 값: ${inputValue}`);
-  //   setShowModal(false); // 모달 닫기
-  //   navigate(currentLink); // 저장된 링크로 이동
-  // };
-
   return (
     <div className="board-list-wrap">
       <div className="search-box-wrap">
@@ -314,9 +298,9 @@ const AccompanyItem = (props) => {
         <div className="board-preview-title">{accompany.boardTitle}</div>
         <div className="member flex-spbetw ">
           <div className="memberId-age-gender text-min">
-            <span>{loginNickname}-</span>
-            <span>28</span>
-            <span>남</span>
+            <span>{accompany.memberNickname}-</span>
+            <span>{accompany.memberAge}살-</span>
+            <span>{accompany.memberGender}</span>
           </div>
           <div className="area text-min">{accompany.boardArea}</div>
         </div>
@@ -425,7 +409,7 @@ const BoardItem = (props) => {
               />
             </Col>
             <Col xs={10} md={10} style={{ padding: 0 }}>
-              <div className="board-memberId">{loginNickname}</div>
+              <div className="board-memberId">{board.memberNickname}</div>
               <div className="board-regDate text-min">{timeString}</div>
             </Col>
           </Container>

@@ -86,6 +86,8 @@ public interface BoardDao {
 	BoardAccompanyDTO selectBoardAccompany(int boardNo);
 	List<AccompanyTypeTag> selectAccompanyTypeTags(int boardNo);
 	List<BoardFileDTO> selectOneAccompanyList(int boardNo);
+	//수정
+//	int updateBoardAccompany(BoardAccompanyDTO boardAccompany);
 
 
 	

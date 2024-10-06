@@ -7,6 +7,7 @@ import { Quill } from "react-quill";
 import BoardUqillEditor from "../utils/BoardUqillEditor";
 import { loginNoState } from "../utils/RecoilData";
 import AccompanyFrm from "./AccompanyFrm";
+import dayjs from "dayjs";
 
 const AccompanyUpdate = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -48,16 +49,64 @@ const AccompanyUpdate = () => {
   const inputTitle = (e) => {
     setBoardTitle(e.target.value);
   };
+  const [accompanyType, setAccompanyType] = useState([
+    { accompany_tag_no: 1, accompany_type: "부분 동행" },
+    { accompany_tag_no: 2, accompany_type: "숙박 공유" },
+    { accompany_tag_no: 3, accompany_type: "전체 동행" },
+    { accompany_tag_no: 4, accompany_type: "투어 동행" },
+    { accompany_tag_no: 5, accompany_type: "식사 동행" },
+    { accompany_tag_no: 6, accompany_type: "공동 구매" },
+  ]);
+  // 초기 일정 설정
+  const startDay = dayjs().add(1, "day");
+  const endDay = dayjs().add(2, "day");
+
+  // 체크인 날짜, 체크아웃 날짜 상태 관리
+  const [startDate, setStartDate] = useState(startDay.format("YYYY-MM-DD"));
+  const [endDate, setEndDate] = useState(endDay.format("YYYY-MM-DD"));
+
+  const [selectedType, setSelectedType] = useState([]); //실제 바뀐 값
+
+  const [daysDifference, setDaysDifference] = useState(0); // 날짜 차이 상태 관리
+
+  const [accompanyContent, setAccompanyContent] = useState([]);
+
+  const inputContent = (e) => {
+    setBoardContent(e.target.value);
+  };
+  const [accompanyArea, setAccompanyArea] = useState("1");
+
   useEffect(() => {
     axios
-      .get(`${backServer}/board/boardNo/${boardNo}`)
+      .get(`${backServer}/board/accompanyNo/${boardNo}`)
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         setBoardThumb(res.data.boardThumb);
         setBoardTitle(res.data.boardTitle);
         setBoardContent(res.data.boardContent);
         setSelectedArea(res.data.boardArea);
         setFileList(res.data.fileList);
+        setStartDate(res.data.startDay);
+        setEndDate(res.data.endDay);
+        setDaysDifference(res.data.accompanyDate);
+        // accompanyTypes가 배열이 아닐 경우 처리
+        const typesArray = Array.isArray(res.data.accompanyTypes)
+          ? res.data.accompanyTypes
+          : res.data.accompanyTypes.split(",").map((type) => type.trim());
+        setSelectedType(typesArray);
+        console.log(typesArray);
+
+        // accompanyContent가 배열이 아닐 경우 처리
+        const accompanyContentArray = Array.isArray(res.data.accompanyContent)
+          ? res.data.accompanyContent
+          : res.data.accompanyContent.split(",").map((type) => type.trim());
+
+        // 각 요소를 개별적으로 상태에 설정
+        accompanyContentArray.forEach((content) => {
+          setAccompanyContent((prevContent) => [...prevContent, content]);
+        });
+
+        console.log(accompanyContentArray); // 변환된 배열 출력
       })
       .catch((err) => {
         console.log(err);
@@ -70,7 +119,14 @@ const AccompanyUpdate = () => {
       form.append("boardTitle", boardTitle);
       form.append("boardContent", boardContent);
       form.append("boardNo", boardNo);
+      form.append("memberNo", loginNo);
       form.append("boardArea", selectedArea);
+      form.append("accompanyDate", daysDifference);
+      form.append("accompanyContent", accompanyContent);
+      form.append("accompanyTagNo ", selectedType);
+      form.append("accompanyArea", accompanyArea);
+      form.append("startDay", dayjs(startDate).format("YYYY-MM-DD"));
+      form.append("endDay", dayjs(endDate).format("YYYY-MM-DD"));
       if (boardThumb !== null) {
         form.append("boardThumb", boardThumb);
       }
@@ -95,7 +151,7 @@ const AccompanyUpdate = () => {
         });
     }
   };
-
+  console.log();
   return (
     <div className="write-content-wrap">
       <div className="write-page-title">여행 게시판 수정</div>
@@ -113,16 +169,26 @@ const AccompanyUpdate = () => {
           setBoardTitle={inputTitle}
           thumbnail={thumbnail}
           setThumbnail={setThumbnail}
-          boardThumb={boardThumb}
-          setBoardThumb={setBoardThumb}
-          fileList={fileList}
-          setFileList={setFileList}
           boardFile={boardFile}
           setBoardFile={setBoardFile}
           selectedArea={selectedArea}
           setSelectedArea={setSelectedArea}
-          delBoardFileNo={delBoardFileNo}
-          setDelBoardFileNo={setDelBoardFileNo}
+          startDate={startDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          setStartDate={setStartDate}
+          accompanyType={accompanyType}
+          setAccompanyType={setAccompanyType}
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+          accompanyContent={accompanyContent}
+          setAccompanyContent={setAccompanyContent}
+          daysDifference={daysDifference}
+          setDaysDifference={setDaysDifference}
+          accompanyArea={accompanyArea}
+          setAccompanyArea={setAccompanyArea}
+          fileList={fileList}
+          setFileList={setFileList}
         />
         <div className="board-editer-wrap">
           <BoardUqillEditor
