@@ -275,52 +275,72 @@
 		<!-- 동행 게시판 상세 -->
 		<!-- 게시판 상세 조회 -->
 	<select id="selectBoardAccompany" resultMap="getAccompany">
-	    SELECT 
-	        b.board_no,
-	        b.board_title,
-	        b.board_content,
-	        b.board_area,
-	        b.reg_date,
-	        b.board_type,
-	        b.board_thumb,
-	        b.read_count,
-	        ba.accompany_no,
-	        ba.accompany_date,
-	        ba.accompany_area,
-	        ba.accompany_content,
-	        ba.start_day,
-	        ba.end_day,
-	        att.accompany_tag_no,
-	        att.accompany_type,
-	        m.member_IMAGE,
-	        m.MEMBER_NICKNAME,
-	        m.MEMBER_AGE,
-	        m.MEMBER_GENDER
-	    FROM 
-	        board b
-	    LEFT JOIN 
-	        board_accompany ba ON b.board_no = ba.board_no
-	    LEFT JOIN 
-	        accompany_tag at ON b.board_no = at.board_no
-	    LEFT JOIN 
-	        accompany_type_tag att ON at.accompany_tag_no = att.accompany_tag_no
-	    LEFT JOIN 
-	        member m ON m.member_no = b.member_no
-	    WHERE 
-	        b.board_no = #{boardNo}
+   		SELECT 
+		    b.board_no,
+		    b.board_title,
+		    b.board_content,
+		    b.board_area,
+		    b.reg_date,
+		    b.board_type,
+		    b.board_thumb,
+		    b.read_count,
+		    ba.accompany_no,
+		    ba.accompany_date,
+		    ba.accompany_area,
+		    ba.accompany_content,
+		    ba.start_day,
+		    ba.end_day,
+		    LISTAGG(att.accompany_type, ',') WITHIN GROUP (ORDER BY att.accompany_type) AS accompany_types,
+		    m.member_image,
+		    m.member_nickname,
+		    m.member_age,
+		    m.member_gender
+		FROM 
+		    board b
+		LEFT JOIN 
+		    board_accompany ba ON b.board_no = ba.board_no
+		LEFT JOIN 
+		    accompany_tag at ON b.board_no = at.board_no
+		LEFT JOIN 
+		    accompany_type_tag att ON at.accompany_tag_no = att.accompany_tag_no
+		LEFT JOIN 
+		    member m ON m.member_no = b.member_no
+		WHERE 
+		    b.board_no = #{boardNo}
+		GROUP BY 
+		    b.board_no, 
+		    b.board_title, 
+		    b.board_content, 
+		    b.board_area, 
+		    b.reg_date, 
+		    b.board_type, 
+		    b.board_thumb, 
+		    b.read_count, 
+		    ba.accompany_no, 
+		    ba.accompany_date, 
+		    ba.accompany_area, 
+		    ba.accompany_content, 
+		    ba.start_day, 
+		    ba.end_day, 
+		    m.member_image, 
+		    m.member_nickname, 
+		    m.member_age, 
+		    m.member_gender
+
 	</select>
 
-	<!-- AccompanyTypeTag 리스트 조회 추가 -->
+
+	<!-- AccompanyTypeTag 리스트 조회 추가 
+	-->
 	<select id="selectAccompanyTypeTags" resultType="AccompanyTypeTag">
-	    SELECT 
-	        att.accompany_tag_no,
-	        att.accompany_type
-	    FROM 
-	        accompany_type_tag att
-	    INNER JOIN 
-	        accompany_tag at ON att.accompany_tag_no = at.accompany_tag_no
-	    WHERE 
-	        at.board_no = #{boardNo}
+	  SELECT 
+		    LISTAGG(att.accompany_type, ',') WITHIN GROUP (ORDER BY att.accompany_type) AS accompany_types
+		FROM 
+		    accompany_type_tag att
+		INNER JOIN 
+		    accompany_tag at ON att.accompany_tag_no = at.accompany_tag_no
+		WHERE 
+		    at.board_no = #{boardNo}
 	</select>
 
 <!-- 파일 리스트 조회 -->
@@ -329,35 +349,45 @@
 	</select>
 	
 	<resultMap type="boardAccompany" id="getAccompany">
-	    <result column="board_no" property="boardNo"/>
-	    <result column="board_title" property="boardTitle"/>
-	    <result column="board_content" property="boardContent"/>
-	    <result column="board_area" property="boardArea"/>
-	    <result column="reg_date" property="regDate"/> 
-	    <result column="board_type" property="boardType"/>
-	    <result column="board_thumb" property="boardThumb"/>
-	    <result column="read_count" property="readCount"/>
-	    <result column="accompany_no" property="accompanyNo"/>
-	    <result column="accompany_date" property="accompanyDate"/>
-	    <result column="start_Day" property="startDay"/>
-	    <result column="end_Day" property="endDay"/>
-	    <result column="accompany_area" property="accompanyArea"/>
-	    <result column="accompany_content" property="accompanyContent"/>
-	    <result column="member_IMAGE" property="memberImage"/>
-	    <result column="MEMBER_NICKNAME" property="memberNickname"/>
-	    <result column="MEMBER_AGE" property="memberAge"/>
-	    <result column="MEMBER_GENDER" property="memberGender"/>
-	
-	    <!-- accompany_tag_no 리스트로 처리 -->
-	    <collection property="accompanyTagNo" column="accompany_tag_no" ofType="java.lang.Integer"/>
-	
-	    <!-- 파일 리스트 조회 -->
-	    <collection property="fileList"
-	        select="selectOneAccompanyList"
-	        column="board_no"
-	        javaType="java.util.List"
-	        ofType="boardFile"/>
+    <result column="board_no" property="boardNo"/>
+    <result column="board_title" property="boardTitle"/>
+    <result column="board_content" property="boardContent"/>
+    <result column="board_area" property="boardArea"/>
+    <result column="reg_date" property="regDate"/> 
+    <result column="board_type" property="boardType"/>
+    <result column="board_thumb" property="boardThumb"/>
+    <result column="read_count" property="readCount"/>
+    <result column="accompany_no" property="accompanyNo"/>
+    <result column="accompany_date" property="accompanyDate"/>
+    <result column="start_Day" property="startDay"/>
+    <result column="end_Day" property="endDay"/>
+    <result column="accompany_area" property="accompanyArea"/>
+    <result column="accompany_content" property="accompanyContent"/>
+    <result column="member_IMAGE" property="memberImage"/>
+    <result column="MEMBER_NICKNAME" property="memberNickname"/>
+    <result column="MEMBER_AGE" property="memberAge"/>
+    <result column="MEMBER_GENDER" property="memberGender"/>
+
+    <!-- 새로 추가: accompany_types 컬럼 매핑 -->
+    <result column="accompany_types" property="accompanyTypes"/>
+    
+    <!-- accompany_tag_no 리스트로 처리 -->
+    <collection property="accompanyTagNo" column="accompany_tag_no" ofType="java.lang.Integer"/>
+    
+    <!-- 파일 리스트 조회 -->
+    <collection property="fileList"
+        select="selectOneAccompanyList"
+        column="board_no"
+        javaType="java.util.List"
+        ofType="boardFile"/>
 	</resultMap>
+	<!-- 동행 수정
+		<update id="boardAccompany">
+			update board set board_title= #{boardTitle},board_content=#{boardContent},board_thumb=#{boardThumb},board_area=#{boardArea} where board_no=#{boardNo}
+		</update>
+	
+	 -->
+
 
 		
 		

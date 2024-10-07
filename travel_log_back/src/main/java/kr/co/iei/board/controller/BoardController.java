@@ -198,14 +198,10 @@ public class BoardController {
     public ResponseEntity<BoardCommentDTO> addComment(@ModelAttribute BoardCommentDTO comment
 		
 			 ) {
-//    	System.out.println(comment.getCommentContent()); 
-//    	System.out.println(comment.getCommentWriter());
-    	
     	 if (comment.getCommentRef() == 0) {
     	        comment.setCommentRef(0);
     	    }
         boolean isAdded = boardService.addComment(comment);
-//        System.out.println(comment);
         if (isAdded) {
         	System.out.println(comment);
             return ResponseEntity.ok(comment); // 댓글이 추가되었을 때
@@ -218,7 +214,6 @@ public class BoardController {
     @PatchMapping("/editComment/{commentNo}")
     public ResponseEntity<Boolean> editComment(@PathVariable int commentNo, @RequestBody Map<String, String> request) {
         String commentContent = request.get("commentContent");
-        System.out.println(commentContent);
         boolean result = boardService.editComment(commentNo, commentContent);
         return ResponseEntity.ok(result);
     }
@@ -226,9 +221,7 @@ public class BoardController {
     // 댓글 삭제
     @DeleteMapping("/deleteComment/{commentNo}")
     public ResponseEntity<Boolean> deleteComment(@PathVariable int commentNo) {
-//    	System.out.println(commentNo);
         boolean result = boardService.deleteComment(commentNo);
-//        System.out.println(result);
         return ResponseEntity.ok(result);
     }
     //댓글 좋아요 
@@ -254,7 +247,6 @@ public class BoardController {
       //댓글 신고
       @PostMapping("/commentReport")
 		public ResponseEntity<Boolean> insertReport(@RequestBody CommentReportDTO commentReport){
-  	  System.out.println(commentReport);
   	  
   	  int ressult = boardService.insertReport(commentReport);
   	  return ResponseEntity.ok(ressult>0);
@@ -293,35 +285,14 @@ public class BoardController {
 			}
 		}
 		
-	    // accompanyContent를 하나의 문자열로 변환
-//		String accompanyContentStr = String.join(",", boardAccompany.getAccompanyContent());
-//		boardAccompany.setAccompanyContent(Collections.singletonList(accompanyContentStr)); 
-
-		
-		// 시작일과 종료일 변환
-//		String startDayStr = boardAccompany.getStartDay(); // "Fri, 04 Oct 2024 01:32:34 GMT"
-//	    String endDayStr = boardAccompany.getEndDay(); // "Sat, 05 Oct 2024 01:32:34 GMT"
-//
-//	    DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'", Locale.ENGLISH);
-//	    DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-	    // 시작일 및 종료일 변환
-//	    LocalDateTime startDate = LocalDateTime.parse(startDayStr, inputFormatter);
-//	    LocalDateTime endDate = LocalDateTime.parse(endDayStr, inputFormatter);
-	    
-	    // 변환된 날짜를 DTO에 설정
-//	    boardAccompany.setStartDay(outputFormatter.format(startDate));
-//	    boardAccompany.setEndDay(outputFormatter.format(endDate));
 
 		int result = boardService.insertAcoompanyBoard(boardAccompany,boardFileList);
-		
 	    return ResponseEntity.ok(result == 1 + boardFileList.size());
   		
   	}
   	//동행 게시판 조회수 처리
   	@PatchMapping("/updateReadCount/{boardNo}")
   	public ResponseEntity<Boolean> updateReadCount(@PathVariable int boardNo){
-  		 System.out.println(boardNo);
   		int result = boardService.updateReadCount(boardNo);
   		return ResponseEntity.ok(result>0);
   	}
@@ -329,11 +300,42 @@ public class BoardController {
   	@GetMapping(value = "/accompanyNo/{boardNo}")
   	public ResponseEntity<BoardAccompanyDTO> selectOneBoardAccompany(@PathVariable int boardNo){
   		BoardAccompanyDTO accompany = boardService.selectOneBoardAccompany(boardNo);
-  		System.out.println(accompany);
   		return ResponseEntity.ok(accompany);
   	}
   	//삭제는 똑같이 가져감
-  	
+  	//동행 게시판 수정
+//  @PatchMapping(value = "/AccompanyUpdate")
+//	public ResponseEntity<Boolean> updateBoard(@ModelAttribute BoardAccompanyDTO boardAccompany , @ModelAttribute MultipartFile thumbnail,@ModelAttribute MultipartFile[] boardFile){
+//		System.out.println(boardAccompany);
+//	  if(thumbnail != null) {
+//			String savepath = root+"/board/thumb/";
+//			String filepath = fileUtils.upload(savepath, thumbnail);
+//			boardAccompany.setBoardThumb(filepath);
+//		}
+//		List<BoardFileDTO> boardFileList = new ArrayList<BoardFileDTO>();
+//		if(boardFile != null) {
+//			String savepath = root+"/board/";
+//			for(MultipartFile file:boardFile) {
+//				BoardFileDTO boardFileDTO = new BoardFileDTO();
+//				String filename = file.getOriginalFilename();
+//				String filepath = fileUtils.upload(savepath, file);
+//				boardFileDTO.setFilename(filename);
+//				boardFileDTO.setFilepath(filepath);
+//				boardFileDTO.setFileNo(boardAccompany.getBoardNo());
+//				boardFileList.add(boardFileDTO);
+//			}
+//		}
+//		List<BoardFileDTO> delFileList = boardService.updateBoardAccompany(boardAccompany,boardFileList);
+//		if(delFileList != null) {
+//			String savrpath = root+"/board/";
+//			for(BoardFileDTO deleteFIle : delFileList) {
+//				File deFile = new File(savrpath+deleteFIle.getFilepath());
+//				deFile.delete();
+//			}
+//			return ResponseEntity.ok(true);
+//		}
+//		return  ResponseEntity.ok(false);
+//	}
   	
   	
 
