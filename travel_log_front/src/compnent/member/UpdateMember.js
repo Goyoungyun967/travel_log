@@ -1,16 +1,23 @@
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { loginNoState } from "../utils/RecoilData";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  isLoginState,
+  loginNicknameState,
+  loginNoState,
+  memberLevelState,
+} from "../utils/RecoilData";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import ChangePw from "./ChangePw";
 
 const UpdateMember = () => {
   const [member, setMember] = useState({});
-  const [memberNo] = useRecoilState(loginNoState); // 로그인한 사용자의 memberNo를 가져옵니다.
-
+  const [memberNo, setMemberNo] = useRecoilState(loginNoState); // 로그인한 사용자의 memberNo를 가져옵니다.
+  const [loginNickname, setLoginNickname] = useRecoilState(loginNicknameState);
+  const [loginLevel, setLoginLevel] = useRecoilState(memberLevelState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
 
   // 컴포넌트가 마운트될 때 회원 정보를 가져옵니다.
   useEffect(() => {
@@ -60,6 +67,41 @@ const UpdateMember = () => {
         console.log(err);
       });
   };
+
+  const deleteMeber = () => {
+    Swal.fire({
+      icon: "warning",
+      title: "회원탈퇴",
+      text: "회원을 탈퇴 하시겠습니까 ?",
+      showCancelButton: true,
+      confirmButtonText: "탈퇴하기",
+      cancelButtonText: "취소",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        axios
+          .patch(`${backServer}/member/LevelUpdate/${memberNo}`)
+          .then((res) => {
+            console.log(res);
+            if (res.data === 1) {
+              Swal.fire({
+                title: "안녕히 가세요!",
+                icon: "info",
+              }).then(() => {
+                setMemberNo(-1);
+                setLoginNickname("");
+                setLoginLevel(3);
+                delete axios.defaults.headers.common["Authorization"];
+                window.localStorage.removeItem("refreshToken");
+                navigate("/");
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  };
   return (
     <div className="update-wrap">
       <div>
@@ -100,9 +142,21 @@ const UpdateMember = () => {
         </div>
       </form>
 
-      <Link to="/member/mypage/updateMember/changePw" className="changePw-zone">
-        비밀번호 수정 하실래요 ?
-      </Link>
+      <div className="update-delete-btn-zone">
+        <Link
+          to="/member/mypage/updateMember/changePw"
+          className="changePw-zone"
+        >
+          비밀번호 수정 하실래요 ?
+        </Link>
+        <button
+          type="button"
+          onClick={deleteMeber}
+          className="member-delete-zone"
+        >
+          회원 탈퇴 하실래요?
+        </button>
+      </div>
     </div>
   );
 };

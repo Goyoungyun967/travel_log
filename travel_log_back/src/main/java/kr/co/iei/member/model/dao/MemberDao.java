@@ -37,4 +37,6 @@ public interface MemberDao {
 	
 	List getMemberData();
 
+	int levelUpdate(int memberNo);
+
 }

@@ -180,8 +180,12 @@ public class MemberContorller {
 		
 		return ResponseEntity.ok(map);
 	}
+	@PatchMapping(value="/LevelUpdate/{memberNo}")
+	public ResponseEntity<Integer> levelUpdate (@PathVariable int memberNo){
+	int result = memberService.levelUpdate(memberNo);
 	
-	
+	return ResponseEntity.ok(result);
+	}
 }
 	
 	

@@ -134,10 +134,10 @@ const Mypage = () => {
             내 예약정보
           </Link>
           <Link to="myComment" className="my-comment-zone">
-            내가 쓴 댓글
+            나의 문의글
           </Link>
-          <Link to="myAllPayment" className="my-account-zone">
-            내 예약 보관함
+          <Link to="DeleteMember" className="my-delete-zone">
+            회원 탈퇴
           </Link>
         </div>
       </div>
