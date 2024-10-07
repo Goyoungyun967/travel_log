@@ -9,8 +9,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import kr.co.iei.board.model.dao.BoardDao;
 import kr.co.iei.board.model.dto.AccompanyTag;
@@ -81,6 +79,7 @@ public class BoardService {
 		}
 		return null;
 	}
+	//동행
 	@Transactional
 	public List<BoardFileDTO> updateBoard(BoardDTO board, List<BoardFileDTO> boardFileList) {
 		int result = boardDao.updateBoard(board);
@@ -281,6 +280,31 @@ public class BoardService {
 		
 		return accompany;
 	}
+
+//	동행수정
+//	@Transactional
+//	public List<BoardFileDTO> updateBoardAccompany(BoardAccompanyDTO boardAccompany, List<BoardFileDTO> boardFileList) {
+//					int result = boardDao.updateBoardAccompany(boardAccompany);
+//		
+//		if(result>0) {
+//			List<BoardFileDTO> delFileList = new ArrayList<BoardFileDTO>();
+//			if(boardAccompany.getDelBoardFileNo() != null) {
+//				delFileList = boardDao.selectBoardFile(boardAccompany.getDelBoardFileNo());
+//				result += boardDao.deleteBoardFile(boardAccompany.getDelBoardFileNo());
+//			}
+//			for(BoardFileDTO boardFile : boardFileList) {
+//				result += boardDao.insertBoardFile(boardFile);
+//			}
+//			int updateTotal = boardAccompany.getDelBoardFileNo() == null 
+//									? 1+boardFileList.size() 
+//									: 1+ boardFileList.size() + boardAccompany.getDelBoardFileNo().length;
+//			if(result == updateTotal) {
+//				return delFileList;
+//			}
+//			
+//		}
+//		return null;
+//	}
 
 	
 

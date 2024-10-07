@@ -43,6 +43,7 @@ const AccompanyList = () => {
     axios
       .get(`${backServer}/board/accompanyList/2/${reqPage}`)
       .then((res) => {
+        console.log(res);
         setAccompanyList(res.data.list);
         setPi(res.data.pi);
       })

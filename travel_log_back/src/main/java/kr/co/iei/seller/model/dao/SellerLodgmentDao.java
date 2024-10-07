@@ -75,6 +75,8 @@ public interface SellerLodgmentDao {
 
 	int delAllServiceTag(int roomNo);
 
+	int updateLodgment(LodgmentStorageDTO ls);
+
 	
 	
 

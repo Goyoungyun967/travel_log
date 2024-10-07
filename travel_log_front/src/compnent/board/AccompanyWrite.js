@@ -77,11 +77,6 @@ const AccompanyWrite = () => {
   // 빽으로 보내줘야하는것들 제목,기본 글,지역, 동행날짜 , 동행지역? ,동행내용
   const writeBoard = () => {
     if (boardTitle !== "" && boardContent !== "") {
-      console.log(daysDifference);
-      console.log(selectedType);
-      console.log(startDate);
-      console.log(endDate);
-      console.log(accompanyContent);
       const form = new FormData();
       form.append("boardTitle", boardTitle);
       form.append("boardContent", boardContent);
@@ -91,9 +86,6 @@ const AccompanyWrite = () => {
       form.append("accompanyContent", accompanyContent);
       form.append("accompanyTagNo ", selectedType);
       form.append("accompanyArea", accompanyArea);
-      // form.append("startDay", startDay);
-      // form.append("endDay", endDay);
-      // Format startDate and endDate before appending to FormData
       form.append("startDay", dayjs(startDate).format("YYYY-MM-DD"));
       form.append("endDay", dayjs(endDate).format("YYYY-MM-DD"));
 

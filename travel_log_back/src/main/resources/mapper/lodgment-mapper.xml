@@ -45,6 +45,18 @@
 		1
 		)
 	</insert>
+	
+	<!-- 호텔 수정 -->
+	<update id="updateLodgment">
+		update lodgment_storage set
+			lodgment_name=#{lodgmentName},
+			lodgment_addr=#{lodgmentAddr},
+			lodgment_img_path=#{lodgmentImgPath},
+			lodgment_notice=#{lodgmentNotice},
+			lodgment_check_in=#{lodgmentCheckIn},
+			lodgment_check_out=#{lodgmentCheckOut}
+		where lodgment_no=#{lodgmentNo}
+	</update>
 
 	<!-- 기존 호텔 삭제 -->
 	<!-- 호텔 등록하면 기존 호텔 테이블에서 삭제해주어야함 (제약조건 걸려있어서 호텔 번호 중복 불가) -->

@@ -86,6 +86,8 @@ public interface BoardDao {
 	BoardAccompanyDTO selectBoardAccompany(int boardNo);
 	List<AccompanyTypeTag> selectAccompanyTypeTags(int boardNo);
 	List<BoardFileDTO> selectOneAccompanyList(int boardNo);
+	//수정
+//	int updateBoardAccompany(BoardAccompanyDTO boardAccompany);
 
 	//형묵 나의 게시판 총 갯수
 	int myBoardTotalCount(int memberNo);

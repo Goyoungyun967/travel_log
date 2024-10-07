@@ -3,7 +3,7 @@
 <mapper namespace="kr.co.iei.booking.model.dao.BookingDao">
 	<insert id="insertBooking">
 		insert into booking values(booking_seq.nextval, #{memberId}, #{sellerNo}, #{roomNo}, #{startDate}, #{endDate},
-		sysdate, #{gusetCount}, #{guestName}, #{guestPhone}, 
+		sysdate, #{guestCount}, #{guestName}, #{guestPhone}, 
 		<choose>
 			<when test="!guestRequest.equals('')">
 				#{guestRequest},
@@ -36,5 +36,42 @@
     	from booking join room using(room_no) join lodgment_storage using(lodgment_no) where member_id=(select member_id from member where member_no=#{memberNo}) order by book_no desc)b)
 	where rnum between #{start} and #{end}
 	</select>
-  
+	
+	<select id="getBookingInfo">
+		select lpad(b.book_no,6,0) book_no, b.member_id, b.start_date, b.end_date, b.status,
+		      b.guest_count , b.guest_name, b.guest_phone, b.guest_request, to_char(b.payment_date,'YYYY-MM-DD HH24:mi:SS') payment_date,
+			(select lodgment_name from lodgment_storage ls 
+			join room r using (lodgment_no) where room_no=b.book_no) lodgment_name,
+			(select lodgment_addr from lodgment_storage ls 
+			join room r using (lodgment_no) where room_no=b.book_no) lodgment_addr,
+			(select room_name from room r where room_no=b.room_no) room_name,
+			(select room_price from room r where room_no=b.room_no) room_price,
+			(select lodgment_img_path from lodgment_storage ls 
+			join room r using (lodgment_no) where room_no=b.room_no) lodgment_img
+		from 
+			booking b
+		where 
+			book_no=#{bookNo}
+	</select>
+	
+	<select id="getPortoneimpuid" resultType="String">
+		select portoneimpuid from booking where book_no=#{bookNo} and status = 1
+	</select>
+  	<update id="updateBooking">
+  		update booking set status = 3 where book_no=#{bookNo}
+  	</update>
+  	
+  	<insert id="insertBookCancel">
+  		insert into booking_cancel values(#{bookNo}, #{cancelReason}, 
+  			<choose>
+  				<when test="cancelReason == 4">
+  				#{cancelReasonText},
+  				</when>
+  				<when test="cancelReason != 4">
+  				null ,
+  				</when>
+  			</choose>
+  			sysdate
+  		)
+  	</insert>
 </mapper>

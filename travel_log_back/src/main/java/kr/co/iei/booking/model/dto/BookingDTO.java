@@ -1,3 +1,4 @@
+
 package kr.co.iei.booking.model.dto;
 
 import org.apache.ibatis.type.Alias;
@@ -30,7 +31,7 @@ public class BookingDTO {
 	@Schema(description = "결제날짜/시간", type = "String")
 	private String paymentDate;
 	@Schema(description = "예약 인원", type = "int")
-	private int gusetCount;
+	private int guestCount;
 	@Schema(description = "투수객 이름", type = "String")
 	private String guestName;
 	@Schema(description = "투수객 핸드폰번호", type = "String")
@@ -46,5 +47,17 @@ public class BookingDTO {
 	@Schema(description = "판매 방 이름", type="string")
 	private String roomName;
 	@Schema(description = "호텔 작성자", type="string")
+
+	private String businessName;
+	@Schema(description = "호텔 주소", type="string")
+	private String lodgmentAddr;
+	@Schema(description = "호텔 이름", type="string")
 	private String lodgmentName;
+	@Schema(description = "결제 가격", type="int")
+	private int roomPrice;
+	@Schema(description = "호텔 이미지", type="string")
+	private String lodgmentImg;
+
+
 }
+

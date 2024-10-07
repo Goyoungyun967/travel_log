@@ -508,6 +508,12 @@ props/*글자 사이즈*/
   margin-right: 20px;
   padding-top: 15px;
   height: 73px;
+  margin-bottom: 20px;
+  width: 100%; /* 부모 요소에 맞게 전체 너비 사용 */
+}
+.accompany-date-list {
+  display: block; /* 블록 레벨로 변경 */
+  margin-bottom: 20px; /* 날짜 리스트 끝과 댓글 사이에 여백 추가 */
 }
 
 .board-date-wrap {
@@ -541,6 +547,8 @@ props/*글자 사이즈*/
 
 /*여행 게시판 상세 게시판*/
 .board-view-wrap {
+  align-items: flex-start;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -555,6 +563,7 @@ props/*글자 사이즈*/
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
   border-radius: 17px;
   padding: 20px;
+  margin-bottom: 20px;
   background-color: #ffffff; /* 배경색 추가 */
 }
 
@@ -654,6 +663,10 @@ props/*글자 사이즈*/
 }
 
 /* 댓글 */
+.board-comment-wrap {
+  clear: both; /* 위 요소들과 분리 */
+  margin-top: 20px;
+}
 .comment-item {
   position: relative;
   margin-bottom: 20px;
