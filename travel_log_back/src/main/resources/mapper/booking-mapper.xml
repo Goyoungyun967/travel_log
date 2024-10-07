@@ -20,22 +20,20 @@
 	</insert>
 
 	
-	<select id="totalCount" resultType="int">
-		select count(*) from booking
+	<select id="myBookingTotalCount" resultType="int">
+		select count(*) from booking where member_id=(select member_id from member where member_no=#{memberNo})
 	</select>
 	
 	<select id="selectBookingList" resultType="booking">
 	select * from
 		(select rownum as rnum, b.* from
-    		(select
-        		payment_date,
+    		(select	
         		room_no,
-        		seller_no,
+        		lodgment_name,
         		status,
         		room_name,
-        		business_name,
-        	to_char(payment_date,'yyyy-mm-dd') as board_date
-    	from booking join room using(room_no) join seller using(seller_no) order by book_no desc)b)
+        	to_char(payment_date,'yyyy-mm-dd') as payment_date
+    	from booking join room using(room_no) join lodgment_storage using(lodgment_no) where member_id=(select member_id from member where member_no=#{memberNo}) order by book_no desc)b)
 	where rnum between #{start} and #{end}
 	</select>
   

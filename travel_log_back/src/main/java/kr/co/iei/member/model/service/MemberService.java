@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.iei.board.model.dao.BoardDao;
 import kr.co.iei.booking.model.dao.BookingDao;
 import kr.co.iei.member.model.dao.MemberDao;
 import kr.co.iei.member.model.dto.LoginMemberDTO;
@@ -26,6 +28,9 @@ public class MemberService {
 	
 	@Autowired
 	private BookingDao bookingDao;
+	
+	@Autowired
+	private BoardDao boardDao;
 	
 	@Autowired
 	private JwtUtils jwtUtil;
@@ -119,18 +124,44 @@ public class MemberService {
 	}
 
 	public Map selectBookingList(int memberNo, int reqPage) {
-		int numPerPage = 12;		//한 페이지당 게시물 수
+		int numPerPage = 8;		//한 페이지당 게시물 수
 		int pageNaviSize = 5;		//페이지네비 길이 
-		int totalCount = bookingDao.totalCount();
+		int totalCount = bookingDao.myBookingTotalCount(memberNo);
 		
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
-		List list = bookingDao.selectBookingList(pi);
+		Map<String, Object> bookingMap = new HashMap<String, Object>();
+		bookingMap.put("memberNo", memberNo);
+		bookingMap.put("start", pi.getStart());
+		bookingMap.put("end", pi.getEnd());
+		List list = bookingDao.selectBookingList(bookingMap);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list",list);
 		map.put("pi", pi);
 		
 		return map;
 		
+	}
+
+
+	
+
+	public Map myBoardList(int memberNo, int reqPage) {
+		int numPerPage = 8;		//한 페이지당 게시물 수
+		int pageNaviSize = 5;		//페이지네비 길이 
+		int totalCount = boardDao.myBoardTotalCount(memberNo);
+		System.out.println(reqPage);
+		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
+		System.out.println(pi);
+		Map<String, Object> myBoardMap = new HashMap<String, Object>();
+		myBoardMap.put("memberNo", memberNo);
+		myBoardMap.put("start", pi.getStart());
+		myBoardMap.put("end", pi.getEnd());
+		List list = boardDao.myBoardList(myBoardMap);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list",list);
+		map.put("pi", pi);
+		
+		return map;
 	}
 
 	
