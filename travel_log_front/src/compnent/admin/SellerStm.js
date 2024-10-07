@@ -15,13 +15,13 @@ const AdminSellerStm = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [stmList, setStmList] = useState(null);
   const [pi, setPi] = useState(null);
-  const [status, setStatus] = useState(0);
+  const [type, setType] = useState(0);
   const [reqPage, setReqPage] = useState(1);
   const [state, setState] = useState(true);
   const [stmNumList, setStmNumList] = useState([]);
   useEffect(() => {
     axios
-      .get(`${backServer}/admin/seller/stmList/${reqPage}/${status}`)
+      .get(`${backServer}/admin/seller/stmList/${reqPage}/${type}`)
       .then((res) => {
         setStmList(res.data.list);
         setPi(res.data.pi);
@@ -30,8 +30,8 @@ const AdminSellerStm = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [reqPage, status, state]);
-  const updateSellerApp = () => {
+  }, [reqPage, type, state]);
+  const updateStmState = () => {
     axios
       .patch(`${backServer}/admin/seller/stm`, stmNumList)
       .then((res) => {
@@ -52,14 +52,14 @@ const AdminSellerStm = () => {
     <>
       <div className="admin-search-box">
         <FormControl>
-          <FormLabel id="status">정산처리여부</FormLabel>
+          <FormLabel id="type">정산처리여부</FormLabel>
           <RadioGroup
             row
-            aria-labelledby="status"
+            aria-labelledby="type"
             defaultValue={0}
             name="radio-buttons-group"
             onChange={(e) => {
-              setStatus(e.target.value);
+              setType(e.target.value);
               setReqPage(1);
             }}
           >
@@ -72,7 +72,7 @@ const AdminSellerStm = () => {
         <thead>
           <tr>
             <th width={"20%"} className="seller-check">
-              {Number(status) === 0 ? (
+              {Number(type) === 0 ? (
                 <Checkbox
                   onChange={(e) => {
                     if (e.target.checked) {
@@ -113,7 +113,7 @@ const AdminSellerStm = () => {
             return (
               <tr key={`stm-list-${index}`}>
                 <td className="seller-check">
-                  {Number(status) === 0 ? (
+                  {Number(type) === 0 ? (
                     <Checkbox
                       onChange={changeStmNumList}
                       checked={stmNumList.includes(stm.stmNum)}
@@ -126,14 +126,14 @@ const AdminSellerStm = () => {
                 <td>{stm.businessName}</td>
                 <td>{stm.stmPrice + "원"}</td>
                 <td>{stm.stmDate}</td>
-                <td>{stm.stmStatus === 0 ? "미처리" : "정산완료"}</td>
+                <td>{stm.stmState === 0 ? "미처리" : "정산완료"}</td>
               </tr>
             );
           })}
-          {Number(status) === 0 ? (
+          {Number(type) === 0 ? (
             <tr>
               <td colSpan={5}>
-                <button className="admin-seller-btn" onClick={updateSellerApp}>
+                <button className="admin-seller-btn" onClick={updateStmState}>
                   정산하기
                 </button>
               </td>

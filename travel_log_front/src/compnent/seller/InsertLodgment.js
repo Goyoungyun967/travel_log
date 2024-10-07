@@ -193,7 +193,7 @@ const InsertLodgment = () => {
                 />
               ) : (
                 <img
-                  src="/image/lodgment_default_img.png"
+                  src="/image/add_image.png"
                   onClick={() => {
                     lodgmentImgRef.current.click();
                   }}
@@ -269,11 +269,17 @@ const InsertLodgment = () => {
               <div className="input-item">
                 <div className="addr-api">
                   <div className="addr-block">
-                    <div className="addr-search-api">
-                      {!isReadOnly ? <ModalAddr setAddress={setAddress} /> : ""}
-                    </div>
                     <div className="addr-api-input">
-                      <label htmlFor="addrText">주소</label>
+                      <div className="addr-flex-wrap">
+                        <label htmlFor="addrText">주소</label>
+                        <div className="addr-search-api">
+                          {!isReadOnly ? (
+                            <ModalAddr setAddress={setAddress} />
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </div>
                       <input
                         type="text"
                         id="addrText"
@@ -441,8 +447,8 @@ const ModalAddr = (props) => {
   };
 
   return (
-    <div>
-      <Button onClick={handleOpen} className="Addrbtn">
+    <div className="sellerAddrSearchBtn">
+      <Button onClick={handleOpen} variant="contained" size="small">
         주소 검색
       </Button>
       <Modal

@@ -29,7 +29,8 @@ const AccompanyFrm = (props) => {
   const setStartDate = props.setStartDate;
   const endDate = props.endDate;
   const setEndDate = props.setEndDate;
-
+  console.log(startDate);
+  console.log(endDate);
   const accompanyType = props.accompanyType;
   const setAccompanyType = props.setAccompanyType;
 

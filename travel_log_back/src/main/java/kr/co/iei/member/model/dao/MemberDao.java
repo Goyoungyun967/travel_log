@@ -26,7 +26,15 @@ public interface MemberDao {
 
 	MemberDTO selectOneUser(int memberNo);
 
+
+	int updateMember(MemberDTO member);
+
+	int changePw(MemberDTO member);
+
+
+
 	List getMemberEnrollData();
 	
 	List getMemberData();
+
 }

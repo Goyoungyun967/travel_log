@@ -2,6 +2,7 @@ package kr.co.iei.member.contorller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -145,6 +147,30 @@ public class MemberContorller {
 			return ResponseEntity.ok(result);
 		}
 		return ResponseEntity.ok(false);
+	}
+	
+	@PatchMapping
+	public ResponseEntity<Integer> updateMember(@RequestBody MemberDTO member){
+		int result = memberService.updateMember(member);
+		return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping(value="pw")
+	public ResponseEntity<Integer> checkPw(@RequestBody MemberDTO member){
+		int result = memberService.checkPw(member);
+		return ResponseEntity.ok(result);
+	}
+	
+	@PatchMapping(value="pw")
+	public ResponseEntity<Integer> changePw(@RequestBody MemberDTO member){
+		int result = memberService.changePw(member);
+		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping(value="/booking/list/{memberNo}/{reqPage}")
+	public ResponseEntity<Map> bookingList (@PathVariable int memberNo, @PathVariable int reqPage){
+		Map map = memberService.selectBookingList(memberNo,reqPage);
+		return ResponseEntity.ok(map);
 	}
 }
 	

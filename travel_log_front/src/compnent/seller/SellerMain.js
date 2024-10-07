@@ -12,6 +12,7 @@ import InqView from "./InqView";
 import ReserveList from "./ReserveList";
 import InsertInq from "./InsertInq";
 import UpdateRoom from "./UpdateRoom";
+import UpdateLodgment from "./UpdateLodgment";
 const SellerMain = () => {
   return (
     <Routes>
@@ -30,7 +31,7 @@ const SellerMain = () => {
       {/* 호텔 누르면 해당 호텔 상세로 이동 */}
       <Route path="lodgmentView/:lodgmentNo" element={<LodgmentView />} />
 
-      {/* 예약 -  -> 토큰 조회 */}
+      {/* 예약 리스트 조회 */}
       <Route path="bookList" element={<ReserveList />} />
 
       {/* 예약 - 예약 번호 보내서 조회 */}
@@ -53,6 +54,12 @@ const SellerMain = () => {
 
       {/* 객실 수정 */}
       <Route path="updateRoom/:lodgmentNo/:roomNo" element={<UpdateRoom />} />
+
+      {/* 호텔 수정 */}
+      <Route path="updateLodgment/:lodgmentNo" element={<UpdateLodgment />} />
+
+      {/* 판매자 정보 조회 */}
+      <Route path="sellerInfo" element={<SellerInfo />} />
     </Routes>
   );
 };

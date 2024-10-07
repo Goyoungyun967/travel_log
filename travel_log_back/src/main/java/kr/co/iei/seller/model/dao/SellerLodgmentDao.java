@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.iei.inquiry.model.dto.InquiryDTO;
+import kr.co.iei.lodgment.model.dto.LodgmentReviewDTO;
 import kr.co.iei.seller.model.dto.BookingInfoDTO;
 import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
@@ -12,6 +13,7 @@ import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
 import kr.co.iei.seller.model.dto.RoomServiceTagDTO;
 import kr.co.iei.seller.model.dto.StmInfoDTO;
+import kr.co.iei.util.PageInfo;
 
 @Mapper
 public interface SellerLodgmentDao {
@@ -22,6 +24,11 @@ public interface SellerLodgmentDao {
 	List selectXlsxHotelInfo(String searchInfo);
 
 	LodgmentStorageDTO selectOneLodgment(int lodgmentNo);
+	
+	int totalCount();
+	
+//	List<LodgmentReviewDTO> selectLodgmentReview(int lodgmentNo, PageInfo pi);
+	List<LodgmentReviewDTO> selectLodgmentReview(int lodgmentNo, int start, int end);
 
 	int insertLodgment(LodgmentStorageDTO ls);
 
@@ -31,7 +38,7 @@ public interface SellerLodgmentDao {
 
 	List<RoomDTO> selectRoomInfo(int lodgmentNo);
 
-	int insertRoom(InsertRoomDTO room);
+	int insertRoom(RoomDTO room);
 
 	int insertRoomFile(RoomFileDTO roomFile);
 
@@ -56,6 +63,21 @@ public interface SellerLodgmentDao {
 	int delUpLodgment(int lodgmentNo);
 
 	int delUpRoom(int roomNo);
+
+	int updatecomment(LodgmentReviewDTO ld);
+
+	/**/
+	int updateRoom(RoomDTO room);
+
+	List<RoomFileDTO> selectRoomFile(int[] delRoomFileNo);
+
+	int deleteRoomFile(int[] delRoomFileNo);
+
+	int delAllServiceTag(int roomNo);
+
+	int updateLodgment(LodgmentStorageDTO ls);
+
+	
 	
 
 }

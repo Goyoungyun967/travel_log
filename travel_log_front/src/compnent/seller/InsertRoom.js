@@ -14,20 +14,27 @@ const InsertRoom = () => {
   const [lodgmentList, setLodgmentList] = useState({});
   // 객실 이름
   const [roomName, setRoomName] = useState("");
+  console.log("roomName-", roomName);
   // 상품 수
   const [roomNum, setRoomNum] = useState(0);
+  console.log("roomNum-", roomNum);
   // 객실 가격
   const [roomPrice, setRoomPrice] = useState(0);
+  console.log("roomPrice-", roomPrice);
   // 공지사항
   const [boardContent, setBoardContent] = useState(
     "<h2>객실 공지사항</h2><p><br></p><p><br></p><h2>객실 정보</h2><p><br></p><p><br></p><h2>조식 정보</h2><h5><br></h5>"
   );
+  console.log("boardContent-", boardContent);
   // 첨부파일 (배열[])
   const [roomFile, setRoomFile] = useState([]);
+  console.log("roomFile-", roomFile);
   // 해시태그
   const [hashTag, setHashTag] = useState([]);
+  console.log("hashTag-", hashTag);
   // 최대인원수
   const [maxCapa, setMaxCapa] = useState(0);
+  console.log("maxPaca-", maxCapa);
 
   console.log(
     "숙소 번호 - ",
@@ -98,8 +105,8 @@ const InsertRoom = () => {
       form.append("roomQua", roomNum);
       form.append("roomName", roomName);
       form.append("roomPrice", roomPrice);
-      form.append("boardContent", boardContent);
-      form.append("maxCapacity", maxCapa);
+      form.append("roomInfo", boardContent);
+      form.append("roomMaxCapacity", maxCapa);
       // 첨부파일 추가한 경우에만 추가(첨부파일은 여러개가 같은  name으로 전송)
       for (let i = 0; i < roomFile.length; i++) {
         form.append("roomFile", roomFile[i]);
@@ -180,6 +187,7 @@ const InsertRoom = () => {
                           type="text"
                           id="roomName"
                           value={roomName}
+                          // 여기서 숫자 검사
                           onChange={(e) => setRoomName(e.target.value)}
                         />
                       </div>

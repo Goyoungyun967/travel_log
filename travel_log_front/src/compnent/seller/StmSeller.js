@@ -24,7 +24,7 @@ const StmSeller = () => {
     form.append("sellerNo", loginNo);
     console.log(startDate);
     axios
-      .post(`${backServer}/seller/stm`, form) // *** 리코일 만들어지면 post로 판매자 번호 보내기 (개인정보라서 post로 조회)
+      .post(`${backServer}/seller/stm`, form)
       .then((res) => {
         console.log("r", res);
         setStmInfo(res.data);
@@ -46,7 +46,7 @@ const StmSeller = () => {
       .finally(() => {
         setSearch(false); // API 호출 후 search를 false로 설정
       });
-  }, []);
+  }, [loginNo]);
 
   const searchDate = () => {
     // 조회해온 날짜는 String이므로 날짜로 바꾸어야함

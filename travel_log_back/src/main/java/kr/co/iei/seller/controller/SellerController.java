@@ -1,5 +1,6 @@
 package kr.co.iei.seller.controller;
 
+import java.io.File;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.inquiry.model.dto.InquiryDTO;
+import kr.co.iei.lodgment.model.dto.LodgmentReviewDTO;
 import kr.co.iei.member.model.dto.LoginMemberDTO;
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dto.BookingInfoDTO;
@@ -91,6 +93,21 @@ public class SellerController {
 		LodgmentStorageDTO ls = sellerService.selectOneLodgment(lodgmentNo);
 		return ResponseEntity.ok(ls);
 	}
+	// 호텔 수정
+	@Operation(summary = "호텔 수정", description = "호텔 번호 받아서 수정")
+	@PatchMapping(value="/updateLodgment")
+	public ResponseEntity<Integer> updateLodgment(@ModelAttribute LodgmentStorageDTO ls, @ModelAttribute MultipartFile lodgmentImg){
+		System.out.println(ls);
+		System.out.println(lodgmentImg);
+		if(lodgmentImg != null){
+            // 업로드 위치임
+            String savepath = root+"/seller/lodgment/";
+            String filepath = fileUtil.upload(savepath, lodgmentImg);
+            ls.setLodgmentImgPath(filepath); // 경로 저장
+        }
+		 int result = sellerService.updateLodgment(ls);
+		return ResponseEntity.ok(result);
+	}
 	
 	
 	// 판매자 정보 조회
@@ -104,11 +121,20 @@ public class SellerController {
 	
 	// 호텔 상세
 	@Operation(summary = "호텔 상세", description = "호텔 정보 출력(호텔 + 객실(객실 사진))")
-	@GetMapping(value="/lodgmentView/{lodgmentNo}")
-	public ResponseEntity<Map> list(@PathVariable int lodgmentNo){
-		Map map = sellerService.selectHotelInfo(lodgmentNo);
+	@GetMapping(value="/lodgmentView/{lodgmentNo}/{reqPage}")
+	public ResponseEntity<Map> list(@PathVariable int lodgmentNo, @PathVariable int reqPage){
+		Map map = sellerService.selectHotelInfo(lodgmentNo, reqPage);
 		return ResponseEntity.ok(map);
 	}
+	
+	// 호텔 정보 조회
+	@Operation(summary = "호텔 조회", description = "호텔 번호 받아서 조회")
+	@GetMapping(value="/lodgmentView/{lodgmentNo}")
+	public ResponseEntity<LodgmentStorageDTO> searchLodgmentInfo(@PathVariable int lodgmentNo){
+		LodgmentStorageDTO lg = sellerService.selectOneLodgment(lodgmentNo);
+		return ResponseEntity.ok(lg);
+	}
+	// 호텔 업데이트
 	
 	// 객실 상세
 	@Operation(summary = "객실 상세", description = "객실 상세(호텔+객실+객실태그(서비스태그)+첨부파일) 호텔 번호/객실 번호 받아서 가져옴")
@@ -120,8 +146,9 @@ public class SellerController {
 	
 //	// 객실 등록
 	@PostMapping(value="/insertRoom")
-	public ResponseEntity<Boolean> insertRoom(@ModelAttribute InsertRoomDTO room, @ModelAttribute MultipartFile[] roomFile){
+	public ResponseEntity<Boolean> insertRoom(@ModelAttribute RoomDTO room, @ModelAttribute MultipartFile[] roomFile){
 		System.out.println(room);
+		System.out.println(roomFile);
 		List<RoomFileDTO> roomFileList = new ArrayList<RoomFileDTO>();
 		if(roomFile != null) {
 			String savepath = root+"/seller/room/";
@@ -137,6 +164,40 @@ public class SellerController {
 		System.out.println(result);
 		return ResponseEntity.ok(result!=0+roomFileList.size());
 	}
+	
+	// 객실 수정
+	@PatchMapping(value = "/updateRoom")
+	public ResponseEntity<Boolean> updateRoom(@ModelAttribute RoomDTO room, @ModelAttribute MultipartFile[] roomFile){
+        List<RoomFileDTO> roomFileList = new ArrayList<RoomFileDTO>();
+        if(roomFile != null){
+            // 첨부파일이 없으면 null로 값이 오기에 null 체크 먼저
+            String savepath = root+"/seller/room/";
+            for(MultipartFile file : roomFile){
+                RoomFileDTO roomFileDTO = new RoomFileDTO();
+                String filename = file.getOriginalFilename();
+                String filepath = fileUtil.upload(savepath, file);
+                roomFileDTO.setRoomImg(filepath);
+                // 수정같은 경우에는 이미 게시글 번호가 있기 때문에 그걸 가지고 와서 바로 roomFileDTO에 set함
+                roomFileDTO.setRoomNo(room.getRoomNo());
+                roomFileList.add(roomFileDTO);
+            }
+        }
+        List<RoomFileDTO> delFileList = sellerService.updateRoom(room, roomFileList);
+        System.out.println(delFileList);
+        if(delFileList != null){
+            String savepath = root+"/seller/room/";
+            for(RoomFileDTO deleteFile : delFileList){
+                File delFile = new File(savepath + deleteFile.getRoomImg());
+                delFile.delete();
+            }
+            return ResponseEntity.ok(true);
+        }
+        else{
+            //실패시임
+            return ResponseEntity.ok(false);
+        }
+	}
+
 	
 	// 판매자 정산
 	@Operation(summary="판매자 정산", description = "정산 정보 출력")
@@ -235,7 +296,7 @@ public class SellerController {
 	
 	// 호텔 삭제 (완전 삭제가 아님 (1에서 0으로 update))
 	@Operation(summary = "호텔 삭제", description = "호텔 삭제(완전 삭제가 아니라 1에서 0으로 update)")
-	@PatchMapping("/delLodgment")
+	@PatchMapping(value="/delLodgment")
 	public ResponseEntity<Integer> delUpLodgment(@RequestParam int lodgmentNo){
 		System.out.println(lodgmentNo);
 		int result = sellerService.delUpLodgment(lodgmentNo);
@@ -244,11 +305,28 @@ public class SellerController {
 	
 	// 객실 삭제 (1에서 0으로 update)
 	@Operation(summary = "객실 삭제", description = "객실 삭제(완전 삭제가 아니라 1에서 0으로 update)")
-	@PatchMapping("/delRoom")
+	@PatchMapping(value="/delRoom")
 	public ResponseEntity<Integer> delUpRoom(@RequestParam int roomNo){
 		System.out.println(roomNo);
 		int result = sellerService.delUpRoom(roomNo);
 		return ResponseEntity.ok(result);
+	}
+	
+	// 판매자 호텔 리뷰 댓글
+	@Operation(summary = "호텔 리뷰 댓글", description = "리뷰 댓글 update랑 reviewNo 가져와서 씀")
+	@PatchMapping(value="/addComment")
+	public ResponseEntity<Integer> addComment(LodgmentReviewDTO ld){
+		System.out.println(ld);
+		int result = sellerService.updateComment(ld);
+		return ResponseEntity.ok(result);
+	}
+	
+	// 판매자 정보 조회
+	@Operation(summary = "판매자 정보 조회", description = "판매자 정보 조회 토큰 사용")
+	@GetMapping(value="/sellerInfo")
+	public ResponseEntity<SellerDTO> sellerInfo(@RequestHeader("Authorization") String token){
+		SellerDTO seller = sellerService.selectOneSeller(token);
+		return ResponseEntity.ok(seller);
 	}
 	
 }

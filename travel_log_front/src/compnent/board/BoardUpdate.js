@@ -6,7 +6,7 @@ import { useRecoilState } from "recoil";
 import BoardFrm from "./BoardFrm";
 import { Quill } from "react-quill";
 import BoardUqillEditor from "../utils/BoardUqillEditor";
-import UqillEditor from "../utils/UqillEditor";
+import { loginNoState } from "../utils/RecoilData";
 const BoardUpdate = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const params = useParams();
@@ -35,9 +35,9 @@ const BoardUpdate = () => {
     { title: "전북" },
     { title: "제주" },
   ]);
-  const [selectedArea, setSelectedArea] = useState("전북");
+  const [selectedArea, setSelectedArea] = useState("");
 
-  //const [loginId , setLoginId] = useRecoilState(loginState);
+  const [loginNo, setLoginNo] = useRecoilState(loginNoState);
   //새로 전송하기 위한 state
   const [thumbnail, setThumbnail] = useState(null);
   const [boardFile, setBoardFile] = useState([]);
@@ -108,7 +108,7 @@ const BoardUpdate = () => {
         }}
       >
         <BoardFrm
-          // loginNo = {loginNo}
+          loginNo={loginNo}
           boardArea={boardArea}
           setBoardArea={setBoardArea}
           boardTitle={boardTitle}
@@ -127,7 +127,7 @@ const BoardUpdate = () => {
           setDelBoardFileNo={setDelBoardFileNo}
         />
         <div className="board-editer-wrap">
-          <UqillEditor
+          <BoardUqillEditor
             boardContent={boardContent}
             setBoardContent={setBoardContent}
             dangerouslySetInnerHTML={{ __html: boardContent }}

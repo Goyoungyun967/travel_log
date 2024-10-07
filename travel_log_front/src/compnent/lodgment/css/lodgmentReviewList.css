@@ -55,3 +55,41 @@
   max-height: 300px; /* 최대 높이를 설정하여 div 크기를 초과하지 않도록 함 */
   object-fit: cover; /* 이미지 비율을 유지하며 잘라내기 */
 }
+.review-text-area {
+  width: 100%;
+  text-align: right; /* 오른쪽 정렬 */
+  margin-right: 0; /* 필요 시 조정 */
+  margin-left: auto; /* 필요 시 조정 */
+}
+
+.lodgmnet-inquire-wrap {
+  width: 100%;
+}
+.lodgment-inquire-btn-wrap {
+  margin-left: auto; /* 왼쪽 여백을 자동으로 설정하여 오른쪽으로 이동 */
+}
+.lodgment-inquire-btn {
+  margin: 0 10px; /* 버튼 간의 여백 */
+  width: 200px;
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+  background-color: white;
+  cursor: pointer;
+  margin-right: 5px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  transition: background-color 0.3s, color 0.3s; /* 호버 시 애니메이션 효과 */
+  left: 0;
+}
+
+.lodgment-inquire-btn:hover {
+  background-color: navy;
+  color: white;
+  border: 1px solid navy; /* border 색상을 호버 시에도 변경하여 크기 영향 방지 */
+}
+.lodgment-review-report {
+  cursor: pointer;
+}
+.lodgment-review-thumb {
+  cursor: pointer;
+}

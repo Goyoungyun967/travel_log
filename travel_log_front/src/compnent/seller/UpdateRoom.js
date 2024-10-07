@@ -4,6 +4,7 @@ import { useRecoilState } from "recoil";
 import { sellerLoginNoState } from "../utils/RecoilData";
 import axios from "axios";
 import UqillEditor from "../utils/UqillEditor";
+import Swal from "sweetalert2";
 
 const UpdateRoom = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -18,21 +19,29 @@ const UpdateRoom = () => {
   const [lodgmentList, setLodgmentList] = useState([]);
   // 객실 이름
   const [roomName, setRoomName] = useState("");
+  console.log("roomName-", roomName);
   // 상품 수
   const [roomNum, setRoomNum] = useState(0);
+  console.log("roomNum-", roomNum);
   // 객실 가격
   const [roomPrice, setRoomPrice] = useState(0);
+  console.log("roomPrice-", roomPrice);
   // 공지사항
   const [boardContent, setBoardContent] = useState("");
+  console.log("boardContent-", boardContent);
   // 첨부파일 (배열[])
   const [roomFile, setRoomFile] = useState([]);
-  console.log("rrrr-", roomFile);
+  const [delRoomFileNo, setDelRoomFileNo] = useState([]); // 지울 파일 번호
+  const [upFile, setUpFile] = useState([]); // 추가될 파일
+  console.log("delRoomFileNo-", delRoomFileNo);
+  console.log("roomFile-", roomFile);
+  console.log("upFile-", upFile);
   // 해시태그
   const [hashTag, setHashTag] = useState([]);
-  console.log(hashTag);
+  console.log("hashTag-", hashTag);
   // 최대인원수
   const [maxCapa, setMaxCapa] = useState(0);
-
+  console.log("maxPaca-", maxCapa);
   const [showImg, setShowImg] = useState([]);
 
   // 기존 첨부파일을 삭제하면 삭제한 파일 번호를 저장할 배열
@@ -59,11 +68,58 @@ const UpdateRoom = () => {
       });
   }, []);
 
+  const UpdateRoom = () => {
+    const form = new FormData();
+    form.append("lodgmentNo", lodgmentNo);
+    form.append("roomNo", roomNo);
+    form.append("roomQua", roomNum);
+    form.append("roomName", roomName);
+    form.append("roomPrice", roomPrice);
+    form.append("roomInfo", boardContent);
+    form.append("roomMaxCapacity", maxCapa);
+    // 첨부파일 추가한 경우에만 추가(첨부파일은 여러개가 같은  name으로 전송)
+    // 파일 추가
+    upFile.forEach((file) => {
+      form.append("roomFile", file); // roomFile 필드에 파일 추가
+    });
+    // for (let i = 0; i < roomFile.length; i++) {
+    //   form.append("roomFile", upFile[i]);
+    // }
+    hashTag.forEach((tag) => form.append("serviceTag", tag.serviceTagNo)); // 해시태그 번호만 보내기
+    for (let i = 0; i < delRoomFileNo.length; i++) {
+      form.append("delRoomFileNo", delRoomFileNo[i]);
+    }
+    axios
+      .patch(`${backServer}/seller/updateRoom`, form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          processData: false,
+        },
+      })
+      .then((res) => {
+        console.log("res-", res);
+        if (res.data) {
+          navigate(`/seller/lodgmentView/${lodgmentNo}`);
+          console.log(form);
+        } else {
+          Swal.fire({
+            title: "에러가 발생했습니다.",
+            text: "원인을 찾으세요",
+            icon: "error",
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          UpdateRoom();
         }}
       >
         <div className="room_box-wrap room_box-radius">
@@ -74,6 +130,8 @@ const UpdateRoom = () => {
                 roomFile={roomFile}
                 setRoomFile={setRoomFile}
                 showImg={showImg}
+                setDelRoomFileNo={setDelRoomFileNo}
+                setUpFile={setUpFile}
               />
             </div>
             <div className="room_info_add">
@@ -166,6 +224,8 @@ const FileInfo = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const roomFile = props.roomFile || [];
   const setRoomFile = props.setRoomFile;
+  const setDelRoomFileNo = props.setDelRoomFileNo;
+  const setUpFile = props.setUpFile;
 
   // showRoomFile 상태를 초기화
   const [showRoomFile, setShowRoomFile] = useState([]);
@@ -190,7 +250,7 @@ const FileInfo = (props) => {
       return;
     }
 
-    // 새 파일 목록을 먼저 처리한 후, 미리보기 배열을 업데이트
+    // 새 파일 목록을 먼저 처리한 후, 미리보기 배열 업데이트
     const newShowFiles = [...showRoomFile];
 
     files.forEach((file) => {
@@ -200,6 +260,7 @@ const FileInfo = (props) => {
 
       if (!isDuplicate) {
         newFiles.push({ roomImg: file.name });
+        setUpFile((prev) => [...prev, file]); // upFile에 파일 추가
 
         const reader = new FileReader();
         reader.onload = () => {
@@ -222,18 +283,27 @@ const FileInfo = (props) => {
     setRoomFile(updatedRoomFiles);
 
     // showRoomFile 상태도 업데이트
-    setShowRoomFile((prev) => prev.filter((_, i) => i !== index));
+    const updatedShowFiles = showRoomFile.filter((_, i) => i !== index);
+    setShowRoomFile(updatedShowFiles);
+
+    // 삭제된 파일 번호를 delRoomFileNo에 추가
+    const removedFileNo = roomFile[index].roomFileNo; // 삭제할 파일 번호 가져오기
+    setDelRoomFileNo((prev) => [...prev, removedFileNo]); // 삭제된 파일 번호 추가
+
+    // upFile에서 삭제된 파일도 제거
+    const removedFileName = roomFile[index].roomImg; // 삭제할 파일 이름 가져오기
+    setUpFile((prev) => prev.filter((file) => file.name !== removedFileName));
   };
 
   return (
     <div className="photo">
-      <label htmlFor="roomFile" className="addBtn">
+      <label htmlFor="upFile" className="addBtn">
         파일첨부
       </label>
       <div className="p_arr">
         <input
           type="file"
-          id="roomFile"
+          id="upFile"
           style={{ display: "none" }}
           onChange={addRoomFile}
           multiple
@@ -262,7 +332,7 @@ const HashTap = (props) => {
 
   const setHashTag = props.setHashTag;
 
-  // 서비스 태그 리스트 정의
+  // 서비스 태그
   const serviceTagList = [
     { serviceTagNo: 1, serviceTagType: "사우나" },
     { serviceTagNo: 2, serviceTagType: "수영장" },
@@ -282,7 +352,7 @@ const HashTap = (props) => {
     const value = Number(e.target.value);
     setHashTag((prevTags) =>
       e.target.checked
-        ? [...prevTags, { serviceTagNo: value, serviceTagType: e.target.name }]
+        ? [...prevTags, { serviceTagNo: value }]
         : prevTags.filter((tag) => tag.serviceTagNo !== value)
     );
   };
@@ -298,7 +368,7 @@ const HashTap = (props) => {
               value={tag.serviceTagNo}
               name={tag.serviceTagType} // serviceTagType을 name으로 사용
               onChange={inputCheckboxChange}
-              checked={hashTag.some((h) => h.serviceTagNo === tag.serviceTagNo)} // hashTag에 있는지 확인
+              checked={hashTag.some((h) => h.serviceTagNo === tag.serviceTagNo)} // hashTag에 있는지 확인 후 체크
             />
             <span className="custom-checkbox">{tag.serviceTagType}</span>
           </label>

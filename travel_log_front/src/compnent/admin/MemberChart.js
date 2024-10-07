@@ -13,6 +13,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { createChart, downloadWorkbook } from "../utils/ExcelChart";
 
 const MemberChart = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -124,68 +125,104 @@ const MemberChart = () => {
   }, [region]);
   return (
     <>
-      <LineChart
-        width={800}
-        height={450}
-        data={enrollData}
-        margin={{ top: 40, right: 20, left: 20, bottom: 30 }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis
-          label={{
-            value: "가입자수",
-            offset: 17,
-            position: "top",
+      <div className="enroll-chart">
+        <button
+          className="excel-down"
+          onClick={(e) => {
+            const target = e.currentTarget.nextSibling;
+            const chart = [target];
+            downloadWorkbook(chart, enrollData);
           }}
-          domain={[0, (dataMax) => Math.floor(dataMax * 1.5)]}
-        />
-        <Tooltip />
-        <Legend verticalAlign="top" height={36} />
-        <Line type="monotone" dataKey="올해" stroke="#8884d8" />
-        <Line type="monotone" dataKey="작년" stroke="#82ca9d" />
-      </LineChart>
-      <ComposedChart
-        width={800}
-        height={450}
-        data={memberData}
-        margin={{ top: 40, right: 20, left: 20, bottom: 30 }}
-      >
-        <XAxis dataKey="name" />
-        <YAxis
-          label={{
-            value: "이용자수",
-            offset: 17,
-            position: "top",
+        >
+          엑셀파일
+        </button>
+        <LineChart
+          width={800}
+          height={450}
+          data={enrollData}
+          margin={{ top: 40, right: 20, left: 20, bottom: 30 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis
+            label={{
+              value: "가입자수",
+              offset: 17,
+              position: "top",
+            }}
+            domain={[0, (dataMax) => Math.floor(dataMax * 1.5)]}
+          />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey="올해" stroke="#8884d8" />
+          <Line type="monotone" dataKey="작년" stroke="#82ca9d" />
+        </LineChart>
+      </div>
+      <div className="member-chart">
+        <button
+          className="excel-down"
+          onClick={(e) => {
+            const target = e.currentTarget.nextSibling;
+            const chart = [target];
+            downloadWorkbook(chart, memberData);
           }}
-          domain={[0, (dataMax) => Math.floor(dataMax * 1.5)]}
-        />
-        <Tooltip />
-        <Legend />
-        <CartesianGrid stroke="#f5f5f5" />
-        <Bar dataKey="남성" barSize={20} fill="#413ea0" />
-        <Bar dataKey="여성" barSize={20} fill="#ff8e99" />
-        <Line type="monotone" dataKey="총이용자" stroke="#ff7300" />
-      </ComposedChart>
-      <BarChart
-        width={800}
-        height={450}
-        data={regionsData}
-        margin={{ top: 40, right: 20, left: 20, bottom: 30 }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis
-          label={{
-            value: "지역별 이용자",
-            offset: 17,
-            position: "top",
+        >
+          엑셀파일
+        </button>
+        <ComposedChart
+          width={800}
+          height={450}
+          data={memberData}
+          margin={{ top: 40, right: 20, left: 20, bottom: 30 }}
+        >
+          <XAxis dataKey="name" />
+          <YAxis
+            label={{
+              value: "이용자수",
+              offset: 17,
+              position: "top",
+            }}
+            domain={[0, (dataMax) => Math.floor(dataMax * 1.5)]}
+          />
+          <Tooltip />
+          <Legend />
+          <CartesianGrid stroke="#f5f5f5" />
+          <Bar dataKey="남성" barSize={20} fill="#413ea0" />
+          <Bar dataKey="여성" barSize={20} fill="#ff8e99" />
+          <Line type="monotone" dataKey="총이용자" stroke="#ff7300" />
+        </ComposedChart>
+      </div>
+      <div className="regions-chart">
+        <button
+          className="excel-down"
+          onClick={(e) => {
+            const target = e.currentTarget.nextSibling;
+            const chart = [target];
+            downloadWorkbook(chart, regionsData);
           }}
-        />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="이용자수" barSize={25} fill="#8884d8" />
-      </BarChart>
+        >
+          엑셀파일
+        </button>
+        <BarChart
+          width={800}
+          height={450}
+          data={regionsData}
+          margin={{ top: 40, right: 20, left: 20, bottom: 30 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis
+            label={{
+              value: "지역별 이용자",
+              offset: 17,
+              position: "top",
+            }}
+          />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="이용자수" barSize={25} fill="#8884d8" />
+        </BarChart>
+      </div>
       {regions ? (
         <FormControl style={{ width: "200px", marginTop: "50px" }}>
           <InputLabel id="regions">지역 선택</InputLabel>
@@ -210,27 +247,39 @@ const MemberChart = () => {
       ) : (
         ""
       )}
-      <ComposedChart
-        width={800}
-        height={450}
-        data={regionData}
-        margin={{ top: 40, right: 20, left: 20, bottom: 30 }}
-      >
-        <XAxis dataKey="name" />
-        <YAxis
-          label={{
-            value: `${region} 이용자수`,
-            offset: 17,
-            position: "top",
+      <div className="regions-chart">
+        <button
+          className="excel-down"
+          onClick={(e) => {
+            const target = e.currentTarget.nextSibling;
+            const chart = [target];
+            downloadWorkbook(chart, regionData);
           }}
-        />
-        <Tooltip />
-        <Legend />
-        <CartesianGrid stroke="#f5f5f5" />
-        <Bar dataKey="남성" barSize={20} fill="#413ea0" />
-        <Bar dataKey="여성" barSize={20} fill="#ff8e99" />
-        <Line type="monotone" dataKey="총이용자" stroke="#ff7300" />
-      </ComposedChart>
+        >
+          엑셀파일
+        </button>
+        <ComposedChart
+          width={800}
+          height={450}
+          data={regionData}
+          margin={{ top: 40, right: 20, left: 20, bottom: 30 }}
+        >
+          <XAxis dataKey="name" />
+          <YAxis
+            label={{
+              value: `${region} 이용자수`,
+              offset: 17,
+              position: "top",
+            }}
+          />
+          <Tooltip />
+          <Legend />
+          <CartesianGrid stroke="#f5f5f5" />
+          <Bar dataKey="남성" barSize={20} fill="#413ea0" />
+          <Bar dataKey="여성" barSize={20} fill="#ff8e99" />
+          <Line type="monotone" dataKey="총이용자" stroke="#ff7300" />
+        </ComposedChart>
+      </div>
     </>
   );
 };

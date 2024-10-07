@@ -29,9 +29,18 @@
 		select member_id from member where member_no = #{loginNo}
 	</select>
 	<select id="selectOneUser" resultType="member">
-		select member_image from member where member_no = #{memberNo}
+		select * from member where member_no = #{memberNo}
 	</select>
 	
+
+	<update id="updateMember">
+		update member set member_nickname=#{memberNickname}, member_phone=#{memberPhone} where member_no=#{memberNo}
+	</update>
+	
+	<update id="changePw">
+	update member set member_pw=#{memberPw} where member_no=#{memberNo}
+	</update>
+
 	<select id="getMemberEnrollData" resultType="map">
     	select to_char(enroll_date,'yyyy-mm') as "date", count(*) as "enrollCount" from member
     	where enroll_date between trunc(add_months(sysdate,-12),'year') and trunc(add_months(sysdate,12),'year')-1
@@ -64,4 +73,5 @@
 			when member_age <![CDATA[>=]]> 10 then '10대'
 		 end),member_gender
 	</select>
+
 </mapper>

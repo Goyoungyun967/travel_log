@@ -169,15 +169,13 @@ props/*글자 사이즈*/
   position: relative;
   width: 250px;
   height: 190px;
-  border-right: 1px solid var(--gray5);
-  border-bottom: 1px solid var(--gray5);
-  border-left: 1px solid var(--gray5);
   border-image: inherit;
   border-top: none;
   border-radius: 10px;
   user-select: none;
   align-items: center;
   cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6); /* 그림자를 더 넓게 만들기 */
 }
 
 .board-preview-title {
@@ -216,7 +214,7 @@ props/*글자 사이즈*/
   width: 100%;
   height: 210px;
   border-radius: 10px;
-  border: 1px solid var(--gray5);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6); /* 그림자를 더 넓게 만들기 */
 }
 .board-memberIcon {
   position: relative;
@@ -510,6 +508,12 @@ props/*글자 사이즈*/
   margin-right: 20px;
   padding-top: 15px;
   height: 73px;
+  margin-bottom: 20px;
+  width: 100%; /* 부모 요소에 맞게 전체 너비 사용 */
+}
+.accompany-date-list {
+  display: block; /* 블록 레벨로 변경 */
+  margin-bottom: 20px; /* 날짜 리스트 끝과 댓글 사이에 여백 추가 */
 }
 
 .board-date-wrap {
@@ -542,84 +546,318 @@ props/*글자 사이즈*/
 }
 
 /*여행 게시판 상세 게시판*/
+.board-view-wrap {
+  align-items: flex-start;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f0f2f5;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
 .board-view-content {
-  width: 1000px;
+  width: 800px; /* 고정 너비 */
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
   border-radius: 17px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #ffffff; /* 배경색 추가 */
 }
 
-.board-silde-wrap {
-  height: 400px;
-}
-.board-img-fluid {
-  width: 100%;
-  height: 400px;
-}
-.board-nick-wrap {
-  width: 50px;
-  height: 50px;
+.board-view-info {
+  margin-bottom: 20px;
 }
 
-.board-member-img {
-  margin: 5px;
-  justify-content: left;
-}
-.nick-img-circle {
-  width: 100px;
-  height: 100px;
-}
-.view-like-comment-keep {
-  margin-top: 10px;
-  border-top: 1px solid var(--gray5);
+.board-back-icon {
+  margin-bottom: 15px;
+  color: #3498db;
 }
 
 .board-view-head {
-  height: 150px;
+  height: auto; /* 자동 높이 조정 */
+  display: flex; /* 플렉스 박스 사용 */
+  justify-content: space-between; /* 양쪽 끝 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
 }
+
 .board-view-title {
   padding: 5px;
 }
+
+.board-silde-wrap {
+  height: 300px; /* 고정 높이 */
+  overflow: hidden; /* 넘치는 부분 숨김 */
+}
+.board-carousel-item {
+  width: 100%;
+  height: 300px;
+}
+.board-img-fluid {
+  width: 100%; /* 너비 100% 유지 */
+  height: 300px; /* 높이 고정 */
+  object-fit: cover; /* 이미지 비율 유지하며 잘림 */
+  display: block; /* 이미지 주위에 여백을 제거 */
+  margin: 0 auto; /* 중앙 정렬 */
+}
+
+.nick-img-circle {
+  width: 100px; /* 멤버 이미지 크기 */
+  height: 100px;
+}
+
 .board-view-text-wrap {
   padding: 5px;
+  color: #444; /* 텍스트 색상 */
+  line-height: 1.6; /* 줄 높이 */
 }
+
 .board-flex {
   display: grid;
   align-items: flex-start; /* 자식 요소를 위쪽에 정렬 */
   justify-content: end; /* 자식 요소를 오른쪽에 정렬 */
-  height: 100vh; /* 필요에 따라 높이 조정 */
+}
+
+.view-like-comment-keep {
+  height: 55px;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  padding: 10px;
 }
 
 .boardList-area-view {
-  font-size: 27px;
-  width: 100px;
-  text-align: center;
+  font-size: 27px; /* 글씨 크기 */
+  width: 100px; /* 고정 너비 */
+  text-align: center; /* 중앙 정렬 */
   color: var(--gray4);
   display: flex; /* Flexbox로 변경 */
-}
-.board-back-icon {
-  padding-left: 2px;
   color: var(--gray4);
+  margin-left: auto;
 }
+.board-report-btn,
+.board-update-btn,
+.board-delete-btn {
+  background: none; /* 배경 제거 */
+  border: none; /* 테두리 제거 */
+  color: #7f8c8d; /* 회색 계통 텍스트 */
+  cursor: pointer; /* 포인터 커서 */
+  font-size: 14px; /* 글씨 크기 */
+  margin-left: 10px; /* 간격 추가 */
+  padding: 0; /* 패딩 제거 */
+  text-decoration: none; /* 밑줄 제거 */
+}
+.view-btn-zone {
+  display: flex; /* 플렉스 박스 사용 */
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  margin-top: 10px; /* 위쪽 마진 추가 */
+}
+
+.board-update-btn:hover,
+.board-delete-btn:hover {
+  color: #95a5a6; /* 호버 시 진한 회색 */
+}
+
 /* 댓글 */
-.comment-input {
+.board-comment-wrap {
+  clear: both; /* 위 요소들과 분리 */
+  margin-top: 20px;
+}
+.comment-item {
+  position: relative;
+  margin-bottom: 20px;
+  padding-right: 50px; /* 오른쪽 공간 확보 */
+  background-color: #f9f9f9; /* 배경 색상을 약간 밝게 */
+  border-radius: 8px; /* 부드러운 테두리 */
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+}
+
+.comment-user {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.comment-content {
+  position: relative;
+  color: #555;
+}
+
+.commnet-like {
+  position: absolute;
+  top: -25px; /* 더 위로 위치 조정 */
+  right: 0;
+  cursor: pointer;
+  font-size: 14px;
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  color: #e74c3c; /* 좋아요 아이콘을 빨간색으로 */
+}
+
+.commnet-like:hover {
+  color: #c0392b; /* 호버 시 더 어두운 빨간색 */
+}
+.commnet-report-btn,
+.comment-update-btn,
+.comment-del-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: none;
+  border: none;
+  color: #7f8c8d; /* 회색 계통 텍스트 */
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 10px; /* 수정과 삭제 버튼 사이 간격 */
+  padding: 0;
+}
+.commnet-report-btn {
+  top: 30px;
+}
+.comment-update-btn {
+  right: 40px; /* 수정 버튼과 삭제 버튼이 더 붙도록 조정 */
+}
+.commnet-report-btn:hover,
+.comment-update-btn:hover,
+.comment-del-btn:hover {
+  color: #95a5a6; /* 호버 시 더 진한 회색 */
+}
+
+/* 밑줄 제거 */
+.commnet-report-btn,
+.comment-update-btn,
+.comment-del-btn {
+  text-decoration: none;
+}
+.commnet-report-btn:hover,
+.comment-update-btn:hover,
+.comment-del-btn:hover {
+  text-decoration: none;
+}
+
+/* 댓글 입력 영역 */
+.comment-input-wrapper {
+  margin-top: 15px; /* 댓글 입력 영역과 다른 요소 간 간격 */
 }
 
 .comment-textarea {
-  flex: 1; /* 입력창이 가능한 공간을 모두 차지하도록 설정 */
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  margin-right: 8px; /* 버튼과의 간격 설정 */
+  width: 100%; /* 전체 너비 */
+  border: 1px solid #ccc; /* 연한 회색 테두리 */
+  border-radius: 4px; /* 부드러운 테두리 */
+  padding: 10px; /* 안쪽 여백 */
+  resize: none; /* 크기 조절 불가 */
+  background-color: #f0f8ff; /* 입력 영역 배경 색상 */
+  font-size: 14px; /* 글자 크기 */
+  color: #333; /* 글자 색상 */
+  transition: border-color 0.3s; /* 테두리 색상 변화 애니메이션 */
 }
 
-.comment-submit-btn {
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: white;
+.comment-textarea:focus {
+  border-color: #3498db; /* 포커스 시 테두리 색상 변경 */
+  outline: none; /* 기본 아웃라인 제거 */
+}
+
+/* 수정 모드 스타일 */
+.comment-edit-textarea {
+  width: 100%; /* 전체 너비 */
+  border: 1px solid #ccc; /* 연한 회색 테두리 */
+  border-radius: 4px; /* 부드러운 테두리 */
+  padding: 10px; /* 안쪽 여백 */
+  margin-top: 10px; /* 댓글 내용과의 간격 */
+  resize: none; /* 크기 조절 불가 */
+  background-color: #f0f8ff; /* 수정 영역 배경 색상 */
+  font-size: 14px; /* 글자 크기 */
+  color: #333; /* 글자 색상 */
+  transition: border-color 0.3s; /* 테두리 색상 변화 애니메이션 */
+}
+
+.comment-edit-textarea:focus {
+  border-color: #3498db; /* 포커스 시 테두리 색상 변경 */
+  outline: none; /* 기본 아웃라인 제거 */
+}
+/*신고 모달 창*/
+/* 모달 창 스타일 */
+.board-Modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+/* 모달 오버레이 스타일 (배경 반투명) */
+.ReactModal__Overlay {
+  background-color: rgba(0, 0, 0, 0.5); /* 배경 반투명 */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+}
+
+/* 신고 유형 선택박스 */
+.board-report-type {
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.board-report-type-select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* 신고 내용 입력 박스 */
+.board-report-content-box {
+  margin-bottom: 20px;
+}
+
+.board-report-title {
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.board-report-content {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* 버튼 스타일 */
+.board-report-insert,
+.board-no-report {
+  width: 100px;
+  padding: 10px;
+  font-size: 14px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.board-report-insert {
+  background-color: #007bff;
+  color: white;
+  margin-right: 10px;
+}
+
+.board-no-report {
+  background-color: #6c757d;
+  color: white;
 }

@@ -97,6 +97,9 @@ const SellerJoin = () => {
     }
 
     if (name === "sellerPhone") {
+      if (value.replace(/[^0-9]/g, "").length > 13) {
+        return; // 11글자를 초과하면 함수 종료
+      }
       value = value
         .replace(/[^0-9]/g, "")
         .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, "$1-$2-$3")

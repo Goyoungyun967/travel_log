@@ -125,12 +125,28 @@
 		
 		 	<!-- 댓글 목록 조회 -->
     	<select id="selectCommentList" resultType="boardComment">
-        	SELECT * FROM board_comment WHERE board_no = #{boardNo}
-   		 </select>
+   			 SELECT 
+   			 bc.comment_No,
+   			 bc.comment_Writer,
+   			 bc.comment_Date,
+   			 bc.comment_Ref,
+   			 bc.comment_Content,
+   			 bc.board_No,
+   			 (SELECT COUNT(*) FROM comment_like cl WHERE cl.comment_no = bc.comment_no) AS commentLikeCount
+   			 FROM board_comment bc
+   			 WHERE board_no = #{boardNo}
+   			 ORDER BY comment_Date DESC
+		</select>
 		 
 		 <!-- 댓글 추가 -->
-   		<insert id="insertComment">
-   			 INSERT INTO board_comment VALUES (board_comment_seq.nextval, #{commentWriter}, sysdate, 0, #{commentContent}, #{boardNo})
+   		<insert id="insertComment" parameterType="boardComment" useGeneratedKeys="true" keyProperty="commentNo">
+		    <!-- 댓글 추가 -->
+		    <selectKey keyProperty="commentNo" resultType="int" order="BEFORE">
+		        SELECT board_comment_seq.nextval FROM dual
+		    </selectKey>
+		    
+		    INSERT INTO board_comment (comment_no, comment_writer, comment_date, comment_ref, comment_content, board_no)
+		    VALUES (#{commentNo}, #{commentWriter}, sysdate, #{commentRef}, #{commentContent}, #{boardNo})
 		</insert>
 		
 		
@@ -145,40 +161,84 @@
 		 <delete id="deleteComment">
 		        DELETE FROM board_comment WHERE comment_No = #{commentNo}
 		 </delete>
- 
-	
+ 		<!-- 좋아요  -->
+ 		<insert id="insertLikeComment">
+			insert into comment_like values(#{memberNo},#{commentNo})
+		</insert>
+		<select id="selectLikeComment" resultType="int">
+			select count(*) from comment_like where member_no=#{memberNo} and comment_No = #{commentNo}   
+		</select>
+
+		<delete id="deleteUnlikeComment">
+			delete from comment_like where member_No=#{memberNo} and comment_No=#{commentNo}
+		</delete>
+		<select id="selectUnlikeComment" resultType="int">
+			select count(*) from comment_like where comment_No = #{commentNo}
+		</select>
+		<!-- 게시판 신고 -->
+		<insert id="insertReport">
+		insert into board_report values(board_report_seq.nextval,#{memberNo},#{reportType},#{reportContent},#{boardNo})
+		</insert>
+		<!-- 댓글 신고 -->
+		<insert id="insertCommentReport">
+		insert into comment_report values(comment_report_seq.nextval,#{commmentReportType},#{commentReportContent},#{commentNo},#{memberNo})
+		</insert>
 		
 		
 		
 		<!-- 동행 게시판  -->
 		<!-- 동행 게시판 select  -->
 			<select id="accompanyTotalCount" resultType="int">
-				SELECT COUNT(*) FROM board WHERE board_type= #{type}
-			</select>	
-		<select id="selectAccompanyList" resultType="board">
-			select * from
-				(select rownum as rnum, sb.* from
-					(SELECT 
-					 	b.board_no,
-					    b.board_title,
-					    b.board_content,
-					    b.board_area,
-					    b.reg_date,
-					    b.board_thumb,
-					    b.read_count,
-					    b.board_type,
-					    (select member_IMAGE from member m where m.member_no = b.member_no) as member_IMAGE,
-					    (select MEMBER_NICKNAME from member m where m.member_no = b.member_no) as member_NICKNAME
-					FROM 
-		    			board b
-		    		WHERE 
-		    			 board_type = #{type}
-		    	    order by
-		          		board_no desc
-		               ) 
-		    			sb)
-			where rnum BETWEEN #{start} and #{end}
+			    SELECT COUNT(*) FROM board WHERE board_type = #{type}
+			</select>
+			<select id="selectAccompanyList" resultType="boardAccompany">
+		    SELECT 
+		        b.board_no,
+		        b.board_title,
+		        b.board_content,
+		        b.board_area,
+		        b.reg_date,
+		        b.board_type,
+		        b.board_thumb,
+		        b.read_count,
+		        ba.accompany_no,
+		        ba.accompany_date,
+		        ba.accompany_area,
+		        ba.start_day,
+		        ba.end_day,
+		        ba.accompany_content,
+		        LISTAGG(att.accompany_type, ',') WITHIN GROUP (ORDER BY att.accompany_type) AS accompany_types,
+		        m.member_IMAGE,
+		        m.MEMBER_NICKNAME,
+		        m.MEMBER_AGE,
+		        m.MEMBER_GENDER
+		    FROM 
+		        board b
+		    LEFT JOIN 
+		        board_accompany ba ON b.board_no = ba.board_no
+		    LEFT JOIN 
+		        accompany_tag at ON b.board_no = at.board_no
+		    LEFT JOIN 
+		        accompany_type_tag att ON at.accompany_tag_no = att.accompany_tag_no
+		    LEFT JOIN 
+		        member m ON m.member_no = b.member_no  
+		    WHERE 
+		        b.board_type = #{type}
+		    GROUP BY 
+		        b.board_no, b.board_title, b.board_content, b.board_area,
+		        b.reg_date, b.board_type, b.board_thumb, b.read_count,
+		        ba.accompany_no, ba.accompany_date, ba.accompany_area,ba.start_day,ba.end_day,
+		        ba.accompany_content,
+		        m.member_IMAGE,       
+		        m.MEMBER_NICKNAME,    
+		        m.MEMBER_AGE,         
+		        m.MEMBER_GENDER      
+		    ORDER BY 
+		        b.board_no DESC
 		</select>
+
+
+
 		<!-- 동행 게시판 insert  -->
 		
 		<insert id="insertBoardAccompany">
@@ -207,9 +267,130 @@
 		<select id="getReviewList">
 			select * from lodgment_review where review_no=#{lodgmentNo}
 		</select>
+		
+		<!-- 게시판 조회수 -->
+		<update id="updateReadCount">
+			update board set read_count = read_count+1 where board_no=#{boardNo}
+		</update>
+		<!-- 동행 게시판 상세 -->
+		<!-- 게시판 상세 조회 -->
+	<select id="selectBoardAccompany" resultMap="getAccompany">
+   		SELECT 
+		    b.board_no,
+		    b.board_title,
+		    b.board_content,
+		    b.board_area,
+		    b.reg_date,
+		    b.board_type,
+		    b.board_thumb,
+		    b.read_count,
+		    ba.accompany_no,
+		    ba.accompany_date,
+		    ba.accompany_area,
+		    ba.accompany_content,
+		    ba.start_day,
+		    ba.end_day,
+		    LISTAGG(att.accompany_type, ',') WITHIN GROUP (ORDER BY att.accompany_type) AS accompany_types,
+		    m.member_image,
+		    m.member_nickname,
+		    m.member_age,
+		    m.member_gender
+		FROM 
+		    board b
+		LEFT JOIN 
+		    board_accompany ba ON b.board_no = ba.board_no
+		LEFT JOIN 
+		    accompany_tag at ON b.board_no = at.board_no
+		LEFT JOIN 
+		    accompany_type_tag att ON at.accompany_tag_no = att.accompany_tag_no
+		LEFT JOIN 
+		    member m ON m.member_no = b.member_no
+		WHERE 
+		    b.board_no = #{boardNo}
+		GROUP BY 
+		    b.board_no, 
+		    b.board_title, 
+		    b.board_content, 
+		    b.board_area, 
+		    b.reg_date, 
+		    b.board_type, 
+		    b.board_thumb, 
+		    b.read_count, 
+		    ba.accompany_no, 
+		    ba.accompany_date, 
+		    ba.accompany_area, 
+		    ba.accompany_content, 
+		    ba.start_day, 
+		    ba.end_day, 
+		    m.member_image, 
+		    m.member_nickname, 
+		    m.member_age, 
+		    m.member_gender
+
+	</select>
+
+
+	<!-- AccompanyTypeTag 리스트 조회 추가 
+	-->
+	<select id="selectAccompanyTypeTags" resultType="AccompanyTypeTag">
+	  SELECT 
+		    LISTAGG(att.accompany_type, ',') WITHIN GROUP (ORDER BY att.accompany_type) AS accompany_types
+		FROM 
+		    accompany_type_tag att
+		INNER JOIN 
+		    accompany_tag at ON att.accompany_tag_no = at.accompany_tag_no
+		WHERE 
+		    at.board_no = #{boardNo}
+	</select>
+
+<!-- 파일 리스트 조회 -->
+	<select id="selectOneAccompanyList" resultType="boardFile">
+	    SELECT * FROM board_file WHERE board_no = #{boardNo}
+	</select>
 	
+	<resultMap type="boardAccompany" id="getAccompany">
+    <result column="board_no" property="boardNo"/>
+    <result column="board_title" property="boardTitle"/>
+    <result column="board_content" property="boardContent"/>
+    <result column="board_area" property="boardArea"/>
+    <result column="reg_date" property="regDate"/> 
+    <result column="board_type" property="boardType"/>
+    <result column="board_thumb" property="boardThumb"/>
+    <result column="read_count" property="readCount"/>
+    <result column="accompany_no" property="accompanyNo"/>
+    <result column="accompany_date" property="accompanyDate"/>
+    <result column="start_Day" property="startDay"/>
+    <result column="end_Day" property="endDay"/>
+    <result column="accompany_area" property="accompanyArea"/>
+    <result column="accompany_content" property="accompanyContent"/>
+    <result column="member_IMAGE" property="memberImage"/>
+    <result column="MEMBER_NICKNAME" property="memberNickname"/>
+    <result column="MEMBER_AGE" property="memberAge"/>
+    <result column="MEMBER_GENDER" property="memberGender"/>
+
+    <!-- 새로 추가: accompany_types 컬럼 매핑 -->
+    <result column="accompany_types" property="accompanyTypes"/>
+    
+    <!-- accompany_tag_no 리스트로 처리 -->
+    <collection property="accompanyTagNo" column="accompany_tag_no" ofType="java.lang.Integer"/>
+    
+    <!-- 파일 리스트 조회 -->
+    <collection property="fileList"
+        select="selectOneAccompanyList"
+        column="board_no"
+        javaType="java.util.List"
+        ofType="boardFile"/>
+	</resultMap>
+	<!-- 동행 수정
+		<update id="boardAccompany">
+			update board set board_title= #{boardTitle},board_content=#{boardContent},board_thumb=#{boardThumb},board_area=#{boardArea} where board_no=#{boardNo}
+		</update>
 	
-	
+	 -->
+
+
+		
+		
 	
   
 </mapper>
