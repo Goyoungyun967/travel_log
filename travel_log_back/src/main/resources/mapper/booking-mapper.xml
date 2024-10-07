@@ -38,5 +38,23 @@
     	from booking join room using(room_no) join seller using(seller_no) order by book_no desc)b)
 	where rnum between #{start} and #{end}
 	</select>
+	
+	<select id="getBookingInfo">
+		select lpad(b.book_no,6,0) book_no, b.member_id, b.start_date, b.end_date,
+		      b.guest_count, b.guest_name, b.guest_phone, b.guest_request,
+		(
+		select lodgment_name from lodgment_storage ls 
+		join room r using (lodgment_no) where room_no=b.book_no
+		) lodgment_name,
+		(
+		select lodgment_addr from lodgment_storage ls 
+		join room r using (lodgment_no) where room_no=b.book_no
+		) lodgment_addr,
+		(
+		select room_name from room r where room_no=b.room_no
+		) room_name 
+		from booking b
+		where book_no=#{bookNo}
+	</select>
   
 </mapper>
