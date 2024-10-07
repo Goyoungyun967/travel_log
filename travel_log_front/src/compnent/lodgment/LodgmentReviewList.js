@@ -24,7 +24,7 @@ import {
   FormLabel,
 } from "@mui/material";
 
-const LodgmentReviewList = (props) => {
+const LodgmentReviewUpdate = (props) => {
   const navigate = useNavigate();
   const lodgmentNo = props.lodgmentNo;
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -47,6 +47,7 @@ const LodgmentReviewList = (props) => {
         `${backServer}/lodgment/reviewList/${lodgmentNo}/${reqPage}/${loginNo}`
       )
       .then((res) => {
+        console.log(res);
         setPi(res.data.pi);
         setAvailableReview(res.data.availableReview);
         setViewReview(res.data.list);
@@ -281,6 +282,19 @@ const LodgmentReviewList = (props) => {
                       </Box>
                     </MuiModal>
                   </div>
+                  {review.memberNo === loginNo && (
+                    <div
+                      onClick={() => {
+                        console.log("수정하기 클릭됨"); // 확인용 로그
+                        navigate(`/lodgment/reviewUpdate`, {
+                          state: { reviewNo: review.reviewNo },
+                        });
+                      }}
+                    >
+                      {review.reviewNo}
+                      수정하기
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -294,4 +308,4 @@ const LodgmentReviewList = (props) => {
   );
 };
 
-export default LodgmentReviewList;
+export default LodgmentReviewUpdate;
