@@ -5,20 +5,28 @@ const AccompanyDate = (props) => {
   const accompanyContent = props.accompanyContent;
   const setAccompanyContent = props.setAccompanyContent;
 
+  const [itinerary, setItinerary] = useState([]);
+
   useEffect(() => {
     if (daysDifference > 0) {
-      const initialItinerary = new Array(daysDifference).fill("");
+      const initialItinerary =
+        accompanyContent.length === daysDifference
+          ? accompanyContent
+          : new Array(daysDifference).fill("");
       setItinerary(initialItinerary);
       setAccompanyContent(initialItinerary);
+    } else {
+      setItinerary([]);
     }
-  }, [daysDifference, setAccompanyContent]);
+  }, [daysDifference, accompanyContent, setAccompanyContent]);
+
   const handleItineraryChange = (index, event) => {
     const newItinerary = [...itinerary];
     newItinerary[index] = event.target.value;
     setItinerary(newItinerary);
     setAccompanyContent(newItinerary);
   };
-  const [itinerary, setItinerary] = useState([]);
+
   return (
     <div>
       <div className="accompany-map-title">
@@ -40,4 +48,5 @@ const AccompanyDate = (props) => {
     </div>
   );
 };
+
 export default AccompanyDate;

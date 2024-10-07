@@ -15,7 +15,12 @@ import Image from "react-bootstrap/Image";
 import AccompanyWrite from "./AccompanyWrite";
 import ModalInput from "./BoardModal";
 import { useRecoilState } from "recoil";
-import { loginNicknameState, loginNoState } from "../utils/RecoilData";
+import {
+  isLoginState,
+  loginNicknameState,
+  loginNoState,
+} from "../utils/RecoilData";
+import Swal from "sweetalert2";
 
 const BoardList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -24,6 +29,7 @@ const BoardList = () => {
   const [accompanyList, setAccompanyList] = useState([]);
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
   const [loginNickname, setLoginNicName] = useRecoilState(loginNicknameState);
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState); //로그인 여부
 
   const [areaSearch, setAreaSearch] = useState([
     { title: "서울" },
@@ -46,7 +52,7 @@ const BoardList = () => {
   ]);
 
   const [likeCount, setLikeCount] = useState(0); // 초기 좋아요 수
-  const [isLike, setIsLike] = useState(0); // 좋아요를 눌렀는지 여부 (1: 안 눌림, 1: 눌림)
+  const [isLike, setIsLike] = useState(0); // 좋아요를 눌렀는지 여부 (0: 안 눌림, 1: 눌림)
 
   const [searchInput, setSearchInput] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -70,6 +76,7 @@ const BoardList = () => {
   const toggleLodgmentDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
+
   //스크롤
   // const handleMouseDown = (e) => {
   //   isMouseDownRef.current = true;
@@ -118,14 +125,16 @@ const BoardList = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [reqPage, isLike]);
+  }, [reqPage, isLike, likeCount]);
   //동행 게시판
   useEffect(() => {
     axios
       .get(`${backServer}/board/accompanyList/2/${reqPage}`)
       .then((res) => {
         setAccompanyList(res.data.list); // 일반 게시글
+
         setPi(res.data.pi);
+        // setIsLike(res.data.);
       })
       .catch((err) => {
         console.log(err);
@@ -182,6 +191,7 @@ const BoardList = () => {
                 key={"accompany-" + i}
                 accompany={accompany}
                 loginNickname={loginNickname}
+                isLogin={isLogin}
               />
             ))}
           </div>
@@ -197,9 +207,10 @@ const BoardList = () => {
               loginNo={loginNo}
               likeCount={likeCount}
               setLikeCount={setLikeCount}
-              isLike={isLike}
+              isLike={board.isLike}
               setIsLike={setIsLike}
               loginNickname={loginNickname}
+              isLogin={isLogin}
             />
           ))}
         </div>
@@ -240,6 +251,7 @@ const AccompanyItem = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const accompany = props.accompany;
   const loginNickname = props.loginNickname;
+  const isLogin = props.isLogin;
 
   const navigate = useNavigate();
   //작성 시간
@@ -263,48 +275,86 @@ const AccompanyItem = (props) => {
   else if (hours > 0) timeString = `${hours}시간 전`;
   else if (minutes > 0) timeString = `${minutes}분 전`;
   else timeString = `방금전`;
-  console.log(timeString);
+  console.log(isLogin);
   return (
-    <div
-      className="board-preview-list awbcss"
-      onClick={() => {
-        axios
-          .patch(`${backServer}/board/updateReadCount/${accompany.boardNo}`)
-          .then((res) => {
-            console.log(res.data);
-          })
-          .catch((err) => {
-            console.log("조회수 증가 실패", err);
-          });
+    <div>
+      {isLogin ? (
+        <div
+          className="board-preview-list awbcss"
+          onClick={() => {
+            axios
+              .patch(`${backServer}/board/updateReadCount/${accompany.boardNo}`)
+              .then((res) => {
+                console.log(res.data);
+              })
+              .catch((err) => {
+                console.log("조회수 증가 실패", err);
+              });
 
-        navigate(
-          `/board/AccompanyView/${accompany.boardNo}/${encodeURIComponent(
-            timeString
-          )}`
-        );
-      }}
-    >
-      <div className="board-preview-thumb">
-        <img
-          style={{ width: "250px" }}
-          src={
-            accompany.boardThumb
-              ? `${backServer}/board/thumb/${accompany.boardThumb}`
-              : "/image/lodgment_default_img.png"
-          }
-        />
-      </div>
-      <div className="board-preview-content">
-        <div className="board-preview-title">{accompany.boardTitle}</div>
-        <div className="member flex-spbetw ">
-          <div className="memberId-age-gender text-min">
-            <span>{accompany.memberNickname}-</span>
-            <span>{accompany.memberAge}살-</span>
-            <span>{accompany.memberGender}</span>
+            navigate(
+              `/board/AccompanyView/${accompany.boardNo}/${encodeURIComponent(
+                timeString
+              )}`
+            );
+          }}
+        >
+          <div className="board-preview-thumb">
+            <img
+              style={{ width: "250px" }}
+              src={
+                accompany.boardThumb
+                  ? `${backServer}/board/thumb/${accompany.boardThumb}`
+                  : "/image/lodgment_default_img.png"
+              }
+            />
           </div>
-          <div className="area text-min">{accompany.boardArea}</div>
+          <div className="board-preview-content">
+            <div className="board-preview-title">{accompany.boardTitle}</div>
+            <div className="member flex-spbetw ">
+              <div className="memberId-age-gender text-min">
+                <span>{accompany.memberNickname}-</span>
+                <span>{accompany.memberAge}살-</span>
+                <span>{accompany.memberGender}</span>
+              </div>
+              <div className="area text-min">{accompany.boardArea}</div>
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div
+          className="board-preview-list awbcss"
+          onClick={() => {
+            Swal.fire({
+              title: "로그인 후 이용 가능합니다",
+              text: "로그인하세요",
+              icon: "info",
+            });
+            navigate("/login");
+          }}
+        >
+          <div className="board-preview-thumb">
+            <img
+              style={{ width: "250px" }}
+              src={
+                accompany.boardThumb
+                  ? `${backServer}/board/thumb/${accompany.boardThumb}`
+                  : "/image/lodgment_default_img.png"
+              }
+            />
+          </div>
+          <div className="board-preview-content">
+            <div className="board-preview-title">{accompany.boardTitle}</div>
+            <div className="member flex-spbetw ">
+              <div className="memberId-age-gender text-min">
+                <span>{accompany.memberNickname}-</span>
+                <span>{accompany.memberAge}살-</span>
+                <span>{accompany.memberGender}</span>
+              </div>
+              <div className="area text-min">{accompany.boardArea}</div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -318,14 +368,13 @@ const BoardItem = (props) => {
   const likeCount = props.likeCount;
   const setLikeCount = props.setLikeCount;
   const loginNickname = props.loginNickname;
+  const isLogin = props.isLogin;
   const navigate = useNavigate();
 
   //작성 시간
   const now = new Date();
-  console.log(now);
   const regDate = new Date(board.regDate);
   const time = now - regDate;
-  console.log(regDate);
   const seconds = Math.floor(time / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
@@ -341,17 +390,15 @@ const BoardItem = (props) => {
   else if (hours > 0) timeString = `${hours}시간 전`;
   else if (minutes > 0) timeString = `${minutes}분 전`;
   else timeString = `방금전`;
-  console.log(timeString);
 
   //날짜 계산
   ///${encodeURIComponent(timeString)
 
   //좋아요
+  console.log(isLike);
 
   const likeClick = () => {
-    console.log(memberNo);
-
-    if (isLike === 1) {
+    if (isLike == 1) {
       // 좋아요 취소 요청
       axios
         .delete(`${backServer}/board/unlike/${board.boardNo}/${memberNo}`)
@@ -380,56 +427,109 @@ const BoardItem = (props) => {
 
   return (
     <div className="boardList-preview">
-      <div
-        className="boardList-content"
-        onClick={() => {
-          navigate(
-            `/board/view/${board.boardNo}/${encodeURIComponent(
-              timeString
-            )}/${isLike}/${likeCount}`
-          );
-        }}
-      >
-        <div className="boardList-area text-medium">{board.boardArea}</div>
-        <div className="board-memberIcon">
-          <Container
-            style={{
-              width: "350px",
-              margin: 0,
-              padding: "5px",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <Col xs={2} md={2} style={{ padding: 0 }}>
-              <Image
-                src="/image/board_default_img.png"
-                className="member-img-circle"
-                roundedCircle
-              />
-            </Col>
-            <Col xs={10} md={10} style={{ padding: 0 }}>
-              <div className="board-memberId">{board.memberNickname}</div>
-              <div className="board-regDate text-min">{timeString}</div>
-            </Col>
-          </Container>
-        </div>
-        <div className="board-preview-content">
-          <div className="board-preview-title">
-            {board.boardTitle}
-            <div className="boardList-preview-thumb">
-              <img
-                src={
-                  board.boardThumb
-                    ? `${backServer}/board/thumb/${board.boardThumb}`
-                    : "/image/lodgment_default_img.png"
-                }
-                className="board-preview-thumb"
-              />
+      {isLogin ? (
+        <div
+          className="boardList-content"
+          onClick={() => {
+            navigate(
+              `/board/view/${board.boardNo}/${encodeURIComponent(timeString)}`
+            );
+          }}
+        >
+          <div className="boardList-area text-medium">{board.boardArea}</div>
+          <div className="board-memberIcon">
+            <Container
+              style={{
+                width: "350px",
+                margin: 0,
+                padding: "5px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Col xs={2} md={2} style={{ padding: 0 }}>
+                <Image
+                  src="/image/board_default_img.png"
+                  className="member-img-circle"
+                  roundedCircle
+                />
+              </Col>
+              <Col xs={10} md={10} style={{ padding: 0 }}>
+                <div className="board-memberId">{board.memberNickname}</div>
+                <div className="board-regDate text-min">{timeString}</div>
+              </Col>
+            </Container>
+          </div>
+          <div className="board-preview-content">
+            <div className="board-preview-title">
+              {board.boardTitle}
+              <div className="boardList-preview-thumb">
+                <img
+                  src={
+                    board.boardThumb
+                      ? `${backServer}/board/thumb/${board.boardThumb}`
+                      : "/image/lodgment_default_img.png"
+                  }
+                  className="board-preview-thumb"
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div
+          className="boardList-content"
+          onClick={() => {
+            Swal.fire({
+              title: "로그인 페이지로 이동",
+              text: "로그인하세요",
+              icon: "info",
+            });
+            navigate("/login");
+          }}
+        >
+          <div className="boardList-area text-medium">{board.boardArea}</div>
+          <div className="board-memberIcon">
+            <Container
+              style={{
+                width: "350px",
+                margin: 0,
+                padding: "5px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Col xs={2} md={2} style={{ padding: 0 }}>
+                <Image
+                  src="/image/board_default_img.png"
+                  className="member-img-circle"
+                  roundedCircle
+                />
+              </Col>
+              <Col xs={10} md={10} style={{ padding: 0 }}>
+                <div className="board-memberId">{board.memberNickname}</div>
+                <div className="board-regDate text-min">{timeString}</div>
+              </Col>
+            </Container>
+          </div>
+          <div className="board-preview-content">
+            <div className="board-preview-title">
+              {board.boardTitle}
+              <div className="boardList-preview-thumb">
+                <img
+                  src={
+                    board.boardThumb
+                      ? `${backServer}/board/thumb/${board.boardThumb}`
+                      : "/image/lodgment_default_img.png"
+                  }
+                  className="board-preview-thumb"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="like-comment-keep">
         <div className="board-like sub-item" onClick={likeClick}>
           {board.likeCount === 0 ? (

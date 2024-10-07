@@ -26,6 +26,8 @@ const AccompanyView = () => {
   console.log(accompany);
   //모달 창 관련
   const [isModalOpen, setIsModalOpen] = useState(false);
+  //업데이트넘
+  const [updateNo, setUpdateNo] = useState(1);
 
   const reportBoard = () => {
     setIsModalOpen(true);
@@ -58,7 +60,7 @@ const AccompanyView = () => {
   console.log(accompany);
   // accompanyContent가 쉼표로 분리된 배열로 변환
   const accompanyContents = accompany?.accompanyContent
-    ?.split(",")
+    ?.split("&*&")
     .map((content, index) => ({
       day: index + 1,
       description: content.trim(),
@@ -94,7 +96,7 @@ const AccompanyView = () => {
                       className="text-medium"
                       style={{ paddingLeft: "23px" }}
                     >
-                      {loginNickname}
+                      {accompany.memberNickname}
                     </div>
                     <div className="text-min" style={{ paddingLeft: "50px" }}>
                       {regDate}
@@ -197,7 +199,7 @@ const AccompanyView = () => {
           />
 
           <Link
-            to={`/board/AccompanyUpdate/${accompany.boardNo}`}
+            to={`/board/AccompanyUpdate/${accompany.boardNo}/${updateNo}`}
             className="board-update-btn"
           >
             수정

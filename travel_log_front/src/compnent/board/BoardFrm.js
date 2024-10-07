@@ -25,6 +25,7 @@ const BoardFrm = (props) => {
 
   const delBoardFileNo = props.delBoardFileNo;
   const setDelBoardFileNo = props.setDelBoardFileNo;
+  console.log(delBoardFileNo);
 
   const thumbnailRef = useRef(null);
   //썸네일 미리보기용 state(데이터 전송을 안할꺼임)

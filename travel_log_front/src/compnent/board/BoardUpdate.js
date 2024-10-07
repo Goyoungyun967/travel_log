@@ -12,7 +12,6 @@ const BoardUpdate = () => {
   const params = useParams();
   const boardNo = params.boardNo;
   const navigate = useNavigate();
-  console.log(boardNo);
 
   const [boardTitle, setBoardTitle] = useState("");
   const [boardContent, setBoardContent] = useState("");
@@ -38,6 +37,7 @@ const BoardUpdate = () => {
   const [selectedArea, setSelectedArea] = useState("");
 
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
+
   //새로 전송하기 위한 state
   const [thumbnail, setThumbnail] = useState(null);
   const [boardFile, setBoardFile] = useState([]);
@@ -65,7 +65,7 @@ const BoardUpdate = () => {
         console.log(err);
       });
   }, []);
-
+  console.log(boardFile);
   const updateBoard = () => {
     if (boardTitle !== "" && boardContent !== "") {
       const form = new FormData();

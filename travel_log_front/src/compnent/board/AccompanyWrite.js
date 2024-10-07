@@ -8,6 +8,7 @@ import { loginNoState } from "../utils/RecoilData";
 import { useRecoilState } from "recoil";
 import BoardUqillEditor from "./../utils/BoardUqillEditor";
 import AccompanyDate from "./AccompanyDate";
+import AccompanyComment from "./AccompanyComment";
 
 const AccompanyWrite = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -75,6 +76,7 @@ const AccompanyWrite = () => {
   const [accompanyArea, setAccompanyArea] = useState("1");
 
   // 빽으로 보내줘야하는것들 제목,기본 글,지역, 동행날짜 , 동행지역? ,동행내용
+  console.log(accompanyContent);
   const writeBoard = () => {
     if (boardTitle !== "" && boardContent !== "") {
       const form = new FormData();
@@ -83,7 +85,7 @@ const AccompanyWrite = () => {
       form.append("boardArea", selectedArea);
       form.append("memberNo", loginNo);
       form.append("accompanyDate", daysDifference);
-      form.append("accompanyContent", accompanyContent);
+      form.append("accompanyContent", accompanyContent.join("&*&"));
       form.append("accompanyTagNo ", selectedType);
       form.append("accompanyArea", accompanyArea);
       form.append("startDay", dayjs(startDate).format("YYYY-MM-DD"));
