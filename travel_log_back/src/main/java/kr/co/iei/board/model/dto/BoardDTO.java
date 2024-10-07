@@ -33,6 +33,8 @@ public class BoardDTO {
 	private int commentCount;
 	
 	
+	
+	
 
 	
 	

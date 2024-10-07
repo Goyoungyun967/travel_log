@@ -47,6 +47,7 @@ public class BookingDTO {
 	@Schema(description = "판매 방 이름", type="string")
 	private String roomName;
 	@Schema(description = "호텔 작성자", type="string")
+
 	private String businessName;
 	@Schema(description = "호텔 주소", type="string")
 	private String lodgmentAddr;
@@ -56,6 +57,7 @@ public class BookingDTO {
 	private int roomPrice;
 	@Schema(description = "호텔 이미지", type="string")
 	private String lodgmentImg;
+
 
 }
 
