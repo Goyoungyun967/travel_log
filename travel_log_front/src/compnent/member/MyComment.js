@@ -1,5 +1,9 @@
 const MyComment = () => {
-  return <div className="myComment-title">내가 쓴 댓글</div>;
+  return (
+    <section>
+      <div className="myComment-title">나의 문의글</div>
+    </section>
+  );
 };
 
 export default MyComment;

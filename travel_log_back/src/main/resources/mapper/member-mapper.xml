@@ -73,5 +73,8 @@
 			when member_age <![CDATA[>=]]> 10 then '10대'
 		 end),member_gender
 	</select>
-
+	
+	<update id="levelUpdate">
+		update member set member_level=3 where member_no=#{memberNo}
+	</update>
 </mapper>
