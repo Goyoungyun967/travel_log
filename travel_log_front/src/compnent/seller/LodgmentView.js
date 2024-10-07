@@ -204,6 +204,7 @@ const LodgmentView = () => {
               sellerComment={sellerComment}
               setSellerComment={setSellerComment}
               reqPageQ={reqPageQ}
+              setSellerText={setSellerText}
               setReqPageQ={setReqPageQ}
               piQ={piQ}
             />

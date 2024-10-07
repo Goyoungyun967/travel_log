@@ -34,6 +34,7 @@ import kr.co.iei.seller.model.dto.BookingInfoDTO;
 import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.LoginSellerDTO;
+import kr.co.iei.seller.model.dto.QnaComment;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
 import kr.co.iei.seller.model.dto.SellerDTO;
@@ -329,6 +330,12 @@ public class SellerController {
 		return ResponseEntity.ok(seller);
 	}
 	
-	// 판매자&회원 문의 조회
+	// 판매자 문의 답변
+	@Operation(summary = "호텔 리뷰 댓글", description = "리뷰 댓글 update랑 reviewNo 가져와서 씀")
+	@PatchMapping(value="/addSellerComment")
+	public ResponseEntity<Integer> addSellerComment(QnaComment qc){
+		int result = sellerService.insertSellerComment(qc);
+		return ResponseEntity.ok(result);
+	}
 	
 }
