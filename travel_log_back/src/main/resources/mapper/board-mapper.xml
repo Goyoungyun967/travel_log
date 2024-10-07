@@ -381,6 +381,27 @@
         javaType="java.util.List"
         ofType="boardFile"/>
 	</resultMap>
+
+	
+	<!-- 형묵 왔다감 -->
+	<select id="myBoardTotalCount" resultType="int">
+		select count(*) from board where member_no=#{memberNo}
+	</select>
+	
+	<select id="myBoardList" resultType="board">
+	select * from
+	    (select rownum as rnum, b.* from 
+	        (select
+	            board_thumb,
+	            member_nickname,
+	            board_title,
+	            board_type,
+	            board_no,
+	            to_char(reg_date,'yyyy-mm-dd') as reg_date
+	        from board join member using(member_no) where member_no=#{memberNo} order by board_no desc)b)
+	where rnum between #{start} and #{end}
+	</select>
+
 	<!-- 동행 수정
 		<update id="boardAccompany">
 			update board set board_title= #{boardTitle},board_content=#{boardContent},board_thumb=#{boardThumb},board_area=#{boardArea} where board_no=#{boardNo}

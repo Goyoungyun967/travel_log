@@ -89,6 +89,15 @@ public interface BoardDao {
 	//수정
 //	int updateBoardAccompany(BoardAccompanyDTO boardAccompany);
 
+	//형묵 나의 게시판 총 갯수
+	int myBoardTotalCount(int memberNo);
+	
+	//형묵 마이페이지 게시글띄우기
+	List myBoardList(Map<String, Object> myBoardMap);
+
+	
+
+
 
 	
 
