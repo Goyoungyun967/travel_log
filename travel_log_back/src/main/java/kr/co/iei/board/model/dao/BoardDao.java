@@ -98,6 +98,15 @@ public interface BoardDao {
 	
 	
 
+	//형묵 나의 게시판 총 갯수
+	int myBoardTotalCount(int memberNo);
+	
+	//형묵 마이페이지 게시글띄우기
+	List myBoardList(Map<String, Object> myBoardMap);
+
+	
+
+
 
 	
 

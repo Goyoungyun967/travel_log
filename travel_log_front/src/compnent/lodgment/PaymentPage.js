@@ -156,7 +156,7 @@ const PaymentPage = () => {
       (rsp) => {
         //console.log(rsp);
         if (rsp.success) {
-          // 결제 성공 시 서버에ㅌ 요청
+          // 결제 성공 시 서버에 요청
           const updatedBookingInfo = {
             ...bookingInfo,
             portoneimpuid: rsp.merchant_uid,
@@ -167,7 +167,11 @@ const PaymentPage = () => {
             .post(`${BackServer}/booking`, updatedBookingInfo)
             .then((res) => {
               console.log(res);
-              navigate(`/lodgment/bookInfo`, { state: { bookNo: res.data } });
+              if (res.data !== null) {
+                navigate(`/lodgment/bookingInfo`, {
+                  state: { bookNo: res.data },
+                });
+              }
             })
             .catch((error) => {
               // 에러 발생 시 처리

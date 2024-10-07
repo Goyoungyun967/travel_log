@@ -169,8 +169,22 @@ public class MemberContorller {
 	
 	@GetMapping(value="/booking/list/{memberNo}/{reqPage}")
 	public ResponseEntity<Map> bookingList (@PathVariable int memberNo, @PathVariable int reqPage){
+		
 		Map map = memberService.selectBookingList(memberNo,reqPage);
 		return ResponseEntity.ok(map);
+	}
+	
+	@GetMapping(value="/board/list/{memberNo}/{reqPage}")
+	public ResponseEntity<Map> myBoardList (@PathVariable int memberNo ,@PathVariable int reqPage){
+		Map map = memberService.myBoardList(memberNo,reqPage);
+		
+		return ResponseEntity.ok(map);
+	}
+	@PatchMapping(value="/LevelUpdate/{memberNo}")
+	public ResponseEntity<Integer> levelUpdate (@PathVariable int memberNo){
+	int result = memberService.levelUpdate(memberNo);
+	
+	return ResponseEntity.ok(result);
 	}
 }
 	

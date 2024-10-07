@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { useParams } from "react-router-dom";
-const LodgmentDetailMapPayment = () => {
-  const params = useParams();
-  const lodgmentNo = params.lodgmentNo;
+import Swal from "sweetalert2";
+const LodgmentDetailMapPayment = (props) => {
+  const lodgmentAddr = props.lodgmentAddr;
+  const lodgmentName = props.lodgmentName;
+  //console.log(lodgmentAddr);
+
   // console.log(lodgmentNo);
   const KakaoKey = process.env.REACT_APP_HS_KAKAO_REST_API_KEY;
   const [lodgmentLongitude, setsLodgmentLongitude] = useState("");
   //console.log(lodgmentLongitude);
   const [lodgmentLatitude, setLodgmentLatitude] = useState("");
   //console.log(lodgmentLatitude);
-  const address = "인천 중구 영종해안남로 19-5";
   fetch(
     `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(
-      address
+      lodgmentAddr
     )}`,
     {
       method: "GET",
@@ -30,32 +32,32 @@ const LodgmentDetailMapPayment = () => {
         setsLodgmentLongitude(longitude);
         setLodgmentLatitude(latitude);
       } else {
-        console.log("주소를 찾을 수 없습니다.");
+        //console.log("주소를 찾을 수 없습니다.");
       }
     })
     .catch((error) => {
-      console.error("API 호출 오류:", error);
+      //console.error("API 호출 오류:", error);
+      Swal.fire({
+        text: "서버 오류, 관리자에게 문의하세요",
+      });
     });
   return (
     <div>
-      <div>위치</div>
-
       <Map
         level={6}
         center={{ lat: lodgmentLatitude, lng: lodgmentLongitude }}
-        style={{ width: "100%", height: "300px" }}
+        style={{ width: "100%", height: "200px" }}
       >
         <MapMarker position={{ lat: lodgmentLatitude, lng: lodgmentLongitude }}>
           <a
-            href={`https://map.kakao.com/link/map/네스트호텔,${lodgmentLatitude},${lodgmentLongitude}`}
+            href={`https://map.kakao.com/link/map/${lodgmentName},${lodgmentLatitude},${lodgmentLongitude}`}
             target="_blank"
             rel="noopener noreferrer"
           >
-            네스트호텔
+            {lodgmentName}
           </a>
         </MapMarker>
       </Map>
-      <div>{address}</div>
     </div>
   );
 };

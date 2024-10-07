@@ -11,6 +11,7 @@ import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
+import kr.co.iei.seller.model.dto.RoomQnaDTO;
 import kr.co.iei.seller.model.dto.RoomServiceTagDTO;
 import kr.co.iei.seller.model.dto.StmInfoDTO;
 import kr.co.iei.util.PageInfo;
@@ -76,6 +77,10 @@ public interface SellerLodgmentDao {
 	int delAllServiceTag(int roomNo);
 
 	int updateLodgment(LodgmentStorageDTO ls);
+
+	int totalCountQna();
+
+	List<RoomQnaDTO> selectQna(int lodgmentNo, int start, int end);
 
 	
 	
