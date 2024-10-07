@@ -42,7 +42,7 @@
 		#{lodgmentNotice},
 		#{lodgmentCheckIn},
 		#{lodgmentCheckOut},
-		1
+		0
 		)
 	</insert>
 	
@@ -151,25 +151,29 @@
 	
 	<!-- 문의 조회 -->
  	<select id="selectQna" resultMap="selectQnaMap">
-		select * from
-				(select rownum as rnum, b.*  from
-	                (select
-	                     rq.ROOM_QNA_NO,
-	                     rq.LODGMENT_NO,
-	                     rq.MEMBER_NO,
-	                     rq.SC_QNA_STATUS,
-	                     rq.QNA_CONTENT,
-	                     rq.QNA_DATE,
-	                     qc.qna_comment_no,
-	                     qc.COM_CONTENT,
-	                     m.member_id
-	                from room_qna rq
-	                left join qna_comment qc
-	                on rq.room_qna_no = qc.room_qna_no
-	                left join member m
-                	on rq.member_no = m.member_no
-	            order by rq.room_qna_no desc)b)
-			where rnum between #{start} and #{end}
+		SELECT *
+			FROM (
+			    SELECT *
+			    FROM (
+			        SELECT ROWNUM AS rnum, b.*
+			        FROM (
+			            SELECT
+			                rq.ROOM_QNA_NO,
+			                rq.LODGMENT_NO,
+			                rq.MEMBER_NO,
+			                rq.SC_QNA_STATUS,
+			                rq.QNA_CONTENT,
+			                rq.QNA_DATE,
+			                m.member_id
+			            FROM room_qna rq
+			            LEFT JOIN member m ON rq.member_no = m.member_no
+			            ORDER BY rq.room_qna_no DESC
+			        ) b
+			    )
+			    WHERE rnum BETWEEN #{start} AND #{end}
+			) rq
+			LEFT JOIN qna_comment qc ON rq.ROOM_QNA_NO = qc.room_qna_no
+			order by qc.QNA_COMMENT_NO desc
 	</select>
 	<resultMap type="roomQna" id="selectQnaMap">
 		<id column="room_qna_no" property="roomQnaNo"/>
@@ -184,6 +188,15 @@
 			<result property="comContent" column="com_content"/>
 		</collection>
 	</resultMap>
+	
+	<!-- 문의 댓글들 조회 -->
+	<select id="selectQnaComment">
+		SELECT *
+		FROM QNA_COMMENT qc
+		LEFT JOIN room_qna rq
+		ON rq.room_qna_no = qc.room_qna_no
+		WHERE rq.lodgment_NO = #{lodgmentNo}
+	</select>
 	
 	<!-- 객실 상세 (객실 정보 + 파일 + 해시태그) -->
 	<select id="selectRoomViewInfo" resultMap="RoomViewMap">
@@ -401,9 +414,9 @@
 	 	update room set room_delete=0 where LODGMENT_NO=#{lodgmentNo}
 	 </update>
 	 
-	 <!-- 호텔 삭제(0으로 전환) -->
+	 <!-- 호텔 삭제(2로 전환) -->
 	 <update id="delUpLodgment">
-	 	update LODGMENT_STORAGE set LODGMENT_DELETE=0 where LODGMENT_NO=#{lodgmentNo}
+	 	update LODGMENT_STORAGE set lodgment_delete=2 where LODGMENT_NO=#{lodgmentNo}
 	 </update>
 	 
 	 <!-- 객실만 삭제 0으로 전환  -->
@@ -449,4 +462,9 @@
 	<delete id="delAllServiceTag">
 		delete from ROOM_SERVICE_TAG where room_no=#{roomNo}
 	</delete>
+	
+		<!-- 판매자 문의 답변 -->
+	<insert id="insertSellerComment">
+		insert into qna_comment values(QNA_COMMENT_SEQ.NEXTVAL, #{roomQnaNo}, #{comContent})
+	</insert>
 </mapper>

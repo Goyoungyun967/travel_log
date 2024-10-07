@@ -9,6 +9,7 @@ import kr.co.iei.lodgment.model.dto.LodgmentReviewDTO;
 import kr.co.iei.seller.model.dto.BookingInfoDTO;
 import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
+import kr.co.iei.seller.model.dto.QnaComment;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
 import kr.co.iei.seller.model.dto.RoomQnaDTO;
@@ -81,6 +82,12 @@ public interface SellerLodgmentDao {
 	int totalCountQna();
 
 	List<RoomQnaDTO> selectQna(int lodgmentNo, int start, int end);
+
+	int insertSellerComment(QnaComment qc);
+
+	List<QnaComment> selectQnaCom();
+
+	List<QnaComment> selectQnaComment(int lodgmentNo);
 
 	
 	

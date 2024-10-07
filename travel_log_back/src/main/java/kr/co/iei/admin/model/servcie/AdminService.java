@@ -204,4 +204,9 @@ public class AdminService {
 		return result;
 	}
 
+	public Map getBoardReportList(int reqPage) {
+		
+		return null;
+	}
+
 }

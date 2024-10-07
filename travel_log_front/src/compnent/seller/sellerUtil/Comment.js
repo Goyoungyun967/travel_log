@@ -4,7 +4,7 @@ import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 import PageNavi from "../../utils/PageNavi";
-import { Button } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { ReviewSlideImg } from "./SlideImg";
 import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
@@ -160,7 +160,7 @@ const TextForm = (props) => {
         }}
       >
         <Textarea
-          placeholder="답글을 적어보세요!"
+          placeholder="100자 이내로 적어주세요!"
           sx={{ mb: 1 }}
           onChange={(e) => {
             setText(e.target.value);
@@ -199,9 +199,20 @@ const QnaComment = (props) => {
     reqPageQ,
     setReqPageQ,
     piQ,
+    setSellerText,
   } = props;
   const [textComment, setTextComment] = useState(false);
   const [viewTextComment, setViewTextComment] = useState(false);
+
+  // 판매자 답글이 있으면 답글 보기 없으면 답글 달기
+  const addComment = (roomQnaNo) => {
+    setTextComment((prev) => ({
+      ...prev,
+      [roomQnaNo]: !prev[roomQnaNo], // 현재 reviewNo에 해당하는 값만 토글
+    }));
+  };
+
+  // 판매자
   const viewComment = (roomQnaNo) => {
     setViewTextComment((prev) => ({
       ...prev,
@@ -220,6 +231,9 @@ const QnaComment = (props) => {
       >
         {qnaList.map((qna, i) => {
           console.log("qna - ", qna);
+          const qnaListArr = qna.commentList;
+          console.log("qnaList - ", qnaListArr);
+          console.log(`${i} - ${qnaListArr.length}`);
           const dateString = qna.qnaDate;
           const formattedDate = dayjs(dateString).format("YYYY-MM-DD");
           return (
@@ -232,14 +246,69 @@ const QnaComment = (props) => {
                 <Typography variant="caption" component="div">
                   {formattedDate}
                 </Typography>
-                <>
-                  <Button
-                    variant="outlined"
-                    onClick={() => viewComment(qna.roomQnaNo)}
-                  >
-                    {viewTextComment[qna.roomQnaNo] ? "답글 취소" : "답글 달기"}
-                  </Button>
-                </>
+                {
+                  qnaListArr.length === 0 ? (
+                    <>
+                      <Button
+                        variant={
+                          textComment[qna.roomQnaNo] ? "contained" : "outlined"
+                        }
+                        onClick={() => viewComment(qna.roomQnaNo)}
+                      >
+                        {viewTextComment[qna.roomQnaNo]
+                          ? "답글 취소"
+                          : "답글 달기"}
+                      </Button>
+                      {viewTextComment[qna.roomQnaNo] && (
+                        <TextQna
+                          setSellerText={setSellerText}
+                          sellerComment={sellerComment}
+                          setSellerComment={setSellerComment}
+                          qnaNo={qna.roomQnaNo}
+                          // 필요한 props 추가
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        variant={
+                          textComment[qna.roomQnaNo] ? "contained" : "outlined"
+                        }
+                        onClick={() => addComment(qna.roomQnaNo)}
+                      >
+                        {textComment[qna.roomQnaNo] ? "답글 닫기" : "답글 보기"}
+                      </Button>
+
+                      {/* 답글 보기(true)때만 보여줌*/}
+                      {textComment[qna.roomQnaNo] ? (
+                        <>
+                          <TextQna
+                            setSellerText={setSellerText}
+                            sellerComment={sellerComment}
+                            setSellerComment={setSellerComment}
+                            qnaNo={qna.roomQnaNo}
+                          />
+                        </>
+                      ) : (
+                        ""
+                      )}
+                      {textComment[qna.roomQnaNo] &&
+                        qnaListArr.map((qnaList, i) => (
+                          <Card key={i}>
+                            <CardContent>
+                              <Typography component="div" level="title-md">
+                                [판매자]
+                              </Typography>
+                              <Typography component="div" level="title-md">
+                                {qnaList.comContent}
+                              </Typography>
+                            </CardContent>
+                          </Card>
+                        ))}
+                    </>
+                  ) // 답글이 없으면 답글 달기 -> 있으면 답글 보기
+                }
               </CardContent>
             </Card>
           );
@@ -252,6 +321,80 @@ const QnaComment = (props) => {
   );
 };
 
-const TextQna = (props) => {};
+// 판매자 문의 답글 달기
+const TextQna = (props) => {
+  const { setSellerText, sellerComment, setSellerComment, qnaNo } = props;
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
+  return (
+    <Box
+      sx={{
+        py: 2,
+        display: "flex", // Flexbox 사용
+        flexDirection: "row", // 가로로 배치
+        gap: 2, // 요소 간 간격
+        alignItems: "center", // 수직 가운데 정렬
+        flexWrap: "nowrap", // 요소가 한 줄에 유지되도록 설정
+        width: "100%",
+      }}
+    >
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          const form = new FormData();
+          form.append("comContent", sellerComment);
+          form.append("roomQnaNo", qnaNo);
+          axios
+            .patch(`${backServer}/seller/addSellerComment`, form, {
+              headers: {
+                contentType: "multipart/form-data",
+                processData: false,
+              },
+            })
+            .then((res) => {
+              console.log(res);
+              if (res.data !== 0) {
+                setSellerText("ok");
+                setSellerComment("");
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }}
+        style={{ display: "flex", alignItems: "center", width: "100%" }}
+      >
+        <Textarea
+          placeholder="100자 이내로 적어주세요!"
+          value={sellerComment}
+          sx={{
+            mb: 1,
+            flexGrow: 1,
+            minHeight: "40px", // 최소 높이
+            maxHeight: "150px", // 최대 높이 (원하는 만큼 조정 가능)
+            overflow: "hidden", // 콘텐츠가 넘칠 경우 스크롤 표시
+            resize: "vertical", // 수직으로 크기 조절 가능
+          }}
+          onChange={(e) => {
+            setSellerComment(e.target.value);
+          }}
+        />
+        <Button
+          type="submit"
+          sx={{
+            ml: 2,
+            height: "40px",
+            padding: "8px 16px",
+            marginTop: "-10px",
+          }}
+          variant="contained"
+          color="success"
+        >
+          작성 완료
+        </Button>
+      </form>
+    </Box>
+  );
+};
 
 export { Comment, QnaComment };
