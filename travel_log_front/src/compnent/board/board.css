@@ -508,6 +508,12 @@ props/*글자 사이즈*/
   margin-right: 20px;
   padding-top: 15px;
   height: 73px;
+  margin-bottom: 20px;
+  width: 100%; /* 부모 요소에 맞게 전체 너비 사용 */
+}
+.accompany-date-list {
+  display: block; /* 블록 레벨로 변경 */
+  margin-bottom: 20px; /* 날짜 리스트 끝과 댓글 사이에 여백 추가 */
 }
 
 .board-date-wrap {
@@ -541,6 +547,8 @@ props/*글자 사이즈*/
 
 /*여행 게시판 상세 게시판*/
 .board-view-wrap {
+  align-items: flex-start;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -555,6 +563,7 @@ props/*글자 사이즈*/
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
   border-radius: 17px;
   padding: 20px;
+  margin-bottom: 20px;
   background-color: #ffffff; /* 배경색 추가 */
 }
 
@@ -630,7 +639,7 @@ props/*글자 사이즈*/
   color: var(--gray4);
   margin-left: auto;
 }
-
+.board-report-btn,
 .board-update-btn,
 .board-delete-btn {
   background: none; /* 배경 제거 */
@@ -654,6 +663,10 @@ props/*글자 사이즈*/
 }
 
 /* 댓글 */
+.board-comment-wrap {
+  clear: both; /* 위 요소들과 분리 */
+  margin-top: 20px;
+}
 .comment-item {
   position: relative;
   margin-bottom: 20px;
@@ -689,7 +702,7 @@ props/*글자 사이즈*/
 .commnet-like:hover {
   color: #c0392b; /* 호버 시 더 어두운 빨간색 */
 }
-
+.commnet-report-btn,
 .comment-update-btn,
 .comment-del-btn {
   position: absolute;
@@ -703,22 +716,25 @@ props/*글자 사이즈*/
   margin-left: 10px; /* 수정과 삭제 버튼 사이 간격 */
   padding: 0;
 }
-
-.comment-update-btn {
-  right: 50px; /* 수정 버튼과 삭제 버튼이 더 붙도록 조정 */
+.commnet-report-btn {
+  top: 30px;
 }
-
+.comment-update-btn {
+  right: 40px; /* 수정 버튼과 삭제 버튼이 더 붙도록 조정 */
+}
+.commnet-report-btn:hover,
 .comment-update-btn:hover,
 .comment-del-btn:hover {
   color: #95a5a6; /* 호버 시 더 진한 회색 */
 }
 
 /* 밑줄 제거 */
+.commnet-report-btn,
 .comment-update-btn,
 .comment-del-btn {
   text-decoration: none;
 }
-
+.commnet-report-btn:hover,
 .comment-update-btn:hover,
 .comment-del-btn:hover {
   text-decoration: none;
@@ -763,4 +779,85 @@ props/*글자 사이즈*/
 .comment-edit-textarea:focus {
   border-color: #3498db; /* 포커스 시 테두리 색상 변경 */
   outline: none; /* 기본 아웃라인 제거 */
+}
+/*신고 모달 창*/
+/* 모달 창 스타일 */
+.board-Modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+/* 모달 오버레이 스타일 (배경 반투명) */
+.ReactModal__Overlay {
+  background-color: rgba(0, 0, 0, 0.5); /* 배경 반투명 */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+}
+
+/* 신고 유형 선택박스 */
+.board-report-type {
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.board-report-type-select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* 신고 내용 입력 박스 */
+.board-report-content-box {
+  margin-bottom: 20px;
+}
+
+.board-report-title {
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.board-report-content {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* 버튼 스타일 */
+.board-report-insert,
+.board-no-report {
+  width: 100px;
+  padding: 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.board-report-insert {
+  background-color: #007bff;
+  color: white;
+  margin-right: 10px;
+}
+
+.board-no-report {
+  background-color: #6c757d;
+  color: white;
 }

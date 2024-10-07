@@ -140,20 +140,26 @@
 }
 .addr-block {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
 .addr-block > .addr-search-api {
   display: block;
-  width: 700px;
 }
+
 .addr-block > .addr-api-input {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  margin-left: 20px;
 }
-.addr-block > .addr-api-input > label {
-  margin-top: 10px;
+.addr-block > .addr-api-input > .addr-flex-wrap {
+  display: flex;
+}
+.addr-block > .addr-api-input > .addr-flex-wrap > label {
+  margin-top: 8px;
+  margin-right: 20px;
+}
+.sellerAddrSearchBtn {
+  margin-top: 8px;
 }
 .addr-block > .addr-api-input > input {
   font-size: 16px;

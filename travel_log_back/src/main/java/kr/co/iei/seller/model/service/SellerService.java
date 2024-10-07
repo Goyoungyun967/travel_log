@@ -26,6 +26,7 @@ import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.LoginSellerDTO;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
+import kr.co.iei.seller.model.dto.RoomQnaDTO;
 import kr.co.iei.seller.model.dto.RoomServiceTagDTO;
 import kr.co.iei.seller.model.dto.SellerDTO;
 import kr.co.iei.seller.model.dto.ServiceTagDTO;
@@ -102,7 +103,7 @@ public class SellerService {
 		LodgmentStorageDTO ls = sellerLodgmentDao.selectOneLodgment(lodgmentNo);
 		return ls;
 	}
-
+	
 	// 호텔 등록
 	@Transactional
 	public int insertLodgment(LodgmentStorageDTO ls) {
@@ -116,7 +117,7 @@ public class SellerService {
 	}
 
 	// 호텔 상세 (호텔 + 객실 상세)
-	public Map selectHotelInfo(int lodgmentNo, int reqPage) {
+	public Map selectHotelInfo(int lodgmentNo, int reqPage, int reqPageQ) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		LodgmentStorageDTO ls = sellerLodgmentDao.selectOneLodgment(lodgmentNo); // 호텔 정보 조회
@@ -127,20 +128,41 @@ public class SellerService {
 		int totalCount = sellerLodgmentDao.totalCount(); // 전체 리뷰 수
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
 
+		// 리뷰
 //		List<LodgmentReviewDTO> review = sellerLodgmentDao.selectLodgmentReview(lodgmentNo,pi); // 호텔 리뷰 조회
 		List<LodgmentReviewDTO> review = sellerLodgmentDao.selectLodgmentReview(lodgmentNo, pi.getStart(), pi.getEnd()); // 호텔
 																															// 리뷰
-																															// 조회
+																											// 조회
+		// 문의
+		int numPerPageQ = 5;
+		int pageNaviSizeQ = 5;
+		int totalCountQ = sellerLodgmentDao.totalCountQna();
+		PageInfo piQ = pageUtil.getPageInfo(reqPageQ, numPerPageQ, pageNaviSizeQ, totalCountQ); 
+		
+		List<RoomQnaDTO> qna = sellerLodgmentDao.selectQna(lodgmentNo, piQ.getStart(), piQ.getEnd());
+		System.out.println(qna);
 		System.out.println(review);
 
-		map.put("lodgment", ls);
-		map.put("list", list);
-		map.put("review", review);
-		map.put("pi", pi);
-
+		map.put("lodgment", ls); // 호텔 정보
+		
+		map.put("list", list); // 객실 정보
+		
+		map.put("review", review); // 리뷰 정보
+		map.put("pi", pi); // 리뷰 페이징
+		
+		map.put("qna", qna); // 문의 정보
+		map.put("piQ", piQ); // 문의 페이징
+		
 		return map;
 	}
 
+	// 호텔 수정
+	@Transactional
+	public int updateLodgment(LodgmentStorageDTO ls) {
+		int result = sellerLodgmentDao.updateLodgment(ls);
+		return result;
+	}
+	
 	// 객실 상세
 	public Map selectRoomInfo(int lodgmentNo, int roomNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -343,6 +365,17 @@ public class SellerService {
 		int result = sellerLodgmentDao.updatecomment(ld);
 		return result;
 	}
+
+
+	// 회원 정보 
+	public SellerDTO selectOneSeller(String token) {
+		LoginSellerDTO loginSeller = jwtUtil.sellerCheckToken(token);
+		SellerDTO seller = sellerDao.selectOneSeller(loginSeller.getSellerNo());
+		return seller;
+	}
+
+
+
 
 
 

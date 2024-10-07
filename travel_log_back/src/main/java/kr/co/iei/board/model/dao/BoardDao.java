@@ -13,6 +13,8 @@ import kr.co.iei.board.model.dto.BoardAccompanyDTO;
 import kr.co.iei.board.model.dto.BoardCommentDTO;
 import kr.co.iei.board.model.dto.BoardDTO;
 import kr.co.iei.board.model.dto.BoardFileDTO;
+import kr.co.iei.board.model.dto.BoardReportDTO;
+import kr.co.iei.board.model.dto.CommentReportDTO;
 
 
 @Mapper
@@ -63,8 +65,11 @@ public interface BoardDao {
 	//삭제 
 	int deleteUnlikeComment(int memberNo, int commentNo);
 	int selectUnlikeComment(int memberNo, int commentNo);
-   
-
+	
+	//신고
+	int insertReport(BoardReportDTO report);
+	//댓글
+	int insertCommentReport(CommentReportDTO commentReport);
 	//동행게시판 리스트
 	int accompanyTotalCount(int type);
 	List<BoardAccompanyDTO> selectAccompanyList(Map<String, Object> m);
@@ -81,6 +86,20 @@ public interface BoardDao {
 	BoardAccompanyDTO selectBoardAccompany(int boardNo);
 	List<AccompanyTypeTag> selectAccompanyTypeTags(int boardNo);
 	List<BoardFileDTO> selectOneAccompanyList(int boardNo);
+	//수정
+//	int updateBoardAccompany(BoardAccompanyDTO boardAccompany);
+
+	//형묵 나의 게시판 총 갯수
+	int myBoardTotalCount(int memberNo);
+	
+	//형묵 마이페이지 게시글띄우기
+	List myBoardList(Map<String, Object> myBoardMap);
+
+	
+
+
+
+	
 
 
 

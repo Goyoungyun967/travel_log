@@ -12,6 +12,7 @@ import ChatBubbleIcon from "@mui/icons-material/ChatBubble"; //댓글
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"; //뒤로가기 모양
 import dayjs from "dayjs";
 import AccompanyComment from "./AccompanyComment";
+import ReportModal from "./ReportModal";
 
 const AccompanyView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -23,6 +24,12 @@ const AccompanyView = () => {
   const regDate = params.regDate;
   const [accompany, setAccompany] = useState(null);
   console.log(accompany);
+  //모달 창 관련
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const reportBoard = () => {
+    setIsModalOpen(true);
+  };
 
   useEffect(() => {
     axios
@@ -179,6 +186,16 @@ const AccompanyView = () => {
         </div>
 
         <div className="view-btn-zone">
+          <button className="board-report-btn" onClick={reportBoard}>
+            신고
+          </button>
+          <ReportModal
+            boardNo={accompany.boardNo}
+            memberNo={loginNo}
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+          />
+
           <Link
             to={`/board/AccompanyUpdate/${accompany.boardNo}`}
             className="board-update-btn"

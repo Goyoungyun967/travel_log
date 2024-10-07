@@ -17,6 +17,8 @@ import kr.co.iei.board.model.dto.BoardAccompanyDTO;
 import kr.co.iei.board.model.dto.BoardCommentDTO;
 import kr.co.iei.board.model.dto.BoardDTO;
 import kr.co.iei.board.model.dto.BoardFileDTO;
+import kr.co.iei.board.model.dto.BoardReportDTO;
+import kr.co.iei.board.model.dto.CommentReportDTO;
 import kr.co.iei.util.PageInfo;
 import kr.co.iei.util.PageUtil;
 
@@ -77,6 +79,7 @@ public class BoardService {
 		}
 		return null;
 	}
+	//동행
 	@Transactional
 	public List<BoardFileDTO> updateBoard(BoardDTO board, List<BoardFileDTO> boardFileList) {
 		int result = boardDao.updateBoard(board);
@@ -188,7 +191,25 @@ public class BoardService {
 		}
 		return 0;
 	}
-
+// 게시판 신고
+	@Transactional
+		public int insertReport(BoardReportDTO report) {
+			int result = boardDao.insertReport(report);
+			if(result>0) {
+				return result;
+			}
+			return 0;
+		}
+	//댓글 신고
+	@Transactional
+	public int insertReport(CommentReportDTO commentReport) {
+		int result = boardDao.insertCommentReport(commentReport);
+		if(result>0) {
+			return result;
+		}
+		return 0;
+	}
+	
 	
 	//동행게시판 
 	public Map<String, Object> selectAccompanyList(int type, int reqPage) {
@@ -259,6 +280,33 @@ public class BoardService {
 		
 		return accompany;
 	}
+
+//	동행수정
+//	@Transactional
+//	public List<BoardFileDTO> updateBoardAccompany(BoardAccompanyDTO boardAccompany, List<BoardFileDTO> boardFileList) {
+//					int result = boardDao.updateBoardAccompany(boardAccompany);
+//		
+//		if(result>0) {
+//			List<BoardFileDTO> delFileList = new ArrayList<BoardFileDTO>();
+//			if(boardAccompany.getDelBoardFileNo() != null) {
+//				delFileList = boardDao.selectBoardFile(boardAccompany.getDelBoardFileNo());
+//				result += boardDao.deleteBoardFile(boardAccompany.getDelBoardFileNo());
+//			}
+//			for(BoardFileDTO boardFile : boardFileList) {
+//				result += boardDao.insertBoardFile(boardFile);
+//			}
+//			int updateTotal = boardAccompany.getDelBoardFileNo() == null 
+//									? 1+boardFileList.size() 
+//									: 1+ boardFileList.size() + boardAccompany.getDelBoardFileNo().length;
+//			if(result == updateTotal) {
+//				return delFileList;
+//			}
+//			
+//		}
+//		return null;
+//	}
+
+	
 
 
 
