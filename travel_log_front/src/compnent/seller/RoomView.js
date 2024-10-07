@@ -134,7 +134,6 @@ const RoomView = () => {
                 >
                   <Tab label="숙소 위치" value="1" />
                   <Tab label="공지사항" value="2" />
-                  <Tab label="문의" value="3" />
                 </TabList>
               </Box>
               <TabPanel value="1">
@@ -149,7 +148,6 @@ const RoomView = () => {
                   />
                 </div>
               </TabPanel>
-              <TabPanel value="3">Item Three</TabPanel>
             </TabContext>
           </Box>
         </div>
