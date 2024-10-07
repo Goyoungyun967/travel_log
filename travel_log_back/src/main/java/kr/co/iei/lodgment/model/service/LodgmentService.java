@@ -11,10 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.iei.lodgment.model.dao.LodgmentDao;
 import kr.co.iei.lodgment.model.dto.LodgmentDTO;
+import kr.co.iei.lodgment.model.dto.LodgmentMemberInquireDTO;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewDTO;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewFileDTO;
-import kr.co.iei.lodgment.model.dto.Request;
-import kr.co.iei.lodgment.model.dto.ReviewStatus;
+import kr.co.iei.lodgment.model.dto.RequestDTO;
+import kr.co.iei.lodgment.model.dto.ReviewStatusDTO;
 import kr.co.iei.lodgment.model.dto.RoomSearchDTO;
 import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
 import kr.co.iei.util.PageInfo;
@@ -132,7 +133,7 @@ public class LodgmentService {
 		int pageNaviSize = 5;	//페이지네비 길이
 		int totalCount = lodgmentDao.totalCount(lodgmentNo);//전체 게시물 수
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
-		Request request = new Request();
+		RequestDTO request = new RequestDTO();
 		request.setStart(pi.getStart());
 		request.setEnd(pi.getEnd());
 		request.setLoginNo(loginNo);
@@ -157,14 +158,14 @@ public class LodgmentService {
 	
 	//리뷰 좋아요 
 	@Transactional
-	public int reviewLike(Request request) {
+	public int reviewLike(RequestDTO request) {
 		int result = lodgmentDao.reviewLike(request);
 		return result;
 	}
 	
 	//리뷰 좋아요 취소
 	@Transactional
-	public int reviewLikeCancle(Request request) {	
+	public int reviewLikeCancle(RequestDTO request) {	
 		int result = lodgmentDao.reviewLikeCancle(request);
 		return result;
 	}
@@ -172,10 +173,10 @@ public class LodgmentService {
 	//다른데서도 쓸일이 있을까? 싶어서
 	public Boolean availableReview(int lodgmentNo, int loginNo) {
 		Boolean availableReview = false;
-		Request lodgmentInfo = new Request();
+		RequestDTO lodgmentInfo = new RequestDTO();
 		lodgmentInfo.setLodgmentNo(lodgmentNo);
 		lodgmentInfo.setLoginNo(loginNo);
-		ReviewStatus reviewStatus = lodgmentDao.reviewStatus(lodgmentInfo);
+		ReviewStatusDTO reviewStatus = lodgmentDao.reviewStatus(lodgmentInfo);
 		if(reviewStatus.getAvailableReviewsCount() > reviewStatus.getUsedReviewsCount()) {
 			availableReview = true;
 		}
@@ -184,8 +185,47 @@ public class LodgmentService {
 	
 	//리뷰 신고
 	@Transactional
-	public int reviewReport(Request request) {
+	public int reviewReport(RequestDTO request) {
 		int result = lodgmentDao.reviewReport(request);
 		return result;
 	}
+	
+	//숙소 문의하기 
+	@Transactional
+	public int insertMemberInquire(LodgmentMemberInquireDTO inquire) {
+		int result = lodgmentDao.insertMemberInquire(inquire);
+		return result;
+	}
+	
+	//숙소 문의 리스트 
+	public Map inquireList(int lodgmentNo, int reqPage) {
+		int numPerPage = 5;	
+		int pageNaviSize = 5;
+		int totalCount = lodgmentDao.totalCountInquire(lodgmentNo);//전체 게시물 수
+		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
+		RequestDTO request = new RequestDTO();
+		request.setStart(pi.getStart());
+		request.setEnd(pi.getEnd());
+		request.setLodgmentNo(lodgmentNo);
+		List list = lodgmentDao.selectInquireList(request);
+	    //리뷰 이미지 전부 불러오기
+		//List Imglist = lodgmentDao.selectGetAllReviewImg(lodgmentNo);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", list);
+		map.put("pi", pi);
+		return map;
+	}
+	
+	//리뷰 삭제 
+	@Transactional
+	public int deleteInquire(int roomQnaNo, int loginNo) {
+		RequestDTO request = new RequestDTO();
+		request.setRoomQnaNo(roomQnaNo);
+		request.setLoginNo(loginNo);
+		int result = lodgmentDao.deleteInquire(request);
+		return result;
+	}
+	
+	
 }

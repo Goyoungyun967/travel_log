@@ -58,7 +58,7 @@ const SearchBar = (props) => {
   //console.log(startDate);
   const lodgmentChange = (e) => {
     const value = e.target.value;
-    setLodgment(value);
+    setLodgment(value.trim());
     if (value.length > 0) {
       axios
         .get(`${backServer}/lodgment/search/${value}`)
