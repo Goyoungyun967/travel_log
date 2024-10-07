@@ -67,7 +67,7 @@ const BookingItem = (props) => {
     <tr
       onClick={() => {
         //여기 링크만 좀 걸어주세요 ~
-        navigate(`/booking/view/${booking.bookingNo}`);
+        navigate(`/lodgment/bookingInfo/${booking.bookingNo}`);
       }}
     >
       <td className="mk-reservation-date-list">{booking.paymentDate}</td>

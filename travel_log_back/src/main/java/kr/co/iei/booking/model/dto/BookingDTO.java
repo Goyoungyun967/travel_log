@@ -1,3 +1,4 @@
+
 package kr.co.iei.booking.model.dto;
 
 import org.apache.ibatis.type.Alias;
@@ -51,5 +52,10 @@ public class BookingDTO {
 	private String lodgmentAddr;
 	@Schema(description = "호텔 이름", type="string")
 	private String lodgmentName;
+	@Schema(description = "결제 가격", type="int")
+	private int roomPrice;
+	@Schema(description = "호텔 이미지", type="string")
+	private String lodgmentImg;
 
 }
+
