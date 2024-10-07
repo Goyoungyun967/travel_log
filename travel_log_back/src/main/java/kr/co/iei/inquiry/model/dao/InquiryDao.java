@@ -73,4 +73,8 @@ public interface InquiryDao {
 
 	int updateLodgmentDelete(int[] lodgmentNo);
 
+	int getBoardReportCount();
+
+	List getBoardReportList(Map<String, Object> m);
+
 }

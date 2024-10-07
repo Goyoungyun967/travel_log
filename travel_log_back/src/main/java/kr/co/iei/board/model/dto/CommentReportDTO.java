@@ -17,5 +17,8 @@ public class CommentReportDTO {
 	private String commentReportContent;
 	private int memberNo;
 	private int commentNo;
-
+	private int boardNo;
+	private String commentContent;
+	private String memberNickname;
+	private String commentWriter;
 }

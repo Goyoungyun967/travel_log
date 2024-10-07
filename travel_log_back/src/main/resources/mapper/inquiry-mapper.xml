@@ -210,7 +210,7 @@
 	join 
 		member using (member_id) 
 	where 
-		seller_no=#{sellerNo} 
+		seller_no=#{sellerNo}
 	group by 
 		decode(member_gender,'m','남성','f','여성')
   </select>
@@ -247,6 +247,27 @@
   	select * from (select rownum as rnum, l.* from (select lodgment_no,lodgment_name,lodgment_type_name,lodgment_delete,business_name from lodgment_storage join lodgment_type using (lodgment_type_no) join seller using (seller_no) where lodgment_delete=#{lodgmentDelete})l) where rnum between #{start} and #{end}
   </select>
   <update id="updateLodgmentDelete">
-		update lodgment_storage set lodgment_delete=0 where lodgment_no in <foreach collection="array" item="lodgmentNo" open="(" close=")" separator=",">#{lodgmentNo}</foreach>
+		update lodgment_storage set lodgment_delete=1 where lodgment_no in <foreach collection="array" item="lodgmentNo" open="(" close=")" separator=",">#{lodgmentNo}</foreach>
 	</update>
+	
+  <!-- 게시글 신고 -->
+  <select id="getBoardReportCount" resultType="int">
+  	select count(*) from board_report
+  </select>
+  <select id="getBoardReportList" resultType="boardReport">
+  	select * from (select rownum as rnum, br.* from (select report_no,member_nickname,report_type,report_content,board_no from board_report join board b using (board_no) join member using (b.member_no))br) where rnum between #{start} and #{end}
+  </select>
+  <select id="getBoardCommentReportCount" resultType="int">
+  	select count(*) from comment_report 
+  	<if test="!type.equals('all')">
+  		where comment_report_type=#{type}
+  	</if>
+  </select>
+  <select id="getBoardCommentReportList" resultType="boardReport">
+  	select * from (select rownum as rnum, b.* from (select comment_report_no,comment_report_type, comment_report_content, comment_content,member_nickname  from board_report join member using (member_no) 
+  	<if test="!type.equals('all')">
+  		where comment_report_type=#{type}
+  	</if>
+  	)b) where rnum between #{start} and #{end}
+  </select>
 </mapper>

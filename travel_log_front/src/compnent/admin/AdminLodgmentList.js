@@ -16,7 +16,7 @@ const AdminLodgmentList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [lodgmentList, setLodgmentList] = useState(null);
   const [pi, setPi] = useState(null);
-  const [lodgmentDelete, setLodgmentDelete] = useState(1);
+  const [lodgmentDelete, setLodgmentDelete] = useState(0);
   const [reqPage, setReqPage] = useState(1);
   const navigate = useNavigate();
   const [state, setState] = useState(true);
@@ -41,8 +41,8 @@ const AdminLodgmentList = () => {
         if (res.data) {
           setState(!state);
           Swal.fire({
-            title: "상품 노출 처리 완료",
-            text: "상품 노출 처리가 완료 되었습니다.",
+            title: "상품 등록 처리 완료",
+            text: "상품 등록 처리가 완료 되었습니다.",
             icon: "success",
           });
         }
@@ -55,19 +55,19 @@ const AdminLodgmentList = () => {
     <>
       <div className="admin-search-box">
         <FormControl>
-          <FormLabel id="lodgmentDelete">노출처리여부</FormLabel>
+          <FormLabel id="lodgmentDelete">등록여부</FormLabel>
           <RadioGroup
             row
             aria-labelledby="lodgmentDelete"
-            defaultValue={1}
+            defaultValue={0}
             name="radio-buttons-group"
             onChange={(e) => {
               setLodgmentDelete(e.target.value);
               setReqPage(1);
             }}
           >
-            <FormControlLabel value={1} control={<Radio />} label="노출" />
-            <FormControlLabel value={0} control={<Radio />} label="숨겨짐" />
+            <FormControlLabel value={0} control={<Radio />} label="등록대기" />
+            <FormControlLabel value={1} control={<Radio />} label="등록완료" />
           </RadioGroup>
         </FormControl>
       </div>
@@ -75,7 +75,7 @@ const AdminLodgmentList = () => {
         <thead>
           <tr>
             <th width={"20%"} className="seller-check">
-              {Number(lodgmentDelete) === 1 ? (
+              {Number(lodgmentDelete) === 0 ? (
                 <Checkbox
                   onChange={(e) => {
                     if (e.target.checked) {
@@ -97,7 +97,7 @@ const AdminLodgmentList = () => {
             <th width={"30%"}>숙소명</th>
             <th width={"15%"}>숙소종류</th>
             <th width={"20%"}>사업자명</th>
-            <th width={"15%"}>노출상태</th>
+            <th width={"15%"}>등록상태</th>
           </tr>
         </thead>
         <tbody>
@@ -118,7 +118,7 @@ const AdminLodgmentList = () => {
             return (
               <tr key={`admin-lodgment-list-${index}`}>
                 <td className="seller-check">
-                  {Number(lodgmentDelete) === 1 ? (
+                  {Number(lodgmentDelete) === 0 ? (
                     <Checkbox
                       onChange={changeLodgmentNoList}
                       checked={lodgmentNoList.includes(lodgment.lodgmentNo)}
@@ -138,19 +138,23 @@ const AdminLodgmentList = () => {
                 <td>{lodgment.lodgmentTypeName}</td>
                 <td>{lodgment.businessName}</td>
                 <td>
-                  {lodgment.lodgmentDelete === 0 ? <>{"숨겨짐"}</> : "노출"}
+                  {lodgment.lodgmentDelete === 0 ? (
+                    <>{"등록대기"}</>
+                  ) : (
+                    "등록완료"
+                  )}
                 </td>
               </tr>
             );
           })}
-          {Number(lodgmentDelete) === 1 ? (
+          {Number(lodgmentDelete) === 0 ? (
             <tr>
               <td colSpan={5}>
                 <button
                   className="admin-seller-btn"
                   onClick={updateLodmentDelete}
                 >
-                  숨기기
+                  등록
                 </button>
               </td>
             </tr>
