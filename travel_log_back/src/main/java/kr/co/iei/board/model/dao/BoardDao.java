@@ -29,18 +29,16 @@ public interface BoardDao {
 
 	int insertBoardFile(BoardFileDTO boardFile);
 
-	BoardDTO selectOneBoard(int boardNo);
+	BoardDTO selectOneBoard(int boardNo,int memberNo);
 
 	BoardFileDTO getBoardFile(int boardFileNo);
 
 	List<BoardFileDTO> selectOneBoardFileList(int boardNo);
 
 	int deleteBoard(int boardNo);
-
+	//수정
 	int updateBoard(BoardDTO board);
-
 	List<BoardFileDTO> selectBoardFile(int[] delBoardFileNo);
-
 	int deleteBoardFile(int[] delBoardFileNo);
 	//조하요
 	int selectLikeBoard(int boardNo, int memberNo);

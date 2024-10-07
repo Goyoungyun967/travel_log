@@ -26,7 +26,7 @@ const BoardView = () => {
   const boardNo = params.boardNo;
   const regDate = params.timeString;
   const [likeCount, setLikeCount] = useState();
-  const [isLike, setIsLike] = useState();
+  const [isLike, setIsLike] = useState(0);
   const [board, setBoard] = useState(null);
   //모달창 관련
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,7 +38,7 @@ const BoardView = () => {
 
   useEffect(() => {
     axios
-      .get(`${backServer}/board/boardNo/${boardNo}`)
+      .get(`${backServer}/board/boardNo/${boardNo}/${memberNo}`)
       .then((res) => {
         setBoard(res.data);
         console.log(res.data);
@@ -200,23 +200,30 @@ const BoardView = () => {
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
           />
-
-          <Link
-            to={`/board/update/${board.boardNo}`}
-            className="board-update-btn"
-          >
-            수정
-          </Link>
-          <button
-            type="button"
-            className="board-delete-btn"
-            onClick={deleteBoard}
-          >
-            삭제
-          </button>
+          <>
+            {loginNickname === board.memberNickname ? (
+              <>
+                <Link
+                  to={`/board/update/${board.boardNo}`}
+                  className="board-update-btn"
+                >
+                  수정
+                </Link>
+                <button
+                  type="button"
+                  className="board-delete-btn"
+                  onClick={deleteBoard}
+                >
+                  삭제
+                </button>
+              </>
+            ) : (
+              ""
+            )}
+          </>
         </div>
 
-        <div className="view-like-comment-keep">
+        {/* <div className="view-like-comment-keep">
           <div className="board-like sub-item" onClick={likeClick}>
             {board.isLike === 0 ? (
               "좋아요"
@@ -244,7 +251,7 @@ const BoardView = () => {
               </>
             )}
           </div>
-        </div>
+        </div> */}
 
         <div className="board-comment-wrap">
           <BoardCommnet board={board} />

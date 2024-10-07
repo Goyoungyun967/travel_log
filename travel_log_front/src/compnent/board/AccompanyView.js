@@ -197,20 +197,28 @@ const AccompanyView = () => {
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
           />
-
-          <Link
-            to={`/board/AccompanyUpdate/${accompany.boardNo}/${updateNo}`}
-            className="board-update-btn"
-          >
-            수정
-          </Link>
-          <button
-            type="button"
-            className="board-delete-btn"
-            onClick={deleteBoard}
-          >
-            삭제
-          </button>
+          <>
+            {loginNickname === accompany.memberNickname ? (
+              <>
+                {" "}
+                <Link
+                  to={`/board/AccompanyUpdate/${accompany.boardNo}/${updateNo}`}
+                  className="board-update-btn"
+                >
+                  수정
+                </Link>
+                <button
+                  type="button"
+                  className="board-delete-btn"
+                  onClick={deleteBoard}
+                >
+                  삭제
+                </button>
+              </>
+            ) : (
+              ""
+            )}
+          </>
         </div>
         <div className="board-comment-wrap">
           <AccompanyComment accompany={accompany} />

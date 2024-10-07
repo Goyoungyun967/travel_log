@@ -125,7 +125,7 @@ const BoardList = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [reqPage, isLike, likeCount]);
+  }, [reqPage, likeCount]);
   //동행 게시판
   useEffect(() => {
     axios
@@ -398,7 +398,7 @@ const BoardItem = (props) => {
   console.log(isLike);
 
   const likeClick = () => {
-    if (isLike == 1) {
+    if (isLike === 1) {
       // 좋아요 취소 요청
       axios
         .delete(`${backServer}/board/unlike/${board.boardNo}/${memberNo}`)

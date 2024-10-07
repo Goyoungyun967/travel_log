@@ -12,6 +12,7 @@ const BoardUpdate = () => {
   const params = useParams();
   const boardNo = params.boardNo;
   const navigate = useNavigate();
+  console.log(boardNo);
 
   const [boardTitle, setBoardTitle] = useState("");
   const [boardContent, setBoardContent] = useState("");

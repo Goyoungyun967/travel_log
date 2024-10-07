@@ -75,7 +75,6 @@
 		    <result column="read_count" property="readCount"/>
 		    <result column="like_count" property="likeCount"/>
 		    <result column="keep_count" property="keepCount"/>
-		    <result column="is_like" property="isLike"/>
 		    <result column="comment_count" property="commentCount"/>
 		    <collection property="fileList"
 		        select="selectOneBoardFileList"
@@ -242,11 +241,8 @@
 		    ORDER BY 
 		        b.board_no DESC
 		</select>
-
-
-
-		<!-- 동행 게시판 insert  -->
 		
+		<!-- 동행 게시판 insert  -->
 		<insert id="insertBoardAccompany">
 			 insert into board values(board_seq.nextval,#{boardTitle},#{boardContent},#{boardArea},sysdate,2,#{boardThumb},#{memberNo},0)
 			<selectKey resultType="int" keyProperty="boardNo" order="AFTER">
@@ -319,7 +315,7 @@
 		<!-- 파일 리스트 조회 -->
 	<select id="selectOneAccompanyList" resultType="boardFile">
 	    SELECT * FROM board_file WHERE board_no = #{boardNo}
-	 </select>
+	</select>
 	<resultMap type="boardAccompany" id="getAccompany">
     <result column="board_no" property="boardNo"/>
     <result column="board_title" property="boardTitle"/>
@@ -331,24 +327,21 @@
     <result column="read_count" property="readCount"/>
     <result column="accompany_no" property="accompanyNo"/>
     <result column="accompany_date" property="accompanyDate"/>
-    <result column="start_Day" property="startDay"/>
-    <result column="end_Day" property="endDay"/>
+    <result column="start_day" property="startDay"/>
+    <result column="end_day" property="endDay"/>
     <result column="accompany_area" property="accompanyArea"/>
     <result column="accompany_content" property="accompanyContent"/>
-    <result column="member_IMAGE" property="memberImage"/>
-    <result column="MEMBER_NICKNAME" property="memberNickname"/>
-    <result column="MEMBER_AGE" property="memberAge"/>
-    <result column="MEMBER_GENDER" property="memberGender"/>
-   
-    <!-- 새로 추가: accompany_types 컬럼 매핑 -->
-  
+    <result column="member_image" property="memberImage"/>
+    <result column="member_nickname" property="memberNickname"/>
+    <result column="member_age" property="memberAge"/>
+    <result column="member_gender" property="memberGender"/>
 
-    
     <!-- accompany_tag_no 리스트로 처리 -->
- 	   <collection property="accompanyTypeTags" ofType="accompanyTypeTag" javaType="java.util.List">
-    		 <result column="accompany_Tag_No" property="accompanyTagNo"/>
-    		  <result column="accompany_Type" property="accompanyType"/>
-    	</collection>
+    <collection property="accompanyTypeTags" ofType="accompanyTypeTag" javaType="java.util.List">
+        <result column="accompany_tag_no" property="accompanyTagNo"/>
+        <result column="accompany_type" property="accompanyType"/>
+    </collection>
+
     <!-- 파일 리스트 조회 -->
     <collection property="fileList"
         select="selectOneAccompanyList"
@@ -356,12 +349,19 @@
         javaType="java.util.List"
         ofType="boardFile"/>
 	</resultMap>
+
 	<!-- 동행 수정-->
-	<update id="boardAccompany">
+	<update id="updateBoardAccompany">
 		update board set board_title= #{boardTitle},board_content=#{boardContent},board_thumb=#{boardThumb},board_area=#{boardArea} where board_no=#{boardNo}
 	</update>
 	<update id="updateAccompany">
-		update board_accompany set accompany_Date=#{accompanyDate} accompany_Area=#{accompanyArea} accompanyContent=#{accompanyContent} start_Day=#{startDay} end_Day_#{endDay} 
+	    UPDATE board_accompany
+	    SET accompany_Date = #{accompanyDate},
+	        accompany_Area = #{accompanyArea},
+	        accompanyContent = #{accompanyContent},
+	        start_Day = #{startDay},
+	        end_Day = #{endDay}
+	    WHERE board_no = #{boardNo}
 	</update>
 	<delete id="delTypeTag">
 		 DELETE from ACCOMPANY_TAG where BOARD_NO=#{boardNo}
@@ -387,12 +387,7 @@
 	where rnum between #{start} and #{end}
 	</select>
 
-	<!-- 동행 수정
-		<update id="boardAccompany">
-			update board set board_title= #{boardTitle},board_content=#{boardContent},board_thumb=#{boardThumb},board_area=#{boardArea} where board_no=#{boardNo}
-		</update>
 	
-	 -->
 
 
 		
