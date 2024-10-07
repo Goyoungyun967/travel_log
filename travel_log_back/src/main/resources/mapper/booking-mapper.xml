@@ -28,6 +28,7 @@
 	select * from
 		(select rownum as rnum, b.* from
     		(select	
+    		    book_no,
         		room_no,
         		lodgment_name,
         		status,

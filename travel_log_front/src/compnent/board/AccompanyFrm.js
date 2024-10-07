@@ -29,20 +29,24 @@ const AccompanyFrm = (props) => {
   const setStartDate = props.setStartDate;
   const endDate = props.endDate;
   const setEndDate = props.setEndDate;
-  console.log(startDate);
-  console.log(endDate);
+
   const accompanyType = props.accompanyType;
   const setAccompanyType = props.setAccompanyType;
 
   //동행
   const selectedType = props.selectedType;
   const setSelectedType = props.setSelectedType;
+  console.log(selectedType);
+  console.log(selectedType.accompanyTagNo);
 
   const accompanyContent = props.accompanyContent;
   const setAccompanyContent = props.setAccompanyContent;
 
   const accompanyArea = props.accompanyArea;
   const setAccompanyArea = props.setAccompanyArea;
+
+  //업데이트랑 나누기 위해
+  const updateNo = props.updateNo;
 
   const handleTypeChange = (tagNo) => {
     setSelectedType((prev) => {
@@ -272,58 +276,144 @@ const AccompanyFrm = (props) => {
               <th>
                 <div className="accompany-date-title">여행 날짜</div>
               </th>
-              <td>
-                <LocalizationProvider dateAdapter={AdapterDateFns} locale={ko}>
-                  <DatePicker
-                    label={clickCount === 0 ? "시작일자" : "종료일자"}
-                    value={
-                      clickCount === 0 ? selectedDates.start : selectedDates.end
-                    }
-                    onChange={handleDateChange}
-                    inputFormat="yyyy년 MM월 dd일"
-                    renderInput={(params) => <TextField {...params} />}
-                    disableTextInput // 사용자 입력을 비활성화
-                    minDate={new Date()}
-                  />
-                </LocalizationProvider>
-                <p>
-                  {selectedDates.start &&
-                    `시작 날짜: ${format(selectedDates.start, "yyyy-MM-dd")}`}
-                </p>
-                <p>
-                  {selectedDates.end &&
-                    `종료 날짜: ${format(selectedDates.end, "yyyy-MM-dd")}`}
-                </p>
-                <p>{daysDifference > 0 && `여행 기간: ${daysDifference}일`}</p>
-              </td>
-            </tr>
-            <tr>
-              <th>
-                <label htmlFor="accompanyType">동행유형</label>
-              </th>
-              <td>
-                <div className="accompany-type-checkboxes">
-                  {accompanyType.map((type) => (
-                    <div key={type.accompany_tag_no}>
-                      <input
-                        type="checkbox"
-                        id={`type-${type.accompany_tag_no}`}
-                        checked={selectedType.includes(type.accompany_tag_no)}
-                        onChange={() =>
-                          handleTypeChange(
-                            type.accompany_tag_no,
-                            type.accompany_type
-                          )
+              <>
+                {updateNo == 1 ? (
+                  <td>
+                    <LocalizationProvider
+                      dateAdapter={AdapterDateFns}
+                      locale={ko}
+                    >
+                      <DatePicker
+                        label={clickCount === 0 ? "시작일자" : "종료일자"}
+                        value={
+                          clickCount === 0
+                            ? selectedDates.start
+                            : selectedDates.end
                         }
+                        onChange={handleDateChange}
+                        inputFormat="yyyy년 MM월 dd일"
+                        renderInput={(params) => <TextField {...params} />}
+                        disableTextInput // 사용자 입력을 비활성화
+                        minDate={new Date()}
                       />
-                      <label htmlFor={`type-${type.accompany_tag_no}`}>
-                        {type.accompany_type}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </td>
+                    </LocalizationProvider>
+                    <p>
+                      {startDate &&
+                        `시작 날짜: ${format(
+                          new Date(startDate),
+                          "yyyy-MM-dd"
+                        )}`}
+                    </p>
+                    <p>
+                      {endDate &&
+                        `종료 날짜: ${format(new Date(endDate), "yyyy-MM-dd")}`}
+                    </p>
+                    <p>
+                      {daysDifference > 0 && `여행 기간: ${daysDifference}일`}
+                    </p>
+                  </td>
+                ) : (
+                  <td>
+                    <LocalizationProvider
+                      dateAdapter={AdapterDateFns}
+                      locale={ko}
+                    >
+                      <DatePicker
+                        label={clickCount === 0 ? "시작일자" : "종료일자"}
+                        value={
+                          clickCount === 0
+                            ? selectedDates.start
+                            : selectedDates.end
+                        }
+                        onChange={handleDateChange}
+                        inputFormat="yyyy년 MM월 dd일"
+                        renderInput={(params) => <TextField {...params} />}
+                        disableTextInput // 사용자 입력을 비활성화
+                        minDate={new Date()}
+                      />
+                    </LocalizationProvider>
+                    <p>
+                      {selectedDates.start &&
+                        `시작 날짜: ${format(
+                          selectedDates.start,
+                          "yyyy-MM-dd"
+                        )}`}
+                    </p>
+                    <p>
+                      {selectedDates.end &&
+                        `종료 날짜: ${format(selectedDates.end, "yyyy-MM-dd")}`}
+                    </p>
+                    <p>
+                      {daysDifference > 0 && `여행 기간: ${daysDifference}일`}
+                    </p>
+                  </td>
+                )}
+              </>
             </tr>
+            <>
+              {updateNo == 1 ? (
+                <tr>
+                  <th>
+                    <label htmlFor="accompanyType">동행유형</label>
+                  </th>
+                  <td>
+                    <div className="accompany-type-checkboxes">
+                      {accompanyType.map((type) => (
+                        <div key={type.accompany_tag_no}>
+                          <input
+                            value={type.accompany_tag_no}
+                            type="checkbox"
+                            id={`type-${type.accompany_tag_no}`}
+                            checked={selectedType.some(
+                              (h) => h.accompanyTagNo === type.accompany_tag_no
+                            )} // hashTag에 있는지 확인 후 체크
+                            onChange={() =>
+                              handleTypeChange(
+                                type.accompany_tag_no,
+                                type.accompany_type
+                              )
+                            }
+                          />
+                          <label htmlFor={`type-${type.accompany_tag_no}`}>
+                            {type.accompany_type}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                <tr>
+                  <th>
+                    <label htmlFor="accompanyType">동행유형</label>
+                  </th>
+                  <td>
+                    <div className="accompany-type-checkboxes">
+                      {accompanyType.map((type) => (
+                        <div key={type.accompany_tag_no}>
+                          <input
+                            type="checkbox"
+                            id={`type-${type.accompany_tag_no}`}
+                            checked={selectedType.includes(
+                              type.accompany_tag_no
+                            )}
+                            onChange={() =>
+                              handleTypeChange(
+                                type.accompany_tag_no,
+                                type.accompany_type
+                              )
+                            }
+                          />
+                          <label htmlFor={`type-${type.accompany_tag_no}`}>
+                            {type.accompany_type}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </>
             <tr>
               <th>
                 <div className="accompany-map">동행 지도</div>
@@ -345,6 +435,7 @@ const AccompanyFrm = (props) => {
                   accompanyContent={accompanyContent}
                   setAccompanyContent={setAccompanyContent}
                   daysDifference={daysDifference}
+                  updateNo={updateNo}
                 />
               </td>
             </tr>

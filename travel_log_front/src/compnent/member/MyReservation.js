@@ -78,7 +78,7 @@ const BookingItem = (props) => {
         //여기 링크만 좀 걸어주세요 ~
 
         navigate(`/lodgment/bookingInfo`, {
-          state: { bookNo: booking.bookingNo },
+          state: { bookNo: booking.bookNo },
         });
       }}
     >

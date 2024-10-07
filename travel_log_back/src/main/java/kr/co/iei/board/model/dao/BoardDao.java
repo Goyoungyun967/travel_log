@@ -42,9 +42,9 @@ public interface BoardDao {
 	List<BoardFileDTO> selectBoardFile(int[] delBoardFileNo);
 
 	int deleteBoardFile(int[] delBoardFileNo);
-
+	//조하요
 	int selectLikeBoard(int boardNo, int memberNo);
-
+	
 	int insertLikeBoard(int memberNo, int boardNo );
 
 	int selectUnlikeBoard(int boardNo, int memberNo);
@@ -62,6 +62,7 @@ public interface BoardDao {
 	//입력
 	int insertLikeComment(int memberNo, int commentNo);
 	int selectLikeComment(int memberNo, int commentNo);
+
 	//삭제 
 	int deleteUnlikeComment(int memberNo, int commentNo);
 	int selectUnlikeComment(int memberNo, int commentNo);
@@ -84,10 +85,18 @@ public interface BoardDao {
 	int updateReadCount(int boardNo);
 	//게시판 상세
 	BoardAccompanyDTO selectBoardAccompany(int boardNo);
-	List<AccompanyTypeTag> selectAccompanyTypeTags(int boardNo);
+//	List<AccompanyTypeTag> selectAccompanyTypeTags(int boardNo);
 	List<BoardFileDTO> selectOneAccompanyList(int boardNo);
+	
+	
 	//수정
-//	int updateBoardAccompany(BoardAccompanyDTO boardAccompany);
+	int updateBoardAccompany(BoardAccompanyDTO boardAccompany);
+	int updateAccompany(BoardAccompanyDTO boardAccompany);
+	int delTypeTag(BoardAccompanyDTO boardAccompany);
+
+
+	
+	
 
 	//형묵 나의 게시판 총 갯수
 	int myBoardTotalCount(int memberNo);
@@ -103,7 +112,50 @@ public interface BoardDao {
 
 
 
+
 	
-//	int insertAccompanyType(BoardAccompanyDTO boardAccompany);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	<!-- AccompanyTypeTag 리스트 조회 추가 
+//	-->
+//	<select id="selectAccompanyTypeTags" resultType="AccompanyTypeTag">
+//	  SELECT 
+//		    LISTAGG(att.accompany_type, ',') WITHIN GROUP (ORDER BY att.accompany_type) AS accompany_types
+//		FROM 
+//		    accompany_type_tag att
+//		INNER JOIN 
+//		    accompany_tag at ON att.accompany_tag_no = at.accompany_tag_no
+//		WHERE 
+//		    at.board_no = #{boardNo}
+//	</select>
+//
+//
+//	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

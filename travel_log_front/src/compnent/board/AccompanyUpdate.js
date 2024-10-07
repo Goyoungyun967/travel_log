@@ -13,8 +13,10 @@ const AccompanyUpdate = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const params = useParams();
   const boardNo = params.boardNo;
+  const updateNo = params.updateNo;
   const navigate = useNavigate();
-  console.log(boardNo);
+
+  console.log(updateNo);
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
   const [boardTitle, setBoardTitle] = useState("");
   const [boardContent, setBoardContent] = useState("");
@@ -75,7 +77,7 @@ const AccompanyUpdate = () => {
     setBoardContent(e.target.value);
   };
   const [accompanyArea, setAccompanyArea] = useState("1");
-
+  console.log(selectedType);
   useEffect(() => {
     axios
       .get(`${backServer}/board/accompanyNo/${boardNo}`)
@@ -89,17 +91,13 @@ const AccompanyUpdate = () => {
         setStartDate(res.data.startDay);
         setEndDate(res.data.endDay);
         setDaysDifference(res.data.accompanyDate);
+        setSelectedType(res.data.accompanyTypeTags);
         // accompanyTypes가 배열이 아닐 경우 처리
-        const typesArray = Array.isArray(res.data.accompanyTypes)
-          ? res.data.accompanyTypes
-          : res.data.accompanyTypes.split(",").map((type) => type.trim());
-        setSelectedType(typesArray);
-        console.log(typesArray);
 
         // accompanyContent가 배열이 아닐 경우 처리
         const accompanyContentArray = Array.isArray(res.data.accompanyContent)
           ? res.data.accompanyContent
-          : res.data.accompanyContent.split(",").map((type) => type.trim());
+          : res.data.accompanyContent.split("&*&").map((type) => type.trim());
 
         // 각 요소를 개별적으로 상태에 설정
         accompanyContentArray.forEach((content) => {
@@ -112,7 +110,7 @@ const AccompanyUpdate = () => {
         console.log(err);
       });
   }, []);
-
+  console.log(accompanyContent);
   const updateBoard = () => {
     if (boardTitle !== "" && boardContent !== "") {
       const form = new FormData();
@@ -122,8 +120,7 @@ const AccompanyUpdate = () => {
       form.append("memberNo", loginNo);
       form.append("boardArea", selectedArea);
       form.append("accompanyDate", daysDifference);
-      form.append("accompanyContent", accompanyContent);
-      form.append("accompanyTagNo ", selectedType);
+      form.append("accompanyContent", accompanyContent.join("&*&"));
       form.append("accompanyArea", accompanyArea);
       form.append("startDay", dayjs(startDate).format("YYYY-MM-DD"));
       form.append("endDay", dayjs(endDate).format("YYYY-MM-DD"));
@@ -138,6 +135,9 @@ const AccompanyUpdate = () => {
       }
       for (let i = 0; i < delBoardFileNo.length; i++) {
         form.append("delBoardFileNo", delBoardFileNo[i]);
+      }
+      for (let i = 0; i < selectedType.length; i++) {
+        form.append("accompanyTagNo", selectedType[i].accompanyTagNo);
       }
       axios
         .patch(`${backServer}/board/AccompanyUpdate`, form)
@@ -189,6 +189,7 @@ const AccompanyUpdate = () => {
           setAccompanyArea={setAccompanyArea}
           fileList={fileList}
           setFileList={setFileList}
+          updateNo={updateNo}
         />
         <div className="board-editer-wrap">
           <BoardUqillEditor

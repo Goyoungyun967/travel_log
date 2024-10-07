@@ -209,4 +209,14 @@ public class LodgmentController {
 		int result = lodgmentService.deleteInquire(roomQnaNo,loginNo);
 		return ResponseEntity.ok(1==result);
 	}
+	
+	//수정 리뷰 데이터 가져오기 
+	@GetMapping(value = "/getReview/{reviewNo}")
+	@Operation(summary = "리뷰 수정 데이터 불러오기",description = "리뷰 번호로 리뷰 불러오기")
+	public ResponseEntity<Boolean> getReview(@PathVariable int reviewNo){
+	
+	System.out.println(reviewNo);	
+	return ResponseEntity.ok(true);
+	}
+
 }

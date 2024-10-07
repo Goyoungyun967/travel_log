@@ -58,7 +58,7 @@ public class BoardService {
 		return result;
 	}
 	//상세게시판
-	public BoardDTO selectOneBoard(int boardNo) {
+	public BoardDTO selectOneBoard(int boardNo ) {
 		BoardDTO board = boardDao.selectOneBoard(boardNo);
 		List<BoardFileDTO> fileList = boardDao.selectOneBoardFileList(boardNo);
 		board.setFileList(fileList);
@@ -83,7 +83,8 @@ public class BoardService {
 	@Transactional
 	public List<BoardFileDTO> updateBoard(BoardDTO board, List<BoardFileDTO> boardFileList) {
 		int result = boardDao.updateBoard(board);
-		
+		System.out.println(boardFileList);
+		System.out.println(boardFileList.get(0));
 		if(result>0) {
 			List<BoardFileDTO> delFileList = new ArrayList<BoardFileDTO>();
 			if(board.getDelBoardFileNo() != null) {
@@ -106,32 +107,15 @@ public class BoardService {
 	@Transactional
 	public int likeBoard(int boardNo, int memberNo) {
 		int likeCount = boardDao.selectLikeBoard(boardNo,memberNo);
-		if(likeCount==0) {
-			int result = boardDao.insertLikeBoard(memberNo,boardNo);
-			if(result>0) {
-				return likeCount;
-			}else {
-				return 0;
-			}
-			
-		}
-		return 0;
+		int result =  boardDao.insertLikeBoard(memberNo,boardNo);
+			return result;
 	}
 //	좋아요 삭제
 	@Transactional
 	public int unlikeBoard(int boardNo, int memberNo) {
-		int unLikeCount = boardDao.selectUnlikeBoard(boardNo,memberNo);
-		
-		if(unLikeCount == 1) {
-			int result = boardDao.deleteUnlikeBoard(memberNo,boardNo);
-			if(result>0) {
-				return unLikeCount;
-			
-			}else {
-				return 0;
-			}
-		}
-		return 0;
+		int likeCount = boardDao.selectLikeBoard(boardNo,memberNo);
+		int result = boardDao.deleteUnlikeBoard(memberNo,boardNo);
+		return result;
 	}
 	
 	// 댓글 목록 조회
@@ -159,7 +143,6 @@ public class BoardService {
 	@Transactional
 	public boolean deleteComment(int commentNo) {
 	    int result = boardDao.deleteComment(commentNo);
-	    System.out.println("ss"+result);
 	    return result == 1; // 성공 여부 반환
 	}
 	//댓글 좋아요 
@@ -227,7 +210,6 @@ public class BoardService {
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("list", list);
 	    map.put("pi", pi);
-	    System.out.println(map);
 	    
 	    return map;
 	}
@@ -274,7 +256,7 @@ public class BoardService {
 	//동행 상세
 	public BoardAccompanyDTO selectOneBoardAccompany(int boardNo) {
 		BoardAccompanyDTO accompany = boardDao.selectBoardAccompany(boardNo);
-		List<AccompanyTypeTag> accompanyTypeTags = boardDao.selectAccompanyTypeTags(boardNo);
+//		List<AccompanyTypeTag> accompanyTypeTags = boardDao.selectAccompanyTypeTags(boardNo);
 		List<BoardFileDTO> fileList = boardDao.selectOneAccompanyList(boardNo);
 		accompany.setFileList(fileList);
 		
@@ -282,29 +264,46 @@ public class BoardService {
 	}
 
 //	동행수정
-//	@Transactional
-//	public List<BoardFileDTO> updateBoardAccompany(BoardAccompanyDTO boardAccompany, List<BoardFileDTO> boardFileList) {
-//					int result = boardDao.updateBoardAccompany(boardAccompany);
-//		
-//		if(result>0) {
-//			List<BoardFileDTO> delFileList = new ArrayList<BoardFileDTO>();
-//			if(boardAccompany.getDelBoardFileNo() != null) {
-//				delFileList = boardDao.selectBoardFile(boardAccompany.getDelBoardFileNo());
-//				result += boardDao.deleteBoardFile(boardAccompany.getDelBoardFileNo());
-//			}
-//			for(BoardFileDTO boardFile : boardFileList) {
-//				result += boardDao.insertBoardFile(boardFile);
-//			}
-//			int updateTotal = boardAccompany.getDelBoardFileNo() == null 
-//									? 1+boardFileList.size() 
-//									: 1+ boardFileList.size() + boardAccompany.getDelBoardFileNo().length;
-//			if(result == updateTotal) {
-//				return delFileList;
-//			}
-//			
-//		}
-//		return null;
-//	}
+	@Transactional
+	public List<BoardFileDTO> updateBoardAccompany(BoardAccompanyDTO boardAccompany, List<BoardFileDTO> boardFileList) {
+					int result = boardDao.updateBoardAccompany(boardAccompany);
+					if(result>0) {
+						List<BoardFileDTO> delFileList = new ArrayList<BoardFileDTO>();
+						if(boardAccompany.getDelBoardFileNo() != null) {
+							delFileList = boardDao.selectBoardFile(boardAccompany.getDelBoardFileNo());
+							result += boardDao.deleteBoardFile(boardAccompany.getDelBoardFileNo());
+						}
+						for(BoardFileDTO boardFile : boardFileList) {
+							result += boardDao.insertBoardFile(boardFile);
+						}
+						int updateTotal = boardAccompany.getDelBoardFileNo() == null 
+								? 1+boardFileList.size() 
+								: 1+ boardFileList.size() + boardAccompany.getDelBoardFileNo().length;
+								if(result == updateTotal) {
+									return delFileList;
+								}
+								
+					}
+					if(result>0) {
+						result = boardDao.updateAccompany(boardAccompany);
+						if(result>0) {
+							result = boardDao.delTypeTag(boardAccompany);
+							if(result>0) {
+								 for (int accompanyTagNo : boardAccompany.getAccompanyTagNo()) {
+							            AccompanyTag at = new AccompanyTag();
+							            at.setBoardNo(boardAccompany.getBoardNo());
+							            at.setAccompanyTagNo(accompanyTagNo);
+							            result += boardDao.insertAccompanyType(at);
+							        }
+
+							}
+						}
+					}
+					    
+					 
+		
+		return null;
+	}
 
 	
 

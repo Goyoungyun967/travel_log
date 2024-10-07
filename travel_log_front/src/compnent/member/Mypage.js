@@ -125,7 +125,7 @@ const Mypage = () => {
         </form>
         <div className="my-info-zone">
           <Link to="updateMember" className="update-zone">
-            정보 수정
+            회원 수정/탈퇴
           </Link>
           <Link to="myboard" className="my-board-zone">
             내가 쓴 게시글
@@ -134,10 +134,10 @@ const Mypage = () => {
             내 예약정보
           </Link>
           <Link to="myComment" className="my-comment-zone">
-            내가 쓴 댓글
+            나의 문의글
           </Link>
-          <Link to="myAllPayment" className="my-account-zone">
-            내 예약 보관함
+          <Link to="DeleteMember" className="my-delete-zone">
+            회원 탈퇴
           </Link>
         </div>
       </div>
