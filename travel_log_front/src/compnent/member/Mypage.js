@@ -125,7 +125,7 @@ const Mypage = () => {
         </form>
         <div className="my-info-zone">
           <Link to="updateMember" className="update-zone">
-            정보 수정
+            회원 수정/탈퇴
           </Link>
           <Link to="myboard" className="my-board-zone">
             내가 쓴 게시글

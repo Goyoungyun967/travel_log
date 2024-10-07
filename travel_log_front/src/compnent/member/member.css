@@ -921,25 +921,29 @@
 }
 
 .mk-reservation-wrap,
-.mk-board-wrap {
+.mk-board-wrap,
+.mk-question-wrap {
   width: 100%;
   height: 100%;
 }
 
 .mk-reservation-title,
-.mk-board-title {
+.mk-board-title,
+.mk-question-title {
   text-align: center;
 }
 
 .mk-reservation-title h4,
-.mk-board-title h4 {
+.mk-board-title h4,
+.mk-question-title {
   font-size: 35px;
   font-weight: 500;
   margin-bottom: 25px;
 }
 
 .mk-reservation-table,
-.mk-board-table {
+.mk-board-table,
+.mk-question-table {
   width: 1200px;
   margin: 0 auto;
   border-collapse: collapse; /* 테두리 간격 제거 */
@@ -948,25 +952,18 @@
 .mk-reservation-table th,
 .mk-reservation-table td,
 .mk-board-table th,
-.mk-board-table td {
+.mk-board-table td,
+.mk-question-table th,
+.mk-question-table td {
   width: 300px; /* 각 셀 너비 설정 */
   padding: 15px; /* 셀 안쪽 여백 */
   text-align: center; /* 텍스트 중앙 정렬 */
   border-bottom: 1px solid #0056b3; /* 하단 테두리 */
 }
 
-.mk-reservation-table th {
+.mk-reservation-table th,
+.mk-question-table th,
+.mk-board-table th {
   font-size: 24px; /* 헤더 폰트 크기 */
   font-weight: bold; /* 헤더 텍스트 두께 */
-}
-
-.mk-reservation-date-list,
-.mk-reservation-room-list,
-.mk-reservation-write-list,
-.mk-reservation-state-list {
-  border-right: 1px solid #0056b3; /* 우측 테두리 */
-}
-
-.mk-reservation-state-list {
-  border-right: none; /* 마지막 셀은 우측 테두리 없음 */
 }
