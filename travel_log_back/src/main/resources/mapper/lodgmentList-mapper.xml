@@ -274,6 +274,8 @@
 		LEFT JOIN booking b ON lr.book_no = b.book_no
 		left join member m on b.member_id = m.member_id
 		WHERE lr.lodgment_no = #{lodgmentNo}
+		ORDER BY 
+        review_no DESC
 		)
 		WHERE rnum BETWEEN #{start} AND #{end}
 	</select>
@@ -330,15 +332,54 @@
 		FROM dual
 	</select>
 	
+	<!-- 리뷰 좋아요 -->
 	<insert id="reviewLike">
 		insert into lodgment_review_like values(#{loginNo}, #{reviewNo})
 	</insert>
 	
+	<!-- 리뷰 좋아요 취소 -->
 	<delete id="reviewLikeCancle">
 		delete from lodgment_review_like where member_no=#{loginNo} and review_no=#{reviewNo}
 	</delete>
-	
+	<!-- 리뷰 신고 -->
 	<insert id="reviewReport">
 		insert into lodgment_review_report values(#{loginNo},#{reviewNo},#{selectedReason})
 	</insert>
+
+	<!-- 숙소 문의 등록 -->
+	<insert id="insertMemberInquire">
+		insert into room_qna values(room_qna_no_seq.nextval, #{lodgmentNo}, #{memberNo}, #{scQnaStatus}, #{qnaContent}, sysdate)
+	</insert>
+	
+	<!-- 숙소 문의 총 개수 -->
+	<select id="totalCountInquire" resultType="int">
+		select count(*) from room_qna where lodgment_no=#{lodgmentNo}
+	</select>
+	
+	<!-- 해당 숙소 문의 리스트 -->
+	<select id="selectInquireList" resultType="lodgmentMemberInquire">
+		select 
+			* 
+		from 
+			(select 
+				rownum as rnum, b.* 
+			from 
+				(select 
+					member_no, room_qna_no, sc_qna_status, qna_content, to_char(qna_date,'yyyy-mm-dd') qna_date, member_id 
+				from 
+					room_qna r
+				join member m using (member_no)
+			where 
+				lodgment_no=#{lodgmentNo}
+			ORDER BY 
+            	room_qna_no DESC
+				)
+			b) 
+		where 
+			rnum between #{start} and #{end}
+	</select>
+	
+	<delete id="deleteInquire">
+		delete from room_qna where room_qna_no=#{roomQnaNo} and member_no = #{loginNo}
+	</delete>
 </mapper>

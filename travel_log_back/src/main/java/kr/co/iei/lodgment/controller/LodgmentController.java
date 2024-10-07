@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,16 +16,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.co.iei.lodgment.model.dto.LodgmentMemberInquireDTO;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewDTO;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewFileDTO;
-import kr.co.iei.lodgment.model.dto.Request;
-import kr.co.iei.lodgment.model.dto.RoomSearchDTO;
+import kr.co.iei.lodgment.model.dto.RequestDTO;
 import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
 import kr.co.iei.lodgment.model.service.LodgmentService;
 import kr.co.iei.util.FileUtils;
@@ -163,7 +163,7 @@ public class LodgmentController {
 	@PostMapping(value = "/reviewLike")
 	@Operation(summary = "댓글 좋아요",description ="댓글번호, 회원번호로 댓글 좋아요 기능") 
 	public ResponseEntity<Boolean> reviewLike(
-			@RequestBody Request request){
+			@RequestBody RequestDTO request){
 		int result = lodgmentService.reviewLike(request);
 		return ResponseEntity.ok(1 == result);
 	}
@@ -172,9 +172,7 @@ public class LodgmentController {
 	@PostMapping(value = "/reviewLikeCancle")
 	@Operation(summary = "댓글 좋아요 취소",description ="댓글번호, 회원번호로 댓글 좋아요 취소 기능") 
 	public ResponseEntity<Boolean> reviewLikeCancle(
-			@RequestBody Request request){	
-		System.out.println(00000);
-
+			@RequestBody RequestDTO request){	
 		int result = lodgmentService.reviewLikeCancle(request);
 		return ResponseEntity.ok(1 == result);
 	}
@@ -182,9 +180,33 @@ public class LodgmentController {
 	//댓글 좋아요  
 	@PostMapping(value = "/report")
 	@Operation(summary = "댓글 신고",description ="댓글번호, 회원번호, 신고사유로 댓글 신고 기능") 
-	public ResponseEntity<Boolean> reviewReport (@RequestBody Request request){
+	public ResponseEntity<Boolean> reviewReport (@RequestBody RequestDTO request){
 		int result = lodgmentService.reviewReport(request);
 		return ResponseEntity.ok(1 == result);
 	}
+	
+	//숙소 문의 하기  form으로 보낼때 어노테이션 ModelAttribute
+	@PostMapping(value = "/memberInquire")
+	@Operation(summary = "회원 숙소 문의",description ="댓글번호, 회원번호, 신고내용, 공개여부(0:공개/1:비공개)로 댓글 신고 기능") 
+	public ResponseEntity<Boolean> insertMemberInquire (@ModelAttribute LodgmentMemberInquireDTO inquire){
+		//System.out.println(inquire);
+		int result = lodgmentService.insertMemberInquire(inquire);
+		return ResponseEntity.ok(1 == result);
+	}
 
+	//숙소 문의 페이징
+	@GetMapping(value = "/inquireList/{lodgmentNo}/{reqPage}")
+	@Operation(summary = "리뷰 리스트",description = "숙소 번호, 페이지넘버")
+	public ResponseEntity<Map> inquireList(@PathVariable int lodgmentNo, @PathVariable int reqPage ){
+		Map map = lodgmentService.inquireList(lodgmentNo, reqPage);
+		return ResponseEntity.ok(map);
+	}
+
+	//문의 삭제하기
+	@DeleteMapping(value = "/inquire/{roomQnaNo}/{loginNo}")
+	@Operation(summary = "문의 삭제하기",description = "문의 번호, 멤버 번호로 삭제")
+	public ResponseEntity<Boolean> deleteInquire(@PathVariable int roomQnaNo, @PathVariable int loginNo ){
+		int result = lodgmentService.deleteInquire(roomQnaNo,loginNo);
+		return ResponseEntity.ok(1==result);
+	}
 }

@@ -252,7 +252,7 @@ const LodgmentDetail = () => {
             <LodgmentReviewList lodgmentNo={lodgmentNo} />
           </Tab>
           <Tab eventKey="profile" title="문의하기">
-            <LodgmentInquire />
+            <LodgmentInquire lodgmentNo={lodgmentNo} />
           </Tab>
           <Tab eventKey="longer-tab" title="공지사항">
             <div
