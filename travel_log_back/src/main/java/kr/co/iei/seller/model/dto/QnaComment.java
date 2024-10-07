@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Schema(description="문의 답변")
 public class QnaComment {
 	@Schema(description = "답변 번호 ",type="int")
-	private int key;
+	private int qnaCommentNo;
 	@Schema(description = "문의 번호",type="int")
 	private int roomQnaNo;
 	@Schema(description = "답변 글",type="String")

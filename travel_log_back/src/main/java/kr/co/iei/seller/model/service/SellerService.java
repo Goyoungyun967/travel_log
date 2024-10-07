@@ -140,14 +140,19 @@ public class SellerService {
 		PageInfo piQ = pageUtil.getPageInfo(reqPageQ, numPerPageQ, pageNaviSizeQ, totalCountQ); 
 		
 		List<RoomQnaDTO> qna = sellerLodgmentDao.selectQna(lodgmentNo, piQ.getStart(), piQ.getEnd());
-		
+		System.out.println(qna);
 		System.out.println(review);
 
-		map.put("lodgment", ls);
-		map.put("list", list);
-		map.put("review", review);
-		map.put("pi", pi);
-
+		map.put("lodgment", ls); // 호텔 정보
+		
+		map.put("list", list); // 객실 정보
+		
+		map.put("review", review); // 리뷰 정보
+		map.put("pi", pi); // 리뷰 페이징
+		
+		map.put("qna", qna); // 문의 정보
+		map.put("piQ", piQ); // 문의 페이징
+		
 		return map;
 	}
 

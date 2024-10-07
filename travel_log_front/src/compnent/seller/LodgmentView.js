@@ -12,7 +12,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import { Comment } from "./sellerUtil/Comment";
+import { Comment, QnaComment } from "./sellerUtil/Comment";
 
 const LodgmentView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -21,17 +21,27 @@ const LodgmentView = () => {
   const lodgmentNo = params.lodgmentNo;
   const [lodgmentList, setLodgmentList] = useState({}); // 숙소 정보
   const [roomList, setRoomList] = useState([]); // 객실 리스트
-  const [reviewList, setReviewList] = useState([]); // 리뷰 리스트
-  const [sellerText, setSellerText] = useState(""); // 판매자 댓글
 
-  // 페이징 처리
+  // 리뷰 관련
+  const [reviewList, setReviewList] = useState([]); // 리뷰 리스트
+  const [sellerText, setSellerText] = useState(""); // 리뷰 판매자 댓글
+  // 리뷰 페이징 처리
   const [reqPage, setReqPage] = useState(1);
   const [pi, setPi] = useState({});
+
+  // 문의 관련
+  const [qnaList, setQnaList] = useState([]); // qna리스트
+  const [sellerComment, setSellerComment] = useState([]); // 문의 판매자 답변 리스트임
+  // 문의 페이징 처리
+  const [reqPageQ, setReqPageQ] = useState(1);
+  const [piQ, setPiQ] = useState({});
 
   console.log(reviewList);
   useEffect(() => {
     axios
-      .get(`${backServer}/seller/lodgmentView/${lodgmentNo}/${reqPage}`)
+      .get(
+        `${backServer}/seller/lodgmentView/${lodgmentNo}/${reqPage}/${reqPageQ}`
+      )
       .then((res) => {
         console.log("lodgment res", res);
         // 호텔 삭제하고 뒤로가기를 누르면 호텔 정보가 null값이 되어서 오류가 뜸
@@ -43,6 +53,9 @@ const LodgmentView = () => {
           setReviewList(res.data.review);
           setSellerText(res.data.review.sellerComment);
           setPi(res.data.pi);
+          setPiQ(res.data.piQ);
+          setQnaList(res.data.qna);
+          setSellerComment(res.data.qna.commentList);
         } else {
           navigate("/seller/list");
         }
@@ -50,7 +63,7 @@ const LodgmentView = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [reqPage, sellerText]);
+  }, [reqPage, sellerText, reqPageQ]);
 
   // 삭제지만.. 1(보여지는거) => 0으로 바뀌게 해야하므로 패치 사용
   const deleteLodgment = () => {
@@ -171,18 +184,30 @@ const LodgmentView = () => {
               />
             </div>
           </TabPanel>
+          {/* 리뷰 */}
           <TabPanel value="3">
             <Comment
               reviewList={reviewList}
               setReviewList={setReviewList}
-              reqPage={reqPage}
-              setReqPage={setReqPage}
               sellerText={sellerText}
               setSellerText={setSellerText}
+              reqPage={reqPage}
+              setReqPage={setReqPage}
               pi={pi}
             />
           </TabPanel>
-          <TabPanel value="4">Item 4</TabPanel>
+          {/* 문의 */}
+          <TabPanel value="4">
+            <QnaComment
+              qnaList={qnaList}
+              setQnaList={setQnaList}
+              sellerComment={sellerComment}
+              setSellerComment={setSellerComment}
+              reqPageQ={reqPageQ}
+              setReqPageQ={setReqPageQ}
+              piQ={piQ}
+            />
+          </TabPanel>
         </TabContext>
       </div>
     </div>

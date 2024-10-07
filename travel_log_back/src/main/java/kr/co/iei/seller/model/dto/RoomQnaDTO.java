@@ -22,11 +22,14 @@ public class RoomQnaDTO {
 	@Schema(description = "회원 번호",type="int")
 	private int memberNo;
 	@Schema(description = "문의 상태",type="int")
-	private int scQnaStatus; // 0: 비공, 1: 공개
+	private int scQnaStatus; // 0: 공개, 1: 비공개
 	@Schema(description = "문의 글",type="String")
 	private String qnaContent;
 	@Schema(description = "문의 작성 날짜",type="String")
 	private String qnaDate;
+	
+	@Schema(description = "문의 작성 회원 아이디",type="String")
+	private String memberId;
 	
 	@Schema(description = "답변 리스트",type="List<QnaComment>")
 	private List<QnaComment> commentList;

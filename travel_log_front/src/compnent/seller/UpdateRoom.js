@@ -329,7 +329,7 @@ const FileInfo = (props) => {
 // 해시태그
 const HashTap = (props) => {
   const hashTag = props.hashTag || []; // hashTag가 undefined일 경우 빈 배열로 초기화
-
+  console.log("ghhhhhh", hashTag);
   const setHashTag = props.setHashTag;
 
   // 서비스 태그

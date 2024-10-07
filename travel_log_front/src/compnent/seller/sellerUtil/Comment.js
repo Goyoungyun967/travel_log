@@ -12,6 +12,7 @@ import Textarea from "@mui/joy/Textarea";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 const Comment = (props) => {
   const {
@@ -188,4 +189,69 @@ const ReviewStar = (props) => {
   );
 };
 
-export { Comment };
+/* 문의 */
+const QnaComment = (props) => {
+  const {
+    qnaList,
+    setQnaList,
+    sellerComment,
+    setSellerComment,
+    reqPageQ,
+    setReqPageQ,
+    piQ,
+  } = props;
+  const [textComment, setTextComment] = useState(false);
+  const [viewTextComment, setViewTextComment] = useState(false);
+  const viewComment = (roomQnaNo) => {
+    setViewTextComment((prev) => ({
+      ...prev,
+      [roomQnaNo]: !prev[roomQnaNo], // 현재 reviewNo에 해당하는 값만 토글
+    }));
+  };
+
+  return (
+    <>
+      <Box
+        sx={{
+          width: "100%",
+          display: "grid",
+          gap: 2,
+        }}
+      >
+        {qnaList.map((qna, i) => {
+          console.log("qna - ", qna);
+          const dateString = qna.qnaDate;
+          const formattedDate = dayjs(dateString).format("YYYY-MM-DD");
+          return (
+            <Card variant="outlined" key={i}>
+              <CardContent>
+                <Typography component="div" level="title-md">
+                  {qna.memberId}
+                </Typography>
+                <Typography component="div">{qna.qnaContent}</Typography>
+                <Typography variant="caption" component="div">
+                  {formattedDate}
+                </Typography>
+                <>
+                  <Button
+                    variant="outlined"
+                    onClick={() => viewComment(qna.roomQnaNo)}
+                  >
+                    {viewTextComment[qna.roomQnaNo] ? "답글 취소" : "답글 달기"}
+                  </Button>
+                </>
+              </CardContent>
+            </Card>
+          );
+        })}
+        <div className="seller-comment-list-r">
+          <PageNavi pi={piQ} reqPage={reqPageQ} setReqPage={setReqPageQ} />
+        </div>
+      </Box>
+    </>
+  );
+};
+
+const TextQna = (props) => {};
+
+export { Comment, QnaComment };
