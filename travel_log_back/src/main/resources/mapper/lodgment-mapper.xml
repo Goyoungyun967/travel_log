@@ -143,6 +143,11 @@
 	<select id="totalCount" resultType="int">
 		select COUNT(*) from LODGMENT_REVIEW
 	</select>
+	
+	<!-- 모든 문의 수 (페이징 처리 위함) -->
+	<select id="totalCountQna" resultType="int">
+		select count(*) from room_qna
+	</select>
 
 	<!-- 객실 상세 (객실 정보 + 파일 + 해시태그) -->
 	<select id="selectRoomViewInfo" resultMap="RoomViewMap">

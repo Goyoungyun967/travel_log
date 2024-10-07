@@ -12,7 +12,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import Comment from "./sellerUtil/Comment";
+import { Comment } from "./sellerUtil/Comment";
 
 const LodgmentView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -154,6 +154,7 @@ const LodgmentView = () => {
               <Tab label="지도" value="1" />
               <Tab label="숙소 공지사항" value="2" />
               <Tab label="리뷰" value="3" />
+              <Tab label="숙소 문의" value="4" />
             </TabList>
           </Box>
           <TabPanel value="1">
@@ -181,6 +182,7 @@ const LodgmentView = () => {
               pi={pi}
             />
           </TabPanel>
+          <TabPanel value="4">Item 4</TabPanel>
         </TabContext>
       </div>
     </div>

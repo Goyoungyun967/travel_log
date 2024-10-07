@@ -188,4 +188,4 @@ const ReviewStar = (props) => {
   );
 };
 
-export default Comment;
+export { Comment };
