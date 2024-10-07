@@ -24,6 +24,7 @@ import kr.co.iei.seller.model.dto.BookingInfoDTO;
 import kr.co.iei.seller.model.dto.InsertRoomDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
 import kr.co.iei.seller.model.dto.LoginSellerDTO;
+import kr.co.iei.seller.model.dto.QnaComment;
 import kr.co.iei.seller.model.dto.RoomDTO;
 import kr.co.iei.seller.model.dto.RoomFileDTO;
 import kr.co.iei.seller.model.dto.RoomQnaDTO;
@@ -137,9 +138,11 @@ public class SellerService {
 		int numPerPageQ = 5;
 		int pageNaviSizeQ = 5;
 		int totalCountQ = sellerLodgmentDao.totalCountQna();
-		PageInfo piQ = pageUtil.getPageInfo(reqPageQ, numPerPageQ, pageNaviSizeQ, totalCountQ); 
+		PageInfo piQ = pageUtil.getPageInfo(reqPageQ, numPerPageQ, pageNaviSizeQ, totalCountQ);
 		
 		List<RoomQnaDTO> qna = sellerLodgmentDao.selectQna(lodgmentNo, piQ.getStart(), piQ.getEnd());
+		
+		
 		System.out.println(qna);
 		System.out.println(review);
 
@@ -345,6 +348,8 @@ public class SellerService {
 	public int delUpLodgment(int lodgmentNo) {
 		// 지우려는 호텔의 객실까지 모두 0으로 전환 update
 		int result = sellerLodgmentDao.delUpLodgmentRoom(lodgmentNo);
+		System.out.println(lodgmentNo);
+		System.out.println(result);
 		if (result > 0) {
 			result += sellerLodgmentDao.delUpLodgment(lodgmentNo);
 			return result;
@@ -372,6 +377,13 @@ public class SellerService {
 		LoginSellerDTO loginSeller = jwtUtil.sellerCheckToken(token);
 		SellerDTO seller = sellerDao.selectOneSeller(loginSeller.getSellerNo());
 		return seller;
+	}
+
+	// 판매자 문의 답변
+	@Transactional
+	public int insertSellerComment(QnaComment qc) {
+		int result = sellerLodgmentDao.insertSellerComment(qc);
+		return result;
 	}
 
 
