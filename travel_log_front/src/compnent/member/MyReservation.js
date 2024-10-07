@@ -1,18 +1,24 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { isLoginState, loginNoState } from "../utils/RecoilData";
+import {
+  bookingListState,
+  isLoginState,
+  loginNoState,
+} from "../utils/RecoilData";
 import { useNavigate } from "react-router-dom";
+import PageNavi from "../utils/PageNavi";
 
 const MyReservation = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
-  const [booking, setBooking] = useState([]);
+  const [booking, setBooking] = useRecoilState(bookingListState);
   const [reqPage, setReqPage] = useState(1);
   const [pi, setPi] = useState({});
-  const [memberNo, setMemberNo] = useRecoilState(loginNoState);
+  const [memberId, setMemberId] = useRecoilState(loginNoState);
+
   useEffect(() => {
     axios
-      .get(`${backServer}/member/booking/list/${memberNo}/${reqPage}`)
+      .get(`${backServer}/member/booking/list/${memberId}/${reqPage}`)
       .then((res) => {
         console.log(res);
         setBooking(res.data.list);
@@ -21,7 +27,7 @@ const MyReservation = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [reqPage]);
+  }, [reqPage, memberId, setBooking]);
   return (
     <div className="mk-reservation-wrap">
       <div className="mk-reservation-title">
@@ -31,8 +37,8 @@ const MyReservation = () => {
         <thead>
           <tr>
             <th className="mk-reservation-date">예약날짜</th>
-            <th className="mk-reservation-room">숙소정보</th>
-            <th className="mk-reservation-write">작성자</th>
+            <th className="mk-reservation-room">숙소명</th>
+            <th className="mk-reservation-write">방 정보</th>
             <th className="mk-reservation-state">상태</th>
           </tr>
         </thead>
@@ -42,6 +48,9 @@ const MyReservation = () => {
           })}
         </tbody>
       </table>
+      <div className="board-paging-wrap">
+        <PageNavi pi={pi} reqPage={reqPage} setReqPage={setReqPage} />
+      </div>
     </div>
   );
 };
@@ -67,12 +76,15 @@ const BookingItem = (props) => {
     <tr
       onClick={() => {
         //여기 링크만 좀 걸어주세요 ~
-        navigate(`/booking/view/${booking.bookingNo}`);
+
+        navigate(`/lodgment/bookingInfo`, {
+          state: { bookNo: booking.bookingNo },
+        });
       }}
     >
       <td className="mk-reservation-date-list">{booking.paymentDate}</td>
+      <td className="mk-reservation-write-list">{booking.lodgmentName}</td>
       <td className="mk-reservation-room-list">{booking.roomName}</td>
-      <td className="mk-reservation-write-list">{booking.businessName}</td>
       <td className="mk-reservation-state-list">
         {getStatusText(booking.status)}
       </td>
