@@ -25,6 +25,8 @@ import axios from "axios";
 import AdminMain from "./compnent/admin/AdminMain";
 import MemberMain from "./compnent/member/MemberMain";
 import UpdateMember from "./compnent/member/UpdateMember";
+import SearchId from "./compnent/member/SearchId";
+import SearchPw from "./compnent/member/SearchPw";
 
 function App() {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -107,6 +109,8 @@ function App() {
           <Route path="/faq/*" element={<FaqMain />} />
           <Route path="/lodgment/*" element={<LodgmentMain />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/searchId" element={<SearchId />} />
+          <Route path="/searchPw" element={<SearchPw />} />
           <Route path="/select" element={<Select />} />
           <Route path="/select/memberJoin" element={<MemberJoin />} />
           <Route path="/select/sellerJoin" element={<SellerJoin />} />

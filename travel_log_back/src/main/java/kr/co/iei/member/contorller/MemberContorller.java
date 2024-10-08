@@ -193,6 +193,22 @@ public class MemberContorller {
 		
 		return ResponseEntity.ok(map);
 	} 
+	
+	
+	@GetMapping(value="/sendIdEmail/{memberEmail}")
+	public ResponseEntity<String> searchIdEmail(@PathVariable String memberEmail) {
+		System.out.println(memberEmail);
+		String userId = memberService.searchIdEmail(memberEmail);
+		System.out.println(userId);
+		String emailContent = "안녕하세요, 아이디는: "+userId+"입니다";
+		 try {
+		        emailSender.sendMail("아이디 찾기", memberEmail, emailContent);
+		        return ResponseEntity.ok("아이디가 이메일로 전송되었습니다.");
+		    } catch (Exception e) {
+		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+		                             .body("이메일 발송 중 문제가 발생했습니다: " + e.getMessage());
+		    }
+	}
 }
 	
 	
