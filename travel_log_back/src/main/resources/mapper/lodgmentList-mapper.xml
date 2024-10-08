@@ -382,4 +382,31 @@
 	<delete id="deleteInquire">
 		delete from room_qna where room_qna_no=#{roomQnaNo} and member_no = #{loginNo}
 	</delete>
+	
+	<select id="getReview" resultMap="getReviewFile">
+		select * from lodgment_review where review_no=#{reviewNo}
+	</select>
+	
+	<update id="updateRevie">
+		update lodgment_review set 
+			review_content = #{reviewContent},
+			rating = #{rating}
+		where review_no = #{reviewNo}
+	</update>
+	
+	<select id="selectReviewFile" resultType="lodgmentReviewFile">
+		select * from lodgment_review_file 
+		where review_file_no in
+		<foreach collection="array" item="delImgFileNo" open="(" close=")" separator=",">
+			#{delImgFileNo}
+		</foreach>		
+	</select>
+
+	<delete id="deleteReviewFile">
+		delete from lodgment_review_file 
+		where review_file_no in
+		<foreach collection="array" item="delImgFileNo" open="(" close=")" separator=",">
+			#{delImgFileNo}
+		</foreach>
+	</delete>
 </mapper>

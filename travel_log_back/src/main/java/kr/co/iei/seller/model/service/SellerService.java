@@ -118,7 +118,7 @@ public class SellerService {
 	}
 
 	// 호텔 상세 (호텔 + 객실 상세)
-	public Map selectHotelInfo(int lodgmentNo, int reqPage, int reqPageQ) {
+	public Map selectHotelInfo(int lodgmentNo, int reqPage, int reqPageQ, int align) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		LodgmentStorageDTO ls = sellerLodgmentDao.selectOneLodgment(lodgmentNo); // 호텔 정보 조회
@@ -126,25 +126,24 @@ public class SellerService {
 
 		int numPerPage = 5; // 한 페이지당 게시물 수
 		int pageNaviSize = 5; // 페이지네비 길이
-		int totalCount = sellerLodgmentDao.totalCount(); // 전체 리뷰 수
+		int totalCount = sellerLodgmentDao.totalCount(lodgmentNo); // 전체 리뷰 수
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
 
 		// 리뷰
 //		List<LodgmentReviewDTO> review = sellerLodgmentDao.selectLodgmentReview(lodgmentNo,pi); // 호텔 리뷰 조회
-		List<LodgmentReviewDTO> review = sellerLodgmentDao.selectLodgmentReview(lodgmentNo, pi.getStart(), pi.getEnd()); // 호텔
+		List<LodgmentReviewDTO> review = sellerLodgmentDao.selectLodgmentReview(lodgmentNo, pi.getStart(), pi.getEnd(), align); // 호텔
 																															// 리뷰
 																											// 조회
 		// 문의
 		int numPerPageQ = 5;
 		int pageNaviSizeQ = 5;
-		int totalCountQ = sellerLodgmentDao.totalCountQna();
+		int totalCountQ = sellerLodgmentDao.totalCountQna(lodgmentNo);
 		PageInfo piQ = pageUtil.getPageInfo(reqPageQ, numPerPageQ, pageNaviSizeQ, totalCountQ);
 		
-		List<RoomQnaDTO> qna = sellerLodgmentDao.selectQna(lodgmentNo, piQ.getStart(), piQ.getEnd());
+		List<RoomQnaDTO> qna = sellerLodgmentDao.selectQna(lodgmentNo, piQ.getStart(), piQ.getEnd(),align);
 		
 		
 		System.out.println(qna);
-		System.out.println(review);
 
 		map.put("lodgment", ls); // 호텔 정보
 		
@@ -152,6 +151,8 @@ public class SellerService {
 		
 		map.put("review", review); // 리뷰 정보
 		map.put("pi", pi); // 리뷰 페이징
+		System.out.println("review - "+review);
+		System.out.println("pi - "+pi);
 		
 		map.put("qna", qna); // 문의 정보
 		map.put("piQ", piQ); // 문의 페이징
@@ -383,6 +384,12 @@ public class SellerService {
 	@Transactional
 	public int insertSellerComment(QnaComment qc) {
 		int result = sellerLodgmentDao.insertSellerComment(qc);
+		return result;
+	}
+
+	// 판매자 리뷰 댓글 삭제 (update null로 처리)
+	public int deleteComment(LodgmentReviewDTO ld) {
+		int result = sellerLodgmentDao.delUpComment(ld);
 		return result;
 	}
 

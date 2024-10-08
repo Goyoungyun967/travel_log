@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { loginNoState } from "../utils/RecoilData";
 import { useRecoilState } from "recoil";
 import axios from "axios";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 
 const LodgmentReviewWirte = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -39,8 +40,9 @@ const LodgmentReviewWirte = () => {
     const files = e.currentTarget.files;
     console.log(files);
 
+    const totalFiles = reviewImg.length + files.length;
     //이미지는 5개까지 저장 가능
-    if (files.length > 5) {
+    if (totalFiles > 6) {
       Swal.fire({
         text: "이미지는 5개까지 등록 가능합니다.",
       });
@@ -55,15 +57,15 @@ const LodgmentReviewWirte = () => {
       for (let i = 0; files.length > i; i++) {
         //서버에 보낼 데이터 저장
         updateImg.push(files[i]);
-        //console.log(reviewImg);
+
         //임시 이미지url 생성
         const reader = new FileReader();
         reader.readAsDataURL(files[i]);
         reader.onloadend = () => {
           fileReaders.push(reader.result); // 읽은 결과를 배열에 추가
           if (fileReaders.length === files.length) {
-            setShowReviewImg(fileReaders); // 모든 파일이 읽힌 후 상태를 업데이트
-            setReviewImg(updateImg);
+            setShowReviewImg((prevShowImg) => [...prevShowImg, ...fileReaders]);
+            setReviewImg((prevReviewImg) => [...prevReviewImg, ...updateImg]);
           }
           //console.log("showReviewImg" + showReviewImg);
         };
@@ -97,7 +99,8 @@ const LodgmentReviewWirte = () => {
     axios
       .post(`${backServer}/lodgment/review`, form, {
         headers: {
-          "Content-Type": "multipart/form-data", // "ContentType"을 "Content-Type"으로 수정
+          contentType: "multipart/form-data",
+          proccesData: false,
         },
       })
       .then((res) => {
@@ -130,6 +133,18 @@ const LodgmentReviewWirte = () => {
           : showReviewImg.map((img, i) => (
               <div key={`showImgContainer${i}`}>
                 <img src={img} alt={`Image ${i}`} />
+                <div
+                  onClick={() => {
+                    setShowReviewImg((prevShowImg) =>
+                      prevShowImg.filter((_, index) => index !== i)
+                    );
+                    setReviewImg((prevReviewImg) =>
+                      prevReviewImg.filter((_, index) => index !== i)
+                    );
+                  }}
+                >
+                  <DeleteForeverOutlinedIcon />
+                </div>
               </div>
             ))}
       </div>

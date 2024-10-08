@@ -70,6 +70,14 @@ public interface LodgmentDao {
 
 	int deleteInquire(RequestDTO request);
 
+	LodgmentReviewDTO getReview(int reviewNo);
+
+	int updateRevie(LodgmentReviewDTO newReview);
+
+	int deleteReviewFile(int[] delImgFileNo);
+
+	List<LodgmentReviewFileDTO> selectReviewFile(int[] delImgFileNo);
+
 	//List selectGetAllReviewImg(int lodgmentNo);
 
 	//List<RoomDTO> getRoomInfoList(int lodgmentNo, String startDate, String endDate, int guset);
