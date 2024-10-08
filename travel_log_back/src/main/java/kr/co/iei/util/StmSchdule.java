@@ -16,4 +16,5 @@ public class StmSchdule {
 		System.out.println(2);
 		adminSerivce.insertSellerStm();
 	}
+	//매일 몇시에 10-11시 체크아웃
 }

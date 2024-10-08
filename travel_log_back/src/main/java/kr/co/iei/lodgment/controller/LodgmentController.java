@@ -1,5 +1,6 @@
 package kr.co.iei.lodgment.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -213,10 +215,38 @@ public class LodgmentController {
 	//수정 리뷰 데이터 가져오기 
 	@GetMapping(value = "/getReview/{reviewNo}")
 	@Operation(summary = "리뷰 수정 데이터 불러오기",description = "리뷰 번호로 리뷰 불러오기")
-	public ResponseEntity<Boolean> getReview(@PathVariable int reviewNo){
+	public ResponseEntity<LodgmentReviewDTO> getReview(@PathVariable int reviewNo){
+		LodgmentReviewDTO reivew = lodgmentService.getReview(reviewNo);
+			
+	return ResponseEntity.ok(reivew);
+	}
 	
-	System.out.println(reviewNo);	
-	return ResponseEntity.ok(true);
+	@PatchMapping(value ="/reviewUpdate")
+	@Operation(summary = "리뷰 수정",description = "리뷰 번호, 삭제파일")
+	public ResponseEntity<Boolean> updateReview(@ModelAttribute LodgmentReviewDTO newReview,
+												@ModelAttribute MultipartFile[] reviewImg){
+		List<LodgmentReviewFileDTO> fileSave = new ArrayList<LodgmentReviewFileDTO>();
+		if(reviewImg != null) {
+			String savepath = root + "/review/";
+			for(MultipartFile file :reviewImg) {
+				LodgmentReviewFileDTO roomImgSave = new LodgmentReviewFileDTO();
+				roomImgSave.setReviewFileNo(newReview.getReviewNo());
+				String filepath = fileUtil.upload(savepath, file);
+				roomImgSave.setReviewImgPath(filepath);
+				roomImgSave.setReviewNo(newReview.getReviewNo());
+				fileSave.add(roomImgSave);
+			}
+		}
+		List<LodgmentReviewFileDTO> delfileList = lodgmentService.delfileList (newReview, fileSave);
+		if(delfileList != null) {
+			String savepath = root+"/review/";
+			for(LodgmentReviewFileDTO delFile : delfileList) {
+				File file = new File(savepath+delFile.getReviewImgPath());
+				file.delete();
+			}
+			return ResponseEntity.ok(true);
+		}
+		return ResponseEntity.ok(true);
 	}
 
 }

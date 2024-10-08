@@ -41,4 +41,6 @@ public class LodgmentReviewDTO {
 	private int totalLikeCount;
 	@Schema(description = "신고 여부",type="int")
 	private int reportCount;
+	@Schema(description = "리뷰사진삭제",type="int")
+	private int[] delImgFileNo;
 }
