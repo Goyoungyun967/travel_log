@@ -6,6 +6,7 @@ import MyReservation from "./MyReservation";
 import MyComment from "./MyComment";
 import ChangePw from "./ChangePw";
 import DeleteMember from "./deleteMember";
+import InquiryView from "../inquiry/InquiryView";
 
 const MemberMain = () => {
   return (
@@ -17,6 +18,20 @@ const MemberMain = () => {
       <Route path="mypage/myReservation" element={<MyReservation />} />
       <Route path="mypage/myComment" element={<MyComment />} />
       <Route path="mypage/updateMember/changePw" element={<ChangePw />} />
+      <Route
+        path="inquiryView/:inquiryNo"
+        element={
+          <div
+            style={{
+              width: "800px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <InquiryView />
+          </div>
+        }
+      />
     </Routes>
   );
 };

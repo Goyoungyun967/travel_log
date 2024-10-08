@@ -18,5 +18,4 @@ public class BoardReportDTO {
 	private String reportContent;
 	private String memberNickname;
 	private int boardNo;
-	
 }

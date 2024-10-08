@@ -1,17 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import {
-  bookingListState,
-  isLoginState,
-  loginNoState,
-} from "../utils/RecoilData";
+import { isLoginState, loginNoState } from "../utils/RecoilData";
 import { useNavigate } from "react-router-dom";
 import PageNavi from "../utils/PageNavi";
 
 const MyReservation = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
-  const [booking, setBooking] = useRecoilState(bookingListState);
+  const [booking, setBooking] = useState([]);
   const [reqPage, setReqPage] = useState(1);
   const [pi, setPi] = useState({});
   const [memberId, setMemberId] = useRecoilState(loginNoState);
@@ -27,7 +23,7 @@ const MyReservation = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [reqPage, memberId, setBooking]);
+  }, [reqPage, memberId]);
   return (
     <div className="mk-reservation-wrap">
       <div className="mk-reservation-title">

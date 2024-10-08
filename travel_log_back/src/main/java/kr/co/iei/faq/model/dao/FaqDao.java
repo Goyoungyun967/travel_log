@@ -25,4 +25,6 @@ public interface FaqDao {
 
 	FaqDTO selectAdminFaq(int faqNo);
 
+	
+
 }

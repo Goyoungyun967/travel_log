@@ -145,11 +145,6 @@ public class AdminService {
 		return list;
 	}
 
-	public List getSellerSalesList() {
-		List list = inquiryDao.getSellerSalesList();
-		return list;
-	}
-
 	@Transactional
 	public void insertSellerStm() {
 		List<SellerDTO> list = inquiryDao.selectSellerSales();
@@ -205,8 +200,18 @@ public class AdminService {
 	}
 
 	public Map getBoardReportList(int reqPage) {
-		
-		return null;
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> m  = new HashMap<String, Object>();
+		int numPerPage = 10;
+		int pageNaviSize = 5;
+		int totalCount = inquiryDao.getBoardReportCount();
+		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
+		m.put("start", pi.getStart());
+		m.put("end", pi.getEnd());
+		List list = inquiryDao.getBoardReportList(m);
+		map.put("list", list);
+		map.put("pi", pi);
+		return map;
 	}
 
 }

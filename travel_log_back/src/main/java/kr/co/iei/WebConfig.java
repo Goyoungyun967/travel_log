@@ -49,7 +49,8 @@ public class WebConfig implements WebMvcConfigurer{
 		//lodgment 리뷰
 				registry
 				.addResourceHandler("/review/**")
-				.addResourceLocations("file:///"+root+"/review/");		
+				.addResourceLocations("file:///"+root+"/review/");	
+				
 						
 	}
 	

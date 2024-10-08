@@ -20,4 +20,5 @@ public class CommentReportDTO {
 	private String commentReportContent;
 	private int memberNo;
 	private int commentNo;
+	private String memberNickname;
 }
