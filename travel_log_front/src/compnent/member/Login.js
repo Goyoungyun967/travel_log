@@ -177,7 +177,7 @@ const Login = () => {
                     <Link to="/searchId" className="link-btn">
                       아이디 찾기
                     </Link>
-                    <Link to="/searchpw" className="link-btn">
+                    <Link to="/searchPw" className="link-btn">
                       비밀번호 찾기
                     </Link>
                   </div>

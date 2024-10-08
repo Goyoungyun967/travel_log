@@ -192,7 +192,8 @@ public class MemberService {
 		return map;
 	}
 
-	
-
-
+	public String searchIdEmail(String memberEmail) {
+		String userId = memberDao.searchIdEmail(memberEmail);
+		return userId;
+	}
 }

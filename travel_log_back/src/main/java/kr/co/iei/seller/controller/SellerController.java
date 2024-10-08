@@ -122,9 +122,9 @@ public class SellerController {
 	
 	// 호텔 상세
 	@Operation(summary = "호텔 상세", description = "호텔 정보 출력(호텔 + 객실(객실 사진))")
-	@GetMapping(value="/lodgmentView/{lodgmentNo}/{reqPage}/{reqPageQ}")
-	public ResponseEntity<Map> list(@PathVariable int lodgmentNo, @PathVariable int reqPage,@PathVariable int reqPageQ){
-		Map map = sellerService.selectHotelInfo(lodgmentNo, reqPage, reqPageQ);
+	@GetMapping(value="/lodgmentView/{lodgmentNo}/{reqPage}/{reqPageQ}/{align}")
+	public ResponseEntity<Map> list(@PathVariable int lodgmentNo, @PathVariable int reqPage,@PathVariable int reqPageQ, @PathVariable int align){
+		Map map = sellerService.selectHotelInfo(lodgmentNo, reqPage, reqPageQ, align);
 		return ResponseEntity.ok(map);
 	}
 	
@@ -322,6 +322,23 @@ public class SellerController {
 		return ResponseEntity.ok(result);
 	}
 	
+	// 판매자 리뷰 댓글 수정
+	@Operation(summary = "판매자 리뷰 댓글", description = "판매자 리뷰 댓글")
+	@PatchMapping(value="/updateComment")
+	public ResponseEntity<Integer> updateComment(LodgmentReviewDTO ld){
+		int result = sellerService.updateComment(ld);
+		return ResponseEntity.ok(result);
+	}
+
+	// 판매자 리뷰 삭제 - 판매자 댓글 null로 처리하면 됨 => update
+	@Operation(summary = "판매자 리뷰 댓글", description = "판매자 리뷰 댓글")
+	@PatchMapping(value="/deleteComment")
+	public ResponseEntity<Integer> deleteComment(LodgmentReviewDTO ld){
+		int result = sellerService.deleteComment(ld);
+		return ResponseEntity.ok(result);
+	}
+	
+	
 	// 판매자 정보 조회
 	@Operation(summary = "판매자 정보 조회", description = "판매자 정보 조회 토큰 사용")
 	@GetMapping(value="/sellerInfo")
@@ -337,5 +354,7 @@ public class SellerController {
 		int result = sellerService.insertSellerComment(qc);
 		return ResponseEntity.ok(result);
 	}
+	
+
 	
 }
