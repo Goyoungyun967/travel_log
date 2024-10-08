@@ -137,7 +137,7 @@ const Mypage = () => {
             나의 문의글
           </Link>
           <Link to="DeleteMember" className="my-delete-zone">
-            회원 탈퇴
+            로고
           </Link>
         </div>
       </div>

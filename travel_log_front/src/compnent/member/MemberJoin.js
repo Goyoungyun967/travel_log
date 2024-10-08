@@ -117,9 +117,7 @@ const MemberJoin = () => {
         .post(`${backServer}/member`, member)
         .then((res) => {
           console.log(res);
-
           navigate("/login");
-
           Swal.fire({
             title: "회원가입을 축하합니다 ! ",
             icon: "success",
@@ -133,20 +131,22 @@ const MemberJoin = () => {
   };
 
   const sendEmail = () => {
-    const memberEmail = member.memberEmailId + "@" + member.memberEmail;
-    axios
-      .get(`${backServer}/member/sendEmail/${memberEmail}`)
-      .then((res) => {
-        console.log(res);
-        sendRef.current.style.display = "block";
-        setSentCode(res.data); // 예시로 서버에서 받은 인증 코드 저장
-        setTimer(300);
-        setIsTimerExpired(false);
-        setInputDisabled(false); // 여기서 이메일 입력을 활성화
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (member.memberEmailId !== "" && member.memberEmail !== "") {
+      const memberEmail = member.memberEmailId + "@" + member.memberEmail;
+      axios
+        .get(`${backServer}/member/sendEmail/${memberEmail}`)
+        .then((res) => {
+          console.log(res);
+          sendRef.current.style.display = "block";
+          setSentCode(res.data); // 예시로 서버에서 받은 인증 코드 저장
+          setTimer(300);
+          setIsTimerExpired(false);
+          setInputDisabled(false); // 여기서 이메일 입력을 활성화
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const verifyCode = () => {

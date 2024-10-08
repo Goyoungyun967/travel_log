@@ -70,9 +70,9 @@ const BookingInfo = () => {
       <div className="booking-info-wrap">
         <div class="booking-container">
           <h2 class="booking-title">
-            {bookNoInfo.status === 0
+            {bookingInfo.status === 1
               ? "예약 현황"
-              : bookNoInfo.status === 1
+              : bookingInfo.status === 2
               ? "이용 완료"
               : "취소된 예약"}
           </h2>

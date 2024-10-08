@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Mapper;
 import kr.co.iei.inquiry.model.dto.InquiryDTO;
 import kr.co.iei.inquiry.model.dto.InquiryFileDTO;
 import kr.co.iei.inquiry.model.dto.InquiryReplyDTO;
-import kr.co.iei.lodgment.model.dto.LodgmentReviewFileDTO;
 import kr.co.iei.seller.model.dto.SellerDTO;
 
 
@@ -33,6 +32,11 @@ public interface InquiryDao {
 	int deleteInquiry(int inquiryNo);
 
 	int insertInquiryReply(InquiryReplyDTO inquiryReply);
+	
+	//회원용
+	int myInqTotalCout(int memberNo);
+
+	List myInqList(Map<String, Object> myInqMap);
 
 	//회원 이용 차트
 	List getLodgmentResionData();
@@ -100,6 +104,6 @@ public interface InquiryDao {
 	int deleteReviewReport(int reviewNo);
 
 	List selectReviewFile(int reviewNo);
-	
+
 
 }

@@ -37,4 +37,8 @@ public class InquiryDTO {
 	private List inquiryFileList;
 	@Schema(description = "1대1 문의 답변",type = "InquiryReplyDTO")
 	private InquiryReplyDTO inquiryReply;
+	//형묵 dto하나 추가함
+	@Schema(description = "1대1 문의 답변 내용",type = "String")
+	private int inquiryReplyNo;
+	
 }

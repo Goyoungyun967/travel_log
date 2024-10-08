@@ -39,4 +39,6 @@ public interface MemberDao {
 
 	int levelUpdate(int memberNo);
 
+	String searchIdEmail(String memberEmail);
+
 }

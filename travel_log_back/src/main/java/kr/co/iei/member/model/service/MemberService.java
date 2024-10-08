@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.iei.board.model.dao.BoardDao;
 import kr.co.iei.booking.model.dao.BookingDao;
+import kr.co.iei.faq.model.dao.FaqDao;
+import kr.co.iei.inquiry.model.dao.InquiryDao;
 import kr.co.iei.member.model.dao.MemberDao;
 import kr.co.iei.member.model.dto.LoginMemberDTO;
 import kr.co.iei.member.model.dto.MemberDTO;
@@ -31,6 +33,9 @@ public class MemberService {
 	
 	@Autowired
 	private BoardDao boardDao;
+	
+	@Autowired
+	private InquiryDao inquiryDao;
 	
 	@Autowired
 	private JwtUtils jwtUtil;
@@ -143,8 +148,6 @@ public class MemberService {
 	}
 
 
-	
-
 	public Map myBoardList(int memberNo, int reqPage) {
 		int numPerPage = 8;		//한 페이지당 게시물 수
 		int pageNaviSize = 5;		//페이지네비 길이 
@@ -170,7 +173,27 @@ public class MemberService {
 		return result;
 	}
 
-	
+	public Map myInqList(int memberNo, int reqPage) {
+		int numPerPage = 8;		//한 페이지당 게시물 수
+		int pageNaviSize = 5;		//페이지네비 길이 
+		int totalCount = inquiryDao.myInqTotalCout(memberNo);
+		
+		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
+		
+		Map<String, Object> myInqMap = new HashMap<String, Object>();
+		myInqMap.put("memberNo", memberNo);
+		myInqMap.put("start", pi.getStart());
+		myInqMap.put("end", pi.getEnd());
+		List list = inquiryDao.myInqList(myInqMap);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list",list);
+		map.put("pi", pi);
+		
+		return map;
+	}
 
-
+	public String searchIdEmail(String memberEmail) {
+		String userId = memberDao.searchIdEmail(memberEmail);
+		return userId;
+	}
 }

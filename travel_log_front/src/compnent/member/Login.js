@@ -92,7 +92,7 @@ const Login = () => {
         // 로그인 시 memberLevel 체크
         if (res.data.memberLevel === 3) {
           Swal.fire({
-            text: "탈퇴한 회원입니다. 고객센터에 문의하세요.",
+            text: "탈퇴한 회원입니다. 다시 회원가입 해주세요",
             icon: "warning",
           });
           return; // 로그인 진행을 중단
@@ -177,7 +177,7 @@ const Login = () => {
                     <Link to="/searchId" className="link-btn">
                       아이디 찾기
                     </Link>
-                    <Link to="/searchpw" className="link-btn">
+                    <Link to="/searchPw" className="link-btn">
                       비밀번호 찾기
                     </Link>
                   </div>

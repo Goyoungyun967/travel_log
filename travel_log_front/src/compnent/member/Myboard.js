@@ -1,16 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { boardListState, loginNoState } from "../utils/RecoilData";
+import { loginNoState } from "../utils/RecoilData";
 import { useNavigate } from "react-router-dom";
 import PageNavi from "../utils/PageNavi";
 
 const MyBoard = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
-  const [boardList, setBoardList] = useRecoilState(boardListState);
+  const [boardList, setBoardList] = useState([]);
   const [reqPage, setReqPage] = useState(1);
   const [pi, setPi] = useState({});
-  const [memberNo, setMmeberNo] = useRecoilState(loginNoState);
+  const [memberNo, setMemberNo] = useRecoilState(loginNoState);
 
   useEffect(() => {
     axios
@@ -23,7 +23,7 @@ const MyBoard = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [reqPage, memberNo, setBoardList]);
+  }, [reqPage, memberNo]);
   return (
     <div className="mk-board-wrap">
       <div className="mk-board-title">

@@ -116,6 +116,7 @@ public class LodgmentService {
 	//리뷰 등록 
 	@Transactional
 	public int insertReview(LodgmentReviewDTO lodgmentReview, List<LodgmentReviewFileDTO> fileSave) {
+		System.out.println(lodgmentReview);
 		int result = lodgmentDao.insertReview(lodgmentReview);
 		if(!fileSave.isEmpty()) {
 			for (LodgmentReviewFileDTO file : fileSave) {
@@ -217,7 +218,7 @@ public class LodgmentService {
 		return map;
 	}
 	
-	//리뷰 삭제 
+	//문의 삭제 
 	@Transactional
 	public int deleteInquire(int roomQnaNo, int loginNo) {
 		RequestDTO request = new RequestDTO();
@@ -225,6 +226,31 @@ public class LodgmentService {
 		request.setLoginNo(loginNo);
 		int result = lodgmentDao.deleteInquire(request);
 		return result;
+	}
+	
+	//리뷰수정 데이터 가져오기 
+	public LodgmentReviewDTO getReview(int reviewNo) {
+		LodgmentReviewDTO review = lodgmentDao.getReview(reviewNo);
+		return review;
+	}
+	
+	@Transactional
+	public List<LodgmentReviewFileDTO> delfileList(LodgmentReviewDTO newReview, List<LodgmentReviewFileDTO> fileSave) {
+		int result = lodgmentDao.updateRevie(newReview);
+		if(result > 0) {
+			//삭제 파일이 있으면 삭제 파일 삭제 
+			List<LodgmentReviewFileDTO> delFileList = new ArrayList<LodgmentReviewFileDTO>(); 
+			if(newReview.getDelImgFileNo() != null) {
+				delFileList = lodgmentDao.selectReviewFile(newReview.getDelImgFileNo());
+				result += lodgmentDao.deleteReviewFile(newReview.getDelImgFileNo());
+			}
+			//새로운 사진 업데이트가 있으면 사진업데이트 
+			for(LodgmentReviewFileDTO reviewFile : fileSave) {
+				result += lodgmentDao.insertReviewFile(reviewFile);
+			}
+			return delFileList;
+		}
+		return null;
 	}
 	
 	

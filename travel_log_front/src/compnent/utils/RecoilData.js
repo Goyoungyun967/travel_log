@@ -25,16 +25,6 @@ const isLoginState = selector({
   },
 });
 
-const bookingListState = atom({
-  key: "bookingListState",
-  default: [],
-});
-
-const boardListState = atom({
-  key: "boardListState",
-  default: [],
-});
-
 //seller 부분 recoil
 const sellerLoginNoState = atom({
   key: "sellerLoginNoState",
@@ -61,6 +51,4 @@ export {
   isSellerLoginState,
   loginNicknameState,
   loginBusinessNameState,
-  bookingListState,
-  boardListState,
 };

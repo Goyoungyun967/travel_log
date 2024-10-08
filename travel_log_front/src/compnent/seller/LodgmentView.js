@@ -14,6 +14,11 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { Comment, QnaComment } from "./sellerUtil/Comment";
 
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+
 const LodgmentView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
@@ -36,11 +41,14 @@ const LodgmentView = () => {
   const [reqPageQ, setReqPageQ] = useState(1);
   const [piQ, setPiQ] = useState({});
 
+  // 필터 검색
+  const [align, setAlign] = useState(1);
+
   console.log(reviewList);
   useEffect(() => {
     axios
       .get(
-        `${backServer}/seller/lodgmentView/${lodgmentNo}/${reqPage}/${reqPageQ}`
+        `${backServer}/seller/lodgmentView/${lodgmentNo}/${reqPage}/${reqPageQ}/${align}`
       )
       .then((res) => {
         console.log("lodgment res", res);
@@ -63,7 +71,7 @@ const LodgmentView = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [reqPage, sellerText, reqPageQ]);
+  }, [reqPage, sellerText, reqPageQ, align]);
 
   // 삭제지만.. 1(보여지는거) => 0으로 바뀌게 해야하므로 패치 사용
   const deleteLodgment = () => {
@@ -167,7 +175,13 @@ const LodgmentView = () => {
               <Tab label="지도" value="1" />
               <Tab label="숙소 공지사항" value="2" />
               <Tab label="리뷰" value="3" />
-              <Tab label="숙소 문의" value="4" />
+              <Tab
+                label="숙소 문의"
+                value="4"
+                onClick={() => {
+                  setAlign(1);
+                }}
+              />
             </TabList>
           </Box>
           <TabPanel value="1">
@@ -186,6 +200,7 @@ const LodgmentView = () => {
           </TabPanel>
           {/* 리뷰 */}
           <TabPanel value="3">
+            <SelectBar align={align} setAlign={setAlign} />
             <Comment
               reviewList={reviewList}
               setReviewList={setReviewList}
@@ -198,6 +213,7 @@ const LodgmentView = () => {
           </TabPanel>
           {/* 문의 */}
           <TabPanel value="4">
+            <SelectQna align={align} setAlign={setAlign} />
             <QnaComment
               qnaList={qnaList}
               setQnaList={setQnaList}
@@ -245,6 +261,60 @@ const RoomItem = (props) => {
         <p>최대인원 : {room.roomQua} 인</p>
         <p>가격 : {room.roomPrice} 원</p>
       </div>
+    </div>
+  );
+};
+
+const SelectBar = (props) => {
+  const { align, setAlign } = props;
+  const handleChange = (event) => {
+    setAlign(event.target.value);
+  };
+
+  return (
+    <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <FormControl sx={{ m: 1, minWidth: 100 }}>
+        <InputLabel id="demo-simple-select-autowidth-label">정렬</InputLabel>
+        <Select
+          labelId="demo-simple-select-autowidth-label"
+          id="demo-simple-select-autowidth"
+          value={align}
+          onChange={handleChange}
+          autoWidth
+          label="정렬"
+        >
+          <MenuItem value={1}>최신순</MenuItem>
+          <MenuItem value={2}>오래된순</MenuItem>
+          <MenuItem value={3}>별점 높은 순</MenuItem>
+          <MenuItem value={4}>별점 낮은 순</MenuItem>
+        </Select>
+      </FormControl>
+    </div>
+  );
+};
+
+const SelectQna = (props) => {
+  const { align, setAlign } = props;
+  const handleChange = (event) => {
+    setAlign(event.target.value);
+  };
+
+  return (
+    <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <FormControl sx={{ m: 1, minWidth: 100 }}>
+        <InputLabel id="demo-simple-select-autowidth-label">정렬</InputLabel>
+        <Select
+          labelId="demo-simple-select-autowidth-label"
+          id="demo-simple-select-autowidth"
+          value={align}
+          onChange={handleChange}
+          autoWidth
+          label="정렬"
+        >
+          <MenuItem value={1}>최신순</MenuItem>
+          <MenuItem value={2}>오래된순</MenuItem>
+        </Select>
+      </FormControl>
     </div>
   );
 };

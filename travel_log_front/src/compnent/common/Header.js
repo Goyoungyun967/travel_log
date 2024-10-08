@@ -10,6 +10,7 @@ import {
   memberLevelState,
   sellerLoginNoState,
 } from "../utils/RecoilData";
+import { useEffect } from "react";
 
 const Header = (props) => {
   const [loginBusinessName, setLoginBusinessName] = useRecoilState(
@@ -56,6 +57,7 @@ const Header = (props) => {
             </ul>
           </nav>
         ) : (
+          // <Menubar />
           <nav className="nav">
             <ul>
               <li>
