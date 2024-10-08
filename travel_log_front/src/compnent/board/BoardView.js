@@ -25,12 +25,12 @@ const BoardView = () => {
   const params = useParams();
   const boardNo = params.boardNo;
   const regDate = params.timeString;
-  const { isLike: isLikeParam, likeCount: likeCountParam } = useParams();
-  const [likeCount, setLikeCount] = useState(Number(likeCountParam));
-  const [isLike, setIsLike] = useState(Number(isLikeParam));
+  const [likeCount, setLikeCount] = useState();
+  const [isLike, setIsLike] = useState(0);
   const [board, setBoard] = useState(null);
   //모달창 관련
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [comfirm, setComfirm] = useState(false);
 
   const reportBoard = () => {
     setIsModalOpen(true);
@@ -38,14 +38,15 @@ const BoardView = () => {
 
   useEffect(() => {
     axios
-      .get(`${backServer}/board/boardNo/${boardNo}`)
+      .get(`${backServer}/board/boardNo/${boardNo}/${memberNo}`)
       .then((res) => {
         setBoard(res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [isLike]);
+  }, [comfirm, likeCount, isLike]);
 
   const deleteBoard = () => {
     axios
@@ -61,12 +62,15 @@ const BoardView = () => {
   };
 
   const likeClick = () => {
-    if (isLike === 1) {
+    //console.log(board.isLike);
+    if (board.isLike === 1) {
       axios
         .delete(`${backServer}/board/unlike/${boardNo}/${memberNo}`)
-        .then(() => {
-          setLikeCount((prevCount) => prevCount - 1);
-          setIsLike(0);
+        .then((res) => {
+          if (res.data === 0) {
+            setComfirm(!comfirm);
+            console.log("삭제 : " + res.data);
+          }
         })
         .catch((err) => {
           console.error("좋아요 취소 중 오류 발생:", err);
@@ -74,9 +78,12 @@ const BoardView = () => {
     } else {
       axios
         .post(`${backServer}/board/like/${boardNo}/${memberNo}`)
-        .then(() => {
-          setLikeCount((prevCount) => prevCount + 1);
-          setIsLike(1);
+        .then((res) => {
+          console.log(res.data);
+          if (res.data === 1) {
+            console.log("좋아요 : " + res.data);
+            setComfirm(!comfirm);
+          }
         })
         .catch((err) => {
           console.error("좋아요 요청 중 오류 발생:", err);
@@ -115,7 +122,7 @@ const BoardView = () => {
                       className="text-medium"
                       style={{ paddingLeft: "23px" }}
                     >
-                      {loginNickname}
+                      {board.memberNickname}
                     </div>
                     <div className="text-min" style={{ paddingLeft: "50px" }}>
                       {regDate}
@@ -184,32 +191,41 @@ const BoardView = () => {
         </div>
 
         <div className="view-btn-zone">
-          <button  className="board-report-btn" onClick={reportBoard}>신고</button>
+          <button className="board-report-btn" onClick={reportBoard}>
+            신고
+          </button>
           <ReportModal
             boardNo={board.boardNo}
             memberNo={loginNo}
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
           />
-
-          <Link
-            to={`/board/update/${board.boardNo}`}
-            className="board-update-btn"
-          >
-            수정
-          </Link>
-          <button
-            type="button"
-            className="board-delete-btn"
-            onClick={deleteBoard}
-          >
-            삭제
-          </button>
+          <>
+            {loginNickname === board.memberNickname ? (
+              <>
+                <Link
+                  to={`/board/update/${board.boardNo}`}
+                  className="board-update-btn"
+                >
+                  수정
+                </Link>
+                <button
+                  type="button"
+                  className="board-delete-btn"
+                  onClick={deleteBoard}
+                >
+                  삭제
+                </button>
+              </>
+            ) : (
+              ""
+            )}
+          </>
         </div>
 
-        <div className="view-like-comment-keep">
+        {/* <div className="view-like-comment-keep">
           <div className="board-like sub-item" onClick={likeClick}>
-            {board.likeCount === 0 ? (
+            {board.isLike === 0 ? (
               "좋아요"
             ) : (
               <>
@@ -235,7 +251,7 @@ const BoardView = () => {
               </>
             )}
           </div>
-        </div>
+        </div> */}
 
         <div className="board-comment-wrap">
           <BoardCommnet board={board} />

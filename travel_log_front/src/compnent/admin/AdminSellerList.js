@@ -133,7 +133,7 @@ const AdminSellerList = () => {
                 <td>{seller.businessNo}</td>
                 <td>{seller.representativeName}</td>
                 <td>{seller.enrollDate}</td>
-                <td>{seller.sellerApp === 0 ? <>{"미승인"}</> : "승인"}</td>
+                <td>{seller.sellerApp === 0 ? <>{"가입대기"}</> : "승인"}</td>
               </tr>
             );
           })}

@@ -253,14 +253,20 @@ const SellerChart = () => {
           ""
         )}
       </div>
-      {sellerListSales ? (
+      {sellerListSales && sellerListSales.length !== 0 ? (
         <div className="seller-chart">
           <button
             className="excel-down"
             onClick={(e) => {
               const target = e.currentTarget.nextSibling;
               const chart = [target];
-              downloadWorkbook(chart, sellerListSales);
+              downloadWorkbook(
+                chart,
+                sellerListSales,
+                `${year}년${
+                  type === "month" ? month + "월" : ""
+                } 전체 판매자 매출`
+              );
             }}
           >
             엑셀파일
@@ -292,7 +298,17 @@ const SellerChart = () => {
           </BarChart>
         </div>
       ) : (
-        ""
+        <div
+          style={{
+            width: "800px",
+            height: "450px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <p>데이터가 없습니다.</p>
+        </div>
       )}
       {sellerList ? (
         <>
@@ -325,7 +341,16 @@ const SellerChart = () => {
               onClick={(e) => {
                 const target = e.currentTarget.nextSibling;
                 const chart = [target];
-                downloadWorkbook(chart, sellerSales);
+                downloadWorkbook(
+                  chart,
+                  sellerSales,
+                  `${
+                    sellerList[
+                      sellerList.findIndex((obj) => obj.sellerNo === sellerNo)
+                        .businessName
+                    ]
+                  } 매출`
+                );
               }}
             >
               엑셀파일
@@ -375,7 +400,16 @@ const SellerChart = () => {
             onClick={(e) => {
               const target = e.currentTarget.nextSibling;
               const chart = [target];
-              downloadWorkbook(chart, sellerSalesAge);
+              downloadWorkbook(
+                chart,
+                sellerSalesAge,
+                `${
+                  sellerList[
+                    sellerList.findIndex((obj) => obj.sellerNo === sellerNo)
+                      .businessName
+                  ]
+                } 나이별 이용자`
+              );
             }}
           >
             엑셀파일
@@ -406,7 +440,16 @@ const SellerChart = () => {
             onClick={(e) => {
               const target = e.currentTarget.nextSibling;
               const chart = [target];
-              downloadWorkbook(chart, sellerSalesGender);
+              downloadWorkbook(
+                chart,
+                sellerSalesGender,
+                `${
+                  sellerList[
+                    sellerList.findIndex((obj) => obj.sellerNo === sellerNo)
+                      .businessName
+                  ]
+                } 성별 이용자`
+              );
             }}
           >
             엑셀파일

@@ -38,6 +38,7 @@ const BoardUpdate = () => {
   const [selectedArea, setSelectedArea] = useState("");
 
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
+
   //새로 전송하기 위한 state
   const [thumbnail, setThumbnail] = useState(null);
   const [boardFile, setBoardFile] = useState([]);
@@ -65,7 +66,7 @@ const BoardUpdate = () => {
         console.log(err);
       });
   }, []);
-
+  console.log(boardFile);
   const updateBoard = () => {
     if (boardTitle !== "" && boardContent !== "") {
       const form = new FormData();

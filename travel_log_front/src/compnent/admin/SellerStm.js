@@ -105,7 +105,7 @@ const AdminSellerStm = () => {
                 setStmNumList([...stmNumList]);
               } else {
                 const newStmNumList = stmNumList.filter((stmNum) => {
-                  return stmNum != stm.stmNum;
+                  return stmNum !== stm.stmNum;
                 });
                 setStmNumList(newStmNumList);
               }

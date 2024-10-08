@@ -235,18 +235,29 @@ const AccompanyComment = (accompany) => {
                         onClose={() => setIsModalOpen(false)}
                       />
                     </div>
-                    <button
-                      className="comment-update-btn"
-                      onClick={() => handleCommentEdit(comment)}
-                    >
-                      수정
-                    </button>
-                    <button
-                      className="comment-del-btn"
-                      onClick={() => handleCommentDelete(comment.commentNo)}
-                    >
-                      삭제
-                    </button>
+                    <>
+                      {loginNickname === accompany.accompany.memberNickname ? (
+                        <>
+                          {" "}
+                          <button
+                            className="comment-update-btn"
+                            onClick={() => handleCommentEdit(comment)}
+                          >
+                            수정
+                          </button>
+                          <button
+                            className="comment-del-btn"
+                            onClick={() =>
+                              handleCommentDelete(comment.commentNo)
+                            }
+                          >
+                            삭제
+                          </button>
+                        </>
+                      ) : (
+                        ""
+                      )}
+                    </>
                   </>
                 )}
               </div>
