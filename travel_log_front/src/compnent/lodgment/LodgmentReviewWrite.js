@@ -16,7 +16,6 @@ const LodgmentReviewWirte = () => {
   const { state } = useLocation();
   const [loginNo] = useRecoilState(loginNoState);
   const lodgmentNo = state?.lodgmentNo;
-  //console.log(lodgmentNo);
   const [value, setValue] = useState(0);
 
   const modules = {

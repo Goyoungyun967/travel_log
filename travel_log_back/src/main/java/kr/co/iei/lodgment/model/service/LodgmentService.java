@@ -116,6 +116,7 @@ public class LodgmentService {
 	//리뷰 등록 
 	@Transactional
 	public int insertReview(LodgmentReviewDTO lodgmentReview, List<LodgmentReviewFileDTO> fileSave) {
+		System.out.println(lodgmentReview);
 		int result = lodgmentDao.insertReview(lodgmentReview);
 		if(!fileSave.isEmpty()) {
 			for (LodgmentReviewFileDTO file : fileSave) {
@@ -217,7 +218,7 @@ public class LodgmentService {
 		return map;
 	}
 	
-	//리뷰 삭제 
+	//문의 삭제 
 	@Transactional
 	public int deleteInquire(int roomQnaNo, int loginNo) {
 		RequestDTO request = new RequestDTO();
