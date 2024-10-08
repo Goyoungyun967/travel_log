@@ -10,7 +10,6 @@ import {
   memberLevelState,
   sellerLoginNoState,
 } from "../utils/RecoilData";
-import Menubar from "../seller/sellerUtil/MenuBar";
 
 const Header = (props) => {
   const [loginBusinessName, setLoginBusinessName] = useRecoilState(
