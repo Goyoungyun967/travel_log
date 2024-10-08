@@ -186,6 +186,13 @@ public class MemberContorller {
 	
 	return ResponseEntity.ok(result);
 	}
+	
+	@GetMapping(value="/myFaq/list/{memberNo}/{reqPage}")
+	public ResponseEntity<Map> myFaqList (@PathVariable int memberNo, @PathVariable int reqPage){
+		Map map = memberService.myFaqList(memberNo, reqPage);
+		
+		return ResponseEntity.ok(map);
+	} 
 }
 	
 	

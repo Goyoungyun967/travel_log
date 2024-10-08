@@ -92,7 +92,7 @@ const Login = () => {
         // 로그인 시 memberLevel 체크
         if (res.data.memberLevel === 3) {
           Swal.fire({
-            text: "탈퇴한 회원입니다. 고객센터에 문의하세요.",
+            text: "탈퇴한 회원입니다. 다시 회원가입 해주세요",
             icon: "warning",
           });
           return; // 로그인 진행을 중단

@@ -30,6 +30,11 @@ const bookingListState = atom({
   default: [],
 });
 
+const faqListState = atom({
+  key: "faqListState",
+  default: [],
+});
+
 const boardListState = atom({
   key: "boardListState",
   default: [],
@@ -63,4 +68,5 @@ export {
   loginBusinessNameState,
   bookingListState,
   boardListState,
+  faqListState,
 };
