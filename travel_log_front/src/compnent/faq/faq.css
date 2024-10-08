@@ -1,6 +1,7 @@
 .faq-section {
   width: 100%;
   align-self: start;
+  position: relative;
 }
 .faq-wrap {
   width: 100%;

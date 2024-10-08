@@ -8,7 +8,7 @@ import SellerChart from "./SellerChart";
 import MemberChart from "./MemberChart";
 import AdminSellerStm from "./SellerStm";
 import AdminLodgmentList from "./AdminLodgmentList";
-import LodgmentReportList from "./LodgmentReportList";
+import ReviewReportList from "./ReviewReportList";
 
 const AdminMain = () => {
   const changeMenu = (e) => {
@@ -25,6 +25,7 @@ const AdminMain = () => {
         <div className="admin-page-title">
           <h3>관리자 페이지</h3>
         </div>
+        {/*}
         <div className="admin-menu-bar">
           <ul className="admin-main-menu" onClick={changeMenu}>
             <li>회원</li>
@@ -65,12 +66,69 @@ const AdminMain = () => {
               <NavLink to="lodgmentList">상품 게시글 관리</NavLink>
             </li>
             <li>
-              <NavLink to="lodgmentReportList">신고 리뷰 관리</NavLink>
+              <NavLink to="reviewReportList">신고 리뷰 관리</NavLink>
             </li>
             <li>
-              <NavLink to="5">신고 게시글 관리</NavLink>
+              <NavLink to="6">신고 게시글 관리</NavLink>
             </li>
           </ul>
+        </div>
+        */}
+        <div className="mcd-menu-wrap">
+          <div class="container">
+            <nav>
+              <ul class="mcd-menu">
+                <li>
+                  <NavLink to="memberChart">
+                    <strong>회원</strong>
+                  </NavLink>
+                  <ul>
+                    <li>
+                      <NavLink to="1">회원 관리</NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="memberChart">회원 이용 관리</NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="inquiryList">1대1 문의 처리</NavLink>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <NavLink to="sellerChart">
+                    <strong>판매자</strong>
+                  </NavLink>
+                  <ul>
+                    <li>
+                      <NavLink to="sellerList">판매자 관리</NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="sellerChart">판매자 매출</NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="sellerStm">판매자 정산</NavLink>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <NavLink to="lodgmentList">
+                    <strong>게시물</strong>
+                  </NavLink>
+                  <ul>
+                    <li>
+                      <NavLink to="lodgmentList">상품 게시글 관리</NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="reviewReportList">리뷰 신고 처리</NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="2">게시글 신고 처리</NavLink>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
         <div className="admin-content-wrap">
           <Routes>
@@ -81,10 +139,7 @@ const AdminMain = () => {
             <Route path="sellerChart" element={<SellerChart />} />
             <Route path="sellerStm" element={<AdminSellerStm />} />
             <Route path="lodgmentList" element={<AdminLodgmentList />} />
-            <Route
-              path="lodgmenttReportList"
-              element={<LodgmentReportList />}
-            />
+            <Route path="reviewReportList" element={<ReviewReportList />} />
           </Routes>
         </div>
       </div>

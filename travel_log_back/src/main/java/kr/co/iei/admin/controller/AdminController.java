@@ -167,4 +167,40 @@ public class AdminController {
 		Map map = adminService.getBoardReportList(reqPage);
 		return ResponseEntity.ok(map);
 	}
+	@GetMapping(value="/board/report/{boardNo}")
+	public ResponseEntity<List> getBoardReport(@PathVariable int boardNo){
+		List list = adminService.getBoardReport(boardNo);
+		return ResponseEntity.ok(list);
+	}
+	@DeleteMapping(value="/board/report")
+	public ResponseEntity<Boolean> deleteBoardReport(@RequestBody int[] reportNo){
+		int result = adminService.deleteBoardReport(reportNo);
+		return ResponseEntity.ok(result == reportNo.length);
+	}
+	
+	@GetMapping(value="/comment/report/list/{reqPage}")
+	public ResponseEntity<Map> getCommentReportList(@PathVariable int reqPage){
+		Map map = adminService.getCommentReportList(reqPage);
+		return ResponseEntity.ok(map);
+	}
+	@GetMapping(value="/comment/report/{commentNo}")
+	public ResponseEntity<List> getCommentReport(@PathVariable int commentNo){
+		List list = adminService.getCommentReport(commentNo);
+		return ResponseEntity.ok(list);
+	}
+	@DeleteMapping(value="/comment/report")
+	public ResponseEntity<Boolean> deleteCommentReport(@RequestBody int[] reportNo){
+		int result = adminService.deleteCommentReport(reportNo);
+		return ResponseEntity.ok(result == reportNo.length);
+	}
+	@GetMapping(value="/review/report/list/{reqPage}")
+	public ResponseEntity<Map> getReviewReportList(@PathVariable int reqPage){
+		Map map = adminService.getReviewReportList(reqPage);
+		return ResponseEntity.ok(map);
+	}
+	@DeleteMapping(value="/review/report/{reviewNo}")
+	public ResponseEntity<Integer> deleteReviewReport(@RequestBody int reviewNo){
+		int result = adminService.deleteReviewReport(reviewNo);
+		return ResponseEntity.ok(result);
+	}
 }

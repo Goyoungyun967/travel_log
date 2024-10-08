@@ -48,6 +48,7 @@ const FaqMain = () => {
         <div className="faq-page-title">
           <h3>자주묻는질문</h3>
         </div>
+        {/*}
         <div className="faq-menu-bar">
           {memberLevel === 1 ? <Link to="faqWrite">글쓰기</Link> : ""}
           {faqTypeList.map((faqType, index) => {
@@ -80,6 +81,43 @@ const FaqMain = () => {
               </div>
             );
           })}
+        </div>
+        */}
+        <div className="mcd-menu-wrap">
+          <div class="container">
+            <nav>
+              <ul class="mcd-menu">
+                {memberLevel === 1 ? (
+                  <li>
+                    <Link to="faqWrite">글쓰기</Link>
+                  </li>
+                ) : (
+                  ""
+                )}
+                {faqTypeList.map((faqType, index) => {
+                  console.log(faqType);
+                  return (
+                    <li key={"faqTypeCategory" + index}>
+                      <a>
+                        <strong>{faqType.category}</strong>
+                      </a>
+                      <ul>
+                        {faqType.typeList.map((item, i) => {
+                          return (
+                            <li key={`faqType+${i}`}>
+                              <NavLink to={`faqList/${item.faqType}/${index}`}>
+                                {item.faqTypeName}
+                              </NavLink>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+          </div>
         </div>
         <div className="faq-content-wrap">
           <Routes>

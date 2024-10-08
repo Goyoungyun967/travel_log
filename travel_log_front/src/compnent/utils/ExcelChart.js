@@ -14,7 +14,6 @@ function downloadWorkbook(chart, chartData, title) {
       br: { col: keys.length + 3 + 11, row: 20 }, // right, bottom
     },
   ];
-  console.log(keys);
   for (let i = 1; i < keys.length; i++) {
     dataSheet.getCell(1, i + 1).value = keys[i];
     chartData.forEach((item, index) => {

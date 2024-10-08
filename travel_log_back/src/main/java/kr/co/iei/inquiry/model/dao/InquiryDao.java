@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import kr.co.iei.inquiry.model.dto.InquiryDTO;
 import kr.co.iei.inquiry.model.dto.InquiryFileDTO;
 import kr.co.iei.inquiry.model.dto.InquiryReplyDTO;
+import kr.co.iei.lodgment.model.dto.LodgmentReviewFileDTO;
 import kr.co.iei.seller.model.dto.SellerDTO;
 
 
@@ -73,8 +74,32 @@ public interface InquiryDao {
 
 	int updateLodgmentDelete(int[] lodgmentNo);
 
-	int getBoardReportCount();
+	//게시글 신고
+	int getBoardReportListCount();
 
 	List getBoardReportList(Map<String, Object> m);
+
+	List getBoardReport(int boardNo);
+
+	int deleteBoardReport(int[] reportNo);
+
+	//댓글 신고
+	int getCommentReportListCount();
+
+	List getCommentReportList(Map<String, Object> m);
+
+	List getCommentReport(int commentNo);
+
+	int deleteCommentReport(int[] reportNo);
+
+	//리뷰신고
+	int getReviewReportListCount();
+
+	List getReviewReportList(Map<String, Object> m);
+
+	int deleteReviewReport(int reviewNo);
+
+	List selectReviewFile(int reviewNo);
+	
 
 }

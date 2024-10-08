@@ -266,9 +266,9 @@
 	from 
 		board_report br
 	join 
-		board b ON br.board_no = b.board_no
+		board b on br.board_no = b.board_no
 	join 
-		member m ON b.member_no = m.member_no
+		member m on b.member_no = m.member_no
 	group by 
 		m.member_nickname, b.board_no, b.board_title 
 	order by 
@@ -297,7 +297,7 @@
 	from 
 		comment_report cr
 	join 
-		board_comment bc ON bc.comment_no = cr.comment_no
+		board_comment bc on bc.comment_no = cr.comment_no
 	group by 
 		bc.comment_writer,  bc.comment_no,bc.comment_content
 	order by 
@@ -336,6 +336,9 @@
     group by 
     	review_content,rating,member_nickname,lodgment_no,review_no 
     order by review_no desc)lrr) where rnum between #{start} and #{end}
+  </select>
+  <select id="selectReviewFile" resultType="lodgmentReviewFile">
+  	select * from lodgment_review_file where review_no=#{reviewNo}
   </select>
   <delete id="deleteReviewReport">
   	delete from review_report where review_no=#{reviewNo}

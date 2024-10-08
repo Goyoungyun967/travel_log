@@ -8,6 +8,7 @@ import {
   isLoginState,
   loginNoState,
   memberLevelState,
+  sellerLoginNoState,
 } from "../utils/RecoilData";
 import axios from "axios";
 
@@ -21,9 +22,12 @@ const InquiryWrite = () => {
   const isLogin = useRecoilValue(isLoginState);
   const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
+  const [sellerLoginNo, setSellerLoginNo] = useRecoilState(sellerLoginNoState);
   useEffect(() => {
     const refreshToken = window.localStorage.getItem("refreshToken");
-    if (!refreshToken) {
+    const sellerRefreshToken =
+      window.localStorage.getItem("sellerRefreshToken");
+    if (!refreshToken && !sellerRefreshToken) {
       Swal.fire({
         title: "로그인 필요",
         text: "로그인 후 이용 가능합니다.",
@@ -31,6 +35,8 @@ const InquiryWrite = () => {
       }).then(() => {
         navigate("/login");
       });
+    } else if (refreshToken && memberLevel === 1) {
+      navigate("/admin/inquiryList");
     }
   }, []);
   const addInquiryFile = (e) => {
@@ -49,8 +55,8 @@ const InquiryWrite = () => {
       const form = new FormData();
       if (memberLevel === 2) {
         form.append("memberNo", loginNo);
-      } else {
-        form.append("sellerNo", loginNo);
+      } else if (memberLevel === 4) {
+        form.append("sellerNo", sellerLoginNo);
       }
       form.append("inquiryTitle", inquiryTitle);
       form.append("inquiryContent", inquiryContent);
@@ -92,7 +98,7 @@ const InquiryWrite = () => {
       });
     }
   };
-  return isLogin ? (
+  return isLogin && memberLevel !== 1 ? (
     <div className="inquiry-write-wrap">
       <div className="inquiry-page-title">
         <h3>1:1문의</h3>

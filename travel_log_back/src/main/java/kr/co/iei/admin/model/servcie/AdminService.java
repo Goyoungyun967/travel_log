@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.iei.faq.model.dao.FaqDao;
 import kr.co.iei.faq.model.dto.FaqDTO;
 import kr.co.iei.inquiry.model.dao.InquiryDao;
+import kr.co.iei.lodgment.model.dto.LodgmentReviewReportDTO;
 import kr.co.iei.member.model.dao.MemberDao;
 import kr.co.iei.seller.model.dao.SellerDao;
 import kr.co.iei.seller.model.dto.SellerDTO;
@@ -151,7 +152,7 @@ public class AdminService {
 		System.out.println(list);
 		int result = 0;
 		for (SellerDTO sellerDTO : list) {
-			result = inquiryDao.insertSellerStm(sellerDTO);
+			result += inquiryDao.insertSellerStm(sellerDTO);
 		}
 		System.out.println(result);
 	}
@@ -204,7 +205,7 @@ public class AdminService {
 		Map<String, Object> m  = new HashMap<String, Object>();
 		int numPerPage = 10;
 		int pageNaviSize = 5;
-		int totalCount = inquiryDao.getBoardReportCount();
+		int totalCount = inquiryDao.getBoardReportListCount();
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
 		m.put("start", pi.getStart());
 		m.put("end", pi.getEnd());
@@ -214,4 +215,64 @@ public class AdminService {
 		return map;
 	}
 
+	public List getBoardReport(int boardNo) {
+		List list = inquiryDao.getBoardReport(boardNo);
+		return list;
+	}
+
+	@Transactional
+	public int deleteBoardReport(int[] reportNo) {
+		int result = inquiryDao.deleteBoardReport(reportNo);
+		return result;
+	}
+
+	public Map getCommentReportList(int reqPage) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> m  = new HashMap<String, Object>();
+		int numPerPage = 10;
+		int pageNaviSize = 5;
+		int totalCount = inquiryDao.getCommentReportListCount();
+		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
+		m.put("start", pi.getStart());
+		m.put("end", pi.getEnd());
+		List list = inquiryDao.getCommentReportList(m);
+		map.put("list", list);
+		map.put("pi", pi);
+		return map;
+	}
+
+	public List getCommentReport(int commentNo) {
+		List list = inquiryDao.getCommentReport(commentNo);
+		return list;
+	}
+
+	@Transactional
+	public int deleteCommentReport(int[] reportNo) {
+		int result = inquiryDao.deleteCommentReport(reportNo);
+		return result;
+	}
+
+	public Map getReviewReportList(int reqPage) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> m  = new HashMap<String, Object>();
+		int numPerPage = 10;
+		int pageNaviSize = 5;
+		int totalCount = inquiryDao.getReviewReportListCount();
+		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
+		m.put("start", pi.getStart());
+		m.put("end", pi.getEnd());
+		List<LodgmentReviewReportDTO> list = inquiryDao.getReviewReportList(m);
+		for (LodgmentReviewReportDTO lodgmentReviewReportDTO : list) {
+			List fileList = inquiryDao.selectReviewFile(lodgmentReviewReportDTO.getReviewNo());
+			lodgmentReviewReportDTO.setFileList(fileList);
+		}
+		map.put("list", list);
+		map.put("pi", pi);
+		return map;
+	}
+	@Transactional
+	public int deleteReviewReport(int reviewNo) {
+		int result = inquiryDao.deleteReviewReport(reviewNo);
+		return result;
+	}
 }

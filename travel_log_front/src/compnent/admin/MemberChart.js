@@ -28,9 +28,9 @@ const MemberChart = () => {
     for (let i = 0; i < 7; i++) {
       const data = {
         name: i + 1 !== 7 ? i + 1 + "0대" : i + 1 + "0대 이상",
-        총이용자: 0,
         남성: 0,
         여성: 0,
+        총이용자: 0,
       };
       newMemberData.push(data);
     }

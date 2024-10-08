@@ -147,22 +147,15 @@ const AdminLodgmentList = () => {
               </tr>
             );
           })}
-          {Number(lodgmentDelete) === 0 ? (
-            <tr>
-              <td colSpan={5}>
-                <button
-                  className="admin-seller-btn"
-                  onClick={updateLodmentDelete}
-                >
-                  등록
-                </button>
-              </td>
-            </tr>
-          ) : (
-            ""
-          )}
         </tbody>
       </table>
+      {Number(lodgmentDelete) === 0 ? (
+        <button className="admin-seller-btn" onClick={updateLodmentDelete}>
+          등록
+        </button>
+      ) : (
+        ""
+      )}
       <div className="admin-page-navi">
         <PageNavi reqPage={reqPage} setReqPage={setReqPage} pi={pi} />
       </div>

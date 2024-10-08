@@ -48,6 +48,7 @@ public class InquiryController {
 	@PostMapping
 	@Operation(summary = "1:1 문의 등록",description = "제목,내용,회원번호 또는 판매자번호,파일을 입력해서 db에 insert")
 	public ResponseEntity<Boolean> insertInquiry(@ModelAttribute InquiryDTO inquiry,@ModelAttribute MultipartFile[] upfile){
+		System.out.println(inquiry);
 		List<InquiryFileDTO> fileList = new ArrayList<InquiryFileDTO>();
 		if(upfile != null) {
 			String savepath = root+"/inquiry/"; 

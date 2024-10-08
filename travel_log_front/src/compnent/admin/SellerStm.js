@@ -130,19 +130,15 @@ const AdminSellerStm = () => {
               </tr>
             );
           })}
-          {Number(type) === 0 ? (
-            <tr>
-              <td colSpan={5}>
-                <button className="admin-seller-btn" onClick={updateStmState}>
-                  정산하기
-                </button>
-              </td>
-            </tr>
-          ) : (
-            ""
-          )}
         </tbody>
       </table>
+      {Number(type) === 0 ? (
+        <button className="admin-seller-btn" onClick={updateStmState}>
+          정산하기
+        </button>
+      ) : (
+        ""
+      )}
       <div className="admin-page-navi">
         <PageNavi reqPage={reqPage} setReqPage={setReqPage} pi={pi} />
       </div>

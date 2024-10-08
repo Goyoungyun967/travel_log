@@ -33,5 +33,5 @@ public class LodgmentReviewReportDTO {
 	@Schema(description = "별점",type = "int")
 	private int rating;
 	@Schema(description = "리뷰 파일 리스트",type = "list")
-	private List<LodgmentReviewReportDTO> lodgmentReviewFileList;
+	private List fileList;
 }
