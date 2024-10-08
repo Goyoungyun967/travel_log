@@ -120,8 +120,23 @@
 					using(REVIEW_NO)
 			        left join member
 			        using(member_no)
-					where LODGMENT_NO = #{lodgmentNo}
-			order by REVIEW_NO desc)b)
+					where LODGMENT_NO = #{lodgmentNo}				
+					order by 
+					<choose>
+						<when test="align==1">
+							REVIEW_NO desc
+						</when>
+						<when test="align==2">
+							REVIEW_NO asc
+						</when>
+						<when test="align==3">
+							rating desc
+						</when>
+						<otherwise>
+							rating asc
+						</otherwise>
+					</choose>
+					)b)
 		where rnum between #{start} and #{end}
 	</select>
 	<resultMap type="lodgmentReview" id="lodgmentReviewMap">
@@ -168,13 +183,21 @@
 			            FROM room_qna rq
 			            LEFT JOIN member m ON rq.member_no = m.member_no
                         where lodgment_no=#{lodgmentNo}
-			            ORDER BY rq.room_qna_no DESC
+			            ORDER BY 
+			            <choose>
+			            	<when test="align==1">
+			            		rq.room_qna_no desc
+			            	</when>
+			            	<otherwise>
+			            		rq.room_qna_no asc
+			            	</otherwise>
+			            </choose>
 			        ) b
 			    )
 			    WHERE rnum BETWEEN #{start} AND #{end}
 			) rq
 			LEFT JOIN qna_comment qc ON rq.ROOM_QNA_NO = qc.room_qna_no
-			order by qc.QNA_COMMENT_NO desc
+			order by  rq.ROOM_QNA_NO DESC
 	</select>
 	<resultMap type="roomQna" id="selectQnaMap">
 		<id column="room_qna_no" property="roomQnaNo"/>
@@ -313,7 +336,6 @@
 		<result property="regDate" column="reg_date" />
 		<result property="inquiryReply.inquiryReplyContent" column="inquiry_reply_content" />
 	</resultMap>
-
 
 	<!-- 판매자 문의 상세 -->
 	<select id="selectInqView" resultMap="InqViewMap">

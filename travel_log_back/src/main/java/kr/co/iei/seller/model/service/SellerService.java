@@ -118,7 +118,7 @@ public class SellerService {
 	}
 
 	// 호텔 상세 (호텔 + 객실 상세)
-	public Map selectHotelInfo(int lodgmentNo, int reqPage, int reqPageQ) {
+	public Map selectHotelInfo(int lodgmentNo, int reqPage, int reqPageQ, int align) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		LodgmentStorageDTO ls = sellerLodgmentDao.selectOneLodgment(lodgmentNo); // 호텔 정보 조회
@@ -131,7 +131,7 @@ public class SellerService {
 
 		// 리뷰
 //		List<LodgmentReviewDTO> review = sellerLodgmentDao.selectLodgmentReview(lodgmentNo,pi); // 호텔 리뷰 조회
-		List<LodgmentReviewDTO> review = sellerLodgmentDao.selectLodgmentReview(lodgmentNo, pi.getStart(), pi.getEnd()); // 호텔
+		List<LodgmentReviewDTO> review = sellerLodgmentDao.selectLodgmentReview(lodgmentNo, pi.getStart(), pi.getEnd(), align); // 호텔
 																															// 리뷰
 																											// 조회
 		// 문의
@@ -140,7 +140,7 @@ public class SellerService {
 		int totalCountQ = sellerLodgmentDao.totalCountQna(lodgmentNo);
 		PageInfo piQ = pageUtil.getPageInfo(reqPageQ, numPerPageQ, pageNaviSizeQ, totalCountQ);
 		
-		List<RoomQnaDTO> qna = sellerLodgmentDao.selectQna(lodgmentNo, piQ.getStart(), piQ.getEnd());
+		List<RoomQnaDTO> qna = sellerLodgmentDao.selectQna(lodgmentNo, piQ.getStart(), piQ.getEnd(),align);
 		
 		
 		System.out.println(qna);

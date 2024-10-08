@@ -30,7 +30,7 @@ public interface SellerLodgmentDao {
 	int totalCount(int lodgmentNo);
 	
 //	List<LodgmentReviewDTO> selectLodgmentReview(int lodgmentNo, PageInfo pi);
-	List<LodgmentReviewDTO> selectLodgmentReview(int lodgmentNo, int start, int end);
+	List<LodgmentReviewDTO> selectLodgmentReview(int lodgmentNo, int start, int end, int align);
 
 	int insertLodgment(LodgmentStorageDTO ls);
 
@@ -81,7 +81,7 @@ public interface SellerLodgmentDao {
 
 	int totalCountQna(int lodgmentNo);
 
-	List<RoomQnaDTO> selectQna(int lodgmentNo, int start, int end);
+	List<RoomQnaDTO> selectQna(int lodgmentNo, int start, int end, int align);
 
 	int insertSellerComment(QnaComment qc);
 
