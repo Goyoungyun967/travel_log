@@ -386,6 +386,12 @@ public class SellerService {
 		return result;
 	}
 
+	// 판매자 리뷰 댓글 삭제 (update null로 처리)
+	public int deleteComment(LodgmentReviewDTO ld) {
+		int result = sellerLodgmentDao.delUpComment(ld);
+		return result;
+	}
+
 
 
 

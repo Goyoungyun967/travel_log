@@ -27,6 +27,7 @@ const Comment = (props) => {
   console.log("review - ", reviewList);
   const [textComment, setTextComment] = useState(false);
   const [viewTextComment, setViewTextComment] = useState(false);
+  const [viewUpdateTextComment, setViewUpdateTextComment] = useState(false);
   const addComment = (reviewNo) => {
     setTextComment((prev) => ({
       ...prev,
@@ -35,6 +36,13 @@ const Comment = (props) => {
   };
   const viewComment = (reviewNo) => {
     setViewTextComment((prev) => ({
+      ...prev,
+      [reviewNo]: !prev[reviewNo], // 현재 reviewNo에 해당하는 값만 토글
+    }));
+  };
+
+  const viewUpdateComment = (reviewNo) => {
+    setViewUpdateTextComment((prev) => ({
       ...prev,
       [reviewNo]: !prev[reviewNo], // 현재 reviewNo에 해당하는 값만 토글
     }));
@@ -64,10 +72,11 @@ const Comment = (props) => {
               <Typography component="div">
                 {review.sellerComment === null ? (
                   <>
-                    <Button onClick={() => addComment(review.reviewNo)}>
+                    <Button onClick={() => viewUpdateComment(review.reviewNo)}>
                       {textComment[review.reviewNo] ? "답글 취소" : "답글 달기"}
                     </Button>
-                    {textComment[review.reviewNo] ? (
+                    {textComment[review.reviewNo] ||
+                    viewUpdateTextComment[review.reviewNo] ? (
                       <TextForm
                         reviewNo={review.reviewNo}
                         lodgmentNo={review.lodgmentNo}
@@ -92,6 +101,10 @@ const Comment = (props) => {
                         <CardContent>
                           <Typography component="div" color="primary">
                             [ 판매자 답변 ]
+                            <Button onClick={() => addComment(review.reviewNo)}>
+                              수정
+                            </Button>{" "}
+                            <Button>삭제</Button>
                           </Typography>
                           <Typography component="div">
                             {review.sellerComment}
@@ -158,15 +171,35 @@ const TextForm = (props) => {
               console.log(err);
             });
         }}
+        style={{ display: "flex", alignItems: "center", width: "100%" }}
       >
         <Textarea
           placeholder="100자 이내로 적어주세요!"
-          sx={{ mb: 1 }}
+          sx={{
+            mb: 1,
+            flexGrow: 1,
+            minHeight: "40px", // 최소 높이
+            maxHeight: "150px", // 최대 높이 (원하는 만큼 조정 가능)
+            overflow: "hidden", // 콘텐츠가 넘칠 경우 스크롤 표시
+            resize: "vertical", // 수직으로 크기 조절 가능
+          }}
           onChange={(e) => {
             setText(e.target.value);
           }}
         />
-        <Button type="submit">작성 완료</Button>
+        <Button
+          type="submit"
+          sx={{
+            ml: 2,
+            height: "40px",
+            padding: "8px 16px",
+            marginTop: "-10px",
+          }}
+          variant="contained"
+          color="success"
+        >
+          작성 완료
+        </Button>
       </form>
     </Box>
   );

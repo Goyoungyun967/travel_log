@@ -151,7 +151,7 @@
 	
 	<!-- 문의 조회 -->
  	<select id="selectQna" resultMap="selectQnaMap">
-		SELECT *
+		        SELECT *
 			FROM (
 			    SELECT *
 			    FROM (
@@ -167,6 +167,7 @@
 			                m.member_id
 			            FROM room_qna rq
 			            LEFT JOIN member m ON rq.member_no = m.member_no
+                        where lodgment_no=#{lodgmentNo}
 			            ORDER BY rq.room_qna_no DESC
 			        ) b
 			    )
@@ -427,6 +428,11 @@
 	 <!-- 판매자 호텔 리뷰 댓글 달기 -->
 	 <update id="updatecomment">
 	 	update LODGMENT_REVIEW set seller_comment=#{sellerComment} where review_no=#{reviewNo}
+	 </update>
+	 
+	 <!-- 판매자 홍텔 리뷰 댓글 삭제(삭제이지만 null로 처리하면 되기 때문에 update) -->
+	 <update id="delUpComment">
+	 	update Lodgmet_review set seller_comment=null where review_no=#{reviewNo}
 	 </update>
 	 
 	 <!-- 판매자 객실 수정 -->

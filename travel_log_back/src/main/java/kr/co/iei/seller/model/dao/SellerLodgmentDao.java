@@ -89,6 +89,8 @@ public interface SellerLodgmentDao {
 
 	List<QnaComment> selectQnaComment(int lodgmentNo);
 
+	int delUpComment(LodgmentReviewDTO ld);
+
 	
 	
 
