@@ -187,9 +187,9 @@ public class MemberContorller {
 	return ResponseEntity.ok(result);
 	}
 	
-	@GetMapping(value="/myFaq/list/{memberNo}/{reqPage}")
-	public ResponseEntity<Map> myFaqList (@PathVariable int memberNo, @PathVariable int reqPage){
-		Map map = memberService.myFaqList(memberNo, reqPage);
+	@GetMapping(value="/myInq/list/{memberNo}/{reqPage}")
+	public ResponseEntity<Map> myInqList (@PathVariable int memberNo, @PathVariable int reqPage){
+		Map map = memberService.myInqList(memberNo, reqPage);
 		
 		return ResponseEntity.ok(map);
 	} 

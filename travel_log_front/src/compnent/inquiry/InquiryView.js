@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import UqillEditor from "../utils/UqillEditor";
 import Swal from "sweetalert2";
+import { useRecoilState } from "recoil";
+import { memberLevelState } from "../utils/RecoilData";
 
 const InquiryView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const inquiryNo = useParams().inquiryNo;
   const [inquiry, setInquiry] = useState(null);
+  const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
   const navigate = useNavigate();
   useEffect(() => {
     axios
@@ -133,17 +136,21 @@ const InquiryView = () => {
                 }}
               ></p>
             </>
-          ) : (
+          ) : memberLevel === 1 ? (
             <UqillEditor
               boardContent={inquiryReplyContent}
               setBoardContent={setInquiryReplyContent}
               width={"100%"}
             />
+          ) : (
+            "답변 없다"
           )}
           {inquiry.inquiryReply ? (
             ""
-          ) : (
+          ) : memberLevel === 1 ? (
             <button onClick={writeInquiryReply}>답변하기</button>
+          ) : (
+            ""
           )}
         </div>
       </div>

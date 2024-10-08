@@ -55,6 +55,7 @@ const UpdateMember = () => {
     axios
       .patch(`${backServer}/member`, member)
       .then((res) => {
+        setLoginNickname(member.memberNickname);
         console.log(res);
         if (res.data === 1) {
           Swal.fire({

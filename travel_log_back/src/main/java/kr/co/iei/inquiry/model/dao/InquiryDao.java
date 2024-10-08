@@ -77,4 +77,12 @@ public interface InquiryDao {
 
 	List getBoardReportList(Map<String, Object> m);
 
+	//형묵 문의글 왔다감
+	int myInqTotalCout(int memberNo);
+
+	List myInqList(Map<String, Object> myInqMap);
+	
+
+
+
 }

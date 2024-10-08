@@ -173,18 +173,18 @@ public class MemberService {
 		return result;
 	}
 
-	public Map myFaqList(int memberNo, int reqPage) {
+	public Map myInqList(int memberNo, int reqPage) {
 		int numPerPage = 8;		//한 페이지당 게시물 수
 		int pageNaviSize = 5;		//페이지네비 길이 
-		int totalCount = inquiryDao.myFaqList(memberNo);
+		int totalCount = inquiryDao.myInqTotalCout(memberNo);
 		
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
 		
-		Map<String, Object> myFaqMap = new HashMap<String, Object>();
-		myFaqMap.put("memberNo", memberNo);
-		myFaqMap.put("start", pi.getStart());
-		myFaqMap.put("end", pi.getEnd());
-		List list = inquiryDao.myFaqList(myFaqMap);
+		Map<String, Object> myInqMap = new HashMap<String, Object>();
+		myInqMap.put("memberNo", memberNo);
+		myInqMap.put("start", pi.getStart());
+		myInqMap.put("end", pi.getEnd());
+		List list = inquiryDao.myInqList(myInqMap);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list",list);
 		map.put("pi", pi);
