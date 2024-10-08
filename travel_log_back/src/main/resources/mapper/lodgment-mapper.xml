@@ -141,12 +141,12 @@
 
 	<!-- 모든 리뷰 수 (페이징 처리 위함)-->
 	<select id="totalCount" resultType="int">
-		select COUNT(*) from LODGMENT_REVIEW
+		select COUNT(*) from LODGMENT_REVIEW where lodgment_no=#{lodgmentNo}
 	</select>
 	
 	<!-- 모든 문의 수 (페이징 처리 위함) -->
 	<select id="totalCountQna" resultType="int">
-		select count(*) from room_qna
+		select count(*) from room_qna where lodgment_no=#{lodgmentNo}
 	</select>
 	
 	<!-- 문의 조회 -->

@@ -41,12 +41,7 @@ const Comment = (props) => {
     }));
   };
 
-  const viewUpdateComment = (reviewNo) => {
-    setViewUpdateTextComment((prev) => ({
-      ...prev,
-      [reviewNo]: !prev[reviewNo], // 현재 reviewNo에 해당하는 값만 토글
-    }));
-  };
+  const viewUpdateComment = (reviewNo) => {};
 
   return (
     <Box
@@ -72,11 +67,10 @@ const Comment = (props) => {
               <Typography component="div">
                 {review.sellerComment === null ? (
                   <>
-                    <Button onClick={() => viewUpdateComment(review.reviewNo)}>
+                    <Button onClick={() => addComment(review.reviewNo)}>
                       {textComment[review.reviewNo] ? "답글 취소" : "답글 달기"}
                     </Button>
-                    {textComment[review.reviewNo] ||
-                    viewUpdateTextComment[review.reviewNo] ? (
+                    {textComment[review.reviewNo] ? (
                       <TextForm
                         reviewNo={review.reviewNo}
                         lodgmentNo={review.lodgmentNo}

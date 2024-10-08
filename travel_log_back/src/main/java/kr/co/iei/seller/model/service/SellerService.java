@@ -126,7 +126,7 @@ public class SellerService {
 
 		int numPerPage = 5; // 한 페이지당 게시물 수
 		int pageNaviSize = 5; // 페이지네비 길이
-		int totalCount = sellerLodgmentDao.totalCount(); // 전체 리뷰 수
+		int totalCount = sellerLodgmentDao.totalCount(lodgmentNo); // 전체 리뷰 수
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
 
 		// 리뷰
@@ -137,14 +137,13 @@ public class SellerService {
 		// 문의
 		int numPerPageQ = 5;
 		int pageNaviSizeQ = 5;
-		int totalCountQ = sellerLodgmentDao.totalCountQna();
+		int totalCountQ = sellerLodgmentDao.totalCountQna(lodgmentNo);
 		PageInfo piQ = pageUtil.getPageInfo(reqPageQ, numPerPageQ, pageNaviSizeQ, totalCountQ);
 		
 		List<RoomQnaDTO> qna = sellerLodgmentDao.selectQna(lodgmentNo, piQ.getStart(), piQ.getEnd());
 		
 		
 		System.out.println(qna);
-		System.out.println(review);
 
 		map.put("lodgment", ls); // 호텔 정보
 		
@@ -152,6 +151,8 @@ public class SellerService {
 		
 		map.put("review", review); // 리뷰 정보
 		map.put("pi", pi); // 리뷰 페이징
+		System.out.println("review - "+review);
+		System.out.println("pi - "+pi);
 		
 		map.put("qna", qna); // 문의 정보
 		map.put("piQ", piQ); // 문의 페이징
