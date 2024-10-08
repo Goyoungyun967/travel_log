@@ -454,7 +454,7 @@
 	 
 	 <!-- 판매자 홍텔 리뷰 댓글 삭제(삭제이지만 null로 처리하면 되기 때문에 update) -->
 	 <update id="delUpComment">
-	 	update Lodgmet_review set seller_comment=null where review_no=#{reviewNo}
+	 	update LODGMENT_REVIEW set seller_comment=null where review_no=#{reviewNo}
 	 </update>
 	 
 	 <!-- 판매자 객실 수정 -->
