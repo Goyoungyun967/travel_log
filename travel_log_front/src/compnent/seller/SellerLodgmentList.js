@@ -68,8 +68,14 @@ const ListItem = (props) => {
         <div className="item-tx">
           <p className="lodgment-addr">{list.lodgmentAddr}</p>
           <div className="lodgment-star">
-            <span>{list.lodgmentStarGrade}</span>
-            <span>성급</span>
+            {list.lodgmentStarGrade === 0 ? (
+              "등록되지 않은 숙소"
+            ) : (
+              <>
+                <span>{list.lodgmentStarGrade}</span>
+                <span>성급</span>
+              </>
+            )}
           </div>
           <h3 className="lodgment-title">{list.lodgmentName}</h3>
         </div>
