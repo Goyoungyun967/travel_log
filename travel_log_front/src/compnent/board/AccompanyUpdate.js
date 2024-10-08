@@ -13,7 +13,9 @@ const AccompanyUpdate = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const params = useParams();
   const boardNo = params.boardNo;
+  const updateNo = params.updateNo;
   const navigate = useNavigate();
+
   console.log(boardNo);
   const [loginNo, setLoginNo] = useRecoilState(loginNoState);
   const [boardTitle, setBoardTitle] = useState("");
@@ -34,21 +36,26 @@ const AccompanyUpdate = () => {
     { title: "경북" },
     { title: "경남" },
     { title: "전북" },
-    { title: "전북" },
+    { title: "전남" },
     { title: "제주" },
   ]);
   const [selectedArea, setSelectedArea] = useState("");
-  //새로 전송하기 위한 state
+
+  // 새로 전송하기 위한 state
   const [thumbnail, setThumbnail] = useState(null);
   const [boardFile, setBoardFile] = useState([]);
-  //조회해온걸 화면에 보여주기 위한 state
+
+  // 조회해온 걸 화면에 보여주기 위한 state
   const [boardThumb, setBoardThumb] = useState(null);
   const [fileList, setFileList] = useState([]);
-  //기존 첨부파일을 삭제하면 삭제한 파일 번호를 저장할 배열
+
+  // 기존 첨부파일을 삭제하면 삭제한 파일 번호를 저장할 배열
   const [delBoardFileNo, setDelBoardFileNo] = useState([]);
+
   const inputTitle = (e) => {
     setBoardTitle(e.target.value);
   };
+
   const [accompanyType, setAccompanyType] = useState([
     { accompany_tag_no: 1, accompany_type: "부분 동행" },
     { accompany_tag_no: 2, accompany_type: "숙박 공유" },
@@ -57,6 +64,7 @@ const AccompanyUpdate = () => {
     { accompany_tag_no: 5, accompany_type: "식사 동행" },
     { accompany_tag_no: 6, accompany_type: "공동 구매" },
   ]);
+
   // 초기 일정 설정
   const startDay = dayjs().add(1, "day");
   const endDay = dayjs().add(2, "day");
@@ -65,15 +73,14 @@ const AccompanyUpdate = () => {
   const [startDate, setStartDate] = useState(startDay.format("YYYY-MM-DD"));
   const [endDate, setEndDate] = useState(endDay.format("YYYY-MM-DD"));
 
-  const [selectedType, setSelectedType] = useState([]); //실제 바뀐 값
-
+  const [selectedType, setSelectedType] = useState([]); // 실제 바뀐 값
   const [daysDifference, setDaysDifference] = useState(0); // 날짜 차이 상태 관리
-
   const [accompanyContent, setAccompanyContent] = useState([]);
 
   const inputContent = (e) => {
     setBoardContent(e.target.value);
   };
+
   const [accompanyArea, setAccompanyArea] = useState("1");
 
   useEffect(() => {
@@ -89,29 +96,21 @@ const AccompanyUpdate = () => {
         setStartDate(res.data.startDay);
         setEndDate(res.data.endDay);
         setDaysDifference(res.data.accompanyDate);
-        // accompanyTypes가 배열이 아닐 경우 처리
-        const typesArray = Array.isArray(res.data.accompanyTypes)
-          ? res.data.accompanyTypes
-          : res.data.accompanyTypes.split(",").map((type) => type.trim());
-        setSelectedType(typesArray);
-        console.log(typesArray);
+        setSelectedType(res.data.accompanyTypeTags);
 
         // accompanyContent가 배열이 아닐 경우 처리
         const accompanyContentArray = Array.isArray(res.data.accompanyContent)
           ? res.data.accompanyContent
-          : res.data.accompanyContent.split(",").map((type) => type.trim());
+          : res.data.accompanyContent.split("&*&").map((type) => type.trim());
 
         // 각 요소를 개별적으로 상태에 설정
-        accompanyContentArray.forEach((content) => {
-          setAccompanyContent((prevContent) => [...prevContent, content]);
-        });
-
+        setAccompanyContent(accompanyContentArray);
         console.log(accompanyContentArray); // 변환된 배열 출력
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [backServer, boardNo]); // backServer와 boardNo를 의존성 배열에 추가
 
   const updateBoard = () => {
     if (boardTitle !== "" && boardContent !== "") {
@@ -122,11 +121,11 @@ const AccompanyUpdate = () => {
       form.append("memberNo", loginNo);
       form.append("boardArea", selectedArea);
       form.append("accompanyDate", daysDifference);
-      form.append("accompanyContent", accompanyContent);
-      form.append("accompanyTagNo ", selectedType);
+      form.append("accompanyContent", accompanyContent.join("&*&"));
       form.append("accompanyArea", accompanyArea);
       form.append("startDay", dayjs(startDate).format("YYYY-MM-DD"));
       form.append("endDay", dayjs(endDate).format("YYYY-MM-DD"));
+
       if (boardThumb !== null) {
         form.append("boardThumb", boardThumb);
       }
@@ -138,6 +137,9 @@ const AccompanyUpdate = () => {
       }
       for (let i = 0; i < delBoardFileNo.length; i++) {
         form.append("delBoardFileNo", delBoardFileNo[i]);
+      }
+      for (let i = 0; i < selectedType.length; i++) {
+        form.append("accompanyTagNo", selectedType[i].accompanyTagNo);
       }
       axios
         .patch(`${backServer}/board/AccompanyUpdate`, form)
@@ -151,7 +153,7 @@ const AccompanyUpdate = () => {
         });
     }
   };
-  console.log();
+
   return (
     <div className="write-content-wrap">
       <div className="write-page-title">여행 게시판 수정</div>
@@ -189,6 +191,7 @@ const AccompanyUpdate = () => {
           setAccompanyArea={setAccompanyArea}
           fileList={fileList}
           setFileList={setFileList}
+          updateNo={updateNo}
         />
         <div className="board-editer-wrap">
           <BoardUqillEditor
@@ -207,4 +210,5 @@ const AccompanyUpdate = () => {
     </div>
   );
 };
+
 export default AccompanyUpdate;

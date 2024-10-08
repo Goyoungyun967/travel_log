@@ -31,6 +31,27 @@ public class BoardDTO {
 	private int likeCount;
 	private int keepCount;
 	private int commentCount;
+	private int isLike;
+	
+	
+	private int accompanyNo;
+	private int accompanyDate;        // 동행 스케줄 표
+	private String accompanyArea;	     // 상세 지역
+	private List<BoardAccompanyDTO> accompanyContents;	 // 각각의 스케줄에 들어갈 설명
+	private String startDay;
+	private String endDay;
+	//일반게시판
+	private int readCount; //조회 수
+	//파일 삭제
+	//상세 페이지 dto(member 관련)
+	private int memberAge;
+	private String memberGender;
+	
+	private String accompanyType;
+	private List<Integer> accompanyTagNo;
+	private List<AccompanyTypeTag> accompanyTypeTags;
+	private String accompanyTypes;
+	private List<String> accompanyTypeList;
 	
 	
 	

@@ -7,11 +7,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Request {
+public class RequestDTO {
 	private int start;
 	private int end;
 	private int lodgmentNo;
     private int reviewNo;
     private int loginNo;
     private int selectedReason;
+    private int deleteInquire;
+    private int roomQnaNo;
 }

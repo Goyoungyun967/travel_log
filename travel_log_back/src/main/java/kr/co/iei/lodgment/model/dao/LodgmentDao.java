@@ -6,10 +6,11 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.iei.lodgment.model.dto.LodgmentDTO;
+import kr.co.iei.lodgment.model.dto.LodgmentMemberInquireDTO;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewDTO;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewFileDTO;
-import kr.co.iei.lodgment.model.dto.Request;
-import kr.co.iei.lodgment.model.dto.ReviewStatus;
+import kr.co.iei.lodgment.model.dto.RequestDTO;
+import kr.co.iei.lodgment.model.dto.ReviewStatusDTO;
 import kr.co.iei.lodgment.model.dto.RoomSearchDTO;
 import kr.co.iei.lodgment.model.dto.SearchLodgmentDTO;
 import kr.co.iei.seller.model.dto.LodgmentStorageDTO;
@@ -51,15 +52,23 @@ public interface LodgmentDao {
 
 	int totalCount(int lodgmentNo);
 
-	List selectReviewList(Request request);
+	List selectReviewList(RequestDTO request);
 
-	ReviewStatus reviewStatus(Request lodgmentInfo);
+	ReviewStatusDTO reviewStatus(RequestDTO lodgmentInfo);
 
-	int reviewLike(Request request);
+	int reviewLike(RequestDTO request);
 
-	int reviewLikeCancle(Request request);
+	int reviewLikeCancle(RequestDTO request);
 
-	int reviewReport(Request request);
+	int reviewReport(RequestDTO request);
+
+	int insertMemberInquire(LodgmentMemberInquireDTO inquire);
+
+	int totalCountInquire(int lodgmentNo);
+
+	List selectInquireList(RequestDTO request);
+
+	int deleteInquire(RequestDTO request);
 
 	//List selectGetAllReviewImg(int lodgmentNo);
 

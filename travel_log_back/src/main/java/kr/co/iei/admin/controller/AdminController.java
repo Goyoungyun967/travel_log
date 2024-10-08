@@ -161,7 +161,8 @@ public class AdminController {
 		int result = adminService.updateLodgmentDelete(lodgmentNo);
 		return ResponseEntity.ok(result == lodgmentNo.length);
 	}
-	@GetMapping(value="/board/report/{reqPage}")
+
+	@GetMapping(value="/board/report/list/{reqPage}")
 	public ResponseEntity<Map> getBoardReportList(@PathVariable int reqPage){
 		Map map = adminService.getBoardReportList(reqPage);
 		return ResponseEntity.ok(map);

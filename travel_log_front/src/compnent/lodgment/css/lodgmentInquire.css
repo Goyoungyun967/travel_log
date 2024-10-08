@@ -1,0 +1,134 @@
+.lodgment-inquire-wrap {
+  width: 100%; /* 부모 요소의 너비를 100%로 설정 */
+}
+
+.lodgment-inquire-btn-wrap {
+  display: flex; /* 플렉스 박스 사용 */
+  justify-content: flex-end; /* 오른쪽 정렬 */
+}
+
+.lodgment-inquire-btn {
+  margin: 0 10px; /* 버튼 간의 여백 */
+  width: 200px;
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+  background-color: white;
+  cursor: pointer;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  transition: background-color 0.3s, color 0.3s; /* 호버 시 애니메이션 효과 */
+}
+
+.lodgment-inquire-btn:hover {
+  background-color: navy;
+  color: white;
+  border: 1px solid navy; /* border 색상을 호버 시에도 변경하여 크기 영향 방지 */
+}
+
+.lodgment-user-inquire-member-wrap {
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  width: 100%;
+  max-width: 500px; /* 필요에 따라 조정 */
+  margin: auto;
+  margin-top: 10px; /* 문의하기 버튼과 간격 */
+}
+
+.lodgment-user-inquiry-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.lodgment-user-inquiry-type {
+  margin-bottom: 16px;
+}
+
+.lodgment-user-inquiry-type label {
+  margin-right: 16px; /* 라디오 버튼 간격 */
+}
+
+.lodgment-user-input-wrap {
+  display: flex; /* 인풋과 버튼을 나란히 배치 */
+}
+
+.lodgment-user-inquiry-input {
+  resize: none; /* 크기 조정 불가 */
+  height: 100px; /* 높이 설정 */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px; /* 인풋과 버튼 간의 간격 */
+  font-size: 16px;
+  flex: 1; /* 남은 공간 차지 */
+}
+
+.lodgment-user-inquiry-submit-btn {
+  background-color: #007bff; /* 버튼 배경색 */
+  color: white; /* 버튼 글자색 */
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.lodgment-user-inquiry-submit-btn:hover {
+  background-color: #0056b3; /* 버튼 호버 시 색상 변경 */
+}
+.lodgment-inquier-pageNavi {
+  display: flex;
+  justify-content: center; /* 가운데 정렬 */
+  margin: 30px 0; /* 상하 여백 추가 */
+}
+
+.lodgment-inquier-pageNavi ul {
+  list-style: none; /* 기본 리스트 스타일 제거 */
+  padding: 0; /* 패딩 제거 */
+  margin: 0; /* 마진 제거 */
+  display: flex; /* 수평 배치 */
+}
+
+.lodgment-inquier-pageNavi li {
+  margin: 0 15px; /* 리스트 아이템 간격 조정 */
+  cursor: pointer;
+}
+
+.lodgment-inquire-list {
+  width: 90%;
+  margin: 0 auto; /* 상하 여백 */
+  padding: 20px; /* 안쪽 여백 */
+  margin: 20px;
+  background-color: #f9f9f9; /* 부드러운 배경색 */
+  border-radius: 8px; /* 둥근 모서리 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 깊이 있는 그림자 */
+  transition: transform 0.2s, box-shadow 0.2s; /* 애니메이션 효과 */
+}
+
+.lodgment-inquire-header {
+  display: flex;
+  justify-content: space-between; /* 양 끝에 정렬 */
+  margin-bottom: 10px; /* 아래 여백 */
+  font-weight: bold; /* 두꺼운 글씨 */
+  color: #4a4a4a; /* 텍스트 색상 */
+}
+
+.lodgment-inquire-id {
+  font-size: 1.2em; /* 아이디 폰트 크기 */
+}
+
+.lodgment-inquire-date {
+  font-size: 0.9em; /* 날짜 폰트 크기 */
+  color: #888; /* 날짜 색상 */
+}
+
+.lodgment-inquire-content {
+  font-size: 1em; /* 내용 폰트 크기 */
+  color: #666; /* 내용 텍스트 색상 */
+  border-top: 1px solid #dcdcdc; /* 상단 테두리 */
+  padding-top: 10px; /* 상단 여백 */
+}
+.lodgment-inquire-del-btn {
+  cursor: pointer;
+}

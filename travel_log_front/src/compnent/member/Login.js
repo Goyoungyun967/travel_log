@@ -89,6 +89,14 @@ const Login = () => {
       .post(`${backServer}/member/login`, member)
       .then((res) => {
         console.log(res);
+        // 로그인 시 memberLevel 체크
+        if (res.data.memberLevel === 3) {
+          Swal.fire({
+            text: "탈퇴한 회원입니다. 고객센터에 문의하세요.",
+            icon: "warning",
+          });
+          return; // 로그인 진행을 중단
+        }
         setLoginNo(res.data.memberNo);
         setMemberLevel(res.data.memberLevel);
         setLoginNickname(res.data.memberNickname);

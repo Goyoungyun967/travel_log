@@ -95,9 +95,9 @@ public class BoardController {
 	    return ResponseEntity.ok(result == 1 + boardFileList.size());
 	}
 	//게시판 상세보기 
-	@GetMapping(value = "/boardNo/{boardNo}")
-	public ResponseEntity<BoardDTO> selectOneBoard(@PathVariable int boardNo){
-		BoardDTO board = boardService.selectOneBoard(boardNo);
+	@GetMapping(value = "/boardNo/{boardNo}/{memberNo}")
+	public ResponseEntity<BoardDTO> selectOneBoard(@PathVariable int boardNo,@PathVariable int memberNo){
+		BoardDTO board = boardService.selectOneBoard(boardNo,memberNo);
 		return ResponseEntity.ok(board);
 	}
 	//안할수도 있음{첨부파일 저장하기}
@@ -141,6 +141,9 @@ public class BoardController {
 	//게시판 수정
 	@PatchMapping
 	public ResponseEntity<Boolean> updateBoard(@ModelAttribute BoardDTO board , @ModelAttribute MultipartFile thumbnail,@ModelAttribute MultipartFile[] boardFile){
+		System.out.println(board);
+		System.out.println(thumbnail);
+		System.out.println(boardFile);
 		if(thumbnail != null) {
 			String savepath = root+"/board/thumb/";
 			String filepath = fileUtils.upload(savepath, thumbnail);
@@ -155,21 +158,23 @@ public class BoardController {
 				String filepath = fileUtils.upload(savepath, file);
 				boardFileDTO.setFilename(filename);
 				boardFileDTO.setFilepath(filepath);
-				boardFileDTO.setFileNo(board.getBoardNo());
+				boardFileDTO.setBoardNo(board.getBoardNo());
 				boardFileList.add(boardFileDTO);
 			}
 		}
 		List<BoardFileDTO> delFileList = boardService.updateBoard(board,boardFileList);
 		if(delFileList != null) {
 			String savrpath = root+"/board/";
-			for(BoardFileDTO deleteFIle : delFileList) {
-				File deFile = new File(savrpath+deleteFIle.getFilepath());
+			for(BoardFileDTO deleteFile : delFileList) {
+				File deFile = new File(savrpath+deleteFile.getFilepath());
 				deFile.delete();
 			}
 			return ResponseEntity.ok(true);
 		}
 		return  ResponseEntity.ok(false);
 	}
+	
+	
 	//좋아요 
 	@PostMapping(value = "like/{boardNo}/{memberNo}")
 	public ResponseEntity<Integer> likeBoard(@PathVariable int boardNo,@PathVariable int memberNo){
@@ -290,6 +295,7 @@ public class BoardController {
 	    return ResponseEntity.ok(result == 1 + boardFileList.size());
   		
   	}
+  	
   	//동행 게시판 조회수 처리
   	@PatchMapping("/updateReadCount/{boardNo}")
   	public ResponseEntity<Boolean> updateReadCount(@PathVariable int boardNo){
@@ -299,43 +305,44 @@ public class BoardController {
   	//동행 게시판 상세보기 
   	@GetMapping(value = "/accompanyNo/{boardNo}")
   	public ResponseEntity<BoardAccompanyDTO> selectOneBoardAccompany(@PathVariable int boardNo){
+  		System.out.println(boardNo);
   		BoardAccompanyDTO accompany = boardService.selectOneBoardAccompany(boardNo);
   		return ResponseEntity.ok(accompany);
   	}
   	//삭제는 똑같이 가져감
   	//동행 게시판 수정
-//  @PatchMapping(value = "/AccompanyUpdate")
-//	public ResponseEntity<Boolean> updateBoard(@ModelAttribute BoardAccompanyDTO boardAccompany , @ModelAttribute MultipartFile thumbnail,@ModelAttribute MultipartFile[] boardFile){
-//		System.out.println(boardAccompany);
-//	  if(thumbnail != null) {
-//			String savepath = root+"/board/thumb/";
-//			String filepath = fileUtils.upload(savepath, thumbnail);
-//			boardAccompany.setBoardThumb(filepath);
-//		}
-//		List<BoardFileDTO> boardFileList = new ArrayList<BoardFileDTO>();
-//		if(boardFile != null) {
-//			String savepath = root+"/board/";
-//			for(MultipartFile file:boardFile) {
-//				BoardFileDTO boardFileDTO = new BoardFileDTO();
-//				String filename = file.getOriginalFilename();
-//				String filepath = fileUtils.upload(savepath, file);
-//				boardFileDTO.setFilename(filename);
-//				boardFileDTO.setFilepath(filepath);
-//				boardFileDTO.setFileNo(boardAccompany.getBoardNo());
-//				boardFileList.add(boardFileDTO);
-//			}
-//		}
-//		List<BoardFileDTO> delFileList = boardService.updateBoardAccompany(boardAccompany,boardFileList);
-//		if(delFileList != null) {
-//			String savrpath = root+"/board/";
-//			for(BoardFileDTO deleteFIle : delFileList) {
-//				File deFile = new File(savrpath+deleteFIle.getFilepath());
-//				deFile.delete();
-//			}
-//			return ResponseEntity.ok(true);
-//		}
-//		return  ResponseEntity.ok(false);
-//	}
+  @PatchMapping(value = "/AccompanyUpdate")
+	public ResponseEntity<Boolean> updateBoard(@ModelAttribute BoardAccompanyDTO boardAccompany , @ModelAttribute MultipartFile thumbnail,@ModelAttribute MultipartFile[] boardFile){
+		System.out.println(boardAccompany);
+	  if(thumbnail != null) {
+			String savepath = root+"/board/thumb/";
+			String filepath = fileUtils.upload(savepath, thumbnail);
+			boardAccompany.setBoardThumb(filepath);
+		}
+		List<BoardFileDTO> boardFileList = new ArrayList<BoardFileDTO>();
+		if(boardFile != null) {
+			String savepath = root+"/board/";
+			for(MultipartFile file:boardFile) {
+				BoardFileDTO boardFileDTO = new BoardFileDTO();
+				String filename = file.getOriginalFilename();
+				String filepath = fileUtils.upload(savepath, file);
+				boardFileDTO.setFilename(filename);
+				boardFileDTO.setFilepath(filepath);
+				boardFileDTO.setFileNo(boardAccompany.getBoardNo());
+				boardFileList.add(boardFileDTO);
+			}
+		}
+		List<BoardFileDTO> delFileList = boardService.updateBoardAccompany(boardAccompany,boardFileList);
+		if(delFileList != null) {
+			String savrpath = root+"/board/";
+			for(BoardFileDTO deleteFile : delFileList) {
+				File deFile = new File(savrpath+deleteFile.getFilepath());
+				deFile.delete();
+			}
+			return ResponseEntity.ok(true);
+		}
+		return  ResponseEntity.ok(false);
+	}
   	
   	
 

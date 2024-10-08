@@ -105,7 +105,7 @@ public class MemberService {
 		int result = memberDao.updateMember(member);
 		return result;
 	}
-
+	
 	public int checkPw(MemberDTO member) {
 		MemberDTO m =memberDao.selectOneMember(member.getMemberNo());
 		System.out.println(member);
@@ -115,7 +115,7 @@ public class MemberService {
 		}
 		return 0;
 	}
-
+	@Transactional
 	public int changePw(MemberDTO member) {
 		String encPw = encoder.encode(member.getMemberPw());
 		member.setMemberPw(encPw);
@@ -162,6 +162,12 @@ public class MemberService {
 		map.put("pi", pi);
 		
 		return map;
+	}
+	
+	@Transactional
+	public int levelUpdate(int memberNo) {
+		int result = memberDao.levelUpdate(memberNo);
+		return result;
 	}
 
 	

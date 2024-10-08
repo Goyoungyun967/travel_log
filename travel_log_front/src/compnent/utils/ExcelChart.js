@@ -1,10 +1,10 @@
 import exceljs from "exceljs";
 import html2canvas from "html2canvas";
-function downloadWorkbook(chart, chartData) {
+function downloadWorkbook(chart, chartData, title) {
   // excel 파일 생성
   let workbook = new exceljs.Workbook();
 
-  const dataSheet = workbook.addWorksheet("DataSheet");
+  const dataSheet = workbook.addWorksheet(title);
 
   //테이블의 경우, 데이터를 넣어줌
   const keys = Object.keys(chartData[0]);
@@ -45,10 +45,14 @@ function downloadWorkbook(chart, chartData) {
     workbook.xlsx.writeBuffer().then((b) => {
       let a = new Blob([b]);
       let url = window.URL.createObjectURL(a);
-
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day =
+        date.getDay() + 1 > 10 ? date.getDay() + 1 : "0" + (date.getDay() + 1);
       let elem = document.createElement("a");
       elem.href = url;
-      elem.download = `${new Date().toString().replaceAll(" ", "")}.xlsx`;
+      elem.download = `${year}-${month}-${day}_${title}.xlsx`;
       document.body.appendChild(elem);
       elem.style = "display: none";
       elem.click();
