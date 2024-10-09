@@ -31,7 +31,8 @@ const UpdateLodgment = () => {
   // 호텔 번호 저장
   //   const [inLodgmentNo, setInLodgmentNo] = useState(0); //---------
   // 호텔 주소
-  const [address, setAddress] = useState(""); // 주소
+  const [address, setAddress] = useState(""); // 보내는 주소
+  const [inputAddr, setInputAddr] = useState(""); // input에 들어갈 주소 (보내지는 않음)
   console.log("wnth-", address);
   // 호텔 성급 저장
   const [lodgmentStar, setLodgmentStar] = useState(0); //---------
@@ -58,6 +59,8 @@ const UpdateLodgment = () => {
   const lodgmentTypeChange = (e) => {
     setLodgmentType(Number(e.target.value));
   };
+  console.log("보내는 주소", address);
+  console.log("보여지는 주소", inputAddr);
 
   useEffect(() => {
     axios
@@ -71,6 +74,7 @@ const UpdateLodgment = () => {
           setLodgmentList(res.data);
           setHotelName(res.data.lodgmentName); // 숙소 이름
           setLodgmentType(res.data.lodgmentTypeNo); // 숙소 타입
+          setInputAddr(res.data.lodgmentAddr);
           setAddress(res.data.lodgmentAddr);
           setLodgmentStar(res.data.lodgmentStarGrade); // 성급
           setCheckIn(res.data.lodgmentCheckIn); // 체크인
@@ -109,12 +113,38 @@ const UpdateLodgment = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (
-            hotelName !== "" &&
-            checkIn !== null &&
-            checkOut !== null &&
-            address !== ""
-          ) {
+          const nameRegex = /^.{1,30}$/; // 호텔 이름 1글자 이상 30자까지만
+          const contentRegex = /^.{1,1000}$/; // 공지사항 1글자 이상 1000글자까지만
+
+          // 각각의 조건을 개별적으로 확인
+          if (!nameRegex.test(hotelName)) {
+            Swal.fire({
+              title: "숙소 이름을 다시 적어주세요",
+              text: "1글자 이상 30글자 이하",
+              icon: "error",
+            });
+          } else if (checkIn === null) {
+            Swal.fire({
+              title: "체크인 날짜를 선택해주세요.",
+              icon: "error",
+            });
+          } else if (checkOut === null) {
+            Swal.fire({
+              title: "체크아웃 날짜를 선택해주세요.",
+              icon: "error",
+            });
+          } else if (address === "") {
+            Swal.fire({
+              title: "주소를 다시 입력해주세요",
+              icon: "error",
+            });
+          } else if (!contentRegex.test(boardContent)) {
+            Swal.fire({
+              title: "공지사항을 다시 입력해주세요",
+              text: "1글자 이상 1000글자 이하",
+              icon: "error",
+            });
+          } else {
             const form = new FormData();
             form.append("lodgmentName", hotelName);
             form.append("lodgmentAddr", address);
@@ -140,12 +170,16 @@ const UpdateLodgment = () => {
               .then((res) => {
                 console.log(res);
                 if (res.data) {
+                  Swal.fire({
+                    title: "수정 완료",
+                    icon: "success",
+                  });
                   navigate(`/seller/list`);
                   console.log(form);
                 } else {
                   Swal.fire({
-                    title: "에러가 발생했습니다.",
-                    text: "원인을 찾으세요",
+                    title: "문제가 발생했습니다.",
+                    text: "다시 시도해주십시오",
                     icon: "error",
                   });
                 }
@@ -213,15 +247,18 @@ const UpdateLodgment = () => {
                       <div className="addr-flex-wrap">
                         <label htmlFor="addrText">주소</label>
                         <div className="addr-search-api">
-                          <ModalAddr setAddress={setAddress} />
+                          <ModalAddr
+                            setAddress={setAddress}
+                            setInputAddr={setInputAddr}
+                          />
                         </div>
                       </div>
                       <input
                         type="text"
                         id="addrText"
-                        value={address}
+                        value={inputAddr}
                         readOnly
-                        onChange={(e) => setAddress(e.target.value)}
+                        onChange={(e) => setInputAddr(e.target.value)}
                       />
                     </div>
                   </div>
@@ -332,7 +369,7 @@ const UpdateLodgment = () => {
 
 // 모달로 띄울 주소 검색 api
 const ModalAddr = (props) => {
-  const setAddress = props.setAddress;
+  const { setAddress, setInputAddr } = props;
   const style = {
     position: "absolute",
     top: "50%",
@@ -349,6 +386,7 @@ const ModalAddr = (props) => {
   const handleClose = () => setOpen(false);
 
   const completeHandler = (data) => {
+    setInputAddr(data.address);
     setAddress(data.address);
   };
 

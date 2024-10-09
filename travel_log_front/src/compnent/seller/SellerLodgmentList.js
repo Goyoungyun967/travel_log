@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import "./css/lodgment_list.css";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { sellerLoginNoState } from "../utils/RecoilData";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { isSellerLoginState, sellerLoginNoState } from "../utils/RecoilData";
 const SellerLodgmentList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
   const [lodgmentList, setLodgmentList] = useState([]);
+  console.log("rrrrrr", lodgmentList.length);
+  const isLogin = useRecoilValue(isSellerLoginState);
   const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
   console.log(loginNo);
   useEffect(() => {
@@ -29,15 +31,32 @@ const SellerLodgmentList = () => {
   return (
     <div className="contanier seller-lodgment-list">
       {/* {isLogin? 현재 로그인이 되어있으면 으로 처리해야함 - 일단 임시로 1로 처리*/}
-      <Link to={`/seller/insertLodgment`} className="btn primary">
-        등록하기
-      </Link>
 
-      <div className="item-wrap">
-        {lodgmentList.map((list, index) => {
-          return <ListItem key={"list-" + index} list={list} index={index} />;
-        })}
-      </div>
+      {lodgmentList.length !== 0 ? (
+        <>
+          {isLogin ? (
+            <Link to={`/seller/insertLodgment`} className="btn primary">
+              등록하기
+            </Link>
+          ) : (
+            ""
+          )}
+          <div className="item-wrap">
+            {lodgmentList.map((list, index) => {
+              return (
+                <ListItem key={"list-" + index} list={list} index={index} />
+              );
+            })}
+          </div>
+        </>
+      ) : (
+        <div className="seller-lodgment-no">
+          <p>등록된 숙소가 없습니다 등록하시겠습니까?</p>
+          <Link to={`/seller/insertLodgment`} className="sellerQusBtn">
+            등록하기
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

@@ -14,6 +14,9 @@
   justify-content: space-around;
   flex-wrap: wrap;
 }
+.seller-lodgment-list {
+  width: 800px;
+}
 .box-wrap > input {
   border-radius: 0px;
 }
@@ -176,4 +179,28 @@
   display: flex;
   justify-content: center;
   height: 500px;
+}
+.seller-lodgment-list > .seller-lodgment-no {
+  width: 100%;
+}
+.seller-lodgment-list > .seller-lodgment-no > p {
+  font-weight: bold;
+  color: #747474;
+  font-size: 20px;
+  text-align: center;
+}
+.seller-lodgment-no > .sellerQusBtn {
+  display: block;
+  margin: 0 auto;
+  width: 50%;
+  text-align: center;
+  border-radius: 10px;
+  height: 50px;
+  font-weight: bold;
+  line-height: 50px;
+  background-color: var(--seller1);
+  color: var(--seller3) !important;
+}
+.seller-lodgment-no > .sellerQusBtn:hover {
+  background-color: var(--seller2);
 }

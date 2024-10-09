@@ -330,7 +330,7 @@ public class SellerController {
 		return ResponseEntity.ok(result);
 	}
 
-	// 판매자 리뷰 삭제 - 판매자 댓글 null로 처리하면 됨 => update
+	// 판매자 리뷰 삭제 - 판매자 댓글 한 테이블에 묶여있어서 null로 처리하면 됨 => update
 	@Operation(summary = "판매자 리뷰 댓글", description = "판매자 리뷰 댓글")
 	@PatchMapping(value="/deleteComment")
 	public ResponseEntity<Integer> deleteComment(LodgmentReviewDTO ld){

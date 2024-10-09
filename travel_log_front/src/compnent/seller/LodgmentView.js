@@ -200,30 +200,42 @@ const LodgmentView = () => {
           </TabPanel>
           {/* 리뷰 */}
           <TabPanel value="3">
-            <SelectBar align={align} setAlign={setAlign} />
-            <Comment
-              reviewList={reviewList}
-              setReviewList={setReviewList}
-              sellerText={sellerText}
-              setSellerText={setSellerText}
-              reqPage={reqPage}
-              setReqPage={setReqPage}
-              pi={pi}
-            />
+            {reviewList.length !== 0 ? (
+              <>
+                <SelectBar align={align} setAlign={setAlign} />
+                <Comment
+                  reviewList={reviewList}
+                  setReviewList={setReviewList}
+                  sellerText={sellerText}
+                  setSellerText={setSellerText}
+                  reqPage={reqPage}
+                  setReqPage={setReqPage}
+                  pi={pi}
+                />
+              </>
+            ) : (
+              "등록된 리뷰가 없습니다"
+            )}
           </TabPanel>
           {/* 문의 */}
           <TabPanel value="4">
-            <SelectQna align={align} setAlign={setAlign} />
-            <QnaComment
-              qnaList={qnaList}
-              setQnaList={setQnaList}
-              sellerComment={sellerComment}
-              setSellerComment={setSellerComment}
-              reqPageQ={reqPageQ}
-              setSellerText={setSellerText}
-              setReqPageQ={setReqPageQ}
-              piQ={piQ}
-            />
+            {qnaList.length !== 0 ? (
+              <>
+                <SelectQna align={align} setAlign={setAlign} />
+                <QnaComment
+                  qnaList={qnaList}
+                  setQnaList={setQnaList}
+                  sellerComment={sellerComment}
+                  setSellerComment={setSellerComment}
+                  reqPageQ={reqPageQ}
+                  setSellerText={setSellerText}
+                  setReqPageQ={setReqPageQ}
+                  piQ={piQ}
+                />
+              </>
+            ) : (
+              "등록된 문의가 없습니다."
+            )}
           </TabPanel>
         </TabContext>
       </div>
