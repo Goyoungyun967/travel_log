@@ -142,4 +142,10 @@ public class BookingService {
 			}
 			return result;
 		}
+		
+		//이용완료 확인
+		public void checkOutStm() {
+			// TODO Auto-generated method stub
+			
+		}
 }

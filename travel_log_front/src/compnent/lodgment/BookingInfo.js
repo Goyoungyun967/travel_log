@@ -201,7 +201,7 @@ const BookingInfo = () => {
           <button
             onClick={() => {
               navigate(`/lodgment/reviewWrite`, {
-                state: { lodgmentNo: bookingInfo.lodgmentNo },
+                state: { lodgmentNo: bookingInfo.lodgmentNo, bookNo: bookNo },
               });
             }}
           >
