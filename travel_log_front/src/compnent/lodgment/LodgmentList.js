@@ -11,6 +11,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import axios from "axios";
 import Swal from "sweetalert2";
+import {
+  lodgmentState,
+  guestState,
+  startDateState,
+  endDateState,
+} from "../utils/RecoilData";
+import { useRecoilState } from "recoil";
 
 const LodgmentList = () => {
   const navigate = useNavigate();
@@ -25,11 +32,10 @@ const LodgmentList = () => {
   const startDay = dayjs().add(1, "day").toDate();
   const endDay = dayjs().add(2, "day").toDate();
 
-  //state 에 정보가 있을경우 정보 기입 / 없으면 기본값 설정
-  const [lodgment, setLodgment] = useState(state?.lodgment || "");
-  const [guest, setGuest] = useState(state?.guest || 2);
-  const [startDate, setStartDate] = useState(state?.startDate || startDay);
-  const [endDate, setEndDate] = useState(state?.endDate || endDay);
+  const [lodgment, setLodgment] = useRecoilState(lodgmentState);
+  const [guest, setGuest] = useRecoilState(guestState);
+  const [startDate, setStartDate] = useRecoilState(startDateState);
+  const [endDate, setEndDate] = useRecoilState(endDateState);
 
   //숙박 종류 검색
   //0:  전체 검색, 1: 호텔,  2: 모텔, 3: 펜션풀빌라, 4:게스트하우스, 5:캠핑
@@ -92,12 +98,6 @@ const LodgmentList = () => {
 
   //값이 변하면 lodgment 검색
   useEffect(() => {
-    //메인에서 들어오지 않을 경우
-    if (state !== null) {
-      lodgmentSearchBtn();
-    } else {
-      return;
-    }
     lodgmentSearchBtn();
   }, [value, starValue, radioBtn, lodgmentType, selectedServiceTags, reqPage]);
 
@@ -106,7 +106,7 @@ const LodgmentList = () => {
     setReqPage(1);
     if (lodgment === "") {
       Swal.fire({
-        icon: "error",
+        icon: "info",
         title: "여행지, 숙소를 입력해주세요.",
         confirmButtonText: "확인",
       });
@@ -300,7 +300,7 @@ const LodgmentList = () => {
           </div>
         </div>
         <div className="lodgment-info-wrap">
-          <LegdmentInfo
+          <LogdmentInfo
             lodgment={lodgment}
             lodgmentDetailInfo={lodgmentDetailInfo}
             navigate={navigate}
@@ -316,7 +316,7 @@ const LodgmentList = () => {
   );
 };
 
-const LegdmentInfo = (props) => {
+const LogdmentInfo = (props) => {
   const {
     lodgment,
     lodgmentDetailInfo,
@@ -340,9 +340,11 @@ const LegdmentInfo = (props) => {
                 key={info.lodgmentNo}
                 className="lodgment-card"
                 onClick={() =>
-                  navigate(
-                    `/lodgment/lodgmentDetail/${info.lodgmentNo}/${startDate}/${endDate}/${guest}`
-                  )
+                  navigate(`/lodgment/lodgmentDetail`, {
+                    state: {
+                      lodgmentNo: info.lodgmentNo,
+                    },
+                  })
                 }
               >
                 <img

@@ -200,6 +200,7 @@ public class LodgmentController {
 	@GetMapping(value = "/inquireList/{lodgmentNo}/{reqPage}")
 	@Operation(summary = "리뷰 리스트",description = "숙소 번호, 페이지넘버")
 	public ResponseEntity<Map> inquireList(@PathVariable int lodgmentNo, @PathVariable int reqPage ){
+		System.out.println(lodgmentNo);
 		Map map = lodgmentService.inquireList(lodgmentNo, reqPage);
 		return ResponseEntity.ok(map);
 	}
