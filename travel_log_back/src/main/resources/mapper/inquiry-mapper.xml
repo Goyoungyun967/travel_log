@@ -272,22 +272,23 @@
   	select count(distinct board_no) from board_report    
   </select>
   <select id="getBoardReportList" resultType="boardReportList">
-  	select * from (select rownum as rnum, br2.* from (select 
+  	select * from (select rownum as rnum, br2.*,(select count(*) from board_report where board_no=br2.board_no) as total_count from (select 
     sum(case when br.report_type = 1 then 1 else 0 end) as abuse_count,
     sum(case when br.report_type = 2 then 1 else 0 end) as uncomfortable_count,
     sum(case when br.report_type = 3 then 1 else 0 end) as ad_count,
     sum(case when br.report_type = 4 then 1 else 0 end) as etc_count,
     m.member_nickname, 
     b.board_no,
-    b.board_title
+    b.board_title,
+    b.board_type
 	from 
 		board_report br
 	join 
-		board b ON br.board_no = b.board_no
+		board b on br.board_no = b.board_no
 	join 
-		member m ON b.member_no = m.member_no
+		member m on b.member_no = m.member_no
 	group by 
-		m.member_nickname, b.board_no, b.board_title 
+		m.member_nickname, b.board_no, b.board_title,b.board_type 
 	order by 
 		b.board_no desc)br2) where rnum between #{start} and #{end}
   </select>
@@ -295,7 +296,7 @@
   	select report_no,report_type,report_content,member_nickname from board_report join member using (member_no) where board_no=#{board_no}
   </select>
   <delete id="deleteBoardReport">
-  	delete from board_report where report_no in <foreach collection="array" item="reportNo" open="(" close=")" separator=",">#{report_no}</foreach>
+  	delete from board_report where report_no=#{report_no}
   </delete>
   
   <!-- 댓글 신고 -->
@@ -303,28 +304,32 @@
   	select count(distinct comment_no) from comment_report    
   </select>
   <select id="getCommentReportList" resultType="commentReportList">
-  	select * from (select rownum as rnum, cr2.* from (select 
+  	select * from (select rownum as rnum, cr2.*,(select count(*) from comment_report where comment_no=cr2.comment_no) as total_count from (select 
     sum(case when cr.comment_report_type = 1 then 1 else 0 end) as abuse_count,
     sum(case when cr.comment_report_type = 2 then 1 else 0 end) as uncomfortable_count,
     sum(case when cr.comment_report_type = 3 then 1 else 0 end) as ad_count,
     sum(case when cr.comment_report_type = 4 then 1 else 0 end) as etc_count,
-    bc.comment_writer, 
+    bc.comment_writer as member_nickname,
     bc.comment_no,
-    bc.comment_content
+    bc.board_no,
+    bc.comment_content,
+    b.board_type
 	from 
 		comment_report cr
 	join 
-		board_comment bc ON bc.comment_no = cr.comment_no
+		board_comment bc on bc.comment_no = cr.comment_no
+	join
+		board b on bc.board_no = b.board_no 
 	group by 
-		bc.comment_writer,  bc.comment_no,bc.comment_content
+		bc.comment_writer,  bc.comment_no,bc.comment_content,bc.board_no,b.board_type
 	order by 
-		bc.board_no desc)cr2) where rnum between #{start} and #{end}
+		bc.comment_no desc)cr2) where rnum between #{start} and #{end}
   </select>
   <select id="getCommentReport" resultType="commentReport">
-  	select comment_report_no,comment_report_type,report_content,member_nickname from comment_report join member using (member_no) where comment_no=#{commentNo}
+  	select comment_report_no,comment_report_type,comment_report_content,member_nickname from comment_report join member using (member_no) where comment_no=#{commentNo}
   </select>
   <delete id="deleteCommentReport">
-  	delete from comment_report where comment_report_no in <foreach collection="array" item="commentReportNo" open="(" close=")" separator=",">#{commentReportNo}</foreach>
+  	delete from comment_report where comment_report_no=#{reportNo}
   </delete>
   
   <!-- 리뷰 신고 -->
@@ -332,7 +337,7 @@
   	select count(distinct review_no) from lodgment_review_report
   </select>
   <select id="getReviewReportList" resultType="lodgmentReviewReport">
-  	select * from (select rownum as rnum, lrr.* from (select
+  	select * from (select rownum as rnum, lrr.*,(select count(*) from lodgment_review_report where review_no=lrr.review_no) as total_count from (select
     sum(case when review_report_type = 1 then 1 else 0 end) as abuse_count,
     sum(case when review_report_type = 2 then 1 else 0 end) as uncomfortable_count,
     sum(case when review_report_type = 3 then 1 else 0 end) as ad_count,
@@ -354,8 +359,11 @@
     	review_content,rating,member_nickname,lodgment_no,review_no 
     order by review_no desc)lrr) where rnum between #{start} and #{end}
   </select>
+  <select id="selectReviewFile" resultType="lodgmentReviewFile">
+  	select * from lodgment_review_file where review_no=#{reviewNo}
+  </select>
   <delete id="deleteReviewReport">
-  	delete from review_report where review_no=#{reviewNo}
+  	delete from lodgment_review_report where review_no=#{reviewNo}
   </delete>
   
   

@@ -24,6 +24,8 @@ public class LodgmentReviewReportDTO {
 	private int adCount;
 	@Schema(description = "기타 신고 횟수",type = "int")
 	private int etcCount;
+	@Schema(description = "누적 신고 합계",type = "int")
+	private int totalCount;
 	@Schema(description = "리뷰 내용",type = "String")
 	private String reviewContent;
 	@Schema(description = "리뷰 작성자 닉네임",type = "String")
@@ -33,5 +35,5 @@ public class LodgmentReviewReportDTO {
 	@Schema(description = "별점",type = "int")
 	private int rating;
 	@Schema(description = "리뷰 파일 리스트",type = "list")
-	private List<LodgmentReviewReportDTO> lodgmentReviewFileList;
+	private List fileList;
 }

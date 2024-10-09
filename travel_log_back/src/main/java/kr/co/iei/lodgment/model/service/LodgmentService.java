@@ -82,7 +82,6 @@ public class LodgmentService {
 		
 		//리뷰 가져오기 다른 컴포넌트에서 작업
 		//List<LodgmentReviewDTO> reviewList = lodgmentDao.getReviewList(lodgmentNo);
-		
 		//보관함 여부
 		//보관함 여부 조회  -1 은 로그인이 안되어있을때의 디폴트 값 
 		int lodgmentCollection = -1;
@@ -90,7 +89,6 @@ public class LodgmentService {
 		if(loginNo != -1) {			
 			//0(보관함 x) 이거나 1(보관함 O) 
 			lodgmentCollection = lodgmentDao.lodgmentCollection(loginNo, lodgmentNo);
-			//System.out.println("lodgmentCollection"+lodgmentCollection);
 		}
 
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -116,6 +114,7 @@ public class LodgmentService {
 	//리뷰 등록 
 	@Transactional
 	public int insertReview(LodgmentReviewDTO lodgmentReview, List<LodgmentReviewFileDTO> fileSave) {
+		System.out.println(lodgmentReview);
 		int result = lodgmentDao.insertReview(lodgmentReview);
 		if(!fileSave.isEmpty()) {
 			for (LodgmentReviewFileDTO file : fileSave) {
@@ -144,6 +143,8 @@ public class LodgmentService {
 		
 		//작성 가능한 리뷰 있는지 확인 여부
 		//작성 가능 리뷰가 있으면 true 로 표시
+		System.out.println("flqbflqbf"+loginNo);
+		
 		Boolean availableReview = false;
 		if(loginNo != -1 ) {
 			availableReview = availableReview(lodgmentNo,loginNo);
@@ -172,15 +173,15 @@ public class LodgmentService {
 	
 	//다른데서도 쓸일이 있을까? 싶어서
 	public Boolean availableReview(int lodgmentNo, int loginNo) {
-		Boolean availableReview = false;
 		RequestDTO lodgmentInfo = new RequestDTO();
 		lodgmentInfo.setLodgmentNo(lodgmentNo);
 		lodgmentInfo.setLoginNo(loginNo);
 		ReviewStatusDTO reviewStatus = lodgmentDao.reviewStatus(lodgmentInfo);
-		if(reviewStatus.getAvailableReviewsCount() > reviewStatus.getUsedReviewsCount()) {
-			availableReview = true;
+		System.out.println("작성한 리뷰수 "+reviewStatus.getAvailableReviewsCount() + "예약한 수"+reviewStatus.getUsedReviewsCount());
+		if(reviewStatus.getAvailableReviewsCount() < reviewStatus.getUsedReviewsCount()) {
+			return true;
 		}
-		return availableReview;
+		return false;
 	}
 	
 	//리뷰 신고
@@ -217,7 +218,7 @@ public class LodgmentService {
 		return map;
 	}
 	
-	//리뷰 삭제 
+	//문의 삭제 
 	@Transactional
 	public int deleteInquire(int roomQnaNo, int loginNo) {
 		RequestDTO request = new RequestDTO();

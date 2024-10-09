@@ -137,19 +137,15 @@ const AdminSellerList = () => {
               </tr>
             );
           })}
-          {Number(sellerApp) === 0 ? (
-            <tr>
-              <td colSpan={5}>
-                <button className="admin-seller-btn" onClick={updateSellerApp}>
-                  가입승인
-                </button>
-              </td>
-            </tr>
-          ) : (
-            ""
-          )}
         </tbody>
       </table>
+      {Number(sellerApp) === 0 ? (
+        <button className="admin-seller-btn" onClick={updateSellerApp}>
+          가입승인
+        </button>
+      ) : (
+        ""
+      )}
       <div className="admin-page-navi">
         <PageNavi reqPage={reqPage} setReqPage={setReqPage} pi={pi} />
       </div>

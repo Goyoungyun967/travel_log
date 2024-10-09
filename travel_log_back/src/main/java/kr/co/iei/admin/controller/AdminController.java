@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.admin.model.servcie.AdminService;
 import kr.co.iei.faq.model.dto.FaqDTO;
+import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dto.SellerDTO;
 
 
@@ -166,5 +167,56 @@ public class AdminController {
 	public ResponseEntity<Map> getBoardReportList(@PathVariable int reqPage){
 		Map map = adminService.getBoardReportList(reqPage);
 		return ResponseEntity.ok(map);
+	}
+	@GetMapping(value="/board/report/{boardNo}")
+	public ResponseEntity<List> getBoardReport(@PathVariable int boardNo){
+		List list = adminService.getBoardReport(boardNo);
+		return ResponseEntity.ok(list);
+	}
+	@DeleteMapping(value="/board/report/{reportNo}")
+	public ResponseEntity<Integer> deleteBoardReport(@PathVariable int reportNo){
+		int result = adminService.deleteBoardReport(reportNo);
+		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping(value="/comment/report/list/{reqPage}")
+	public ResponseEntity<Map> getCommentReportList(@PathVariable int reqPage){
+		Map map = adminService.getCommentReportList(reqPage);
+		return ResponseEntity.ok(map);
+	}
+	@GetMapping(value="/comment/report/{commentNo}")
+	public ResponseEntity<List> getCommentReport(@PathVariable int commentNo){
+		List list = adminService.getCommentReport(commentNo);
+		return ResponseEntity.ok(list);
+	}
+	@DeleteMapping(value="/comment/report/{reportNo}")
+	public ResponseEntity<Integer> deleteCommentReport(@PathVariable int reportNo){
+		int result = adminService.deleteCommentReport(reportNo);
+		return ResponseEntity.ok(result);
+	}
+	@GetMapping(value="/review/report/list/{reqPage}")
+	public ResponseEntity<Map> getReviewReportList(@PathVariable int reqPage){
+		Map map = adminService.getReviewReportList(reqPage);
+		return ResponseEntity.ok(map);
+	}
+	@DeleteMapping(value="/review/report/{reviewNo}")
+	public ResponseEntity<Integer> deleteReviewReport(@PathVariable int reviewNo){
+		int result = adminService.deleteReviewReport(reviewNo);
+		return ResponseEntity.ok(result);
+	}
+	@GetMapping(value="/member/list/{reqPage}/{type}")
+	public ResponseEntity<Map> getAdminMemberList(@PathVariable int reqPage, @PathVariable int type){
+		Map map = adminService.getAdminMemberList(reqPage,type);
+		return ResponseEntity.ok(map);
+	}
+	@PostMapping(value="/member/report")
+	public ResponseEntity<Integer> insertMemberReport(@RequestBody MemberDTO member){
+		int result = adminService.insertMemberReport(member);
+		return ResponseEntity.ok(result);
+	}
+	@PatchMapping(value="/member")
+	public ResponseEntity<Integer> updateMemberLevel(@RequestBody MemberDTO member){
+		int result = adminService.updateMemberLevel(member);
+		return ResponseEntity.ok(result);
 	}
 }

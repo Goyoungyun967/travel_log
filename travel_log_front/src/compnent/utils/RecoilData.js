@@ -1,4 +1,5 @@
 import { atom, selector } from "recoil";
+import dayjs from "dayjs";
 
 const loginNoState = atom({
   key: "loginNoState",
@@ -43,6 +44,28 @@ const isSellerLoginState = selector({
     return sellerLoginNo !== -1;
   },
 });
+
+//숙소 리코일
+const lodgmentState = atom({
+  key: "lodgmentState",
+  default: "",
+});
+
+const guestState = atom({
+  key: "guestState",
+  default: 2,
+});
+
+const startDateState = atom({
+  key: "startDateState",
+  default: dayjs().add(1, "day").toDate(),
+});
+
+const endDateState = atom({
+  key: "endDateState",
+  default: dayjs().add(2, "day").toDate(),
+});
+
 export {
   loginNoState,
   memberLevelState,
@@ -51,4 +74,8 @@ export {
   isSellerLoginState,
   loginNicknameState,
   loginBusinessNameState,
+  lodgmentState,
+  guestState,
+  startDateState,
+  endDateState,
 };

@@ -58,8 +58,8 @@ public class BoardService {
 		return result;
 	}
 	//상세게시판
-	public BoardDTO selectOneBoard(int boardNo ,int memberNo ) {
-		BoardDTO board = boardDao.selectOneBoard(boardNo,memberNo);
+	public BoardDTO selectOneBoard(int boardNo) {
+		BoardDTO board = boardDao.selectOneBoard(boardNo);
 		List<BoardFileDTO> fileList = boardDao.selectOneBoardFileList(boardNo);
 		board.setFileList(fileList);
 		return board;

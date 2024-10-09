@@ -126,23 +126,19 @@ const AdminSellerStm = () => {
                 <td>{stm.businessName}</td>
                 <td>{stm.stmPrice + "원"}</td>
                 <td>{stm.stmDate}</td>
-                <td>{stm.stmState === 0 ? "미처리" : "정산완료"}</td>
+                <td>{stm.stmState === 0 ? "정산대기" : "정산완료"}</td>
               </tr>
             );
           })}
-          {Number(type) === 0 ? (
-            <tr>
-              <td colSpan={5}>
-                <button className="admin-seller-btn" onClick={updateStmState}>
-                  정산하기
-                </button>
-              </td>
-            </tr>
-          ) : (
-            ""
-          )}
         </tbody>
       </table>
+      {Number(type) === 0 ? (
+        <button className="admin-seller-btn" onClick={updateStmState}>
+          정산하기
+        </button>
+      ) : (
+        ""
+      )}
       <div className="admin-page-navi">
         <PageNavi reqPage={reqPage} setReqPage={setReqPage} pi={pi} />
       </div>

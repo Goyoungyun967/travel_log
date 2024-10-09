@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -47,8 +48,8 @@ public class BookingService {
 
 	public String getPortoneimpuid(BookingCancelDTO cancelData) {
 		String portoneimpuid = bookingDao.getPortoneimpuid(cancelData);
-		System.out.println("portoneimpuid : "+cancelData);
-		System.out.println("portoneimpuid : "+portoneimpuid);
+		//System.out.println("portoneimpuid : "+cancelData);
+		//System.out.println("portoneimpuid : "+portoneimpuid);
 	
 
 		return portoneimpuid;
@@ -141,5 +142,20 @@ public class BookingService {
 				result += bookingDao.insertBookCancel(cancelData);
 			}
 			return result;
+		}
+		
+		//이용완료 확인
+		@Transactional
+		public void checkOutStm() {
+			List<BookingDTO> bookingList = bookingDao.selectAllBookingList();
+			int result = 0;
+			System.out.println(bookingList);
+			for (BookingDTO booking : bookingList) {
+				if(booking.getStatus() == 1) {
+					result = bookingDao.updateBookingStatus(booking);
+				}
+			}
+			System.out.println(result);
+			
 		}
 }

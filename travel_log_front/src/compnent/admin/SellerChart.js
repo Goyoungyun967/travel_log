@@ -86,9 +86,9 @@ const SellerChart = () => {
           const data = {
             name: i + 1 + "월",
             올해: 0,
+            올해총매출: 0,
             작년: 0,
             작년총매출: 0,
-            올해총매출: 0,
           };
           newChartData.push(data);
         }

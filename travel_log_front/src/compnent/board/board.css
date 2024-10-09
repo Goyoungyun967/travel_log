@@ -168,14 +168,14 @@ props/*글자 사이즈*/
 .awbcss {
   position: relative;
   width: 250px;
-  height: 190px;
+  height: 206px;
   border-image: inherit;
   border-top: none;
   border-radius: 10px;
   user-select: none;
   align-items: center;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6); /* 그림자를 더 넓게 만들기 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* 그림자를 더 넓게 만들기 */
 }
 
 .board-preview-title {
@@ -183,6 +183,7 @@ props/*글자 사이즈*/
 }
 /*게시판 리스트 css*/
 .height-box {
+  padding: 8px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -196,7 +197,6 @@ props/*글자 사이즈*/
 }
 .boardList-content {
   height: 150px;
-  border-bottom: 1px solid var(--gray5);
 }
 .boardList-area {
   position: absolute;
@@ -210,11 +210,12 @@ props/*글자 사이즈*/
   color: var(--gray4);
 }
 .boardList-preview {
+  position: relative;
   margin-top: 8px;
   width: 100%;
-  height: 210px;
+  height: 230px;
   border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6); /* 그림자를 더 넓게 만들기 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* 그림자를 더 넓게 만들기 */
 }
 .board-memberIcon {
   position: relative;
@@ -240,12 +241,10 @@ props/*글자 사이즈*/
   overflow: hidden;
   flex-shrink: 0;
   width: 100%;
-  height: 115px;
+  height: 133px;
+  object-fit: cover;
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-}
-.board-preview-thumb {
-  width: 100%;
 }
 
 .boardList-preview-thumb {
@@ -253,7 +252,7 @@ props/*글자 사이즈*/
   overflow: hidden;
   flex-shrink: 0;
   width: 100px;
-  height: 80px;
+  height: 100px;
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
 }
@@ -268,10 +267,13 @@ props/*글자 사이즈*/
 .like-comment-keep {
   height: 55px;
   align-items: center;
-  position: relative;
+  position: absolute;
+  bottom: 0;
+  left: 0;
   width: 100%;
   display: flex;
   justify-content: flex-start;
+  border-top: 1px solid var(--gray5);
 }
 .sub-item {
   justify-content: center;
@@ -293,7 +295,7 @@ props/*글자 사이즈*/
 .accompany-write {
   cursor: pointer;
   height: 50px;
-  background-color: #00800b;
+  background-color: #40a1c7;
   color: #ffffff;
   border: none;
   border-radius: 10px;
@@ -304,20 +306,20 @@ props/*글자 사이즈*/
 .board-write {
   cursor: pointer;
   height: 50px;
-  background-color: #00800b;
+  background-color: #a111a0;
   color: #ffffff;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s, transform 0.2s;
+  transition: all 3s, transform 0.2s;
 }
 .board-write:hover {
-  background-color: #06bb15;
+  opacity: 0.8;
   transform: translateY(-2px);
 }
 .accompany-write:hover {
-  background-color: #06bb15;
+  opacity: 0.8;
   transform: translateY(-2px);
 }
 
@@ -352,7 +354,7 @@ props/*글자 사이즈*/
   padding: 10px; /* 패딩 추가 */
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* 상단 그림자 */
   display: flex; /* flexbox 사용 */
-  justify-content: space-between; /* 버튼 간 간격 조정 */
+  gap: 10px;
   margin-top: 10px; /* 위쪽 여백 추가 */
   z-index: 10; /* 다른 요소 위로 */
 }
@@ -389,11 +391,11 @@ props/*글자 사이즈*/
   padding: 10px 20px; /* 패딩 추가 */
   font-size: 16px; /* 글자 크기 */
   cursor: pointer; /* 포인터 커서 */
-  transition: background-color 0.3s ease; /* 배경색 전환 효과 */
+  transition: all 0.3s; /* 배경색 전환 효과 */
 }
 
 .boardWrite-btn:hover {
-  background-color: #45a049; /* 호버 시 더 어두운 초록색 */
+  opacity: 0.8;
 }
 
 .boardWrite-btn:active {
@@ -860,4 +862,8 @@ props/*글자 사이즈*/
 .board-no-report {
   background-color: #6c757d;
   color: white;
+}
+
+.swiper {
+  padding: 30px 20px !important;
 }

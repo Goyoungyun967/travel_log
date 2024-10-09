@@ -5,11 +5,17 @@ import LodgmentDetailMap from "./LodgmentDetailMap";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import LodgmentRoomDetail from "./LodgmentRoomDetail";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { loginNoState } from "../utils/RecoilData";
+import {
+  loginNoState,
+  lodgmentState,
+  guestState,
+  startDateState,
+  endDateState,
+} from "../utils/RecoilData";
 import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -19,12 +25,13 @@ import LodgmentInquire from "./LodgmentInquire";
 
 const LodgmentDetail = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
-  const params = useParams();
+  const { state } = useLocation();
   const navigate = useNavigate();
-  const lodgmentNo = params.lodgmentInfo;
-  const startDate = params.startDate;
-  const endDate = params.endDate;
-  const guest = params.guest;
+  const lodgmentNo = state.lodgmentNo;
+  const [guest, setGuest] = useRecoilState(guestState);
+  const [startDate, setStartDate] = useRecoilState(startDateState);
+  const [endDate, setEndDate] = useRecoilState(endDateState);
+
   const [lodgmentInfo, setLodgmentInfo] = useState({});
   const [roomSearchList, setRoomSearchList] = useState([]);
   const [loginNo] = useRecoilState(loginNoState);
@@ -32,24 +39,20 @@ const LodgmentDetail = () => {
   //보관함 여부
   const [lodgmentCollection, sestLodgmentCollection] = useState("");
 
-  //보관함 좋아요 성공실패
+  //보관함 좋아요,좋아요취소 시 useEffect 돌게 만들어줌
   const [result, setResult] = useState(true);
-
-  //console.log("디테일 :" + lodgmentNo);
-  //console.log(loginNo);
 
   const formattedStartDate = format(new Date(startDate), "yyyy-MM-dd");
   const formattedEndDate = format(new Date(endDate), "yyyy-MM-dd");
 
+  console.log("loginNo" + loginNo);
   useEffect(() => {
-    //console.log("loginNo" + loginNo);
-
     axios
       .get(
         `${BackServer}/lodgment/roomInfo/${lodgmentNo}/${formattedStartDate}/${formattedEndDate}/${loginNo}`
       )
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setLodgmentInfo(res.data.lodgmentInfo);
         setRoomSearchList(res.data.lodgmentInfo.roomSearchList);
         sestLodgmentCollection(res.data.lodgmentCollection);
