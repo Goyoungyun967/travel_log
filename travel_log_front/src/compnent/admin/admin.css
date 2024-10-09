@@ -4,7 +4,6 @@
 
 .admin-section {
   width: 100%;
-  align-self: start;
 }
 .admin-wrap {
   width: 100%;
@@ -83,12 +82,13 @@
   margin: 75px auto;
   flex-direction: column;
   align-items: center;
+  z-index: 1;
 }
 .admin-page-navi {
   width: 100%;
   display: flex;
-  height: auto;
   justify-content: center;
+  align-items: center;
   margin-top: 30px;
 }
 .admin-list-table {
@@ -240,6 +240,27 @@
   border-radius: 7px;
   background-color: var(--main5);
 }
+.admin-content-wrap .pagination {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+.admin-content-wrap .pagination > li {
+  cursor: pointer;
+  flex-grow: 0;
+}
+.admin-content-wrap .pagination > li > span {
+}
+.admin-content-wrap .pagination > li > .active-page {
+}
+.pagination {
+  display: flex; /* Flexbox를 사용 */
+  justify-content: center; /* 수평 가운데 정렬 */
+  list-style: none; /* 기본 리스트 스타일 제거 */
+  padding: 0; /* 패딩 제거 */
+  margin: 20px 0; /* 위 아래 여백 추가 (원하는 만큼 조절) */
+}
+
 /*메뉴바*/
 
 .admin-section {

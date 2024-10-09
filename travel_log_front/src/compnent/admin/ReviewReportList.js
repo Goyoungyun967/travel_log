@@ -54,6 +54,24 @@ const ReviewReportList = () => {
                 console.log(err);
               });
           };
+          const deleteReview = () => {
+            axios
+              .delete(`${backServer}/lodgment/reviewDelete/${review.reviewNo}`)
+              .then((res) => {
+                if (res.data > 0) {
+                  Swal.fire({
+                    title: "리뷰 삭제 완료",
+                    text: "리뷰 삭제 처리가 완료 되었습니다.",
+                    icon: "success",
+                  });
+                  reviewReportList.splice(i, 1);
+                  setReviewReportList([...reviewReportList]);
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          };
           return (
             <div key={`review-report-${i}`} className="review-content-wrap">
               {review.fileList.length > 0 && (
@@ -98,7 +116,7 @@ const ReviewReportList = () => {
                 </p>
               </div>
               <div className="report-btn">
-                <button>리뷰 삭제</button>
+                <button onClick={deleteReview}>리뷰 삭제</button>
                 <button onClick={deleteReport}>신고 무효</button>
               </div>
             </div>

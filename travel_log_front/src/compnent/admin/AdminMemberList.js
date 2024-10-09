@@ -35,7 +35,7 @@ const AdminMemberList = () => {
     <>
       <div className="admin-search-box">
         <FormControl>
-          <FormLabel id="type">가입승인여부</FormLabel>
+          <FormLabel id="type">정렬 기준</FormLabel>
           <RadioGroup
             row
             aria-labelledby="type"
@@ -46,7 +46,7 @@ const AdminMemberList = () => {
               setReqPage(1);
             }}
           >
-            <FormControlLabel value={0} control={<Radio />} label="기본" />
+            <FormControlLabel value={0} control={<Radio />} label="번호순" />
             <FormControlLabel
               value={1}
               control={<Radio />}
@@ -111,8 +111,8 @@ const AdminMemberList = () => {
                 <td>{member.enrollDate}</td>
                 <td>{member.reportCount}</td>
                 <td>
-                  <FormControl style={{ width: "100%" }}>
-                    <InputLabel id="levels">등급 선택</InputLabel>
+                  <FormControl style={{ width: "80%" }}>
+                    <InputLabel id="levels">등급</InputLabel>
                     <Select
                       labelId="levels"
                       id="levels"
