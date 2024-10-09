@@ -5,7 +5,11 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { SwiperSlide, Swiper } from "swiper/react";
-import { isLoginState, loginNicknameState } from "../utils/RecoilData";
+import {
+  isLoginState,
+  loginNicknameState,
+  memberLevelState,
+} from "../utils/RecoilData";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward"; //화살표
 import img1 from "./main/img1.jpg";
 import img2 from "./main/img2.jpg";
@@ -21,6 +25,8 @@ import {
   startDateState,
   endDateState,
 } from "../utils/RecoilData";
+import SellerLodgmentList from "../seller/SellerLodgmentList";
+import StmSeller from "../seller/StmSeller";
 
 const Main = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -59,6 +65,10 @@ const Main = () => {
   const [reqPage, setReqPage] = useState(1);
   const [loginNickname, setLoginNicName] = useRecoilState(loginNicknameState);
   const [isLogin, setIsLogin] = useRecoilState(isLoginState); //로그인 여부
+
+  // 멤버 레벨
+  const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
+  console.log(memberLevel);
   //일반게시판 가져오기
   useEffect(() => {
     axios
@@ -76,95 +86,106 @@ const Main = () => {
   };
 
   return (
-    <div className="section">
-      <div className="main-sileder-wrap">
-        <Swiper
-          key="main-slider"
-          modules={[Autoplay]}
-          speed={1000}
-          slidesPerView={1}
-          spaceBetween={0}
-          grabCursor={true}
-          loop={true}
-          autoplay={{
-            delay: 2500,
-          }}
-        >
-          {images.map((img, i) => (
-            <SwiperSlide key={"img-" + i}>
-              <img
-                className="slider-image"
-                style={{ width: "100%" }}
-                src={img}
-                alt={`Main slide ${i + 1}`}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-      <div className="main-search-bar">
-        <SearchBar
-          lodgment={lodgment}
-          setLodgment={setLodgment}
-          guest={guest}
-          setGuest={setGuest}
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
-          startDay={startDay}
-          endDay={endDay}
-          onClick={lodgementSearchBtn}
-        />
-      </div>
-      {/*게시판 출력 */}
-      <div
-        style={{ maxWidth: "1000px", margin: "150px auto" }}
-        className="main-board-list-wrap"
-      >
-        <div className="main-board-name  flex-spbetw">
-          <span>여행 게시판</span>
-          <span className="board-next" onClick={handleMoreClick}>
-            {/* onClick={handleMoreClick} */}
-            더보기 <ArrowForwardIcon style={{ paddingBottom: "4px" }} />
-          </span>
+    <>
+      {memberLevel === 4 ? ( // 4 : 판매자 zone
+        <div className="Seller-Main-List">
+          <div className="seller-lodgment-list">
+            <SellerLodgmentList />
+          </div>
         </div>
-        <Swiper
-          key="board-slider"
-          slidesPerView={3}
-          spaceBetween={3}
-          grabCursor={true}
-          breakpoints={{
-            // 미디어 쿼리를 통해 지정한 화면 크기마다 원하는 Swiper 옵션 지정, 반응형
-            375: {
-              slidesPerView: 1, //브라우저가 375보다 클 때
-              spaceBetween: 0,
-            },
-            768: {
-              slidesPerView: 2, //브라우저가 768보다 클 때
-              spaceBetween: 0,
-            },
-            1024: {
-              slidesPerView: 3, //브라우저가 1024보다 클 때
-              spaceBetween: 0,
-            },
-          }}
-        >
-          {/* <div className="board-preview-wrap width-box"> */}
-          {boardList.map((board, i) => (
-            <SwiperSlide key={"board-" + i}>
-              <BoardItem
-                // key={"board-" + i}
-                board={board}
-                loginNickname={loginNickname}
-                isLogin={isLogin}
-              />
-            </SwiperSlide>
-          ))}
-          {/* </div> */}
-        </Swiper>
-      </div>
-    </div>
+      ) : (
+        // 회원 zone
+        <div className="section">
+          <div className="main-sileder-wrap">
+            <Swiper
+              key="main-slider"
+              modules={[Autoplay]}
+              speed={1000}
+              slidesPerView={1}
+              spaceBetween={0}
+              grabCursor={true}
+              loop={true}
+              autoplay={{
+                delay: 2500,
+              }}
+            >
+              {images.map((img, i) => (
+                <SwiperSlide key={"img-" + i}>
+                  <img
+                    className="slider-image"
+                    style={{ width: "100%" }}
+                    src={img}
+                    alt={`Main slide ${i + 1}`}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+          <div className="main-search-bar">
+            <SearchBar
+              lodgment={lodgment}
+              setLodgment={setLodgment}
+              guest={guest}
+              setGuest={setGuest}
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+              startDay={startDay}
+              endDay={endDay}
+              onClick={lodgementSearchBtn}
+            />
+          </div>
+          {/*게시판 출력 */}
+          <div
+            style={{ maxWidth: "1000px", margin: "150px auto" }}
+            className="main-board-list-wrap"
+          >
+            <div className="main-board-name  flex-spbetw">
+              <span>여행 게시판</span>
+              <span className="board-next" onClick={handleMoreClick}>
+                {/* onClick={handleMoreClick} */}
+                더보기 <ArrowForwardIcon style={{ paddingBottom: "4px" }} />
+              </span>
+            </div>
+            <Swiper
+              key="board-slider"
+              slidesPerView={3}
+              spaceBetween={3}
+              grabCursor={true}
+              breakpoints={{
+                // 미디어 쿼리를 통해 지정한 화면 크기마다 원하는 Swiper 옵션 지정, 반응형
+                375: {
+                  slidesPerView: 1, //브라우저가 375보다 클 때
+                  spaceBetween: 0,
+                },
+                768: {
+                  slidesPerView: 2, //브라우저가 768보다 클 때
+                  spaceBetween: 0,
+                },
+                1024: {
+                  slidesPerView: 3, //브라우저가 1024보다 클 때
+                  spaceBetween: 0,
+                },
+              }}
+            >
+              {/* <div className="board-preview-wrap width-box"> */}
+              {boardList.map((board, i) => (
+                <SwiperSlide key={"board-" + i}>
+                  <BoardItem
+                    // key={"board-" + i}
+                    board={board}
+                    loginNickname={loginNickname}
+                    isLogin={isLogin}
+                  />
+                </SwiperSlide>
+              ))}
+              {/* </div> */}
+            </Swiper>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 const BoardItem = (props) => {

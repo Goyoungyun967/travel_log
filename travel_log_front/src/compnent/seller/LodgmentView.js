@@ -125,8 +125,14 @@ const LodgmentView = () => {
             <h1>{lodgmentList.lodgmentName}</h1>
           </div>
           <div className="item-star">
-            <span>{lodgmentList.lodgmentStarGrade}</span>
-            <span>성급</span>
+            {lodgmentList.lodgmentStarGrade === 0 ? (
+              "등록되지 않은 숙소"
+            ) : (
+              <>
+                <span>{lodgmentList.lodgmentStarGrade}</span>
+                <span>성급</span>
+              </>
+            )}
           </div>
           <div className="item-addr">
             <p>{lodgmentList.lodgmentAddr}</p>
@@ -140,33 +146,53 @@ const LodgmentView = () => {
             <span>{lodgmentList.lodgmentCheckOut}</span>
           </div>
 
-          <Link
-            to={`/seller/updateLodgment/${lodgmentList.lodgmentNo}`}
-            className="btn primary"
-          >
-            호텔 수정
-          </Link>
-          <button type="button" onClick={deleteLodgment}>
-            호텔 삭제
-          </button>
+          <div className="sellerBtnZone">
+            <Link
+              to={`/seller/updateLodgment/${lodgmentList.lodgmentNo}`}
+              className="sellerUpdateLodgment"
+            >
+              호텔 수정
+            </Link>
+            <button
+              type="button"
+              onClick={deleteLodgment}
+              className="sellerDelLodgment"
+            >
+              호텔 삭제
+            </button>
+          </div>
         </div>
       </div>
       <div className="item-sc-wrap">
-        <Link
-          to={`/seller/insertRoom/${lodgmentList.lodgmentNo}`}
-          className="btn primary"
-        >
-          객실 등록
-        </Link>
-        <div className="lrv-wrap">
-          <h4>객실 정보</h4>
-          <div className="room-arr">
-            {roomList.map((room, i) => {
-              console.log("room-", room);
-              return <RoomItem key={"room - " + i} room={room} />;
-            })}
+        {roomList.length !== 0 ? (
+          <>
+            <Link
+              to={`/seller/insertRoom/${lodgmentList.lodgmentNo}`}
+              className="sellerInsertRoomBtn"
+            >
+              객실 등록
+            </Link>
+            <div className="lrv-wrap">
+              <h4>객실 정보</h4>
+              <div className="room-arr">
+                {roomList.map((room, i) => {
+                  console.log("room-", room);
+                  return <RoomItem key={"room - " + i} room={room} />;
+                })}
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="noRoomListAlret">
+            <p>등록된 숙소가 없습니다 등록하시겠습니까?</p>
+            <Link
+              to={`/seller/insertRoom/${lodgmentList.lodgmentNo}`}
+              className="sellerInsertRoomBtn noRoomList"
+            >
+              객실 등록 하기
+            </Link>
           </div>
-        </div>
+        )}
       </div>
       <div className="item-tr-wrap">
         <TabContext value={value}>

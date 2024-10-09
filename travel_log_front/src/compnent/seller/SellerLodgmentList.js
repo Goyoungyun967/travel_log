@@ -4,6 +4,12 @@ import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { isSellerLoginState, sellerLoginNoState } from "../utils/RecoilData";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
 const SellerLodgmentList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const params = useParams();
@@ -35,19 +41,34 @@ const SellerLodgmentList = () => {
       {lodgmentList.length !== 0 ? (
         <>
           {isLogin ? (
-            <Link to={`/seller/insertLodgment`} className="btn primary">
-              등록하기
+            <Link to={`/seller/insertLodgment`} className="sellerListLgBtn">
+              숙소 등록하기
             </Link>
           ) : (
             ""
           )}
-          <div className="item-wrap">
-            {lodgmentList.map((list, index) => {
-              return (
-                <ListItem key={"list-" + index} list={list} index={index} />
-              );
-            })}
-          </div>
+          <Swiper
+            spaceBetween={25}
+            slidesPerView={3}
+            autoplay={{ delay: 3000 }}
+            pagination={{ clickable: true }}
+            loop={true}
+            onSlideChange={() => console.log("slide change")}
+            onSwiper={(swiper) => console.log(swiper)}
+            navigation={true}
+            modules={[Pagination, Navigation]}
+            className="mySwiper seller-swiper"
+          >
+            <div className="item-wrap">
+              {lodgmentList.map((list, index) => {
+                return (
+                  <SwiperSlide key={"slide-" + index}>
+                    <ListItem key={"list-" + index} list={list} index={index} />
+                  </SwiperSlide>
+                );
+              })}
+            </div>
+          </Swiper>
         </>
       ) : (
         <div className="seller-lodgment-no">
@@ -70,18 +91,19 @@ const ListItem = (props) => {
   return (
     <>
       <div
-        className="item"
+        className="seller-lg-list-item"
         onClick={() => {
           navigate(`/seller/lodgmentView/${list.lodgmentNo}`);
         }}
       >
-        <div className="item-img">
+        <div className="seller-item-img">
           <img
             src={
               list.lodgmentImgPath
                 ? `${backServer}/seller/lodgment/${list.lodgmentImgPath}`
                 : "/image/lodgment_default_img.png"
             }
+            style={{ width: "230px" }}
           />
         </div>
         <div className="item-tx">
