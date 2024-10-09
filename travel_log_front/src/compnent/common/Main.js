@@ -6,7 +6,6 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { SwiperSlide, Swiper } from "swiper/react";
 import { isLoginState, loginNicknameState } from "../utils/RecoilData";
-import { useRecoilState } from "recoil";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward"; //화살표
 import img1 from "./main/img1.jpg";
 import img2 from "./main/img2.jpg";
@@ -14,23 +13,31 @@ import img3 from "./main/img3.jpg";
 import img4 from "./main/img4.jpg";
 import img5 from "./main/img5.jpg";
 import { Autoplay } from "swiper/modules";
+//숙소 리코일
+import { useRecoilState } from "recoil";
+import {
+  lodgmentState,
+  guestState,
+  startDateState,
+  endDateState,
+} from "../utils/RecoilData";
 
 const Main = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
-  //여행지, 숙소 검색
-  const [lodgment, setLodgment] = useState("");
-  //인원 검색
-  const [guest, setGuest] = useState(2);
+  const [lodgment, setLodgment] = useRecoilState(lodgmentState);
+  const [guest, setGuest] = useRecoilState(guestState);
+  const [startDate, setStartDate] = useRecoilState(startDateState);
+  const [endDate, setEndDate] = useRecoilState(endDateState);
 
   //const today = dayjs().toDate();
   //기본 날짜 세팅
   const startDay = dayjs().add(1, "day").toDate();
   const endDay = dayjs().add(2, "day").toDate();
 
-  //체크인 날짜 , 체크아웃 날짜
-  const [startDate, setStartDate] = useState(startDay);
-  const [endDate, setEndDate] = useState(endDay);
+  // //체크인 날짜 , 체크아웃 날짜
+  // const [startDate, setStartDate] = useState(startDay);
+  // const [endDate, setEndDate] = useState(endDay);
 
   //메인 이미지 배열
   const images = [img1, img2, img3, img4, img5];
@@ -45,9 +52,7 @@ const Main = () => {
       return;
     }
     // 유효한 검색이 이루어졌다면 다음 페이지로 이동
-    navigate("/lodgment/lodgmentList", {
-      state: { lodgment, guest, startDate, endDate },
-    });
+    navigate("/lodgment/lodgmentList");
   };
   //게시판
   const [boardList, setBoardList] = useState([]);

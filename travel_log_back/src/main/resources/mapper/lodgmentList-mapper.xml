@@ -43,7 +43,19 @@
 	        (SELECT MIN(rm.room_price) 
 	            FROM room rm 
 	            JOIN lodgment_storage ls2 ON rm.lodgment_no = ls2.lodgment_no 
-	            WHERE ls2.lodgment_no = ls.lodgment_no) AS room_price,
+	            WHERE ls2.lodgment_no = ls.lodgment_no
+	            <choose>
+					<when test="minPrice != 0 and maxPrice == 500000">
+						and rm.room_price >= #{minPrice}
+					</when>
+					<when test="minPrice ==0 and maxPrice != 500000">
+						and rm.room_price <![CDATA[<]]>= #{maxPrice}
+					</when>
+					<when test="minPrice !=0 and maxPrice != 500000">
+						and (rm.room_price between #{minPrice} and #{maxPrice})
+					</when>
+				</choose>
+	            ) AS room_price,
 	        (SELECT FLOOR(AVG(lr.rating)) AS avg_rating 
 	            FROM lodgment_review lr
 	            WHERE lr.lodgment_no = ls.lodgment_no) AS avg_rating,
@@ -243,7 +255,7 @@
 	<insert id="insertReview">
 		insert into lodgment_review
 		values (lodgment_review_seq.nextval,
-		#{memberNo}, #{bookNo} #{lodgmentNo},
+		#{memberNo}, #{bookNo}, #{lodgmentNo},
 		#{reviewContent}, #{rating},
 		null)
 		<selectKey resultType="int" keyProperty="reviewNo"
@@ -298,43 +310,29 @@
 
 	<!-- 리뷰 여부 비교 -->
 	<select id="reviewStatus" resultType="reviewStatus">
-		SELECT
-		( SELECT
-		COUNT(*) AS used_reviews_count
-		FROM
-		booking b
-		LEFT JOIN
+	select count(b.book_no) used_reviews_count, count(r.review_no) available_reviews_count
+	from 
+	booking b
+	LEFT JOIN
+	lodgment_review r ON b.book_no = r.book_no
+	JOIN
+	lodgment_storage s ON
+	b.seller_no = s.seller_no
+	LEFT JOIN room r ON
+	b.room_no = r.room_no
+	LEFT JOIN lodgment_storage s ON r.lodgment_no =
+	s.lodgment_no
+	join
+	member m ON b.member_id = m.member_id
+	LEFT JOIN
+	lodgment_review r ON b.book_no = r.book_no
+	where
+	m.member_no = #{loginNo}
+	 and
+	b.end_date  <![CDATA[<]]>
+	SYSDATE
+	AND s.lodgment_no = #{lodgmentNo}
 
-		lodgment_review r ON b.book_no = r.book_no
-		JOIN
-		lodgment_storage s ON
-		b.seller_no = s.seller_no
-		JOIN
-		member m ON b.member_id = m.member_id
-		WHERE
-		m.member_no = #{loginNo}
-		AND s.lodgment_no = #{lodgmentNo}
-		AND
-		b.end_date <![CDATA[<]]>
-		SYSDATE
-		AND r.review_no IS NOT NULL 
-		) AS
-		used_reviews_count,
-
-		(SELECT COUNT(*)
-		FROM booking b
-		LEFT JOIN room r ON
-		b.room_no = r.room_no
-		LEFT JOIN lodgment_storage s ON r.lodgment_no =
-		s.lodgment_no
-		LEFT JOIN member m ON b.member_id = m.member_id
-		WHERE
-		b.end_date <![CDATA[<]]>
-		SYSDATE
-		AND member_no = #{loginNo}
-		AND s.lodgment_no = #{lodgmentNo} )
-		AS available_reviews_count
-		FROM dual
 	</select>
 	
 	<!-- 리뷰 좋아요 -->

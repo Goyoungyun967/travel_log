@@ -136,8 +136,11 @@ public class LodgmentController {
 	// FE 에서 formDate를 보낼때 키값이 객체 변수명과 동일하면 객체로받을수 있다. 
 	@PostMapping(value ="/review")
 	@Operation(summary = "리뷰 등록하기",description = "회원번호, 숙소번호, 글내용, 사진(비어있을수도 있음)")
-	public ResponseEntity<Boolean> insertReview(@ModelAttribute LodgmentReviewDTO lodgmentReview,@ModelAttribute MultipartFile[] reviewImg ){		
+	public ResponseEntity<Boolean> insertReview(@ModelAttribute LodgmentReviewDTO lodgmentReview, @ModelAttribute MultipartFile[] reviewImg ){		
 		//사진데이터 저장 리스트
+	
+		System.out.println(lodgmentReview);
+		System.out.println(reviewImg);
 		List<LodgmentReviewFileDTO> fileSave = new ArrayList<LodgmentReviewFileDTO>();
 		//동일한 파일 없도록 라벨링 후 지정된 경로에 업로드 됨 
 		if(reviewImg != null) {
@@ -200,6 +203,7 @@ public class LodgmentController {
 	@GetMapping(value = "/inquireList/{lodgmentNo}/{reqPage}")
 	@Operation(summary = "리뷰 리스트",description = "숙소 번호, 페이지넘버")
 	public ResponseEntity<Map> inquireList(@PathVariable int lodgmentNo, @PathVariable int reqPage ){
+		System.out.println(lodgmentNo);
 		Map map = lodgmentService.inquireList(lodgmentNo, reqPage);
 		return ResponseEntity.ok(map);
 	}
