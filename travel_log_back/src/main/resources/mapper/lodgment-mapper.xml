@@ -51,7 +51,9 @@
 		update lodgment_storage set
 			lodgment_name=#{lodgmentName},
 			lodgment_addr=#{lodgmentAddr},
-			lodgment_img_path=#{lodgmentImgPath},
+			<if test="lodgmentImgPath!='no'">			
+				lodgment_img_path=#{lodgmentImgPath},
+			</if>
 			lodgment_notice=#{lodgmentNotice},
 			lodgment_check_in=#{lodgmentCheckIn},
 			lodgment_check_out=#{lodgmentCheckOut}

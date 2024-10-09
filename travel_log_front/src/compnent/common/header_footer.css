@@ -23,6 +23,13 @@
   --line3: #eaeced;
   --line4: #f6f6f6;
   --line5: #f8f9fa;
+
+  /*판매자 임시 컬러*/
+  --seller1: #1860c3;
+  --seller2: #3d80cb;
+  --seller3: #71a9db;
+  --seller4: #ffbf6b;
+  --seller5: #ffd6b3;
 }
 * {
   margin: 0;

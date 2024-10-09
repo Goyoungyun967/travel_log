@@ -98,13 +98,15 @@ public class SellerController {
 	@Operation(summary = "호텔 수정", description = "호텔 번호 받아서 수정")
 	@PatchMapping(value="/updateLodgment")
 	public ResponseEntity<Integer> updateLodgment(@ModelAttribute LodgmentStorageDTO ls, @ModelAttribute MultipartFile lodgmentImg){
-		System.out.println(ls);
-		System.out.println(lodgmentImg);
+		System.out.println("ls : "+ls);
+		System.out.println("lodgmentImg : "+lodgmentImg);
 		if(lodgmentImg != null){
             // 업로드 위치임
             String savepath = root+"/seller/lodgment/";
             String filepath = fileUtil.upload(savepath, lodgmentImg);
             ls.setLodgmentImgPath(filepath); // 경로 저장
+        }else {
+        	ls.setLodgmentImgPath("no"); // null값이면 "no" 주어서 매퍼에서 거르기...
         }
 		 int result = sellerService.updateLodgment(ls);
 		return ResponseEntity.ok(result);
@@ -330,7 +332,7 @@ public class SellerController {
 		return ResponseEntity.ok(result);
 	}
 
-	// 판매자 리뷰 삭제 - 판매자 댓글 null로 처리하면 됨 => update
+	// 판매자 리뷰 삭제 - 판매자 댓글 한 테이블에 묶여있어서 null로 처리하면 됨 => update
 	@Operation(summary = "판매자 리뷰 댓글", description = "판매자 리뷰 댓글")
 	@PatchMapping(value="/deleteComment")
 	public ResponseEntity<Integer> deleteComment(LodgmentReviewDTO ld){

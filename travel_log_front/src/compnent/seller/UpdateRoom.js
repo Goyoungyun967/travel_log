@@ -69,6 +69,51 @@ const UpdateRoom = () => {
   }, []);
 
   const UpdateRoom = () => {
+    const nameRegex = /^.{1,15}$/; // 객실 이름: 1자 이상 15자 이하로..!
+    const numberRegex = /^[1-9][0-9]*$/; // 인원, 상품 수 : 1 이상의 숫자만 입력..!
+    const contentRegex = /^.{1,1000}$/; // 공지사항: 1자 이상 1000자 이하..!
+    // 모든 필드의 입력값 확인
+    if (!nameRegex.test(roomName)) {
+      Swal.fire({
+        title: "객실명을 다시 입력해주세요",
+        text: "1~15자 이하로 작성해주세요",
+        icon: "error",
+      });
+      return;
+    }
+
+    if (!numberRegex.test(maxCapa)) {
+      Swal.fire({
+        title: "최대 인원을 다시 입력해주세요",
+        icon: "error",
+      });
+      return;
+    }
+
+    if (!numberRegex.test(roomNum)) {
+      Swal.fire({
+        title: "상품 수를 다시 입력해주세요",
+        icon: "error",
+      });
+      return;
+    }
+
+    if (!numberRegex.test(roomPrice)) {
+      Swal.fire({
+        title: "상품 가격을 다시 입력해주세요",
+        icon: "error",
+      });
+      return;
+    }
+
+    if (!contentRegex.test(boardContent)) {
+      Swal.fire({
+        title: "공지사항을 다시 입력해주세요",
+        icon: "error",
+      });
+      return;
+    }
+
     const form = new FormData();
     form.append("lodgmentNo", lodgmentNo);
     form.append("roomNo", roomNo);

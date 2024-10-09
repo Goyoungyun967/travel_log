@@ -172,4 +172,25 @@
   cursor: pointer;
 }
 
+.seller-inq-box-wrap > div > p {
+  font-weight: bold;
+  color: #747474;
+  font-size: 20px;
+  text-align: center;
+}
+.seller-inq-box-wrap > div > .no-inq-list {
+  display: block;
+  margin: 0 auto;
+  width: 50%;
+  text-align: center;
+  border-radius: 10px;
+  height: 50px;
+  font-weight: bold;
+  line-height: 50px;
+  background-color: var(--seller1);
+  color: var(--seller3) !important;
+}
+.seller-inq-box-wrap > div > .no-inq-list:hover {
+  background-color: var(--seller2);
+}
 /*-------------InsertInq.js--------------*/
