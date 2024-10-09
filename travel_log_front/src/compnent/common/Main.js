@@ -102,19 +102,21 @@ const Main = () => {
           ))}
         </Swiper>
       </div>
-      <SearchBar
-        lodgment={lodgment}
-        setLodgment={setLodgment}
-        guest={guest}
-        setGuest={setGuest}
-        startDate={startDate}
-        setStartDate={setStartDate}
-        endDate={endDate}
-        setEndDate={setEndDate}
-        startDay={startDay}
-        endDay={endDay}
-        onClick={lodgementSearchBtn}
-      />
+      <div className="main-search-bar">
+        <SearchBar
+          lodgment={lodgment}
+          setLodgment={setLodgment}
+          guest={guest}
+          setGuest={setGuest}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          startDay={startDay}
+          endDay={endDay}
+          onClick={lodgementSearchBtn}
+        />
+      </div>
       {/*게시판 출력 */}
       <div
         style={{ maxWidth: "1000px", margin: "150px auto" }}

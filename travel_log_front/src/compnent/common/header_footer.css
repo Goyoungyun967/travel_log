@@ -190,10 +190,10 @@ a {
   width: 100%;
 } */
 
-.section.lodgment-bar {
+.main-search-bar {
   position: absolute;
   top: 40%;
-  left: 0;
+  left: 28%;
   z-index: 2 !important;
 }
 .lodgment-table-wrap {
