@@ -21,7 +21,8 @@ import {
   loginNoState,
 } from "../utils/RecoilData";
 import Swal from "sweetalert2";
-
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/swiper-bundle.css";
 const BoardList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
@@ -184,18 +185,39 @@ const BoardList = () => {
           </span>
         </div>
         {/* 가로 리스트 출력 ref={scrollContainerRef}*/}
-        <div className="scrollable-container">
-          <div className="board-preview-wrap width-box">
-            {accompanyList.map((accompany, i) => (
+        <Swiper
+          slidesPerView={4}
+          spaceBetween={10}
+          grabCursor={true}
+          breakpoints={{
+            // 미디어 쿼리를 통해 지정한 화면 크기마다 원하는 Swiper 옵션 지정, 반응형
+            375: {
+              slidesPerView: 1, //브라우저가 375보다 클 때
+              spaceBetween: 0,
+            },
+            768: {
+              slidesPerView: 3, //브라우저가 768보다 클 때
+              spaceBetween: 0,
+            },
+            1024: {
+              slidesPerView: 4, //브라우저가 1024보다 클 때
+              spaceBetween: 0,
+            },
+          }}
+        >
+          {/* <div className="board-preview-wrap width-box"> */}
+          {accompanyList.map((accompany, i) => (
+            <SwiperSlide>
               <AccompanyItem
                 key={"accompany-" + i}
                 accompany={accompany}
                 loginNickname={loginNickname}
                 isLogin={isLogin}
               />
-            ))}
-          </div>
-        </div>
+            </SwiperSlide>
+          ))}
+          {/* </div> */}
+        </Swiper>
         <div className="board-page-title flex-spbetw">
           <span>최신 여행 게시판</span>
         </div>
@@ -277,7 +299,7 @@ const AccompanyItem = (props) => {
   else timeString = `방금전`;
   console.log(isLogin);
   return (
-    <div>
+    <>
       {isLogin ? (
         <div
           className="board-preview-list awbcss"
@@ -300,7 +322,7 @@ const AccompanyItem = (props) => {
         >
           <div className="board-preview-thumb">
             <img
-              style={{ width: "250px" }}
+              style={{ height: "100%" }}
               src={
                 accompany.boardThumb
                   ? `${backServer}/board/thumb/${accompany.boardThumb}`
@@ -334,7 +356,7 @@ const AccompanyItem = (props) => {
         >
           <div className="board-preview-thumb">
             <img
-              style={{ width: "250px" }}
+              style={{ height: "100%" }}
               src={
                 accompany.boardThumb
                   ? `${backServer}/board/thumb/${accompany.boardThumb}`
@@ -355,7 +377,7 @@ const AccompanyItem = (props) => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
