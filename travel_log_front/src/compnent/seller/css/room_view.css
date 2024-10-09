@@ -162,6 +162,76 @@
   width: 100%; /* Carousel 전체 크기 제한 */
   margin: 0 auto; /* 중앙 정렬 */
 }
+.sellerBtnZone {
+  width: 300px;
+}
+
+.sellerBtnZone > .sellerUpdateLodgment {
+  margin-right: 20px;
+  display: inline-block;
+  width: 100px;
+  height: 40px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  background-color: var(--seller1);
+  font-weight: bold;
+  color: var(--seller3) !important;
+}
+.sellerBtnZone > .sellerUpdateLodgment:hover {
+  background-color: var(--seller2);
+}
+.sellerBtnZone > .sellerDelLodgment {
+  border: none;
+  background-color: transparent;
+  display: inline-block;
+  width: 100px;
+  height: 40px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  background-color: var(--seller4);
+  font-weight: bold;
+  color: var(--seller2) !important;
+}
+.sellerBtnZone > .sellerDelLodgment:hover {
+  background-color: var(--seller2);
+}
 .item-tr-wrap .seller-review-image {
   height: 300px;
+}
+.noRoomListAlret {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+.noRoomListAlret > p {
+  color: #979797;
+  font-weight: bold;
+}
+
+.sellerInsertRoomBtn {
+  margin-top: 30px;
+  display: block;
+  width: 150px;
+  height: 40px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  background-color: var(--seller1);
+  font-weight: bold;
+  color: var(--seller3) !important;
+}
+.sellerInsertRoomBtn:hover {
+  background-color: var(--seller2);
+}
+
+.noRoomList {
+  width: 300px;
+  margin: 0 auto;
 }
