@@ -412,4 +412,6 @@
 			#{delImgFileNo}
 		</foreach>
 	</delete>
+	
+	
 </mapper>

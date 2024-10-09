@@ -78,4 +78,12 @@
   			sysdate
   		)
   	</insert>
+  	
+  	<select id="selectAllBookingList" resultType="booking">
+  		select * from booking
+  	</select>
+  	
+  	<update id="updateBookingStatus">
+  		update booking set status = 2 where book_no=#{bookNo} and status=1 and (sysdate > to_date(#{endDate},'YYYY-MM-DD'))
+  	</update>
 </mapper>

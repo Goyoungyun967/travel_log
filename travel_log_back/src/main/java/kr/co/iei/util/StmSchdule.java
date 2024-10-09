@@ -20,7 +20,7 @@ public class StmSchdule {
 		adminSerivce.insertSellerStm();
 	}
 	//매일 몇시에 10-11시 체크아웃
-	@Scheduled(cron = "0 0 17 * * *")
+	@Scheduled(cron = "0 0 11 * * *")
 	public void checkOutStm() {
 		bookingService.checkOutStm();
 	}

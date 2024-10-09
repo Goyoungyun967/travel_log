@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -144,8 +145,17 @@ public class BookingService {
 		}
 		
 		//이용완료 확인
+		@Transactional
 		public void checkOutStm() {
-			// TODO Auto-generated method stub
+			List<BookingDTO> bookingList = bookingDao.selectAllBookingList();
+			int result = 0;
+			System.out.println(bookingList);
+			for (BookingDTO booking : bookingList) {
+				if(booking.getStatus() == 1) {
+					result = bookingDao.updateBookingStatus(booking);
+				}
+			}
+			System.out.println(result);
 			
 		}
 }
