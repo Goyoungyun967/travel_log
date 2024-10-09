@@ -32,7 +32,6 @@ public interface MemberDao {
 	int changePw(MemberDTO member);
 
 
-
 	List getMemberEnrollData();
 	
 	List getMemberData();
@@ -40,5 +39,17 @@ public interface MemberDao {
 	int levelUpdate(int memberNo);
 
 	String searchIdEmail(String memberEmail);
+
+
+	int searchPw(MemberDTO member);
+
+	int getAdminMemberListCount();
+
+	List getAdminMemberList(Map<String, Object> m);
+
+	int insertMemberReport(MemberDTO member);
+
+	int updateMemberLevel(MemberDTO member);
+
 
 }

@@ -23,7 +23,6 @@ function downloadWorkbook(chart, chartData, title) {
   chartData.forEach((item, index) => {
     dataSheet.getCell(index + 2, 1).value = item.name;
   });
-  console.log(chart);
 
   let promise = [];
   chart.forEach((item, index) => {
