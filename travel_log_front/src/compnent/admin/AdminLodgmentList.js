@@ -25,7 +25,6 @@ const AdminLodgmentList = () => {
     axios
       .get(`${backServer}/admin/lodgment/list/${reqPage}/${lodgmentDelete}`)
       .then((res) => {
-        console.log(res.data);
         setLodgmentList(res.data.list);
         setPi(res.data.pi);
         setLodgmentNoList([]);

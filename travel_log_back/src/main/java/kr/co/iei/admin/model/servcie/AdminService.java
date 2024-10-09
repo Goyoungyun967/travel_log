@@ -13,6 +13,7 @@ import kr.co.iei.faq.model.dto.FaqDTO;
 import kr.co.iei.inquiry.model.dao.InquiryDao;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewReportDTO;
 import kr.co.iei.member.model.dao.MemberDao;
+import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dao.SellerDao;
 import kr.co.iei.seller.model.dto.SellerDTO;
 import kr.co.iei.util.PageInfo;
@@ -221,7 +222,7 @@ public class AdminService {
 	}
 
 	@Transactional
-	public int deleteBoardReport(int[] reportNo) {
+	public int deleteBoardReport(int reportNo) {
 		int result = inquiryDao.deleteBoardReport(reportNo);
 		return result;
 	}
@@ -247,7 +248,7 @@ public class AdminService {
 	}
 
 	@Transactional
-	public int deleteCommentReport(int[] reportNo) {
+	public int deleteCommentReport(int reportNo) {
 		int result = inquiryDao.deleteCommentReport(reportNo);
 		return result;
 	}
@@ -273,6 +274,34 @@ public class AdminService {
 	@Transactional
 	public int deleteReviewReport(int reviewNo) {
 		int result = inquiryDao.deleteReviewReport(reviewNo);
+		return result;
+	}
+
+	public Map getAdminMemberList(int reqPage, int type) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> m  = new HashMap<String, Object>();
+		int numPerPage = 20;
+		int pageNaviSize = 5;
+		int totalCount = memberDao.getAdminMemberListCount();
+		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
+		m.put("start", pi.getStart());
+		m.put("end", pi.getEnd());
+		m.put("type",type);
+		List list = memberDao.getAdminMemberList(m);
+		map.put("list", list);
+		map.put("pi", pi);
+		return map;
+	}
+
+	@Transactional
+	public int updateMemberLevel(MemberDTO member) {
+		int result = memberDao.updateMemberLevel(member);
+		return result;
+	}
+	
+	@Transactional
+	public int insertMemberReport(MemberDTO member) {
+		int result = memberDao.insertMemberReport(member);
 		return result;
 	}
 }

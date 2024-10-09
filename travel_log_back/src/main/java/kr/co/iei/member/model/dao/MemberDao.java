@@ -41,4 +41,12 @@ public interface MemberDao {
 
 	String searchIdEmail(String memberEmail);
 
+	int getAdminMemberListCount();
+
+	List getAdminMemberList(Map<String, Object> m);
+
+	int insertMemberReport(MemberDTO member);
+
+	int updateMemberLevel(MemberDTO member);
+
 }
