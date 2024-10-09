@@ -176,3 +176,35 @@ a {
   flex: 1;
   justify-content: center;
 }
+
+/* main slider */
+.main-sileder-wrap > .swiper {
+  padding: 0 !important;
+}
+.main-sileder-wrap .slider-image {
+  width: 100%; /* 슬라이드의 폭에 맞게 설정 */
+  height: 600px; /* 원하는 높이 설정 */
+  object-fit: cover; /* 비율을 유지하면서 잘라냄 */
+}
+/* .main-sileder-wrap .swiper-slide > img {
+  width: 100%;
+} */
+
+.section.lodgment-bar {
+  position: absolute;
+  top: 40%;
+  left: 0;
+  z-index: 2 !important;
+}
+.lodgment-table-wrap {
+  background-color: var(--main2);
+}
+
+.swiper {
+  width: 100%;
+  max-width: 1200px;
+  padding: 30px 20px !important;
+}
+/* .swiper-slide {
+  width: 280px !important;
+} */

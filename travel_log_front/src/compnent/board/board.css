@@ -168,7 +168,7 @@ props/*글자 사이즈*/
 .awbcss {
   position: relative;
   width: 250px;
-  height: 190px;
+  height: 206px;
   border-image: inherit;
   border-top: none;
   border-radius: 10px;
@@ -241,12 +241,10 @@ props/*글자 사이즈*/
   overflow: hidden;
   flex-shrink: 0;
   width: 100%;
-  height: 100px;
+  height: 133px;
+  object-fit: cover;
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-}
-.board-preview-thumb {
-  width: 100%;
 }
 
 .boardList-preview-thumb {
