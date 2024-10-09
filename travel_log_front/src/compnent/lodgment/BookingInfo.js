@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
 
 const BookingInfo = () => {
   const { state } = useLocation();
+  const navigate = useNavigate();
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const bookNo = state.bookNo;
   //const bookNo = 21;
@@ -179,9 +180,8 @@ const BookingInfo = () => {
           </div>
         </div>
       </div>
-      <div></div>
       <div className="booking-cancle">
-        {BookingInfo.status === 1 && (
+        {bookingInfo.status === 1 && (
           <>
             <button onClick={handleOpenModal}>예약 취소</button>
             <CancleModal
@@ -196,6 +196,17 @@ const BookingInfo = () => {
               roomPrice={bookNoInfo.roomPrice}
             />
           </>
+        )}
+        {bookingInfo.status === 2 && bookingInfo.reviewCount === 0 && (
+          <button
+            onClick={() => {
+              navigate(`/lodgment/reviewWrite`, {
+                state: { lodgmentNo: bookingInfo.lodgmentNo, bookNo: bookNo },
+              });
+            }}
+          >
+            리뷰 작성
+          </button>
         )}
       </div>
     </section>
@@ -278,7 +289,7 @@ const CancleModal = (pros) => {
             ))}
           </RadioGroup>
         </FormControl>
-        {selectedReason === "4" && (
+        {selectedReason === "2" && (
           <input
             placeholder="기타 사유를 20자 이내로 입력하세요"
             maxLength={20} // 최대 50자로 제한

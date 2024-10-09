@@ -160,13 +160,11 @@ const LodgmentReviewUpdate = (props) => {
         {availableReview && (
           <>
             <div className="review-no-comment">
-              예약 가능한 리뷰가 있습니다. 리뷰를 남겨주세요.
-            </div>
-            <div className="lodgment-review-btn-wrap">
+              예약 가능한 리뷰가 있습니다. 리뷰를 작성하러 가기
               <button
                 className="review-btn"
                 onClick={() => {
-                  navigate(`/lodgment/reviewWrite`, { state: { lodgmentNo } });
+                  navigate(`/member/mypage/myReservation`);
                 }}
               >
                 리뷰 작성
@@ -202,7 +200,11 @@ const LodgmentReviewUpdate = (props) => {
                   <div>
                     <Rating name="read-only" value={review.rating} readOnly />
                   </div>
-                  <div>{review.reviewContent}</div>
+                  <div>
+                    <span
+                      dangerouslySetInnerHTML={{ __html: review.reviewContent }}
+                    ></span>
+                  </div>
                   <div className="review-text-area">
                     <span>
                       {review.likeCount === 0 ? (
@@ -291,7 +293,6 @@ const LodgmentReviewUpdate = (props) => {
                         });
                       }}
                     >
-                      {review.reviewNo}
                       수정하기
                     </div>
                   )}

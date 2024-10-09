@@ -95,9 +95,9 @@ public class BoardController {
 	    return ResponseEntity.ok(result == 1 + boardFileList.size());
 	}
 	//게시판 상세보기 
-	@GetMapping(value = "/boardNo/{boardNo}/{memberNo}")
-	public ResponseEntity<BoardDTO> selectOneBoard(@PathVariable int boardNo,@PathVariable int memberNo){
-		BoardDTO board = boardService.selectOneBoard(boardNo,memberNo);
+	@GetMapping(value = "/boardNo/{boardNo}")
+	public ResponseEntity<BoardDTO> selectOneBoard(@PathVariable int boardNo){
+		BoardDTO board = boardService.selectOneBoard(boardNo);
 		return ResponseEntity.ok(board);
 	}
 	//안할수도 있음{첨부파일 저장하기}
