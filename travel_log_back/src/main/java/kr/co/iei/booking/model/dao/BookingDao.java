@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.iei.booking.model.dto.BookingAvailavleDTO;
 import kr.co.iei.booking.model.dto.BookingCancelDTO;
 import kr.co.iei.booking.model.dto.BookingDTO;
 
@@ -30,6 +31,8 @@ public interface BookingDao {
 	List<BookingDTO> selectAllBookingList();
 
 	int updateBookingStatus(BookingDTO booking);
+
+	BookingAvailavleDTO bookingAvailable(BookingDTO bookingInfo);
 
 
 }
