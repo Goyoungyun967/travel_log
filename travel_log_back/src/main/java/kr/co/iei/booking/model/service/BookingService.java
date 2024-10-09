@@ -47,8 +47,8 @@ public class BookingService {
 
 	public String getPortoneimpuid(BookingCancelDTO cancelData) {
 		String portoneimpuid = bookingDao.getPortoneimpuid(cancelData);
-		System.out.println("portoneimpuid : "+cancelData);
-		System.out.println("portoneimpuid : "+portoneimpuid);
+		//System.out.println("portoneimpuid : "+cancelData);
+		//System.out.println("portoneimpuid : "+portoneimpuid);
 	
 
 		return portoneimpuid;

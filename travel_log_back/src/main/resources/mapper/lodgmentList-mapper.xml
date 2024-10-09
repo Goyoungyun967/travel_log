@@ -255,7 +255,7 @@
 	<insert id="insertReview">
 		insert into lodgment_review
 		values (lodgment_review_seq.nextval,
-		#{memberNo}, #{bookNo} #{lodgmentNo},
+		#{memberNo}, #{bookNo}, #{lodgmentNo},
 		#{reviewContent}, #{rating},
 		null)
 		<selectKey resultType="int" keyProperty="reviewNo"
