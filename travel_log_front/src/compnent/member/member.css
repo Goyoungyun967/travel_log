@@ -1025,3 +1025,169 @@
   display: none;
   overflow: hidden;
 }
+
+.searchId-label {
+  margin-right: 7px;
+  font-size: 21px;
+}
+
+.searchPw-input {
+  margin-top: 70px;
+}
+
+.id-input-searchPw {
+  margin-left: 8px;
+  padding: 10px; /* 안쪽 여백을 줄임 */
+  border: 1px solid #ccc; /* 테두리 */
+  border-radius: 7px;
+  font-size: 16px; /* 폰트 크기 */
+  outline: none; /* 포커스 시 테두리 제거 */
+  transition: border-color 0.3s, box-shadow 0.3s; /* 테두리 색상 및 그림자 전환 효과 */
+  margin-top: 5px; /* 위쪽 여백을 줄임 */
+  border-radius: 8px;
+}
+
+.id-input-searchPw:hover {
+  border-color: #007bff; /* 포커스 시 테두리 색상 변경 */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 포커스 시 그림자 추가 */
+}
+
+.searchPw-title h4 {
+  text-align: center;
+}
+
+.think-id {
+  display: flex;
+  align-items: center;
+  cursor: pointer; /* 마우스 커서 변경 */
+  transition: color 0.3s ease; /* 부드러운 색상 전환 */
+}
+
+.think-id p {
+  margin-top: 25px;
+  margin-left: 25px;
+  color: #007bff;
+  text-decoration: underline;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.think-id:hover p {
+  color: #0056b3;
+  text-decoration: none;
+  transform: scale(1.05);
+}
+
+.idExists-zone {
+  text-align: center;
+  margin-top: 15px;
+  color: #007bff;
+}
+
+.rePassword-btn {
+  padding: 9px 17px; /* 버튼 크기 조정 */
+  font-size: 18px;
+  color: #fff;
+  background-color: #36c3fe;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s; /* 전환 효과 추가 */
+  width: 190px;
+  margin: 0 auto;
+  margin-left: 9px;
+}
+
+.rePassword-btn:hover {
+  background-color: #6592fe;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 효과 */
+}
+
+.searchPw-wrap {
+  position: relative;
+}
+
+.reset-pw-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* 어두운 배경 */
+  z-index: 1000; /* 양식 위에 표시 */
+}
+
+.reset-password-form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 입체감 효과 */
+  z-index: 1001; /* 오버레이 위에 표시 */
+}
+
+.rePassword-modal-close-btn {
+  padding: 9px 17px; /* 버튼 크기 조정 */
+  font-size: 18px;
+  color: #fff;
+  background-color: #36c3fe;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s; /* 전환 효과 추가 */
+  width: 190px;
+  margin: 0 auto;
+  margin-left: 9px;
+}
+
+.rePassword-modal-close-btn:hover {
+  background-color: #6592fe;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 효과 */
+}
+
+.re-password-btn {
+  padding: 9px 17px; /* 버튼 크기 조정 */
+  font-size: 18px;
+  color: #fff;
+  background-color: #36c3fe;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s; /* 전환 효과 추가 */
+  width: 190px;
+  margin: 0 auto;
+  margin-left: 9px;
+}
+
+.re-password-btn:hover {
+  background-color: #6592fe;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 효과 */
+}
+
+.newPassword-input {
+  margin-left: 16px;
+  padding: 10px; /* 안쪽 여백을 줄임 */
+  border: 1px solid #ccc; /* 테두리 */
+  border-radius: 7px;
+  font-size: 16px; /* 폰트 크기 */
+  outline: none; /* 포커스 시 테두리 제거 */
+  transition: border-color 0.3s, box-shadow 0.3s; /* 테두리 색상 및 그림자 전환 효과 */
+  margin-top: 5px; /* 위쪽 여백을 줄임 */
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.newPassword-input:hover {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 1 23, 255, 0.5);
+}
+
+.rePassword-modal-close-btn {
+  margin-top: 40px;
+}

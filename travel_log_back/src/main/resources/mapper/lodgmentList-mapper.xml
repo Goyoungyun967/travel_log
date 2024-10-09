@@ -255,7 +255,7 @@
 	<insert id="insertReview">
 		insert into lodgment_review
 		values (lodgment_review_seq.nextval,
-		#{memberNo}, #{bookNo} #{lodgmentNo},
+		#{memberNo}, #{bookNo}, #{lodgmentNo},
 		#{reviewContent}, #{rating},
 		null)
 		<selectKey resultType="int" keyProperty="reviewNo"
@@ -412,4 +412,9 @@
 			#{delImgFileNo}
 		</foreach>
 	</delete>
+	  	
+  	<delete id="deleteReview">
+  		delete from lodgment_review where review_no=#{reviewNo}
+  	</delete>
+	
 </mapper>

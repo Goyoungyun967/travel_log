@@ -81,4 +81,27 @@
 	<select id="searchIdEmail" resultType="String">
 		select member_id from member where member_email=#{memberEmail}
 	</select>
+	
+
+	<update id="searchPw">
+		update member set member_pw=#{memberPw} where member_id=#{memberId}
+	</update>
+	<select id="getAdminMemberListCount" resultType="int">
+		select count(*) from member
+	</select>
+	<select id="getAdminMemberList" resultType="member">
+		select * from(select rownum as rnum,m2.* from (select member_no,member_id,member_nickname,member_level,to_char(enroll_date,'yyyy-mm-dd') as enroll_date,nvl((select count(*) from board_report where member_no=m.member_no and report_type=2),0)+nvl((select count(*) from comment_report where member_no=m.member_no and comment_report_type=2),0) as report_count,nvl((select count(*) from member_report where member_no=m.member_no and end_date <![CDATA[>]]> sysdate),0) as member_state from member m order by 
+		<if test="type==1">
+			report_count,	
+		</if>
+		member_no desc
+		)m2) where rnum between #{start} and #{end}
+	</select>
+	<insert id="insertMemberReport">
+		insert into member_report values (#{memberNo},sysdate,sysdate+14)
+	</insert>
+	<update id="updateMemberLevel">
+		update member set member_level=#{memberLevel} where member_no=#{memberNo}
+
+	</update>
 </mapper>

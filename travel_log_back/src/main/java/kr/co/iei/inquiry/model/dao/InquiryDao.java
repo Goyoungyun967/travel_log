@@ -85,7 +85,7 @@ public interface InquiryDao {
 
 	List getBoardReport(int boardNo);
 
-	int deleteBoardReport(int[] reportNo);
+	int deleteBoardReport(int reportNo);
 
 	//댓글 신고
 	int getCommentReportListCount();
@@ -94,7 +94,7 @@ public interface InquiryDao {
 
 	List getCommentReport(int commentNo);
 
-	int deleteCommentReport(int[] reportNo);
+	int deleteCommentReport(int reportNo);
 
 	//리뷰신고
 	int getReviewReportListCount();

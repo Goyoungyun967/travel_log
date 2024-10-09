@@ -22,10 +22,12 @@ public class BoardReportListDTO {
 	private int adCount;
 	@Schema(description = "기타 신고 횟수",type = "int")
 	private int etcCount;
+	@Schema(description = "누적 신고 합계",type = "int")
+	private int totalCount;
 	@Schema(description = "게시글 제목",type = "String")
 	private String boardTitle;
 	@Schema(description = "게시글 작성자 닉네임",type = "String")
 	private String memberNickname;
-	@Schema(description = "신고 번호",type = "int")
-	private int reportNo;
+	@Schema(description = "게시글 유형",type = "int")
+	private int boardType;
 }
