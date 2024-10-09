@@ -24,32 +24,27 @@ const UpdateLodgment = () => {
 
   //호텔 명
   const [hotelName, setHotelName] = useState("");
-  console.log(hotelName);
   // 호텔 타입 저장
   const [lodgmentType, setLodgmentType] = useState(1); //---------
-  console.log(lodgmentType);
   // 호텔 번호 저장
   //   const [inLodgmentNo, setInLodgmentNo] = useState(0); //---------
   // 호텔 주소
   const [address, setAddress] = useState(""); // 보내는 주소
   const [inputAddr, setInputAddr] = useState(""); // input에 들어갈 주소 (보내지는 않음)
-  console.log("wnth-", address);
   // 호텔 성급 저장
   const [lodgmentStar, setLodgmentStar] = useState(0); //---------
   console.log(lodgmentStar);
   // back으로 보내는 이미지
   const [lodgmentImg, setLodgmentImg] = useState(null);
-  console.log(lodgmentImg);
+  console.log("back lodgmentImg - ", lodgmentImg);
   // 호텔 check-in / check-out
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
-  console.log(checkIn);
-  console.log(checkOut);
   // 공지사항
   const [boardContent, setBoardContent] = useState("");
-  console.log(boardContent);
   // 미리보기용 이미지
   const [viewImg, setViewImg] = useState(null);
+  console.log("viewImg - ", viewImg);
   const [upImg, setUpImg] = useState(null);
 
   //   console.log("미리보기 이미지", viewImg);

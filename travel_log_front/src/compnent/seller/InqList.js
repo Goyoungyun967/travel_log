@@ -9,7 +9,7 @@ import { sellerLoginNoState } from "../utils/RecoilData";
 const InqList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [inqList, setInqList] = useState([]);
-  console.log(inqList.length === 0);
+  console.log("iiiiiiiii", inqList.length === 0);
   const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
   useEffect(() => {
     axios
@@ -27,13 +27,26 @@ const InqList = () => {
   return (
     <>
       <div className="seller-inq-box-wrap">
-        <h3>내가 쓴 문의 조회</h3>
-        <div className="inq-btn-wrap">
-          <Link to={`/inquiryWrite`} className="inq-btn">
-            문의 하기
-          </Link>
-        </div>
-        <SellerInqList inqList={inqList} />
+        {inqList.length !== 0 ? (
+          <>
+            <h3>내가 쓴 문의 조회</h3>
+            <div className="inq-btn-wrap">
+              <Link to={`/inquiryWrite`} className="inq-btn">
+                문의 하기
+              </Link>
+            </div>
+            <SellerInqList inqList={inqList} />
+          </>
+        ) : (
+          <>
+            <div>
+              <p>등록된 문의가 없습니다. 등록하시겠습니까?</p>
+              <Link to={`/inquiryWrite`} className="no-inq-list">
+                문의 하기
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </>
   );

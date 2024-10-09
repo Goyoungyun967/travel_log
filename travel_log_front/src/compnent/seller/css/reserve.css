@@ -1,4 +1,10 @@
 /*---- 기능 ----*/
+.seller-reserve-box-wrap > .no-reserve {
+  text-align: center;
+  color: #747474;
+  font-weight: bold;
+  font-size: 20px;
+}
 .reserve-box-wrap {
   border: 1px solid #ccc;
   padding: 30px;
