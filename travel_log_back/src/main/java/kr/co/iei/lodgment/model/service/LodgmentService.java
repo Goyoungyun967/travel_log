@@ -253,6 +253,12 @@ public class LodgmentService {
 		return null;
 	}
 	
+	@Transactional
+	public int deleteReview(int reviewNo) {
+		int result = lodgmentDao.deleteReview(reviewNo);
+		return result;
+	}
+	
 	
 	
 }

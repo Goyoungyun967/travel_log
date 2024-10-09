@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import kr.co.iei.booking.model.dao.BookingDao;
+import kr.co.iei.booking.model.dto.BookingAvailavleDTO;
 import kr.co.iei.booking.model.dto.BookingCancelDTO;
 import kr.co.iei.booking.model.dto.BookingDTO;
 import kr.co.iei.member.model.dao.MemberDao;
@@ -34,10 +35,13 @@ public class BookingService {
 	@Transactional
 	public int insertBooking(BookingDTO bookingInfo) {
 		String memberId = memberDao.getMemberId(bookingInfo.getMemberNo());
-		//System.out.println(memberId);
-		bookingInfo.setMemberId(memberId);
-		int result = bookingDao.insertBooking(bookingInfo);
-		return bookingInfo.getBookNo();
+		BookingAvailavleDTO bookingAvailable = bookingDao.bookingAvailable(bookingInfo);
+		if(bookingAvailable.getBookingCount() >= bookingAvailable.getRoomCount()) {
+			bookingInfo.setMemberId(memberId);
+			int result = bookingDao.insertBooking(bookingInfo);
+			return bookingInfo.getBookNo();			
+		}
+		return -1;
 	}
 
 	public BookingDTO getBookingInfo(int bookNo) {
@@ -48,10 +52,6 @@ public class BookingService {
 
 	public String getPortoneimpuid(BookingCancelDTO cancelData) {
 		String portoneimpuid = bookingDao.getPortoneimpuid(cancelData);
-		//System.out.println("portoneimpuid : "+cancelData);
-		//System.out.println("portoneimpuid : "+portoneimpuid);
-	
-
 		return portoneimpuid;
 	}
 	

@@ -412,6 +412,9 @@
 			#{delImgFileNo}
 		</foreach>
 	</delete>
-	
+	  	
+  	<delete id="deleteReview">
+  		delete from lodgment_review where review_no=#{reviewNo}
+  	</delete>
 	
 </mapper>

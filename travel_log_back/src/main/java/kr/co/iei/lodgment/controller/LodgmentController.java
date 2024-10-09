@@ -225,6 +225,7 @@ public class LodgmentController {
 	return ResponseEntity.ok(reivew);
 	}
 	
+	//리뷰 수정하기
 	@PatchMapping(value ="/reviewUpdate")
 	@Operation(summary = "리뷰 수정",description = "리뷰 번호, 삭제파일")
 	public ResponseEntity<Boolean> updateReview(@ModelAttribute LodgmentReviewDTO newReview,
@@ -252,5 +253,13 @@ public class LodgmentController {
 		}
 		return ResponseEntity.ok(true);
 	}
+	
+	@DeleteMapping(value ="/reviewDelete/{reviewNo}")
+	@Operation(summary = "리뷰 삭제",description = "리뷰 번호")
+	public ResponseEntity<Boolean> deleteReview(@PathVariable int reviewNo){
+		int result = lodgmentService.deleteReview(reviewNo);
+		return ResponseEntity.ok(1==result);
+	}
+
 
 }

@@ -86,4 +86,17 @@
   	<update id="updateBookingStatus">
   		update booking set status = 2 where book_no=#{bookNo} and status=1 and (sysdate > to_date(#{endDate},'YYYY-MM-DD'))
   	</update>
+  	
+  	<select id="bookingAvailable" resultType="bookingAvailable">	
+		SELECT count(*) AS booking_count,
+		       (SELECT r.room_max_capacity
+		        FROM room r 
+		        WHERE r.room_no = b.room_no) AS room_count
+		FROM booking b
+		WHERE start_date <![CDATA[<]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') 
+		  AND end_date > TO_DATE(#{startDate}, 'YYYY-MM-DD')
+		  AND room_no=#{roomNo}
+		GROUP BY b.room_no
+  	</select>
+
 </mapper>
