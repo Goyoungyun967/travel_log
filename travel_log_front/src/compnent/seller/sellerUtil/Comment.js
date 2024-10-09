@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 
 const Comment = (props) => {
+  const backServer = process.env.REACT_APP_BACK_SERVER;
   const {
     reviewList,
     setReviewList,
@@ -28,12 +29,17 @@ const Comment = (props) => {
   const [textComment, setTextComment] = useState(false);
   const [viewTextComment, setViewTextComment] = useState(false);
   const [viewUpdateTextComment, setViewUpdateTextComment] = useState(false);
+  const [view, setView] = useState(false);
+  console.log(view);
+  // 답글 달기 눌렀을 때!
   const addComment = (reviewNo) => {
     setTextComment((prev) => ({
       ...prev,
       [reviewNo]: !prev[reviewNo], // 현재 reviewNo에 해당하는 값만 토글
     }));
   };
+
+  // 답글 보기 눌렀을 때!
   const viewComment = (reviewNo) => {
     setViewTextComment((prev) => ({
       ...prev,
@@ -41,7 +47,37 @@ const Comment = (props) => {
     }));
   };
 
-  const viewUpdateComment = (reviewNo) => {};
+  // 수정 버튼 눌렀을 때 토글!
+  const viewUpdateComment = (reviewNo) => {
+    setView(false);
+    setViewUpdateTextComment((prev) => ({
+      ...prev,
+      [reviewNo]: !prev[reviewNo], // 현재 reviewNo에 해당하는 값만 토글
+    }));
+  };
+
+  // 삭제 버튼 눌렀을 때
+  const deleteComment = (reviewNo) => {
+    const form = new FormData();
+    form.append("reviewNo", reviewNo);
+    axios
+      .patch(`${backServer}/seller/deleteComment`, form, {
+        headers: {
+          contentType: "multipart/form-data",
+          processData: false,
+        },
+      })
+      .then((res) => {
+        console.log("rrrr", res);
+        if (res.data !== 0) {
+          setSellerText("ok");
+          setView(true); // 작성 완료를 누르면 textarea사라지고 타이포 나오게
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <Box
@@ -95,14 +131,34 @@ const Comment = (props) => {
                         <CardContent>
                           <Typography component="div" color="primary">
                             [ 판매자 답변 ]
-                            <Button onClick={() => addComment(review.reviewNo)}>
+                            <Button
+                              onClick={() => viewUpdateComment(review.reviewNo)}
+                            >
                               수정
-                            </Button>{" "}
-                            <Button>삭제</Button>
+                            </Button>
+                            <Button
+                              onClick={() => deleteComment(review.reviewNo)}
+                            >
+                              삭제
+                            </Button>
                           </Typography>
-                          <Typography component="div">
-                            {review.sellerComment}
-                          </Typography>
+                          {viewUpdateTextComment[review.reviewNo] &&
+                          view !== true ? ( // view가 false면 TextForm 아니면 타이포 나오게
+                            <TextForm
+                              reviewNo={review.reviewNo}
+                              lodgmentNo={review.lodgmentNo}
+                              setReviewList={setReviewList}
+                              sellerText={sellerText}
+                              setSellerText={setSellerText}
+                              reqPage={reqPage}
+                              textComment={review.sellerComment}
+                              setView={setView}
+                            />
+                          ) : (
+                            <Typography component="div">
+                              {review.sellerComment}
+                            </Typography>
+                          )}
                         </CardContent>
                       </Card>
                     ) : (
@@ -123,12 +179,13 @@ const Comment = (props) => {
 };
 // 답글 달기
 const TextForm = (props) => {
+  const textComment = props.textComment;
+  const setView = props.setView;
+  const [text, setText] = useState(textComment || "");
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const { lodgmentNo, setReviewList, reqPage, setSellerText } = props;
-  const [text, setText] = useState("");
-  const [replyText, setReplyText] = useState(""); // 상태 추가
-  console.log(text);
+  console.log("text", text);
   const { reviewNo } = props;
   console.log("asdfadsf", reviewNo);
   return (
@@ -156,9 +213,10 @@ const TextForm = (props) => {
               },
             })
             .then((res) => {
-              console.log(res);
+              console.log("rrrr", res);
               if (res.data !== 0) {
                 setSellerText("ok");
+                setView(true); // 작성 완료를 누르면 textarea사라지고 타이포 나오게
               }
             })
             .catch((err) => {
@@ -177,6 +235,7 @@ const TextForm = (props) => {
             overflow: "hidden", // 콘텐츠가 넘칠 경우 스크롤 표시
             resize: "vertical", // 수직으로 크기 조절 가능
           }}
+          value={text}
           onChange={(e) => {
             setText(e.target.value);
           }}
