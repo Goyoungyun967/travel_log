@@ -192,11 +192,12 @@ a {
 
 .main-search-bar {
   position: absolute;
-  top: 40%;
+  top: 38%;
   left: 28%;
   z-index: 2 !important;
 }
-.lodgment-table-wrap {
+.main-search-bar .lodgment-table-wrap {
+  padding: 20px;
   background-color: var(--main2);
 }
 
@@ -205,6 +206,6 @@ a {
   max-width: 1200px;
   padding: 30px 20px !important;
 }
-/* .swiper-slide {
+.main-board-list-wrap .swiper-slide {
   width: 280px !important;
-} */
+}

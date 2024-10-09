@@ -201,12 +201,12 @@ const AccompanyView = () => {
             {loginNickname === accompany.memberNickname ? (
               <>
                 {" "}
-                <Link
+                {/* <Link
                   to={`/board/AccompanyUpdate/${accompany.boardNo}/${updateNo}`}
                   className="board-update-btn"
                 >
                   수정
-                </Link>
+                </Link> */}
                 <button
                   type="button"
                   className="board-delete-btn"

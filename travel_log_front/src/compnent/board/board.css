@@ -312,14 +312,14 @@ props/*글자 사이즈*/
   border-radius: 10px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s, transform 0.2s;
+  transition: all 3s, transform 0.2s;
 }
 .board-write:hover {
-  background-color: #06bb15;
+  opacity: 0.8;
   transform: translateY(-2px);
 }
 .accompany-write:hover {
-  background-color: #06bb15;
+  opacity: 0.8;
   transform: translateY(-2px);
 }
 
@@ -391,11 +391,11 @@ props/*글자 사이즈*/
   padding: 10px 20px; /* 패딩 추가 */
   font-size: 16px; /* 글자 크기 */
   cursor: pointer; /* 포인터 커서 */
-  transition: background-color 0.3s ease; /* 배경색 전환 효과 */
+  transition: all 0.3s; /* 배경색 전환 효과 */
 }
 
 .boardWrite-btn:hover {
-  background-color: #45a049; /* 호버 시 더 어두운 초록색 */
+  opacity: 0.8;
 }
 
 .boardWrite-btn:active {

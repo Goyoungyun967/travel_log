@@ -38,7 +38,7 @@ const BoardView = () => {
 
   useEffect(() => {
     axios
-      .get(`${backServer}/board/boardNo/${boardNo}/${memberNo}`)
+      .get(`${backServer}/board/boardNo/${boardNo}`)
       .then((res) => {
         setBoard(res.data);
         console.log(res.data);
