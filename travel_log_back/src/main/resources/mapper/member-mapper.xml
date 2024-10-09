@@ -85,7 +85,7 @@
 
 	<update id="searchPw">
 		update member set member_pw=#{memberPw} where member_id=#{memberId}
-
+	</update>
 	<select id="getAdminMemberListCount" resultType="int">
 		select count(*) from member
 	</select>
