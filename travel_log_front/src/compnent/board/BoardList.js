@@ -462,7 +462,11 @@ const BoardItem = (props) => {
             >
               <Col xs={2} md={2} style={{ padding: 0 }}>
                 <Image
-                  src="/image/board_default_img.png"
+                  src={
+                    board.memberImage
+                      ? `${backServer}/member/profile/${board.memberImage}`
+                      : "/image/lodgment_default_img.png"
+                  }
                   className="member-img-circle"
                   roundedCircle
                 />

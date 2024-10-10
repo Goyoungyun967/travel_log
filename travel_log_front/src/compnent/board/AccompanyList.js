@@ -138,7 +138,7 @@ const AccompanyItem = (props) => {
   else if (hours > 0) timeString = `${hours}시간 전`;
   else if (minutes > 0) timeString = `${minutes}분 전`;
   else timeString = `방금전`;
-
+  console.log(accompany.memberImage);
   return (
     <>
       {isLogin ? (
@@ -168,7 +168,11 @@ const AccompanyItem = (props) => {
               >
                 <Col xs={2} md={2} style={{ padding: 0 }}>
                   <Image
-                    src="/image/board_default_img.png"
+                    src={
+                      accompany.memberImage
+                        ? `${backServer}/member/profile/${accompany.memberImage}`
+                        : "/image/lodgment_default_img.png"
+                    }
                     className="member-img-circle"
                     roundedCircle
                   />
@@ -246,7 +250,11 @@ const AccompanyItem = (props) => {
               >
                 <Col xs={2} md={2} style={{ padding: 0 }}>
                   <Image
-                    src="/image/board_default_img.png"
+                    src={
+                      accompany.memberImage
+                        ? `${backServer}/member/profile/${accompany.memberImage}`
+                        : "/image/lodgment_default_img.png"
+                    }
                     className="member-img-circle"
                     roundedCircle
                   />
