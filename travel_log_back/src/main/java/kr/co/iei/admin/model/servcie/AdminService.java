@@ -289,7 +289,7 @@ public class AdminService {
 	public Map getAdminMemberList(int reqPage, int type) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Map<String, Object> m  = new HashMap<String, Object>();
-		int numPerPage = 20;
+		int numPerPage = 10;
 		int pageNaviSize = 5;
 		int totalCount = memberDao.getAdminMemberListCount();
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);

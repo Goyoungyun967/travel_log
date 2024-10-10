@@ -3,6 +3,9 @@
   align-self: start;
   position: relative;
 }
+.faq-section .faq-content ul>li{
+  list-style-type: disc !important;
+}
 .faq-wrap {
   width: 100%;
   display: flex;

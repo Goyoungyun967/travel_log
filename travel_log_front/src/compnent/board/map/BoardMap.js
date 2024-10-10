@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
 const BoardMap = () => {
+  /*
   const { kakao } = window;
 
   const container = useRef(null); // 지도 컨테이너 접근
@@ -13,7 +14,7 @@ const BoardMap = () => {
     const map = new kakao.maps.Map(container.current, options);
   }, []);
 
-  return <div style={{ width: "100%", height: "500px" }} ref={container}></div>;
+  return <div style={{ width: "100%", height: "500px" }} ref={container}></div>;*/
 };
 
 export default BoardMap;
