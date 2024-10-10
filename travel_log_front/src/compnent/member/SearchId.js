@@ -19,7 +19,7 @@ const SearchId = () => {
   const sendEmail = () => {
     if (member.memberEmailId !== "" && member.memberEmail !== "") {
       const memberEmail = member.memberEmailId + "@" + member.memberEmail;
-      console.log(memberEmail);
+
       axios
         .get(`${backServer}/member/sendIdEmail/${memberEmail}`)
         .then((res) => {

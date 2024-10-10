@@ -136,7 +136,6 @@ const SellerJoin = () => {
       return;
     }
     if (idCheck === 1 && pwMessage.current.classList.contains("valid")) {
-      console.log("전송할 seller 데이터:", seller);
       axios
         .post(`${backServer}/seller/sellerJoin`, seller)
         .then((res) => {

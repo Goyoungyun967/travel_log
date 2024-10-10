@@ -151,9 +151,9 @@ public class MemberService {
 		int numPerPage = 8;		//한 페이지당 게시물 수
 		int pageNaviSize = 5;		//페이지네비 길이 
 		int totalCount = boardDao.myBoardTotalCount(memberNo);
-		System.out.println(reqPage);
+		
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
-		System.out.println(pi);
+		
 		Map<String, Object> myBoardMap = new HashMap<String, Object>();
 		myBoardMap.put("memberNo", memberNo);
 		myBoardMap.put("start", pi.getStart());
@@ -199,7 +199,7 @@ public class MemberService {
 	@Transactional
 	public int searchPw(MemberDTO member) {
 		String encPw = encoder.encode(member.getMemberPw());
-		System.out.println(encPw);
+		
 		member.setMemberPw(encPw);
 		int result = memberDao.searchPw(member);
 		return result;

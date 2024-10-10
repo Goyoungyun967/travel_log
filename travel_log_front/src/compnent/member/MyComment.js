@@ -13,7 +13,6 @@ const MyComment = () => {
   const [pi, setPi] = useState({});
   const [memberNo, setMemberNo] = useRecoilState(loginNoState);
 
-  console.log(memberNo);
   useEffect(() => {
     axios
       .get(`${backServer}/member/myInq/list/${memberNo}/${reqPage}`)

@@ -82,7 +82,6 @@ const BoardItem = (props) => {
   return (
     <tr
       onClick={() => {
-        console.log(board.boardType);
         if (board.boardType === 1) {
           navigate(
             `/board/view/${board.boardNo}/${encodeURIComponent(timeString)}`

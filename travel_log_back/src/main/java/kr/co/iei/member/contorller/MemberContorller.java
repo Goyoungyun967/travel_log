@@ -102,7 +102,7 @@ public class MemberContorller {
 		
 		try {
 	        emailSender.sendMail("트레블로그 이메일 인증번호", memberEmail, emailContent);
-	        System.out.println("Generated verification code: " + sb.toString());
+	       
 	        return ResponseEntity.ok(sb.toString()); // 이메일 발송 성공
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -216,7 +216,7 @@ public class MemberContorller {
 	
 	@PatchMapping(value="/searchPw")
 	public ResponseEntity<Integer> searchPw(@RequestBody MemberDTO member){
-		System.out.println(member);
+		
 		int result = memberService.searchPw(member);
 		return ResponseEntity.ok(result);
 	}

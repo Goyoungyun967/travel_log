@@ -58,7 +58,6 @@ const SearchPw = () => {
   };
 
   const updateNewPassword = () => {
-    console.log(member);
     if (member.memberPw === newMemberPwRe) {
       axios
         .patch(`${backServer}/member/searchPw`, member)
