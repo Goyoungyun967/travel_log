@@ -204,7 +204,7 @@ const BoardList = () => {
           {/* </div> */}
         </Swiper>
         <div className="board-page-title flex-spbetw">
-          <span>여행 포스터</span>
+          <span>여행 포스트</span>
         </div>
         <div className="board-preview-wrap height-box">
           {boardList.map((board, i) => (

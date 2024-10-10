@@ -15,6 +15,7 @@ import { useRecoilState } from "recoil";
 import { loginNicknameState, loginNoState } from "../utils/RecoilData";
 import "./board.css";
 import ReportModal from "./ReportModal";
+import Swal from "sweetalert2";
 
 const BoardView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -49,16 +50,34 @@ const BoardView = () => {
   }, [comfirm, likeCount, isLike]);
 
   const deleteBoard = () => {
-    axios
-      .delete(`${backServer}/board/delete/${boardNo}`)
-      .then((res) => {
-        if (res.data === 1) {
-          navigate("/board/list");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    Swal.fire({
+      title: "삭제하시겠습니까?",
+      text: "삭제는 확인 버튼을 클릭하세요.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // 사용자가 확인 버튼을 클릭했을 때 삭제 요청
+        axios
+          .delete(`${backServer}/board/delete/${boardNo}`)
+          .then((res) => {
+            if (res.data === 1) {
+              Swal.fire("삭제되었습니다!", "", "success");
+              navigate("/board/list"); // 삭제 후 페이지 이동
+            } else {
+              Swal.fire("삭제 실패!", "다시 시도해주세요.", "error");
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            Swal.fire("삭제 중 오류 발생!", "문제를 해결해주세요.", "error");
+          });
+      } else {
+        Swal.fire("삭제가 취소되었습니다.", "", "info"); // 삭제 취소 알림
+      }
+    });
   };
 
   const likeClick = () => {

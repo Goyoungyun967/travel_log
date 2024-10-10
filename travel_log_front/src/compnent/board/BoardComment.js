@@ -23,7 +23,6 @@ const BoardComment = ({ board }) => {
   const [isLike, setIsLike] = useState(Number(isLikeParam));
   //신고 모달창
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const reportBoard = () => {
     setIsModalOpen(true);
   };
@@ -50,32 +49,33 @@ const BoardComment = ({ board }) => {
 
   // 댓글 제출 핸들러
   const handleCommentSubmit = () => {
-    if (checkReport()) {
-      if (commentValue.trim() !== "") {
-        const form = new FormData();
-        form.append("commentContent", commentValue.trim());
-        form.append("commentWriter", loginNickname);
-        form.append("boardNo", board.boardNo);
-
-        axios
-          .post(`${backServer}/board/insertComment`, form, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((res) => {
-            // 댓글 추가 후 목록을 다시 불러옴
-            console.log(res.data);
-            setCommentList((prevComments) => [...prevComments, res.data]);
-            setCommentValue(""); // 입력 필드 초기화
-          })
-          .catch((err) => {
-            console.error("댓글 추가 실패:", err);
-          });
-      } else {
-        alert("댓글 내용을 입력하세요.");
+    checkReport().then((result) => {
+      if (result) {
+        if (commentValue.trim() !== "") {
+          const form = new FormData();
+          form.append("commentContent", commentValue.trim());
+          form.append("commentWriter", loginNickname);
+          form.append("boardNo", board.boardNo);
+          axios
+            .post(`${backServer}/board/insertComment`, form, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            })
+            .then((res) => {
+              // 댓글 추가 후 목록을 다시 불러옴
+              console.log(res.data);
+              setCommentList((prevComments) => [...prevComments, res.data]);
+              setCommentValue(""); // 입력 필드 초기화
+            })
+            .catch((err) => {
+              console.error("댓글 추가 실패:", err);
+            });
+        } else {
+          alert("댓글 내용을 입력하세요.");
+        }
       }
-    }
+    });
   };
 
   // 댓글 수정 핸들러
@@ -111,18 +111,32 @@ const BoardComment = ({ board }) => {
 
   // 댓글 삭제 핸들러
   const handleCommentDelete = (commentNo) => {
-    console.log(commentNo);
-    axios
-      .delete(`${backServer}/board/deleteComment/${commentNo}`)
-      .then(() => {
-        setCommentList((prevComments) =>
-          prevComments.filter((comment) => comment.commentNo !== commentNo)
-        ); // 댓글 목록에서 삭제
-      })
-      .catch((error) => {
-        console.error("댓글 삭제 실패:", error);
-        alert("댓글 삭제에 실패했습니다. 다시 시도해 주세요.");
-      });
+    Swal.fire({
+      title: "댓글을 삭제하시겠습니까?",
+      text: "삭제는 확인 버튼을 클릭하세요.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // 사용자가 확인 버튼을 클릭했을 때 삭제 요청
+        axios
+          .delete(`${backServer}/board/deleteComment/${commentNo}`)
+          .then(() => {
+            setCommentList((prevComments) =>
+              prevComments.filter((comment) => comment.commentNo !== commentNo)
+            ); // 댓글 목록에서 삭제
+            Swal.fire("댓글이 삭제되었습니다!", "", "success");
+          })
+          .catch((error) => {
+            console.error("댓글 삭제 실패:", error);
+            Swal.fire("댓글 삭제 실패!", "다시 시도해 주세요.", "error");
+          });
+      } else {
+        Swal.fire("댓글 삭제가 취소되었습니다.", "", "info"); // 삭제 취소 알림
+      }
+    });
   };
 
   // 댓글 좋아요 핸들러
@@ -157,11 +171,12 @@ const BoardComment = ({ board }) => {
   if (loading) {
     return <p>로딩 중...</p>; // 로딩 상태 표시
   }
-  const checkReport = () => {
+  const checkReport = async () => {
     if (loginNo !== -1) {
-      axios
+      return axios
         .get(`${backServer}/member/report/${loginNo}`)
         .then((res) => {
+          console.log(res.data);
           if (res.data !== "") {
             Swal.fire({
               title: "댓글 작성 제한",
@@ -169,11 +184,16 @@ const BoardComment = ({ board }) => {
               icon: "warning",
             });
             return false;
+          } else {
+            return true;
           }
         })
         .catch((err) => {
           console.log(err);
+          return false;
         });
+    } else {
+      return Promise.resolve(false);
     }
   };
   return (

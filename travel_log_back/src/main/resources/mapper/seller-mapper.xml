@@ -107,7 +107,7 @@
 			when member_age >= 20 then '20대'
 			when member_age >= 10 then '10대'
 		end)
-		order by 1 desc
+		order by 2
   </select>
   <select id="getSellerSalesGender" resultType="map">
   	select 
@@ -123,6 +123,8 @@
 		seller_no=#{sellerNo}
 	group by 
 		decode(member_gender,'m','남성','f','여성')
+	order by
+		2 desc
   </select>
   
   <!-- 정산 -->
@@ -134,7 +136,7 @@
   	join 
   		room  using (room_no)
   	where 
-  		payment_date between add_months(sysdate,-1) and sysdate and state=2 group by seller_no
+  		payment_date between add_months(sysdate,-1) and sysdate and status=2 group by seller_no
   </select>
   <insert id="insertSellerStm">
   	insert into stm_tbl values(stm_seq.nextval,#{sellerNo},#{sales},sysdate,0)

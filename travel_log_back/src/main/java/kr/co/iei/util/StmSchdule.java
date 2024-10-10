@@ -14,9 +14,8 @@ public class StmSchdule {
 	@Autowired
 	private BookingService bookingService;
 	
-	@Scheduled(cron = "0 0 0 4 * *")
+	@Scheduled(cron = "0 0 0 10 * *")
 	public void insertSellerStm() {
-		System.out.println(2);
 		adminSerivce.insertSellerStm();
 	}
 	//매일 몇시에 10-11시 체크아웃

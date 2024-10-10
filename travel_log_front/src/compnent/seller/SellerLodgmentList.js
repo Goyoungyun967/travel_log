@@ -15,22 +15,17 @@ const SellerLodgmentList = () => {
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
   const [lodgmentList, setLodgmentList] = useState([]);
-  console.log("rrrrrr", lodgmentList.length);
   const isLogin = useRecoilValue(isSellerLoginState);
   const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
-  console.log("loginNo-", loginNo);
   useEffect(() => {
     axios
       .post(`${backServer}/seller/lodgmentList`, null, {
         params: { loginNo: loginNo },
       })
       .then((res) => {
-        console.log("r:", res);
         setLodgmentList(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [loginNo]);
 
   // 판매자 메인
@@ -51,8 +46,6 @@ const SellerLodgmentList = () => {
             autoplay={{ delay: 3000 }}
             pagination={{ clickable: true }}
             loop={true}
-            onSlideChange={() => console.log("slide change")}
-            onSwiper={(swiper) => console.log(swiper)}
             navigation={true}
             modules={[Pagination, Navigation]}
             className="mySwiper seller-swiper"
@@ -85,11 +78,15 @@ const ListItem = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const list = props.list;
-  console.log(list);
   return (
     <>
       {list.lodgmentDelete === 0 ? ( // 0이면 등록 대기 중인 숙소
-        <div className="seller-lg-list-item seller-admin-check">
+        <div
+          className="seller-lg-list-item seller-admin-check"
+          onClick={() => {
+            navigate(`/seller/lodgmentView/${list.lodgmentNo}`);
+          }}
+        >
           <p className="seller-check-p">등록 대기 중</p>
           <div className="seller-item-img">
             <img

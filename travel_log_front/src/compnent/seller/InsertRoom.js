@@ -18,55 +18,29 @@ const InsertRoom = () => {
   const [lodgmentList, setLodgmentList] = useState({});
   // 객실 이름
   const [roomName, setRoomName] = useState("");
-  console.log("roomName-", roomName);
   // 상품 수
   const [roomNum, setRoomNum] = useState(0);
-  console.log("roomNum-", roomNum);
   // 객실 가격
   const [roomPrice, setRoomPrice] = useState(0);
-  console.log("roomPrice-", roomPrice);
   // 공지사항
   const [boardContent, setBoardContent] = useState(
     "<h2>객실 공지사항</h2><p><br></p><p><br></p><h2>객실 정보</h2><p><br></p><p><br></p><h2>조식 정보</h2><h5><br></h5>"
   );
-  console.log("boardContent-", boardContent);
   // 첨부파일 (배열[])
   const [roomFile, setRoomFile] = useState([]);
-  console.log("roomFile-", roomFile);
   // 해시태그
   const [hashTag, setHashTag] = useState([]);
-  console.log("hashTag-", hashTag);
   // 최대인원수
   const [maxCapa, setMaxCapa] = useState(0);
-  console.log("maxPaca-", maxCapa);
-
-  console.log(
-    "숙소 번호 - ",
-    lodgmentNo,
-    "상품 이름 - ",
-    roomName,
-    "상품 수 - ",
-    roomNum,
-    "객실 가격 - ",
-    roomPrice,
-    "해시태그 - ",
-    hashTag,
-    "최대인원 수 - ",
-    maxCapa
-  );
 
   useEffect(() => {
     axios
       .get(`${backServer}/seller/lodgmentInfo/${lodgmentNo}`)
       .then((res) => {
-        console.log(res);
         setLodgmentList(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
-  console.log(lodgmentList);
 
   // 보내기
   const writeRoom = () => {
@@ -139,14 +113,12 @@ const InsertRoom = () => {
         },
       })
       .then((res) => {
-        console.log("res-", res);
         if (res.data) {
           Swal.fire({
             title: "객실 등록 완료",
             icon: "success",
           });
           navigate(`/seller/lodgmentView/${lodgmentNo}`);
-          console.log(form);
         } else {
           Swal.fire({
             title: "문제가 발생했습니다.",
@@ -155,14 +127,12 @@ const InsertRoom = () => {
           });
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   return (
     <>
-      {lodgmentList.sellerNo === loginNo || memberLevel === 1 ? (
+      {lodgmentList.sellerNo === loginNo ? (
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -293,7 +263,6 @@ const FileInfo = (props) => {
   const setRoomFile = props.setRoomFile;
   // 미리보기용 첨부 파일 (파일 전송 x)
   const [showRoomFile, setShowRoomFile] = useState([]);
-  console.log("파일 - ", showRoomFile);
 
   // 파일 add
   const addRoomFile = (e) => {

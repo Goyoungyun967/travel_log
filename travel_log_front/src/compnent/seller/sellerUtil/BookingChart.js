@@ -3,9 +3,7 @@ import axios from "axios";
 
 const BookingChart = (props) => {
   const loginNo = props.sellerLoginNo;
-  console.log("loginNoBooking", loginNo);
   const [bookingChart, setBookingChart] = useState({});
-  console.log("bc", bookingChart);
 
   const backServer = process.env.REACT_APP_BACK_SERVER;
   useEffect(() => {
@@ -13,12 +11,9 @@ const BookingChart = (props) => {
       axios
         .get(`${backServer}/seller/bookingInfo/${loginNo}`)
         .then((res) => {
-          console.log("bookRes - ", res);
           setBookingChart(res.data);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     }
   }, [loginNo]);
 

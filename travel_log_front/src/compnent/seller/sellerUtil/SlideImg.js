@@ -32,7 +32,6 @@ const SlideImg = (props) => {
 const InqSlideImg = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const file = props.fileList;
-  console.log(file);
   return (
     <>
       {file && file.length > 0 ? ( // 파일이 존재할 때만 Carousel 렌더링
@@ -60,14 +59,12 @@ const InqSlideImg = (props) => {
 const ReviewSlideImg = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const file = props.fileList;
-  console.log("file-----", file);
   return (
     <>
       {file && file.length > 0 ? ( // 파일이 존재할 때만
         <Carousel data-bs-theme="dark" className="custom-carousel">
           {file.map((img, i) => (
             <Carousel.Item key={i}>
-              {console.log("img------------", img)}
               <img
                 className={`d-block seller-review-image`}
                 src={`${backServer}/review/${img.reviewImgPath}`}

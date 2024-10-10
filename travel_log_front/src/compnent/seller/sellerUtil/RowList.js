@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 // 판매자 매출 정보 리스트
 const RowList = (props) => {
   const stmInfo = props.stmInfo;
-  console.log(stmInfo);
   //   const [filterModel, setFilterModel] = useState({ items: [] }); 만약 여기서 필터를 조회하고 싶으면 사용하기
 
   // 행 넣기
@@ -72,7 +71,6 @@ const SellerInqList = (props) => {
   // 해당 행 클릭시 상세로 이동하게..
   const handleRowClick = (params) => {
     const inqNo = params.row.id;
-    console.log(inqNo);
     navigate(`/seller/inqView/${inqNo}`);
   };
 
@@ -107,7 +105,6 @@ const SellerInqList = (props) => {
 const SellerReserveList = (props) => {
   const navigate = useNavigate();
   const list = props.list;
-  console.log(list);
 
   // 날짜 변환 함수 정의
   const formatDate = (dateString) => {
@@ -138,7 +135,6 @@ const SellerReserveList = (props) => {
   // 해당 행 클릭시 상세로 이동하게..
   const handleRowClick = (params) => {
     const inqNo = params.row.id;
-    console.log(inqNo);
     navigate(`/seller/reserve/${inqNo}`);
   };
   return (
