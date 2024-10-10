@@ -25,8 +25,9 @@ const FaqWrite = (props) => {
         setFaqTypeList(newFaqTypeList);
     },[])
     */
+
   const [faqCategoryIndex, setFaqCategoryIndex] = useState(
-    categoryIndex ? categoryIndex : 0
+    categoryIndex ? Number(categoryIndex) : 0
   );
   const [faq, setFaq] = useState({ faqType: "L1", faqTitle: "" });
   const [faqContent, setFaqContent] = useState("");
@@ -35,9 +36,6 @@ const FaqWrite = (props) => {
     setFaq({ ...faq, [e.target.id]: e.target.value });
   };
   useEffect(() => {
-    setFaq({ faqType: "L1", faqTitle: "" });
-    setFaqContent("");
-    setFaqCategoryIndex(0);
     if (faqNo) {
       axios
         .get(`${backServer}/admin/faq/${faqNo}`)
@@ -48,6 +46,10 @@ const FaqWrite = (props) => {
         .catch((err) => {
           console.log(err);
         });
+    } else {
+      setFaq({ faqType: "L1", faqTitle: "" });
+      setFaqContent("");
+      setFaqCategoryIndex(0);
     }
   }, [faqNo]);
 

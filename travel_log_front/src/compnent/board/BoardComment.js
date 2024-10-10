@@ -159,7 +159,7 @@ const BoardComment = ({ board }) => {
   }
   const checkReport = async () => {
     if (loginNo !== -1) {
-      axios
+      return axios
         .get(`${backServer}/member/report/${loginNo}`)
         .then((res) => {
           console.log(res.data);
@@ -169,15 +169,18 @@ const BoardComment = ({ board }) => {
               text: `제한 기간 : ${res.data.startDate} ~ ${res.data.endDate}`,
               icon: "warning",
             });
+            return false;
           } else {
             return true;
           }
         })
         .catch((err) => {
           console.log(err);
+          return false;
         });
+    } else {
+      return Promise.resolve(false);
     }
-    return false;
   };
   return (
     <div className="board-comment-section">
