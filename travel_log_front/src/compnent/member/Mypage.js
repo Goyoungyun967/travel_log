@@ -12,7 +12,7 @@ const Mypage = () => {
   const [member, setMember] = useState({ memberImage: "" });
   const [memberImage, setMemberImage] = useState(null); // 초기 상태 설정
   const thumbnailRef = useRef(null);
-  console.log(memberNo);
+
   const [fileImg, setFileImg] = useState();
   useEffect(() => {
     if (memberNo != -1) {
@@ -52,9 +52,6 @@ const Mypage = () => {
       const form = new FormData();
       form.append("memberNo", memberNo);
       form.append("file", file); // 파일을 추가
-
-      console.log("멤버 번호:", memberNo);
-      console.log("멤버 이미지:", file);
 
       axios
         .post(`${backServer}/member/profile`, form, {
