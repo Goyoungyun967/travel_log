@@ -105,7 +105,11 @@ const AccompanyView = () => {
                 >
                   <Col xs={2} md={2}>
                     <Image
-                      src="/image/board_default_img.png"
+                      src={
+                        accompany.memberImage
+                          ? `${backServer}/member/profile/${accompany.memberImage}`
+                          : "/image/lodgment_default_img.png"
+                      }
                       className="nick-img-circle"
                       roundedCircle
                     />

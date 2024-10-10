@@ -41,4 +41,6 @@ public class LodgmentDTO {
 	private String serviceTagType;
 	@Schema(description = "룸정보",type="RoomSearchDTO")
 	private List<RoomSearchDTO> RoomSearchList;	
+	@Schema(description = "평균점수",type="RoomSearchDTO")
+	private int avgRating;	
 }

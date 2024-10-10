@@ -294,8 +294,15 @@
 	</select>
 	
 	<select id="getLodgmentInfo" resultType="lodgmentDetail">
-		select * from
-		lodgment_storage where lodgment_no=${lodgmentNo}
+		select 
+		lodgment_addr, lodgment_check_in,lodgment_check_out
+		lodgment_img_path,lodgment_name,lodgment_no,
+		lodgment_notice,lodgment_star_grade,lodgment_type_no,
+		seller_no, 
+		(select floor(avg(rating)) from lodgment_review where lodgment_no = ${lodgmentNo}) as avg_rating
+		 from
+		lodgment_storage
+		where lodgment_no=${lodgmentNo}
 	</select>
 
 

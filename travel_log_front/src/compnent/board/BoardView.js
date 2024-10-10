@@ -112,7 +112,11 @@ const BoardView = () => {
                 >
                   <Col xs={2} md={2}>
                     <Image
-                      src="/image/board_default_img.png"
+                      src={
+                        board.memberImage
+                          ? `${backServer}/member/profile/${board.memberImage}`
+                          : "/image/lodgment_default_img.png"
+                      }
                       className="nick-img-circle"
                       roundedCircle
                     />
