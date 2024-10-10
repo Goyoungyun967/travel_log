@@ -47,7 +47,7 @@ const LodgmentReviewUpdate = (props) => {
         `${backServer}/lodgment/reviewList/${lodgmentNo}/${reqPage}/${loginNo}`
       )
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setPi(res.data.pi);
         setAvailableReview(res.data.availableReview);
         setViewReview(res.data.list);

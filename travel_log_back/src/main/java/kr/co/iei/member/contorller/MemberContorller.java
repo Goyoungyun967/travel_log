@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.member.model.dto.LoginMemberDTO;
 import kr.co.iei.member.model.dto.MemberDTO;
-
+import kr.co.iei.member.model.dto.MemberReportDTO;
 import kr.co.iei.member.model.service.MemberService;
 import kr.co.iei.seller.model.dto.SellerDTO;
 import kr.co.iei.util.EmailSender;
@@ -214,19 +214,27 @@ public class MemberContorller {
 		    }
 	}
 	
-	@PatchMapping(value="searchPw")
+	@PatchMapping(value="/searchPw")
 	public ResponseEntity<Integer> searchPw(@RequestBody MemberDTO member){
 		System.out.println(member);
 		int result = memberService.searchPw(member);
 		return ResponseEntity.ok(result);
 	}
+
 	
 	@GetMapping(value="/memberNickname/{memberNickname}/check-nickname")
 	public ResponseEntity<Integer> checkNickname(@PathVariable String memberNickname){
 		int result = memberService.checkNickname(memberNickname);
 		
 		return ResponseEntity.ok(result);
+
+	@GetMapping(value="/report/{memberNo}")
+	public ResponseEntity<MemberReportDTO> getMemberReport(@PathVariable int memberNo){
+		MemberReportDTO memberReport = memberService.getMemberReport(memberNo);
+		return ResponseEntity.ok(memberReport);
+
 	}
+}
 }
 	
 	

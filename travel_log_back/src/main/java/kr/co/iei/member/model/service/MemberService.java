@@ -18,6 +18,7 @@ import kr.co.iei.inquiry.model.dao.InquiryDao;
 import kr.co.iei.member.model.dao.MemberDao;
 import kr.co.iei.member.model.dto.LoginMemberDTO;
 import kr.co.iei.member.model.dto.MemberDTO;
+import kr.co.iei.member.model.dto.MemberReportDTO;
 import kr.co.iei.util.JwtUtils;
 import kr.co.iei.util.PageInfo;
 import kr.co.iei.util.PageUtil;
@@ -204,8 +205,15 @@ public class MemberService {
 		return result;
 	}
 
+
 	public int checkNickname(String memberNickname) {
 		int result = memberDao.checkNickname(memberNickname);
 		return result;
+
+	public MemberReportDTO getMemberReport(int memberNo) {
+		MemberReportDTO memberReport = memberDao.getMemberReport(memberNo);
+		return memberReport;
+
 	}
+}
 }

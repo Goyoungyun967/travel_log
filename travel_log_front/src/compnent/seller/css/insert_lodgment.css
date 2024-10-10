@@ -14,6 +14,9 @@
   justify-content: space-around;
   flex-wrap: wrap;
 }
+.seller-lodgment-list {
+  width: 800px;
+}
 .box-wrap > input {
   border-radius: 0px;
 }
@@ -52,31 +55,19 @@
 .Q > button {
   margin-right: 50px;
 }
-.Q > button:nth-child(3) {
-  background-color: red;
-}
+
 .Q > p {
   font-size: 12px;
 }
 .box-notice {
   margin-top: 20px;
 }
-.btn {
-  margin-top: 25px;
-  width: 100px;
-  border-radius: 10px;
-  border: none;
-  padding: 5px;
-}
-.primary {
-  background-color: var(--main5);
-  color: var(--main2);
-}
 
 .search-hotel {
   border: 1px solid #ccc;
   width: 300px;
   height: 300px;
+  margin-top: 80px;
 }
 .search-hotel > .input {
   text-align: center;
@@ -169,11 +160,74 @@
   border-bottom: 2px solid #ccc;
 }
 .insertLodgmentBtn {
-  margin-top: 30px;
+  text-align: center;
+  cursor: pointer;
+  width: 100px;
+  background-color: var(--seller2);
+  border-radius: 10px;
+  height: 40px;
+  line-height: 40px;
+  color: var(--seller4) !important;
+  margin: 20px;
+  border: none;
+}
+.insertLodgmentBtn:hover {
+  background-color: var(--seller1);
 }
 
 .box-notice > .editor {
   display: flex;
   justify-content: center;
   height: 500px;
+}
+.seller-lodgment-list > .seller-lodgment-no {
+  width: 100%;
+}
+.seller-lodgment-list > .seller-lodgment-no > p {
+  font-weight: bold;
+  color: #747474;
+  font-size: 20px;
+  text-align: center;
+}
+.seller-lodgment-no > .sellerQusBtn {
+  display: block;
+  margin: 0 auto;
+  width: 50%;
+  text-align: center;
+  border-radius: 10px;
+  font-weight: bold;
+  line-height: 50px;
+  background-color: var(--seller1);
+  color: var(--seller3) !important;
+}
+.seller-lodgment-no > .sellerQusBtn:hover {
+  background-color: var(--seller2);
+}
+
+.AddLodgmentYesBtn {
+  display: block;
+  float: left;
+  text-align: center;
+  margin-top: 25px;
+  width: 100px;
+  padding: 5px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  background-color: var(--seller1);
+  color: var(--seller3) !important;
+}
+
+.AddLodgmentNoBtn {
+  display: block;
+  float: left;
+  text-align: center;
+  margin-top: 25px;
+  width: 100px;
+  padding: 5px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  background-color: var(--seller1);
+  color: var(--seller3) !important;
 }

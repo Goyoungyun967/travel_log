@@ -12,8 +12,10 @@ import Textarea from "@mui/joy/Textarea";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import dayjs from "dayjs";
 
+// 리뷰
 const Comment = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const {
@@ -26,6 +28,7 @@ const Comment = (props) => {
     setSellerText,
   } = props;
   console.log("review - ", reviewList);
+  console.log("reviewArr - ", reviewList.length);
   const [textComment, setTextComment] = useState(false);
   const [viewTextComment, setViewTextComment] = useState(false);
   const [viewUpdateTextComment, setViewUpdateTextComment] = useState(false);
@@ -58,25 +61,35 @@ const Comment = (props) => {
 
   // 삭제 버튼 눌렀을 때
   const deleteComment = (reviewNo) => {
-    const form = new FormData();
-    form.append("reviewNo", reviewNo);
-    axios
-      .patch(`${backServer}/seller/deleteComment`, form, {
-        headers: {
-          contentType: "multipart/form-data",
-          processData: false,
-        },
-      })
-      .then((res) => {
-        console.log("rrrr", res);
-        if (res.data !== 0) {
-          setSellerText("ok");
-          setView(true); // 작성 완료를 누르면 textarea사라지고 타이포 나오게
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    Swal.fire({
+      icon: "warning",
+      title: "답글을 삭제하시겠습니까?",
+      showCancelButton: true,
+      confirmButtonText: "삭제하기",
+      cancelButtonText: "취소",
+    }).then((r) => {
+      if (r.isConfirmed) {
+        const form = new FormData();
+        form.append("reviewNo", reviewNo);
+        axios
+          .patch(`${backServer}/seller/deleteComment`, form, {
+            headers: {
+              contentType: "multipart/form-data",
+              processData: false,
+            },
+          })
+          .then((res) => {
+            console.log("rrrr", res);
+            if (res.data !== 0) {
+              setSellerText("ok");
+              setView(true); // 작성 완료를 누르면 textarea사라지고 타이포 나오게
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
   };
 
   return (
@@ -202,6 +215,16 @@ const TextForm = (props) => {
       <form
         onSubmit={(event) => {
           event.preventDefault();
+          // 댓글 1자 이상 100자 이하로..!
+          const commentRegex = /^.{1,100}$/;
+
+          if (!commentRegex.test(text)) {
+            Swal.fire({
+              text: "1~100자 이하로 입력해주세요",
+              icon: "error",
+            });
+            return;
+          }
           const form = new FormData();
           form.append("reviewNo", reviewNo);
           form.append("sellerComment", text);
@@ -238,6 +261,13 @@ const TextForm = (props) => {
           value={text}
           onChange={(e) => {
             setText(e.target.value);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              // 엔터
+              e.preventDefault();
+              e.target.form.requestSubmit();
+            }
           }}
         />
         <Button
@@ -287,9 +317,10 @@ const QnaComment = (props) => {
     piQ,
     setSellerText,
   } = props;
+
   const [textComment, setTextComment] = useState(false);
   const [viewTextComment, setViewTextComment] = useState(false);
-
+  console.log("sellerComment", sellerComment);
   // 판매자 답글이 있으면 답글 보기 없으면 답글 달기
   const addComment = (roomQnaNo) => {
     setTextComment((prev) => ({
@@ -350,7 +381,10 @@ const QnaComment = (props) => {
                           setSellerText={setSellerText}
                           sellerComment={sellerComment}
                           setSellerComment={setSellerComment}
+                          //oneComment={oneComment}
+                          //setOneComment={setOneComment}
                           qnaNo={qna.roomQnaNo}
+
                           // 필요한 props 추가
                         />
                       )}
@@ -410,7 +444,9 @@ const QnaComment = (props) => {
 // 판매자 문의 답글 달기
 const TextQna = (props) => {
   const { setSellerText, sellerComment, setSellerComment, qnaNo } = props;
+  const [oneComment, setOneComment] = useState(""); // 상태를 같이 관리하니까 여러 input에 한 번에 쳐져서 개별로 관리.,..
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  console.log("one", oneComment);
   const navigate = useNavigate();
   return (
     <Box
@@ -427,32 +463,56 @@ const TextQna = (props) => {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          const form = new FormData();
-          form.append("comContent", sellerComment);
-          form.append("roomQnaNo", qnaNo);
-          axios
-            .patch(`${backServer}/seller/addSellerComment`, form, {
-              headers: {
-                contentType: "multipart/form-data",
-                processData: false,
-              },
-            })
-            .then((res) => {
-              console.log(res);
-              if (res.data !== 0) {
-                setSellerText("ok");
-                setSellerComment("");
-              }
-            })
-            .catch((err) => {
-              console.log(err);
+
+          // 댓글 1자 이상 100자 이하로..!
+          const commentRegex = /^.{1,100}$/;
+
+          if (!commentRegex.test(oneComment)) {
+            Swal.fire({
+              text: "1~100자 이하로 입력해주세요",
+              icon: "error",
             });
+            return;
+          }
+          setSellerComment(oneComment);
+
+          Swal.fire({
+            icon: "warning",
+            title: "제출 하시겠습니까?",
+            text: " 수정 삭제가 불가하오니 신중하게 작성해주시길 바랍니다.",
+            showCancelButton: true,
+            confirmButtonText: "제출하기",
+            cancelButtonText: "취소",
+          }).then((r) => {
+            if (r.isConfirmed) {
+              const form = new FormData();
+              form.append("comContent", oneComment);
+              form.append("roomQnaNo", qnaNo);
+              axios
+                .patch(`${backServer}/seller/addSellerComment`, form, {
+                  headers: {
+                    contentType: "multipart/form-data",
+                    processData: false,
+                  },
+                })
+                .then((res) => {
+                  console.log(res);
+                  if (res.data !== 0) {
+                    setSellerText("ok");
+                    setOneComment("");
+                  }
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
+          });
         }}
         style={{ display: "flex", alignItems: "center", width: "100%" }}
       >
         <Textarea
           placeholder="100자 이내로 적어주세요!"
-          value={sellerComment}
+          value={oneComment}
           sx={{
             mb: 1,
             flexGrow: 1,
@@ -462,7 +522,14 @@ const TextQna = (props) => {
             resize: "vertical", // 수직으로 크기 조절 가능
           }}
           onChange={(e) => {
-            setSellerComment(e.target.value);
+            setOneComment(e.target.value);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              // 엔터
+              e.preventDefault();
+              e.target.form.requestSubmit();
+            }
           }}
         />
         <Button

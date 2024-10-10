@@ -236,18 +236,30 @@ const BoardComment = ({ board }) => {
                         onClose={() => setIsModalOpen(false)}
                       />
                     </div>
-                    <button
-                      className="comment-update-btn"
-                      onClick={() => handleCommentEdit(comment)}
-                    >
-                      수정
-                    </button>
-                    <button
-                      className="comment-del-btn"
-                      onClick={() => handleCommentDelete(comment.commentNo)}
-                    >
-                      삭제
-                    </button>
+                    <></>
+                    <>
+                      {loginNickname === board.memberNickname ? (
+                        <>
+                          {" "}
+                          <button
+                            className="comment-update-btn"
+                            onClick={() => handleCommentEdit(comment)}
+                          >
+                            수정
+                          </button>
+                          <button
+                            className="comment-del-btn"
+                            onClick={() =>
+                              handleCommentDelete(comment.commentNo)
+                            }
+                          >
+                            삭제
+                          </button>
+                        </>
+                      ) : (
+                        ""
+                      )}
+                    </>
                   </>
                 )}
               </div>

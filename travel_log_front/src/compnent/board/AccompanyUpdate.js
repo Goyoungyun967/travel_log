@@ -8,6 +8,7 @@ import BoardUqillEditor from "../utils/BoardUqillEditor";
 import { loginNoState } from "../utils/RecoilData";
 import AccompanyFrm from "./AccompanyFrm";
 import dayjs from "dayjs";
+import Swal from "sweetalert2";
 
 const AccompanyUpdate = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -113,7 +114,68 @@ const AccompanyUpdate = () => {
   }, [backServer, boardNo]); // backServer와 boardNo를 의존성 배열에 추가
 
   const updateBoard = () => {
-    if (boardTitle !== "" && boardContent !== "") {
+    let isValid = true; // 유효성 검사를 위한 플래그
+
+    const titleRegex = /^.{1,20}$/; // 제목: 1~20글자
+    const contentRegex = /^.{1,1000}$/; // 내용: 1~1000글자
+
+    // 제목 유효성 검사
+    if (!titleRegex.test(boardTitle)) {
+      isValid = false;
+      Swal.fire({
+        title: "제목을 입력해주세요.",
+        text: "제목은 1~20글자 사이여야 합니다.",
+        icon: "warning",
+      });
+    }
+
+    // 내용 유효성 검사
+    if (!contentRegex.test(boardContent)) {
+      isValid = false;
+      Swal.fire({
+        title: "글내용을 입력해주세요.",
+        text: "내용은 1~1000글자 사이여야 합니다.",
+        icon: "warning",
+      });
+    }
+    // 지역 유효성 검사
+    if (!selectedArea) {
+      isValid = false;
+      Swal.fire({
+        title: "지역을 선택해주세요.",
+        text: "지역을 선택해야 합니다.",
+        icon: "warning",
+      });
+    }
+
+    // 동행 지역 유효성 검사
+    if (!accompanyArea) {
+      isValid = false;
+      Swal.fire({
+        title: "동행 지역선택해주세요",
+        text: "동행 지역을 선택해야 합니다.",
+        icon: "warning",
+      });
+    }
+
+    // 시작일과 종료일 유효성 검사
+    if (!startDate || !endDate) {
+      isValid = false;
+      Swal.fire({
+        title: "동행 날짜를 입력해주세요",
+        text: "시작일과 종료일을 다 입력해야 합니다.",
+        icon: "warning",
+      });
+    }
+    if (!selectedType) {
+      isValid = false;
+      Swal.fire({
+        title: "동행 유형을 입력해주세요",
+        text: "동행 유형을 하나 이상 선택해주세요.",
+        icon: "warning",
+      });
+    }
+    if (isValid) {
       const form = new FormData();
       form.append("boardTitle", boardTitle);
       form.append("boardContent", boardContent);

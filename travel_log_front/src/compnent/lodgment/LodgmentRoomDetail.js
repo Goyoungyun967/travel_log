@@ -94,7 +94,8 @@ const LodgmentRoomDetail = (props) => {
                           <td>
                             {room.reservationstatus === "1" ? (
                               <span>
-                                {checkIn} ~ {checkOut}
+                                {format(new Date(startDate), "yyyy-MM-dd")} ~
+                                {format(new Date(endDate), "yyyy-MM-dd")}
                               </span>
                             ) : room.reservationstatus === "2" ? (
                               <span>해당 날짜는 예약이 불가합니다</span>

@@ -17,6 +17,7 @@ const UpdateRoom = () => {
   // 조회해온 파일 목록을 화면에 보여주기 위한 state
   //const [fileList, setFileList] = useState([]);
   const [lodgmentList, setLodgmentList] = useState([]);
+  console.log("lllllllllllllllll", lodgmentList);
   // 객실 이름
   const [roomName, setRoomName] = useState("");
   console.log("roomName-", roomName);
@@ -43,6 +44,7 @@ const UpdateRoom = () => {
   const [maxCapa, setMaxCapa] = useState(0);
   console.log("maxPaca-", maxCapa);
   const [showImg, setShowImg] = useState([]);
+  const [sellerNo, setSellerNo] = useState(0);
 
   // 기존 첨부파일을 삭제하면 삭제한 파일 번호를 저장할 배열
   //   const [delBoardFileNo, setDelBoardFileNo] = useState([]);
@@ -62,6 +64,7 @@ const UpdateRoom = () => {
         setBoardContent(res.data.room.roomInfo);
         setHashTag(res.data.room.serviceTagList);
         setShowImg(res.data.room.fileList);
+        setSellerNo(res.data.lodgment.sellerNo);
       })
       .catch((err) => {
         console.log(err);
@@ -69,6 +72,51 @@ const UpdateRoom = () => {
   }, []);
 
   const UpdateRoom = () => {
+    const nameRegex = /^.{1,15}$/; // 객실 이름: 1자 이상 15자 이하로..!
+    const numberRegex = /^[1-9][0-9]*$/; // 인원, 상품 수 : 1 이상의 숫자만 입력..!
+    const contentRegex = /^.{1,1000}$/; // 공지사항: 1자 이상 1000자 이하..!
+    // 모든 필드의 입력값 확인
+    if (!nameRegex.test(roomName)) {
+      Swal.fire({
+        title: "객실명을 다시 입력해주세요",
+        text: "1~15자 이하로 작성해주세요",
+        icon: "error",
+      });
+      return;
+    }
+
+    if (!numberRegex.test(maxCapa)) {
+      Swal.fire({
+        title: "최대 인원을 다시 입력해주세요",
+        icon: "error",
+      });
+      return;
+    }
+
+    if (!numberRegex.test(roomNum)) {
+      Swal.fire({
+        title: "상품 수를 다시 입력해주세요",
+        icon: "error",
+      });
+      return;
+    }
+
+    if (!numberRegex.test(roomPrice)) {
+      Swal.fire({
+        title: "상품 가격을 다시 입력해주세요",
+        icon: "error",
+      });
+      return;
+    }
+
+    if (!contentRegex.test(boardContent)) {
+      Swal.fire({
+        title: "공지사항을 다시 입력해주세요",
+        icon: "error",
+      });
+      return;
+    }
+
     const form = new FormData();
     form.append("lodgmentNo", lodgmentNo);
     form.append("roomNo", roomNo);
@@ -116,106 +164,112 @@ const UpdateRoom = () => {
 
   return (
     <>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          UpdateRoom();
-        }}
-      >
-        <div className="room_box-wrap room_box-radius">
-          <div className="room_box">
-            <h5>사진은 최대 5개만 등록 가능합니다.</h5>
-            <div className="photo_add">
-              <FileInfo
-                roomFile={roomFile}
-                setRoomFile={setRoomFile}
-                showImg={showImg}
-                setDelRoomFileNo={setDelRoomFileNo}
-                setUpFile={setUpFile}
-              />
-            </div>
-            <div className="room_info_add">
-              <div className="inroom-input-wrap">
-                <div className="input-fr-wrap">
-                  <HashTap hashTag={hashTag} setHashTag={setHashTag} />
-                  <div className="input-sc-wrap">
-                    <div className="input-item">
-                      <div className="input-title">
-                        <label htmlFor="roomName">객실 이름</label>
-                      </div>
-                      <div className="input room_name">
-                        <input
-                          type="text"
-                          id="roomName"
-                          value={roomName}
-                          onChange={(e) => setRoomName(e.target.value)}
-                        />
-                      </div>
-                    </div>
-                    <div className="input-item">
-                      <div className="input-title">
-                        <label htmlFor="maxCapacity">최대인원수</label>
-                      </div>
-                      <div className="input">
-                        <input
-                          type="number"
-                          id="maxCapacity"
-                          min={0}
-                          max={100}
-                          value={maxCapa === 0 ? "" : maxCapa}
-                          onChange={(e) => setMaxCapa(Number(e.target.value))}
-                        />
-                      </div>
-                    </div>
-                    <div className="input-item">
-                      <div className="input-title">
-                        <label htmlFor="roomNum">상품수</label>
-                      </div>
-                      <div className="input">
-                        <input
-                          type="number"
-                          id="roomNum"
-                          min={0}
-                          max={1000}
-                          value={roomNum === 0 ? "" : roomNum}
-                          onChange={(e) => setRoomNum(Number(e.target.value))}
-                        />
-                      </div>
-                    </div>
-                    <div className="input-item">
-                      <div className="input-title">
-                        <label htmlFor="roomPrice">상품 가격</label>
-                      </div>
-                      <div className="input room_price">
-                        <input
-                          type="number"
-                          id="roomPrice"
-                          min={0}
-                          max={10000000000}
-                          value={roomPrice === 0 ? "" : roomPrice}
-                          onChange={(e) => setRoomPrice(Number(e.target.value))}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="box box-notice">
-                  <h3>공지사항</h3>
-                  <div className="editor">
-                    <UqillEditor
-                      boardContent={boardContent}
-                      setBoardContent={setBoardContent}
-                    />
-                  </div>
-                </div>
+      {sellerNo === loginNo ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            UpdateRoom();
+          }}
+        >
+          <div className="room_box-wrap room_box-radius">
+            <div className="room_box">
+              <h5>사진은 최대 5개만 등록 가능합니다.</h5>
+              <div className="photo_add">
+                <FileInfo
+                  roomFile={roomFile}
+                  setRoomFile={setRoomFile}
+                  showImg={showImg}
+                  setDelRoomFileNo={setDelRoomFileNo}
+                  setUpFile={setUpFile}
+                />
               </div>
-              <button type="submit" className="btn primary">
-                등록 완료
-              </button>
+              <div className="room_info_add">
+                <div className="inroom-input-wrap">
+                  <div className="input-fr-wrap">
+                    <HashTap hashTag={hashTag} setHashTag={setHashTag} />
+                    <div className="input-sc-wrap">
+                      <div className="input-item">
+                        <div className="input-title">
+                          <label htmlFor="roomName">객실 이름</label>
+                        </div>
+                        <div className="input room_name">
+                          <input
+                            type="text"
+                            id="roomName"
+                            value={roomName}
+                            onChange={(e) => setRoomName(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <div className="input-item">
+                        <div className="input-title">
+                          <label htmlFor="maxCapacity">최대인원수</label>
+                        </div>
+                        <div className="input">
+                          <input
+                            type="number"
+                            id="maxCapacity"
+                            min={0}
+                            max={100}
+                            value={maxCapa === 0 ? "" : maxCapa}
+                            onChange={(e) => setMaxCapa(Number(e.target.value))}
+                          />
+                        </div>
+                      </div>
+                      <div className="input-item">
+                        <div className="input-title">
+                          <label htmlFor="roomNum">상품수</label>
+                        </div>
+                        <div className="input">
+                          <input
+                            type="number"
+                            id="roomNum"
+                            min={0}
+                            max={1000}
+                            value={roomNum === 0 ? "" : roomNum}
+                            onChange={(e) => setRoomNum(Number(e.target.value))}
+                          />
+                        </div>
+                      </div>
+                      <div className="input-item">
+                        <div className="input-title">
+                          <label htmlFor="roomPrice">상품 가격</label>
+                        </div>
+                        <div className="input room_price">
+                          <input
+                            type="number"
+                            id="roomPrice"
+                            min={0}
+                            max={10000000000}
+                            value={roomPrice === 0 ? "" : roomPrice}
+                            onChange={(e) =>
+                              setRoomPrice(Number(e.target.value))
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="box box-notice">
+                    <h3>공지사항</h3>
+                    <div className="editor">
+                      <UqillEditor
+                        boardContent={boardContent}
+                        setBoardContent={setBoardContent}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" className="btn primary">
+                  등록 완료
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+      ) : (
+        "다시 로그인 해주세요"
+      )}
     </>
   );
 };

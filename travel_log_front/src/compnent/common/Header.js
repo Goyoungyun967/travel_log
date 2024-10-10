@@ -12,6 +12,12 @@ import {
 } from "../utils/RecoilData";
 import { useEffect } from "react";
 
+/* ---------- seller ---------- */
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
+
 const Header = (props) => {
   const [loginBusinessName, setLoginBusinessName] = useRecoilState(
     loginBusinessNameState
@@ -36,136 +42,156 @@ const Header = (props) => {
   return (
     <header className="header">
       <div>
-        <div className="logo">
-          <Link to="/">Travel Log</Link>
-        </div>
-        {memberLevel === 4 ? (
-          <nav className="nav">
-            <ul>
-              <li>
-                <Link to="/seller/list">숙소 리스트</Link>
-              </li>
-              <li>
-                <Link to="/seller/stm">매출 정보</Link>
-              </li>
-              <li>
-                <Link to="/seller/bookList">예약 조회</Link>
-              </li>
-              <li>
-                <Link to="/seller/inqList">판매자 1대1 문의</Link>
-              </li>
-            </ul>
-          </nav>
+        {memberLevel === 4 ? ( // 판매자 zone
+          <Navbar collapseOnSelect expand="lg">
+            <Container>
+              <Navbar.Brand href="/" className="me-5 fw-bold text-primary fs-3">
+                Travel-Log
+              </Navbar.Brand>
+              <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+              <Navbar.Collapse id="responsive-navbar-nav">
+                <Nav className="mx-auto">
+                  {" "}
+                  {/* 가운데 정렬을 위한 클래스 */}
+                  <Nav.Link href="/" className="me-5 seller-custom-nav-link">
+                    숙소
+                  </Nav.Link>
+                  <Nav.Link
+                    href="/seller/stm"
+                    className="me-5 seller-custom-nav-link"
+                  >
+                    매출
+                  </Nav.Link>
+                  <Nav.Link
+                    href="/seller/bookList"
+                    className="me-5 seller-custom-nav-link"
+                  >
+                    예약조회
+                  </Nav.Link>
+                  <Nav.Link
+                    href="/seller/inqList"
+                    className="me-5 seller-custom-nav-link"
+                  >
+                    고객센터
+                  </Nav.Link>
+                </Nav>
+                <Nav>
+                  {" "}
+                  {/* 로그인/회원가입 부분 */}
+                  {isLogin ? (
+                    <>
+                      <Nav.Link
+                        href={
+                          memberLevel === 1
+                            ? "/admin"
+                            : memberLevel === 4
+                            ? "/seller/sellerInfo"
+                            : "/member/mypage"
+                        }
+                        className="me-3 fw-bold"
+                      >
+                        {memberLevel === 4 ? loginBusinessName : loginNickname}
+                      </Nav.Link>
+                      <Nav.Link
+                        href="/#"
+                        onClick={logout}
+                        className="text-danger fw-bold"
+                      >
+                        로그아웃
+                      </Nav.Link>
+                    </>
+                  ) : (
+                    <>
+                      <Nav.Link href="/login" className="me-3">
+                        로그인
+                      </Nav.Link>
+                      <Nav.Link href="/select">회원가입</Nav.Link>
+                    </>
+                  )}
+                </Nav>
+              </Navbar.Collapse>
+            </Container>
+          </Navbar>
         ) : (
           // <Menubar />
-          <nav className="nav">
-            <ul>
-              <li>
-                <Link to="#">지역</Link>
-                <ul className="sub-menu">
-                  <li>
-                    <Link to="#">서울</Link>
-                  </li>
-                  <li>
-                    <Link to="#">인천</Link>
-                  </li>
-                  <li>
-                    <Link to="#">경기</Link>
-                  </li>
-                  <li>
-                    <Link to="#">부산</Link>
-                  </li>
-                  <li>
-                    <Link to="#">대전</Link>
-                  </li>
-                  <li>
-                    <Link to="#">대구</Link>
-                  </li>
-                  <li>
-                    <Link to="#">울산</Link>
-                  </li>
-                  <li>
-                    <Link to="#">세종</Link>
-                  </li>
-                  <li>
-                    <Link to="#">광주</Link>
-                  </li>
-                  <li>
-                    <Link to="#">강원</Link>
-                  </li>
-                  <li>
-                    <Link to="#">충북</Link>
-                  </li>
-                  <li>
-                    <Link to="#">충남</Link>
-                  </li>
-                  <li>
-                    <Link to="#">경북</Link>
-                  </li>
-                  <li>
-                    <Link to="#">경남</Link>
-                  </li>
-                  <li>
-                    <Link to="#">전남</Link>
-                  </li>
-                  <li>
-                    <Link to="#">제주</Link>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <Link to="/lodgment/lodgmentList">상품</Link>
-              </li>
-              <li>
-                <Link to="/board/list">커뮤니티</Link>
-              </li>
-              <li>
-                <Link to="#">고객센터</Link>
-                <ul className="sub-menu">
-                  <li>
-                    <Link to="/faq/faqList/L1/0">자주묻는질문</Link>
-                  </li>
-                  <li>
-                    <Link to="/inquiryWrite">1:1문의</Link>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </nav>
-        )}
-        <ul className="user-menu">
-          {isLogin ? (
-            <>
-              <li>
-                <Link
-                  to={
-                    memberLevel === 1
-                      ? "/admin"
-                      : memberLevel === 4
-                      ? "/seller/list"
-                      : "/member/mypage"
-                  }
+          <>
+            <Navbar collapseOnSelect expand="lg">
+              <Container>
+                <Navbar.Brand
+                  href="/"
+                  className="me-5 fw-bold text-primary fs-3"
                 >
-                  {memberLevel === 4 ? loginBusinessName : loginNickname}
-                </Link>
-              </li>
-              <li>
-                <Link to="/#" onClick={logout}>
-                  로그아웃
-                </Link>
-              </li>
-            </>
-          ) : (
-            <>
-              <li>
-                <Link to="/login">로그인</Link>
-              </li>
-              <li>
-                <Link to="/select">회원가입</Link>
-              </li>
-            </>
-          )}
-        </ul>
+                  Travel-Log
+                </Navbar.Brand>
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Collapse id="responsive-navbar-nav">
+                  <Nav className="mx-auto">
+                    {" "}
+                    {/* 가운데 정렬을 위한 클래스 */}
+                    <Nav.Link
+                      href="/lodgment/lodgmentList"
+                      className="me-5 seller-custom-nav-link"
+                    >
+                      국내 숙소
+                    </Nav.Link>
+                    <Nav.Link
+                      href="/board/list"
+                      className="me-5 seller-custom-nav-link"
+                    >
+                      커뮤니티
+                    </Nav.Link>
+                    <NavDropdown title="고객센터" id="collapsible-nav-dropdown">
+                      <NavDropdown.Item href="/faq/faqList/L1/0">
+                        자주 묻는 질문
+                      </NavDropdown.Item>
+                      <NavDropdown.Item href="/inquiryWrite">
+                        1:1 문의
+                      </NavDropdown.Item>
+                    </NavDropdown>
+                  </Nav>
+                  <Nav>
+                    {" "}
+                    {/* 로그인/회원가입 부분 */}
+                    {isLogin ? (
+                      <>
+                        <Nav.Link
+                          href={
+                            memberLevel === 1
+                              ? "/admin/memberChart"
+                              : memberLevel === 4
+                              ? "/seller/sellerInfo"
+                              : "/member/mypage"
+                          }
+                          className="me-3 fw-bold"
+                        >
+                          {memberLevel === 4
+                            ? loginBusinessName
+                            : memberLevel === 1
+                            ? "관리자"
+                            : loginNickname}
+                        </Nav.Link>
+                        <Nav.Link
+                          href="/#"
+                          onClick={logout}
+                          className="text-danger fw-bold"
+                        >
+                          로그아웃
+                        </Nav.Link>
+                      </>
+                    ) : (
+                      <>
+                        <Nav.Link href="/login" className="me-3">
+                          로그인
+                        </Nav.Link>
+                        <Nav.Link href="/select">회원가입</Nav.Link>
+                      </>
+                    )}
+                  </Nav>
+                </Navbar.Collapse>
+              </Container>
+            </Navbar>
+          </>
+        )}
       </div>
     </header>
   );

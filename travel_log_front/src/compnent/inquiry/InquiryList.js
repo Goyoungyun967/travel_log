@@ -31,6 +31,9 @@ const InquiryList = () => {
   }, [reqPage, type, state]);
   return inquiryList ? (
     <>
+      <div className="admin-page-title">
+        <h3>1대1 문의 처리</h3>
+      </div>
       <div className="admin-search-box">
         <FormControl>
           <FormLabel id="type">사용자</FormLabel>
@@ -73,8 +76,8 @@ const InquiryList = () => {
         <thead>
           <tr>
             <th width={"10%"}>번호</th>
-            <th width={"40%"}>제목</th>
-            <th width={"15%"}>작성자</th>
+            <th width={"35%"}>제목</th>
+            <th width={"20%"}>작성자</th>
             <th width={"20%"}>작성일</th>
             <th width={"15%"}>처리상태</th>
           </tr>
@@ -89,7 +92,11 @@ const InquiryList = () => {
                 }}
               >
                 <td>{inquiry.inquiryNo}</td>
-                <td>{inquiry.inquiryTitle}</td>
+                <td>
+                  {inquiry.inquiryTitle.length > 10
+                    ? inquiry.inquiryTitle.substr(0, 10) + "..."
+                    : inquiry.inquiryTitle}
+                </td>
                 <td>
                   {inquiry.memberId
                     ? inquiry.memberId + "(회원)"

@@ -8,47 +8,60 @@
 /*---- 기능 ----*/
 
 .seller-lodgment-list {
-  width: 1000px;
+  width: 1200px;
   padding: 10px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  position: relative;
+  overflow: visible;
 }
-.seller-lodgment-list > .item-wrap {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
+.seller-lg-list-item {
+  width: 250px;
+  height: 300px;
+  border: 1px solid #333;
 }
-.seller-lodgment-list > .item-wrap > .item {
-  border: 1px solid #ccc;
-  width: 300px;
+.seller-lg-list-item > .seller-item-img {
+  width: 230px;
+  height: 150px;
   margin: 10px;
 }
-.seller-lodgment-list > .item-wrap > .item:hover {
-  cursor: pointer;
-  opacity: 0.5;
-}
-
-.seller-lodgment-list > .item-wrap > .item > .item-img > img {
-  padding: 10px;
-  width: 280px;
-  height: 220px;
+.seller-lg-list-item > .seller-item-img > img {
+  width: 230px;
+  height: 150px;
   object-fit: cover;
 }
-.seller-lodgment-list > .item-wrap > .item > .item-tx {
-  padding: 10px;
+.seller-lg-list-item > .item-tx > .lodgment-addr {
+  margin: 10px;
+  font-size: 12px;
 }
-.seller-lodgment-list > .item-wrap > .item > .item-tx > .lodgment-addr {
-  font-size: 13px;
+.seller-lg-list-item > .item-tx > .lodgment-star {
+  margin: 10px;
+  text-align: right;
+  font-size: 12px;
 }
-.seller-lodgment-list > .item-wrap > .item > .item-tx > .lodgment-star {
-  display: flex;
-  justify-content: flex-end;
-}
-.seller-lodgment-list > .item-wrap > .item > .item-tx > .lodgment-title {
-  font-size: 18px;
+.seller-lg-list-item > .item-tx > .lodgment-title {
+  margin: 10px;
   font-weight: bold;
-  color: #333;
+  font-size: 15px;
+}
+.seller-lg-list-item:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+.sellerListLgBtn {
+  width: 150px;
+  height: 40px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 40px;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: var(--seller2);
+  font-weight: bold;
+  color: var(--seller4);
+}
+.sellerListLgBtn:hover {
+  background-color: var(--seller1);
 }

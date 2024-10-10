@@ -86,18 +86,17 @@
 }
 .seller-room-wrap > .seller-btn-div > .seller-update-btn {
   text-align: center;
+  cursor: pointer;
   width: 100px;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--seller2);
   border-radius: 10px;
   height: 40px;
   line-height: 40px;
+  color: var(--seller4) !important;
   margin: 20px;
 }
 .seller-room-wrap > .seller-btn-div > .seller-update-btn:hover {
-  cursor: pointer;
-  background-color: skyblue;
-  color: #333;
+  background-color: var(--seller1);
 }
 
 .seller-room-wrap > .seller-btn-div > .seller-del-btn {
@@ -162,6 +161,97 @@
   width: 100%; /* Carousel 전체 크기 제한 */
   margin: 0 auto; /* 중앙 정렬 */
 }
+.sellerBtnZone {
+  width: 300px;
+}
+
+.sellerBtnZone > .sellerUpdateLodgment {
+  margin-right: 20px;
+  display: inline-block;
+  width: 100px;
+  height: 40px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  background-color: var(--seller1);
+  font-weight: bold;
+  color: var(--seller4);
+  text-decoration: none;
+}
+.sellerBtnZone > .sellerUpdateLodgment:hover {
+  background-color: var(--seller2);
+}
+.sellerBtnZone > .sellerDelLodgment {
+  border: none;
+  background-color: transparent;
+  display: inline-block;
+  width: 100px;
+  height: 40px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  background-color: var(--seller4);
+  font-weight: bold;
+  color: var(--seller2);
+}
+.sellerBtnZone > .sellerDelLodgment:hover {
+  background-color: var(--seller5);
+  color: var(--seller4);
+}
 .item-tr-wrap .seller-review-image {
   height: 300px;
+}
+.noRoomListAlret {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+.noRoomListAlret > p {
+  color: #979797;
+  font-weight: bold;
+}
+
+.sellerInsertRoomBtn {
+  margin-top: 30px;
+  display: block;
+  width: 150px;
+  height: 40px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  background-color: var(--seller2);
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--seller4);
+}
+.sellerInsertRoomBtn:hover {
+  background-color: var(--seller1);
+}
+
+.noRoomList {
+  width: 300px;
+  margin: 0 auto;
+}
+.seller-room-del-btn > button {
+  margin-top: 20px;
+  display: block;
+  width: 120px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  background-color: var(--seller4);
+  font-weight: bold;
+  color: var(--seller2);
+}
+.seller-room-del-btn > button:hover {
+  background-color: var(--seller5);
+  color: var(--seller4);
 }

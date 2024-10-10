@@ -52,7 +52,7 @@ const LodgmentDetail = () => {
         `${BackServer}/lodgment/roomInfo/${lodgmentNo}/${formattedStartDate}/${formattedEndDate}/${loginNo}`
       )
       .then((res) => {
-        //console.log(res);
+        console.log(res);
         setLodgmentInfo(res.data.lodgmentInfo);
         setRoomSearchList(res.data.lodgmentInfo.roomSearchList);
         sestLodgmentCollection(res.data.lodgmentCollection);
@@ -180,7 +180,7 @@ const LodgmentDetail = () => {
               });
             }}
           >
-            <FavoriteIcon sx={{ fontSize: 40 }} />
+            <FavoriteIcon sx={{ fontSize: 40, color: "red" }} />
           </div>
         ) : (
           "머징"

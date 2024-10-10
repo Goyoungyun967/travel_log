@@ -1,4 +1,4 @@
-import { NavLink, Route, Routes } from "react-router-dom";
+import { NavLink, Route, Routes, useNavigate } from "react-router-dom";
 import "./admin.css";
 import InquiryList from "../inquiry/InquiryList";
 import InquiryView from "../inquiry/InquiryView";
@@ -11,8 +11,13 @@ import AdminLodgmentList from "./AdminLodgmentList";
 import ReviewReportList from "./ReviewReportList";
 import BoardReportList from "./BoardReportList";
 import AdminMemberList from "./AdminMemberList";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { memberLevelState } from "../utils/RecoilData";
+import Swal from "sweetalert2";
 
 const AdminMain = () => {
+  /*
   const changeMenu = (e) => {
     e.currentTarget.nextSibling.classList.toggle("active");
     if (e.currentTarget.lastChild.innerText === "expand_more") {
@@ -21,12 +26,33 @@ const AdminMain = () => {
       e.currentTarget.lastChild.innerText = "expand_more";
     }
   };
-  return (
+  */
+  const navigate = useNavigate();
+  const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
+  const refreshToken = window.localStorage.getItem("refreshToken");
+  if (!refreshToken) {
+    Swal.fire({
+      title: "잘못된 접근",
+      text: "잘못된 접근입니다.",
+      icon: "warning",
+    }).then(() => {
+      navigate("/");
+    });
+  }
+  const checkLevel = () => {
+    if (memberLevel !== 1) {
+      Swal.fire({
+        title: "잘못된 접근",
+        text: "잘못된 접근입니다.",
+        icon: "warning",
+      }).then(() => {
+        navigate("/");
+      });
+    }
+  };
+  return memberLevel === 1 ? (
     <section className="admin-section">
       <div className="admin-wrap">
-        <div className="admin-page-title">
-          <h3>관리자 페이지</h3>
-        </div>
         {/*}
         <div className="admin-menu-bar">
           <ul className="admin-main-menu" onClick={changeMenu}>
@@ -77,7 +103,7 @@ const AdminMain = () => {
         </div>
         */}
         <div className="mcd-menu-wrap">
-          <div class="container">
+          <div class="admin-menu-container">
             <nav>
               <ul class="mcd-menu">
                 <li>
@@ -148,6 +174,10 @@ const AdminMain = () => {
         </div>
       </div>
     </section>
+  ) : memberLevel !== -1 ? (
+    checkLevel()
+  ) : (
+    ""
   );
 };
 

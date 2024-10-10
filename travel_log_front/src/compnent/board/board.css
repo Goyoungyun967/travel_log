@@ -45,9 +45,6 @@ props/*글자 사이즈*/
 }
 
 /* 검색 입력 필드 포커스 시 */
-.search-input:focus {
-  border-color: var(--main4); /* 포커스 시 파란색 테두리 */
-}
 
 /* 드롭다운 목록 스타일 */
 .boardArea-popup {
@@ -87,6 +84,15 @@ props/*글자 사이즈*/
 /* 동행  */
 .board-box {
   margin-top: 30px;
+}
+.board-preview-list {
+  opacity: 0.8;
+  transform: translateY(-2px);
+  transition: opacity 0.3s ease, transform 0.3s ease; /* 0.3초 동안 부드럽게 변화 */
+}
+.board-preview-list:hover {
+  opacity: 1; /* 호버 시 opacity를 1로 변경 */
+  transform: translateY(0); /* 호버 시 원래 위치로 이동 */
 }
 
 /* 동행 제목 */
@@ -131,40 +137,7 @@ props/*글자 사이즈*/
   width: 100%;
   min-width: 100%;
 }
-/* 동행 리스트 
 
-
-.scrollable-container {
-  overflow: hidden;
-  width: 100%;
-  
-  }
-
-
-.width-box {
-  display: flex;
-  flex-direction: row;
-  margin-top: 10px;
-  cursor: auto;
-  border-radius: 4px;
-  overflow: auto;
-  
-  overscroll-behavior: auto;
-  
-  overscroll-behavior: contain; 스크롤 이벤트가 부모로 전달되지 않도록 설정 
-  align-items: start;
-  position: relative;
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 15px;
-  align-items: center;
-  justify-content: flex-start;
-  box-sizing: border-box;
-  width: 100%;
-
-}
-
-*/
 .awbcss {
   position: relative;
   width: 250px;
@@ -189,34 +162,43 @@ props/*글자 사이즈*/
   flex-direction: column;
   gap: 16px;
   align-items: flex-start;
-  align-items: start;
-  justify-content: flex-start;
   box-sizing: border-box;
   width: 99%;
   cursor: pointer;
 }
+
 .boardList-content {
   height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
+
 .boardList-area {
   position: absolute;
   right: 8px;
-  align-items: center;
-  justify-content: center;
-  width: fit-content;
-  padding: 3px 3px;
+  padding: 5px 10px;
   background-color: var(--gray6);
   border-radius: 10px;
   color: var(--gray4);
+  font-weight: bold;
+  font-size: 0.9em;
 }
+
 .boardList-preview {
   position: relative;
   margin-top: 8px;
   width: 100%;
-  height: 230px;
+  height: 240px;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* 그림자를 더 넓게 만들기 */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s;
 }
+
+.boardList-preview:hover {
+  transform: scale(1.02);
+}
+
 .board-memberIcon {
   position: relative;
   display: flex;
@@ -224,16 +206,47 @@ props/*글자 사이즈*/
   align-items: center;
   width: 100%;
 }
+
+.member-img-circle {
+  width: 40px;
+  height: 40px;
+}
+
 .board-regDate {
   padding-left: 50px;
+  font-size: 0.8em;
+  color: var(--gray3);
 }
+
 .board-preview-content {
   gap: 8px;
-  padding: 4px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
 .board-preview-title {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+
+.boardList-preview-thumb {
+  margin-left: 10px;
+}
+
+.accompany-content-text {
+  font-size: 0.9em;
+  color: #333;
+}
+
+.accompany-type,
+.accompany-date-type {
+  font-size: 0.85em;
+  color: var(--gray5);
+  margin-top: 4px;
 }
 /*썸내일 css*/
 .board-preview-thumb {
@@ -243,7 +256,6 @@ props/*글자 사이즈*/
   width: 100%;
   height: 133px;
   object-fit: cover;
-  background-color: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
 }
 
@@ -304,6 +316,7 @@ props/*글자 사이즈*/
   transition: background-color 0.3s, transform 0.2s;
 }
 .board-write {
+  text-decoration: none; /* 밑줄 제거 */
   cursor: pointer;
   height: 50px;
   background-color: #a111a0;
@@ -392,6 +405,7 @@ props/*글자 사이즈*/
   font-size: 16px; /* 글자 크기 */
   cursor: pointer; /* 포인터 커서 */
   transition: all 0.3s; /* 배경색 전환 효과 */
+  text-decoration: none;
 }
 
 .boardWrite-btn:hover {
@@ -469,7 +483,8 @@ props/*글자 사이즈*/
 }
 
 .board-thumb-wrap img:hover {
-  transform: scale(1.05); /* 마우스 오버 시 확대 */
+  opacity: 0.8;
+  transform: translateY(-2px);
 }
 
 .board-thumb-wrap input[type="file"] {
@@ -509,7 +524,6 @@ props/*글자 사이즈*/
 .accompany-date-wrap {
   margin-right: 20px;
   padding-top: 15px;
-  height: 73px;
   margin-bottom: 20px;
   width: 100%; /* 부모 요소에 맞게 전체 너비 사용 */
 }
@@ -866,4 +880,68 @@ props/*글자 사이즈*/
 
 .swiper {
   padding: 30px 20px !important;
+}
+/*동행 게시판 view css*/
+.accompany-day-wrap {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.accompany-day {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.accompany-day span {
+  margin-right: 5px;
+}
+
+.accompany-date-wrap {
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.accompany-date-list {
+  margin-top: 10px;
+}
+
+.accompany-content-text-border {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 4px;
+  display: flex;
+}
+
+.accompany-content-text-border strong {
+  color: #007bff; /* 강조 색상 */
+}
+
+.accompany-content-text-border:hover {
+  background-color: #e9ecef; /* 호버 효과 */
+  transition: background-color 0.3s;
+}
+.accompany-type-wrap {
+  display: flex;
+  flex-direction: row; /* 항목들을 가로로 나열 */
+  gap: 10px; /* 항목 간의 간격 */
+  flex-wrap: wrap; /* 화면 크기에 따라 줄 바꿈 */
+}
+
+.accompany-type-item {
+  background-color: #e9ecef;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #dcdcdc;
+  font-size: 14px;
+  color: #333;
+}
+/*썸네일*/
+.board-preview-thumb > img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }

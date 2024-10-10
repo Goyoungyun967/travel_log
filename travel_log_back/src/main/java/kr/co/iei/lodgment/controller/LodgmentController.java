@@ -67,7 +67,7 @@ public class LodgmentController {
 	//검색 할 경우 원하는 숙박 정보 
 	@GetMapping(value = "/searchLodgment")  //RequestParam 과 PathVariable 차이점 찾아보기 
 	@Operation(summary = "숙박업체 조회",description = "페이지, 여행지(또는 호텔), 체크인, 체크아웃, 인원수, 가격조정(최저가격 ~ 최고가격), 관련 서비스 태그(선택 무 가능), 호텔성급(선택 무 가능), 숙박타입 선택")
-	public ResponseEntity<List<SearchLodgmentDTO>> searchLodgment(
+	public ResponseEntity<Map> searchLodgment(
 			@RequestParam int reqPage,
             @RequestParam String lodgment,
             @RequestParam String startDate,
@@ -91,10 +91,10 @@ public class LodgmentController {
 			selectedServiceTagsArry = new int[1];
 			selectedServiceTagsArry[0] = 100;	
 		}
-		List<SearchLodgmentDTO> list = 
+		Map map = 
 				lodgmentService.getLodgmentList(reqPage,lodgment,startDate,endDate,guest,
 						minPrice,maxPrice,selectedServiceTagsArry,starValue,order, lodgmentType);
-		return ResponseEntity.ok(list);
+		return ResponseEntity.ok(map);
 		
 	}
 	

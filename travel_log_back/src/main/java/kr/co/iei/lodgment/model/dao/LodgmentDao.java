@@ -80,6 +80,9 @@ public interface LodgmentDao {
 
 	int deleteReview(int reviewNo);
 
+	int getTotalPage(int start, int end, String lodgment, String startDate, String endDate, int guest, int minPrice,
+			int maxPrice, int[] selectedServiceTagsArry, int starValue, int order, int lodgmentType);
+
 	//List selectGetAllReviewImg(int lodgmentNo);
 
 	//List<RoomDTO> getRoomInfoList(int lodgmentNo, String startDate, String endDate, int guset);

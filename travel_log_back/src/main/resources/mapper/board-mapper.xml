@@ -120,7 +120,7 @@
 
 
 		<select id="selectUnlikeBoard" resultType="int">
-			select count(*) from board_like where board_no = #{boardNo}
+			select count(*) from board_like where board_no = #{boardNo} and member_no=#{memberNo}
 		</select>
 		<delete id="deleteUnlikeBoard">
 			delete from board_like where board_no=#{boardNo} and member_No=#{memberNo}

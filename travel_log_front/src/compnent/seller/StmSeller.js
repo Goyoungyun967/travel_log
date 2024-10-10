@@ -75,27 +75,33 @@ const StmSeller = () => {
   };
   return (
     <div className="stm-box-wrap">
-      <h3>매출 정보</h3>
-      <SellerChart stmInfo={stmInfo} />
-      <div className="search-date">
-        <SearchDate
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
-          setSearch={setSearch}
-        />
-        <button
-          className="search-btn"
-          type="button"
-          onClick={() => {
-            searchDate();
-          }}
-        >
-          찾기
-        </button>
-      </div>
-      <RowList stmInfo={stmInfo} />
+      {stmInfo.length !== 0 ? (
+        <>
+          <h3>매출 정보</h3>
+          <SellerChart stmInfo={stmInfo} />
+          <div className="search-date">
+            <SearchDate
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+              setSearch={setSearch}
+            />
+            <button
+              className="search-btn"
+              type="button"
+              onClick={() => {
+                searchDate();
+              }}
+            >
+              찾기
+            </button>
+          </div>
+          <RowList stmInfo={stmInfo} />
+        </>
+      ) : (
+        <p className="no-stm">조회된 매출이 없습니다.</p>
+      )}
     </div>
   );
 };

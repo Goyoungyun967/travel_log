@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.iei.member.model.dto.MemberDTO;
+import kr.co.iei.member.model.dto.MemberReportDTO;
 
 @Mapper
 public interface MemberDao {
@@ -50,7 +51,11 @@ public interface MemberDao {
 
 	int updateMemberLevel(MemberDTO member);
 
+
 	int checkNickname(String memberNickname);
+
+	MemberReportDTO getMemberReport(int memberNo);
+
 
 
 }

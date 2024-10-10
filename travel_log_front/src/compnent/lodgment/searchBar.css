@@ -27,17 +27,22 @@
   position: relative; /* 내부 요소가 절대 위치를 사용할 수 있도록 설정 */
   margin: 0 auto; /* 수평 중앙 정렬 */
 }
+
 .table-wrap {
   margin: 0;
   padding: 0;
 }
+.lodgment-table-wrap > .lodgment-search-table {
+  width: 90%;
+}
+
 .lodgment-search-table th {
   text-align: start;
   vertical-align: bottom;
 }
 .search-lodgment {
   width: 100%;
-  background-color: var(--gray5);
+  background-color: var(--gray6);
   height: 50px;
   box-sizing: border-box;
   margin: 0;
@@ -51,7 +56,7 @@
   box-sizing: border-box;
   background-color: transparent;
   border: none;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid var(--gray5);
   height: 30px;
   text-align: left;
 }
@@ -123,7 +128,7 @@
   box-sizing: border-box;
   position: absolute;
   width: 30.5%;
-  top: 84px;
+  top: 80px;
   border: 1px solid var(--gray5);
   height: 150px;
   border-bottom-left-radius: 15px;
@@ -151,7 +156,7 @@
   box-sizing: border-box;
   position: absolute;
   width: 20%;
-  top: 84px;
+  top: 80px;
   border: 1px solid var(--gray5);
   height: 60px;
   border-bottom-left-radius: 15px;
@@ -171,4 +176,7 @@
   position: absolute;
   z-index: 1; /* 버튼보다 위에 오도록 설정 */
   top: 60%;
+}
+.search-input:focus {
+  border-color: var(--gray6); /* 포커스 시 파란색 테두리 */
 }

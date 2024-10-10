@@ -3,7 +3,7 @@
 <mapper namespace="kr.co.iei.seller.model.dao.SellerLodgmentDao">
 	<!-- 등록한 호텔 조회 -->
 	<select id="selectLodgmentList" resultType="lodgmentStorage">
-		select * from LODGMENT_STORAGE where seller_no=#{sellerNo} and lodgment_delete=1
+		select * from LODGMENT_STORAGE where seller_no=#{sellerNo} and lodgment_delete=1 or lodgment_delete=0
 	</select>
 
 	<!-- 기존 호텔 검색 - 이름이나 주소에 해당 단어 섞여 있으면 조회 (리스트) -->
@@ -51,7 +51,9 @@
 		update lodgment_storage set
 			lodgment_name=#{lodgmentName},
 			lodgment_addr=#{lodgmentAddr},
-			lodgment_img_path=#{lodgmentImgPath},
+			<if test="lodgmentImgPath!='no'">			
+				lodgment_img_path=#{lodgmentImgPath},
+			</if>
 			lodgment_notice=#{lodgmentNotice},
 			lodgment_check_in=#{lodgmentCheckIn},
 			lodgment_check_out=#{lodgmentCheckOut}
@@ -495,4 +497,9 @@
 	<insert id="insertSellerComment">
 		insert into qna_comment values(QNA_COMMENT_SEQ.NEXTVAL, #{roomQnaNo}, #{comContent})
 	</insert>
+	
+	<!-- 예약정보 조회 -->
+	<select id="selectBooking" resultType="bookingInfo">
+		select * from booking where seller_no=#{loginNo}
+	</select>
 </mapper>
