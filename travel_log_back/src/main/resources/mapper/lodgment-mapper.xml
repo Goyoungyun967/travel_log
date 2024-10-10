@@ -3,7 +3,7 @@
 <mapper namespace="kr.co.iei.seller.model.dao.SellerLodgmentDao">
 	<!-- 등록한 호텔 조회 -->
 	<select id="selectLodgmentList" resultType="lodgmentStorage">
-		select * from LODGMENT_STORAGE where seller_no=#{sellerNo} and lodgment_delete=1
+		select * from LODGMENT_STORAGE where seller_no=#{sellerNo} and lodgment_delete=1 or lodgment_delete=0
 	</select>
 
 	<!-- 기존 호텔 검색 - 이름이나 주소에 해당 단어 섞여 있으면 조회 (리스트) -->

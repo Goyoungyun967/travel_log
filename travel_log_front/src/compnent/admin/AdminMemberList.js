@@ -33,6 +33,9 @@ const AdminMemberList = () => {
 
   return memberList ? (
     <>
+      <div className="admin-page-title">
+        <h3>회원 관리</h3>
+      </div>
       <div className="admin-search-box">
         <FormControl>
           <FormLabel id="type">정렬 기준</FormLabel>

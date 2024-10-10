@@ -24,9 +24,6 @@ const AdminMain = () => {
   return (
     <section className="admin-section">
       <div className="admin-wrap">
-        <div className="admin-page-title">
-          <h3>관리자 페이지</h3>
-        </div>
         {/*}
         <div className="admin-menu-bar">
           <ul className="admin-main-menu" onClick={changeMenu}>
@@ -77,7 +74,7 @@ const AdminMain = () => {
         </div>
         */}
         <div className="mcd-menu-wrap">
-          <div class="container">
+          <div class="admin-menu-container">
             <nav>
               <ul class="mcd-menu">
                 <li>

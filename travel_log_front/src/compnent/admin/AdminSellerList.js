@@ -52,6 +52,9 @@ const AdminSellerList = () => {
   };
   return sellerList ? (
     <>
+      <div className="admin-page-title">
+        <h3>판매자 관리</h3>
+      </div>
       <div className="admin-search-box">
         <FormControl>
           <FormLabel id="sellerApp">가입승인여부</FormLabel>

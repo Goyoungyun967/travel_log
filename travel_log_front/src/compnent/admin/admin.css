@@ -13,6 +13,7 @@
 }
 .admin-page-title {
   text-align: center;
+  margin-bottom: 50px;
 }
 .admin-menu-bar {
   position: absolute;
@@ -273,39 +274,39 @@
   *zoom: 1;
 }
 
-.container {
+.admin-menu-container {
   position: relative;
   margin: 0px auto;
   padding: 50px 0;
   clear: both;
 }
 @media only screen and (min-width: 1200px) {
-  .container {
+  .admin-menu-container {
     width: 1210px;
   }
 }
 
 @media only screen and (min-width: 960px) and (max-width: 1199px) {
-  .container {
+  .admin-menu-container {
     width: 1030px;
   }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 959px) {
-  .container {
+  .admin-menu-container {
     width: 682px;
   }
 }
 
 @media only screen and (min-width: 480px) and (max-width: 767px) {
-  .container {
+  .admin-menu-container {
     width: 428px;
     margin: 0 auto;
   }
 }
 
 @media only screen and (max-width: 479px) {
-  .container {
+  .admin-menu-container {
     width: 320px;
     margin: 0 auto;
   }

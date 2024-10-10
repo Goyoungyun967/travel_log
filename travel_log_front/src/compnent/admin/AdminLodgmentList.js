@@ -52,6 +52,9 @@ const AdminLodgmentList = () => {
   };
   return lodgmentList ? (
     <>
+      <div className="admin-page-title">
+        <h3>상품 게시글 관리</h3>
+      </div>
       <div className="admin-search-box">
         <FormControl>
           <FormLabel id="lodgmentDelete">등록여부</FormLabel>
