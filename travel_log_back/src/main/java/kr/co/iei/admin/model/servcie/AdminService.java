@@ -8,13 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.iei.board.model.dao.BoardDao;
 import kr.co.iei.faq.model.dao.FaqDao;
 import kr.co.iei.faq.model.dto.FaqDTO;
 import kr.co.iei.inquiry.model.dao.InquiryDao;
+import kr.co.iei.lodgment.model.dao.LodgmentDao;
 import kr.co.iei.lodgment.model.dto.LodgmentReviewReportDTO;
 import kr.co.iei.member.model.dao.MemberDao;
 import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dao.SellerDao;
+import kr.co.iei.seller.model.dao.SellerLodgmentDao;
 import kr.co.iei.seller.model.dto.SellerDTO;
 import kr.co.iei.util.PageInfo;
 import kr.co.iei.util.PageUtil;
@@ -32,6 +35,12 @@ public class AdminService {
 	private SellerDao sellerDao;
 	@Autowired
 	private MemberDao memberDao;
+	@Autowired
+	private SellerLodgmentDao sellerLodgmentDao;
+	@Autowired
+	private LodgmentDao lodgmentDao;
+	@Autowired
+	private BoardDao boardDao;
 
 	public Map selectInquiryList(int reqPage, String type,int state) {
 		Map<String,Object> map = new HashMap<String, Object>();
@@ -105,55 +114,55 @@ public class AdminService {
 	}
 
 	public List getLodgmentResionData() {
-		List list = inquiryDao.getLodgmentResionData();
+		List list = memberDao.getLodgmentResionData();
 		return list;
 	}
 
 	public List getLodgmentResionSearchMemberData(String region) {
-		List list = inquiryDao.getLodgmentResionSearchMemberData(region);
+		List list = memberDao.getLodgmentResionSearchMemberData(region);
 		return list;
 	}
 
 	public List getLodgmentResionMemberData() {
-		List list = inquiryDao.getLodgmentResionMemberData();
+		List list = memberDao.getLodgmentResionMemberData();
 		return list;
 	}
 
 
 	public List getSellerList() {
-		List list = inquiryDao.getSellerList();
+		List list = sellerDao.getSellerList();
 		return list;
 	}
 	public List getSellerListSales(String type, String date) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("type", type);
 		map.put("date", date);
-		List list = inquiryDao.getSellerListSales(map);
+		List list = sellerDao.getSellerListSales(map);
 		return list;
 	}
 
 	public List getSellerSales(int sellerNo) {
-		List list = inquiryDao.getSellerSales(sellerNo);
+		List list = sellerDao.getSellerSales(sellerNo);
 		return list;
 	}
 
 	public List getSellerSalesGender(int sellerNo) {
-		List list = inquiryDao.getSellerSalesGender(sellerNo);
+		List list = sellerDao.getSellerSalesGender(sellerNo);
 		return list;
 	}
 
 	public List getSellerSalesAge(int sellerNo) {
-		List list = inquiryDao.getSellerSalesAge(sellerNo);
+		List list = sellerDao.getSellerSalesAge(sellerNo);
 		return list;
 	}
 
 	@Transactional
 	public void insertSellerStm() {
-		List<SellerDTO> list = inquiryDao.selectSellerSales();
+		List<SellerDTO> list = sellerDao.selectSellerSales();
 		System.out.println(list);
 		int result = 0;
 		for (SellerDTO sellerDTO : list) {
-			result += inquiryDao.insertSellerStm(sellerDTO);
+			result += sellerDao.insertSellerStm(sellerDTO);
 		}
 		System.out.println(result);
 	}
@@ -163,19 +172,19 @@ public class AdminService {
 		Map<String, Object> m = new HashMap<String, Object>();
 		int numPerPage = 10;
 		int pageNaviSize = 5;
-		int totalCount = inquiryDao.getSellerStmCount(state);
+		int totalCount = sellerDao.getSellerStmCount(state);
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
 		m.put("start", pi.getStart());
 		m.put("end", pi.getEnd());
 		m.put("state", state);
-		List list = inquiryDao.getSellerStmList(m);
+		List list = sellerDao.getSellerStmList(m);
 		map.put("pi", pi);
 		map.put("list", list);
 		return map;
 	}
 
 	public int updateStm(int[] stmNum) {
-		int result = inquiryDao.updateStm(stmNum);
+		int result = sellerDao.updateStm(stmNum);
 		return result;
 	}
 
@@ -184,12 +193,12 @@ public class AdminService {
 		Map<String, Object> m = new HashMap<String, Object>();
 		int numPerPage = 10;
 		int pageNaviSize = 5;
-		int totalCount = inquiryDao.getAdminLodgmentCount(lodgmentDelete);
+		int totalCount = sellerLodgmentDao.getAdminLodgmentCount(lodgmentDelete);
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
 		m.put("start", pi.getStart());
 		m.put("end", pi.getEnd());
 		m.put("lodgmentDelete",lodgmentDelete);
-		List list = inquiryDao.getAdminLodgmentList(m);
+		List list = sellerLodgmentDao.getAdminLodgmentList(m);
 		map.put("pi", pi);
 		map.put("list", list);
 		return map;
@@ -197,7 +206,7 @@ public class AdminService {
 
 	@Transactional
 	public int updateLodgmentDelete(int[] lodgmentNo) {
-		int result = inquiryDao.updateLodgmentDelete(lodgmentNo);
+		int result = sellerLodgmentDao.updateLodgmentDelete(lodgmentNo);
 		return result;
 	}
 
@@ -206,24 +215,24 @@ public class AdminService {
 		Map<String, Object> m  = new HashMap<String, Object>();
 		int numPerPage = 10;
 		int pageNaviSize = 5;
-		int totalCount = inquiryDao.getBoardReportListCount();
+		int totalCount = boardDao.getBoardReportListCount();
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
 		m.put("start", pi.getStart());
 		m.put("end", pi.getEnd());
-		List list = inquiryDao.getBoardReportList(m);
+		List list = boardDao.getBoardReportList(m);
 		map.put("list", list);
 		map.put("pi", pi);
 		return map;
 	}
 
 	public List getBoardReport(int boardNo) {
-		List list = inquiryDao.getBoardReport(boardNo);
+		List list = boardDao.getBoardReport(boardNo);
 		return list;
 	}
 
 	@Transactional
 	public int deleteBoardReport(int reportNo) {
-		int result = inquiryDao.deleteBoardReport(reportNo);
+		int result = boardDao.deleteBoardReport(reportNo);
 		return result;
 	}
 
@@ -232,24 +241,24 @@ public class AdminService {
 		Map<String, Object> m  = new HashMap<String, Object>();
 		int numPerPage = 10;
 		int pageNaviSize = 5;
-		int totalCount = inquiryDao.getCommentReportListCount();
+		int totalCount = boardDao.getCommentReportListCount();
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
 		m.put("start", pi.getStart());
 		m.put("end", pi.getEnd());
-		List list = inquiryDao.getCommentReportList(m);
+		List list = boardDao.getCommentReportList(m);
 		map.put("list", list);
 		map.put("pi", pi);
 		return map;
 	}
 
 	public List getCommentReport(int commentNo) {
-		List list = inquiryDao.getCommentReport(commentNo);
+		List list = boardDao.getCommentReport(commentNo);
 		return list;
 	}
 
 	@Transactional
 	public int deleteCommentReport(int reportNo) {
-		int result = inquiryDao.deleteCommentReport(reportNo);
+		int result = boardDao.deleteCommentReport(reportNo);
 		return result;
 	}
 
@@ -258,13 +267,13 @@ public class AdminService {
 		Map<String, Object> m  = new HashMap<String, Object>();
 		int numPerPage = 10;
 		int pageNaviSize = 5;
-		int totalCount = inquiryDao.getReviewReportListCount();
+		int totalCount = lodgmentDao.getReviewReportListCount();
 		PageInfo pi = pageUtil.getPageInfo(reqPage, numPerPage, pageNaviSize, totalCount);
 		m.put("start", pi.getStart());
 		m.put("end", pi.getEnd());
-		List<LodgmentReviewReportDTO> list = inquiryDao.getReviewReportList(m);
+		List<LodgmentReviewReportDTO> list = lodgmentDao.getReviewReportList(m);
 		for (LodgmentReviewReportDTO lodgmentReviewReportDTO : list) {
-			List fileList = inquiryDao.selectReviewFile(lodgmentReviewReportDTO.getReviewNo());
+			List fileList = lodgmentDao.getReviewFile(lodgmentReviewReportDTO.getReviewNo());
 			lodgmentReviewReportDTO.setFileList(fileList);
 		}
 		map.put("list", list);
@@ -273,7 +282,7 @@ public class AdminService {
 	}
 	@Transactional
 	public int deleteReviewReport(int reviewNo) {
-		int result = inquiryDao.deleteReviewReport(reviewNo);
+		int result = lodgmentDao.deleteReviewReport(reviewNo);
 		return result;
 	}
 

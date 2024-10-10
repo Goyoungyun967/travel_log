@@ -105,7 +105,23 @@ public interface BoardDao {
 	
 
 
+	//게시글 신고
+	int getBoardReportListCount();
 
+	List getBoardReportList(Map<String, Object> m);
+
+	List getBoardReport(int boardNo);
+
+	int deleteBoardReport(int reportNo);
+
+	//댓글 신고
+	int getCommentReportListCount();
+
+	List getCommentReportList(Map<String, Object> m);
+
+	List getCommentReport(int commentNo);
+
+	int deleteCommentReport(int reportNo);
 	
 
 
