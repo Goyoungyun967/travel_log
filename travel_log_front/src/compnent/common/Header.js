@@ -140,7 +140,11 @@ const Header = (props) => {
                     >
                       커뮤니티
                     </Nav.Link>
-                    <NavDropdown title="고객센터" id="collapsible-nav-dropdown">
+                    <NavDropdown
+                      title="고객센터"
+                      id="collapsible-nav-dropdown"
+                      className="me-5"
+                    >
                       <NavDropdown.Item href="/faq/faqList/L1/0">
                         자주 묻는 질문
                       </NavDropdown.Item>

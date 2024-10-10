@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { sellerLoginNoState } from "../utils/RecoilData";
+import { memberLevelState, sellerLoginNoState } from "../utils/RecoilData";
 import axios from "axios";
 import UqillEditor from "../utils/UqillEditor";
 import Swal from "sweetalert2";
@@ -10,6 +10,7 @@ const UpdateRoom = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState); // 판매자 번호
+  const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
   const roomNo = params.roomNo; // 객실 번호
@@ -164,7 +165,7 @@ const UpdateRoom = () => {
 
   return (
     <>
-      {sellerNo === loginNo ? (
+      {sellerNo === loginNo || memberLevel === 1 ? (
         <form
           onSubmit={(e) => {
             e.preventDefault();

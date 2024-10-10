@@ -189,6 +189,12 @@
   border-bottom: 1px solid #eaeaea;
 }
 
+.booking-item img {
+  width: 100%; /* 부모 요소의 너비에 맞춤 */
+  height: auto; /* 비율을 유지하며 높이를 자동 조절 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  object-fit: cover; /* 이미지 비율을 유지하면서 크기에 맞게 잘라냄 */
+}
 .booking-item:last-child {
   border-bottom: none;
 }

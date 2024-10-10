@@ -254,7 +254,7 @@ const InsertLodgment = () => {
             </button>
             <button
               type="button"
-              className="AddLodgmentBtn colorYesNo"
+              className="AddLodgmentBtn colorNoLg"
               onClick={noHotel}
             >
               No

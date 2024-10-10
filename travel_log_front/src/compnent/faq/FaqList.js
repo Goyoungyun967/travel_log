@@ -12,12 +12,10 @@ const FaqList = () => {
   const faqType = useParams().faqType;
   const [faqList, setFaqList] = useState([]);
   const categoryIndex = useParams().categoryIndex;
-  console.log(faqType);
   useEffect(() => {
     axios
       .get(`${backServer}/faq/faqList/${faqType}`)
       .then((res) => {
-        console.log(res);
         setFaqList(res.data);
       })
       .catch((err) => {

@@ -18,13 +18,14 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { sellerLoginNoState } from "../utils/RecoilData";
+import { memberLevelState, sellerLoginNoState } from "../utils/RecoilData";
 import { useRecoilState } from "recoil";
 
 const LodgmentView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
+  const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
   const [lodgmentList, setLodgmentList] = useState({}); // 숙소 정보
@@ -151,7 +152,7 @@ const LodgmentView = () => {
           </div>
 
           <div className="sellerBtnZone">
-            {lodgmentList.sellerNo === loginNo ? (
+            {lodgmentList.sellerNo === loginNo || memberLevel === 1 ? (
               <>
                 <Link
                   to={`/seller/updateLodgment/${lodgmentList.lodgmentNo}`}
@@ -176,7 +177,7 @@ const LodgmentView = () => {
       <div className="item-sc-wrap">
         {roomList.length !== 0 ? (
           <>
-            {lodgmentList.sellerNo === loginNo ? (
+            {lodgmentList.sellerNo === loginNo || memberLevel === 1 ? (
               <Link
                 to={`/seller/insertRoom/${lodgmentList.lodgmentNo}`}
                 className="sellerInsertRoomBtn"
@@ -199,7 +200,7 @@ const LodgmentView = () => {
         ) : (
           <div className="noRoomListAlret">
             <p>등록된 숙소가 없습니다 등록하시겠습니까?</p>
-            {lodgmentList.sellerNo === loginNo ? (
+            {lodgmentList.sellerNo === loginNo || memberLevel === 1 ? (
               <Link
                 to={`/seller/insertRoom/${lodgmentList.lodgmentNo}`}
                 className="sellerInsertRoomBtn noRoomList"
@@ -218,12 +219,12 @@ const LodgmentView = () => {
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               <Tab label="지도" value="1" />
               <Tab label="숙소 공지사항" value="2" />
-              {lodgmentList.sellerNo === loginNo ? (
+              {lodgmentList.sellerNo === loginNo || memberLevel === 1 ? (
                 <Tab label="리뷰" value="3" />
               ) : (
                 ""
               )}
-              {lodgmentList.sellerNo === loginNo ? (
+              {lodgmentList.sellerNo === loginNo || memberLevel === 1 ? (
                 <Tab
                   label="숙소 문의"
                   value="4"

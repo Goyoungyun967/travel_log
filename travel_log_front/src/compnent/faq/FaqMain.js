@@ -84,7 +84,7 @@ const FaqMain = () => {
         </div>
         */}
         <div className="mcd-menu-wrap">
-          <div class="container">
+          <div class="admin-menu-container">
             <nav>
               <ul class="mcd-menu">
                 {memberLevel === 1 ? (
@@ -95,7 +95,6 @@ const FaqMain = () => {
                   ""
                 )}
                 {faqTypeList.map((faqType, index) => {
-                  console.log(faqType);
                   return (
                     <li key={"faqTypeCategory" + index}>
                       <a>

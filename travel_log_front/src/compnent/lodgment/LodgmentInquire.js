@@ -155,21 +155,42 @@ const LodgmentInquire = (pros) => {
                 <div>
                   {inquire.memberNo === loginNo && (
                     <span
-                      className="lodgment-inquire-del-btn"
+                      className="lodgmnetInquire-del-span"
                       onClick={() => {
-                        axios
-                          .delete(
-                            `${backServer}/lodgment/inquire/${inquire.roomQnaNo}/${loginNo}`
-                          )
-                          .then((res) => {
-                            if (res) {
-                              setSuccess(!success);
-                            }
-                            console.log(res);
-                          })
-                          .catch((err) => {
-                            console.log(err);
-                          });
+                        Swal.fire({
+                          icon: "warning",
+                          title: "삭제 확인",
+                          text: "정말로 삭제하시겠습니까?",
+                          showCancelButton: true,
+                          confirmButtonText: "예",
+                          cancelButtonText: "아니오",
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            axios
+                              .delete(
+                                `${backServer}/lodgment/inquire/${inquire.roomQnaNo}/${loginNo}`
+                              )
+                              .then((res) => {
+                                if (res) {
+                                  setSuccess(!success);
+                                  Swal.fire({
+                                    icon: "success",
+                                    title: "삭제 완료",
+                                    text: "질문이 성공적으로 삭제되었습니다.",
+                                  });
+                                }
+                                console.log(res);
+                              })
+                              .catch((err) => {
+                                console.log(err);
+                                Swal.fire({
+                                  icon: "error",
+                                  title: "삭제 실패",
+                                  text: "문제가 발생했습니다. 다시 시도해주세요.",
+                                });
+                              });
+                          }
+                        });
                       }}
                     >
                       삭제하기

@@ -17,7 +17,8 @@ const LodgmentReviewWirte = () => {
   const [loginNo] = useRecoilState(loginNoState);
   const lodgmentNo = state?.lodgmentNo;
   const [value, setValue] = useState(0);
-
+  const bookNo = state.bookNo;
+  console.log(bookNo);
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, false] }],
@@ -92,6 +93,7 @@ const LodgmentReviewWirte = () => {
     form.append("reviewContent", reviewContent);
     form.append("memberNo", loginNo);
     form.append("lodgmentNo", lodgmentNo);
+    form.append("bookNo", bookNo);
     for (let i = 0; i < reviewImg.length; i++) {
       form.append("reviewImg", reviewImg[i]);
     }

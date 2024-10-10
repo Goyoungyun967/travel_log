@@ -5,10 +5,11 @@ import UqillEditor from "../utils/UqillEditor";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useRecoilState } from "recoil";
-import { sellerLoginNoState } from "../utils/RecoilData";
+import { memberLevelState, sellerLoginNoState } from "../utils/RecoilData";
 
 const InsertRoom = () => {
   const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
+  const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const params = useParams();
@@ -161,7 +162,7 @@ const InsertRoom = () => {
 
   return (
     <>
-      {lodgmentList.sellerNo === loginNo ? (
+      {lodgmentList.sellerNo === loginNo || memberLevel === 1 ? (
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -271,7 +272,7 @@ const InsertRoom = () => {
                     </div>
                   </div>
                 </div>
-                <button type="submit" className="btn primary">
+                <button type="submit" className="AddRoomBtnInsert">
                   등록 완료
                 </button>
               </div>

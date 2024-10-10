@@ -115,7 +115,7 @@ const AdminMain = () => {
                       <NavLink to="memberList">회원 관리</NavLink>
                     </li>
                     <li>
-                      <NavLink to="memberChart">회원 이용 관리</NavLink>
+                      <NavLink to="memberChart">회원 이용 정보</NavLink>
                     </li>
                     <li>
                       <NavLink to="inquiryList">1대1 문의 처리</NavLink>
@@ -131,7 +131,7 @@ const AdminMain = () => {
                       <NavLink to="sellerList">판매자 관리</NavLink>
                     </li>
                     <li>
-                      <NavLink to="sellerChart">판매자 매출</NavLink>
+                      <NavLink to="sellerChart">판매자 매출 정보</NavLink>
                     </li>
                     <li>
                       <NavLink to="sellerStm">판매자 정산</NavLink>

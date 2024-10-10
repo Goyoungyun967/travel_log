@@ -21,7 +21,7 @@ const BookingInfo = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const bookNo = state.bookNo;
   //const bookNo = 21;
-  console.log("bookNo : " + bookNo);
+  console.log("state : " + state);
   const [bookingInfo, setBookingInfo] = useState([]);
   useEffect(() => {
     axios
@@ -289,7 +289,7 @@ const CancleModal = (pros) => {
             ))}
           </RadioGroup>
         </FormControl>
-        {selectedReason === "2" && (
+        {selectedReason === "4" && (
           <input
             placeholder="기타 사유를 20자 이내로 입력하세요"
             maxLength={20} // 최대 50자로 제한

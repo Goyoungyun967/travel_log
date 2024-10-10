@@ -208,14 +208,15 @@ a {
 } */
 
 .main-search-bar {
-  width: 800px;
+  width: 850px;
   position: absolute;
-  top: 38%;
-  left: 30%;
+  top: 45%;
+  left: 50%;
   z-index: 2 !important;
+  transform: translate(-50%, -50%);
 }
 .main-search-bar .lodgment-table-wrap {
-  padding: 20px;
+  padding: 10px;
   background-color: var(--main2);
 }
 
