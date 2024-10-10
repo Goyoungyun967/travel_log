@@ -389,7 +389,70 @@
 
 	
 
-
+	<!-- 게시글 신고  -->
+  <select id="getBoardReportListCount" resultType="int">
+  	select count(distinct board_no) from board_report    
+  </select>
+  <select id="getBoardReportList" resultType="boardReportList">
+  	select * from (select rownum as rnum, br2.*,(select count(*) from board_report where board_no=br2.board_no) as total_count from (select 
+    sum(case when br.report_type = 1 then 1 else 0 end) as abuse_count,
+    sum(case when br.report_type = 2 then 1 else 0 end) as uncomfortable_count,
+    sum(case when br.report_type = 3 then 1 else 0 end) as ad_count,
+    sum(case when br.report_type = 4 then 1 else 0 end) as etc_count,
+    m.member_nickname, 
+    b.board_no,
+    b.board_title,
+    b.board_type
+	from 
+		board_report br
+	join 
+		board b on br.board_no = b.board_no
+	join 
+		member m on b.member_no = m.member_no
+	group by 
+		m.member_nickname, b.board_no, b.board_title,b.board_type 
+	order by 
+		b.board_no desc)br2) where rnum between #{start} and #{end}
+  </select>
+  <select id="getBoardReport" resultType="boardReport">
+  	select report_no,report_type,report_content,member_nickname from board_report join member using (member_no) where board_no=#{board_no}
+  </select>
+  <delete id="deleteBoardReport">
+  	delete from board_report where report_no=#{report_no}
+  </delete>
+  
+  <!-- 댓글 신고 -->
+  <select id="getCommentReportListCount" resultType="int">
+  	select count(distinct comment_no) from comment_report    
+  </select>
+  <select id="getCommentReportList" resultType="commentReportList">
+  	select * from (select rownum as rnum, cr2.*,(select count(*) from comment_report where comment_no=cr2.comment_no) as total_count from (select 
+    sum(case when cr.comment_report_type = 1 then 1 else 0 end) as abuse_count,
+    sum(case when cr.comment_report_type = 2 then 1 else 0 end) as uncomfortable_count,
+    sum(case when cr.comment_report_type = 3 then 1 else 0 end) as ad_count,
+    sum(case when cr.comment_report_type = 4 then 1 else 0 end) as etc_count,
+    bc.comment_writer as member_nickname,
+    bc.comment_no,
+    bc.board_no,
+    bc.comment_content,
+    b.board_type
+	from 
+		comment_report cr
+	join 
+		board_comment bc on bc.comment_no = cr.comment_no
+	join
+		board b on bc.board_no = b.board_no 
+	group by 
+		bc.comment_writer,  bc.comment_no,bc.comment_content,bc.board_no,b.board_type
+	order by 
+		bc.comment_no desc)cr2) where rnum between #{start} and #{end}
+  </select>
+  <select id="getCommentReport" resultType="commentReport">
+  	select comment_report_no,comment_report_type,comment_report_content,member_nickname from comment_report join member using (member_no) where comment_no=#{commentNo}
+  </select>
+  <delete id="deleteCommentReport">
+  	delete from comment_report where comment_report_no=#{reportNo}
+  </delete>
 		
 		
 	

@@ -1,6 +1,7 @@
 package kr.co.iei.seller.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -91,7 +92,12 @@ public interface SellerLodgmentDao {
 
 	int delUpComment(LodgmentReviewDTO ld);
 
-	
+	//상품 게시글 관리
+	int getAdminLodgmentCount(int lodgmentDelete);
+
+	List getAdminLodgmentList(Map<String, Object> m);
+
+	int updateLodgmentDelete(int[] lodgmentNo);
 	
 
 }

@@ -497,4 +497,16 @@
 	<insert id="insertSellerComment">
 		insert into qna_comment values(QNA_COMMENT_SEQ.NEXTVAL, #{roomQnaNo}, #{comContent})
 	</insert>
+	
+	
+	<!-- 상품 게시글 관리 -->
+  <select id="getAdminLodgmentCount" resultType="int">
+  	select count(*) from lodgment_storage where lodgment_delete=#{lodgmentDelete}
+  </select>
+  <select id="getAdminLodgmentList" resultType="lodgmentStorage">
+  	select * from (select rownum as rnum, l.* from (select lodgment_no,lodgment_name,lodgment_type_name,lodgment_delete,business_name from lodgment_storage join lodgment_type using (lodgment_type_no) join seller using (seller_no) where lodgment_delete=#{lodgmentDelete})l) where rnum between #{start} and #{end}
+  </select>
+  <update id="updateLodgmentDelete">
+		update lodgment_storage set lodgment_delete=1 where lodgment_no in <foreach collection="array" item="lodgmentNo" open="(" close=")" separator=",">#{lodgmentNo}</foreach>
+  </update>
 </mapper>

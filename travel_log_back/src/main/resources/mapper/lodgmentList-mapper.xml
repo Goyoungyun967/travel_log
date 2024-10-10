@@ -417,4 +417,39 @@
   		delete from lodgment_review where review_no=#{reviewNo}
   	</delete>
 	
+	<!-- 리뷰 신고 -->
+  <select id="getReviewReportListCount" >
+  	select count(distinct review_no) from lodgment_review_report
+  </select>
+  <select id="getReviewReportList" resultType="lodgmentReviewReport">
+  	select * from (select rownum as rnum, lrr.*,(select count(*) from lodgment_review_report where review_no=lrr.review_no) as total_count from (select
+    sum(case when review_report_type = 1 then 1 else 0 end) as abuse_count,
+    sum(case when review_report_type = 2 then 1 else 0 end) as uncomfortable_count,
+    sum(case when review_report_type = 3 then 1 else 0 end) as ad_count,
+    sum(case when review_report_type = 4 then 1 else 0 end) as etc_count,
+    review_content,
+    rating,
+    member_nickname,
+    lodgment_no,
+    review_no 
+    from 
+    	lodgment_review_report 
+    join 
+    	lodgment_review lr using (review_no)
+    join 
+    	lodgment_storage using (lodgment_no) 
+    join
+    	member m on m.member_no=lr.member_no 
+    group by 
+    	review_content,rating,member_nickname,lodgment_no,review_no 
+    order by review_no desc)lrr) where rnum between #{start} and #{end}
+  </select>
+  <select id="getReviewFile" resultType="lodgmentReviewFile">
+  	select * from lodgment_review_file where review_no=#{reviewNo}
+  </select>
+  <delete id="deleteReviewReport">
+  	delete from lodgment_review_report where review_no=#{reviewNo}
+  </delete>
+  
+	
 </mapper>

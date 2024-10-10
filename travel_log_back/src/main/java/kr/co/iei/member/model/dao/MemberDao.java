@@ -53,6 +53,12 @@ public interface MemberDao {
 	int updateMemberLevel(MemberDTO member);
 
 	MemberReportDTO getMemberReport(int memberNo);
+	
+	//회원 이용 차트
+	List getLodgmentResionData();
 
+	List getLodgmentResionSearchMemberData(String region);
+
+	List getLodgmentResionMemberData();
 
 }

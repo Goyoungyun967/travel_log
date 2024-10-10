@@ -164,57 +164,68 @@ public class AdminController {
 	}
 
 	@GetMapping(value="/board/report/list/{reqPage}")
+	@Operation(summary = "신고 게시글 리스트 조회",description = "페이지 번호를 받아서 신고가 존재하는 게시글 리스트 조회")
 	public ResponseEntity<Map> getBoardReportList(@PathVariable int reqPage){
 		Map map = adminService.getBoardReportList(reqPage);
 		return ResponseEntity.ok(map);
 	}
 	@GetMapping(value="/board/report/{boardNo}")
+	@Operation(summary = "게시글 신고 리스트 조회",description = "게시글 번호를 받아서 게시글 신고 정보 리스트 조회")
 	public ResponseEntity<List> getBoardReport(@PathVariable int boardNo){
 		List list = adminService.getBoardReport(boardNo);
 		return ResponseEntity.ok(list);
 	}
 	@DeleteMapping(value="/board/report/{reportNo}")
+	@Operation(summary = "게시글 신고 삭제",description = "신고 번호를 받아서 게시글 신고 삭제")
 	public ResponseEntity<Integer> deleteBoardReport(@PathVariable int reportNo){
 		int result = adminService.deleteBoardReport(reportNo);
 		return ResponseEntity.ok(result);
 	}
 	
 	@GetMapping(value="/comment/report/list/{reqPage}")
+	@Operation(summary = "신고 댓글 리스트 조회",description = "페이지 번호를 받아서 신고가 존재하는 댓글 리스트 조회")
 	public ResponseEntity<Map> getCommentReportList(@PathVariable int reqPage){
 		Map map = adminService.getCommentReportList(reqPage);
 		return ResponseEntity.ok(map);
 	}
 	@GetMapping(value="/comment/report/{commentNo}")
+	@Operation(summary = "댓글 신고 리스트 조회",description = "댓글 번호를 받아서 댓글 신고 정보 리스트 조회")
 	public ResponseEntity<List> getCommentReport(@PathVariable int commentNo){
 		List list = adminService.getCommentReport(commentNo);
 		return ResponseEntity.ok(list);
 	}
 	@DeleteMapping(value="/comment/report/{reportNo}")
+	@Operation(summary = "댓글 신고 삭제",description = "신고 번호를 받아서 댓글 신고 삭제")
 	public ResponseEntity<Integer> deleteCommentReport(@PathVariable int reportNo){
 		int result = adminService.deleteCommentReport(reportNo);
 		return ResponseEntity.ok(result);
 	}
 	@GetMapping(value="/review/report/list/{reqPage}")
+	@Operation(summary = "신고 리뷰 리스트 조회",description = "페이지 번호를 받아서 신고가 존재하는 리뷰 리스트 조회")
 	public ResponseEntity<Map> getReviewReportList(@PathVariable int reqPage){
 		Map map = adminService.getReviewReportList(reqPage);
 		return ResponseEntity.ok(map);
 	}
 	@DeleteMapping(value="/review/report/{reviewNo}")
+	@Operation(summary = "리뷰 신고 삭제",description = "리뷰 번호를 받아서 리뷰 신고 전체 삭제")
 	public ResponseEntity<Integer> deleteReviewReport(@PathVariable int reviewNo){
 		int result = adminService.deleteReviewReport(reviewNo);
 		return ResponseEntity.ok(result);
 	}
 	@GetMapping(value="/member/list/{reqPage}/{type}")
+	@Operation(summary = "회원 리스트 조회",description = "페이지 번호, 타입을 받아서 type이 1일경우 신고많은순 외에는 번호순 리스트 조회")
 	public ResponseEntity<Map> getAdminMemberList(@PathVariable int reqPage, @PathVariable int type){
 		Map map = adminService.getAdminMemberList(reqPage,type);
 		return ResponseEntity.ok(map);
 	}
 	@PostMapping(value="/member/report")
+	@Operation(summary = "회원 정지 등록",description = "회원 번호를 받아서 정지 정보 등록")
 	public ResponseEntity<Integer> insertMemberReport(@RequestBody MemberDTO member){
 		int result = adminService.insertMemberReport(member);
 		return ResponseEntity.ok(result);
 	}
 	@PatchMapping(value="/member")
+	@Operation(summary = "회원 등급 수정",description = "회원 번호와 등급 번호를 받아서 회원 등급 정보 수정")
 	public ResponseEntity<Integer> updateMemberLevel(@RequestBody MemberDTO member){
 		int result = adminService.updateMemberLevel(member);
 		return ResponseEntity.ok(result);
