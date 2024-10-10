@@ -131,7 +131,7 @@ const InsertLodgment = () => {
           const nameRegex = /^.{1,30}$/; // 호텔 이름 1글자 이상 30자까지만
           const contentRegex = /^.{1,1000}$/; // 공지사항 1글자 이상 1000글자까지만
 
-          // 각각의 조건을 개별적으로 확인
+          // false면 Swal
           if (!nameRegex.test(hotelName)) {
             Swal.fire({
               title: "숙소 이름을 다시 적어주세요",

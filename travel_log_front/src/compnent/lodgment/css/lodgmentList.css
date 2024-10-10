@@ -18,13 +18,14 @@
 .lodgment-info-text {
   font-size: 1.5rem; /* 텍스트 크기 조절 */
   margin-bottom: 10px; /* 아래 여백 */
+  margin-left: 5px;
 }
 .max-num {
   text-align: right;
   margin-right: 100%;
 }
 .choose-price-wrap {
-  border-bottom: 3px solid var(--main1);
+  border-bottom: 3px solid var(--gray2);
   height: 200px;
 }
 .lodgment-price-max {
@@ -33,17 +34,20 @@
 }
 .lodgment-star-range {
   height: 100px;
-  border-bottom: 3px solid var(--main1);
+  border-bottom: 3px solid var(--gray2);
   margin-top: 20px;
-  margin: 10px;
+  padding: 5px;
 }
-
+.lodgment-sellprice-info {
+  margin-left: 7px;
+}
 .start-range-wrap {
   margin-top: 10px;
+  margin-left: 4px;
 }
 .lodgment-service-wrap {
-  border-bottom: 3px solid var(--main1);
-  margin: 10px;
+  border-bottom: 3px solid var(--gray2);
+  margin-top: 15px;
 }
 .lodgment-price-range {
   width: 100%; /* 부모 요소의 너비를 100%로 설정 */
@@ -131,7 +135,11 @@
 }
 
 .lodgment-card {
-  cursor: pointer;
+  border-bottom: 4px solid var(--gray6);
+  width: 85%;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer; /* 카드에 마우스 커서 추가 */
+  margin-bottom: 20px; /* 카드 간격 추가 */
 }
 .lodgment-card-container {
   width: 100%;
@@ -154,9 +162,11 @@
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 .lodgment-card img {
-  width: 300px;
-  margin-bottom: 30px;
-  margin-top: 10px;
+  max-width: 300px; /* 최대 너비를 설정하여 너무 작아지지 않도록 조정 */
+  height: auto; /* 자동으로 비율 유지 */
+  object-fit: cover; /* 비율을 유지하며 요소에 맞게 자르기 */
+  border-radius: 15px; /* 카드의 모서리에 둥근 효과 추가 */
+  margin: 10px; /* 위아래, 좌우 여백을 동일하게 설정 */
 }
 .lodgment-details {
   text-align: left;
@@ -183,4 +193,30 @@
 }
 .lodgment-address {
   margin-top: 20px;
+}
+.search-left-wrap > search-lodgment {
+  margin-right: 10px;
+}
+.radio-lodgment-wrap {
+  border-top: 3px solid var(--gray2);
+  border-bottom: 3px solid var(--gray2);
+  margin-bottom: 20px;
+}
+.radio-lodgment-wrap > .lodgment-info-text {
+  margin-top: 20px;
+}
+.selet-lodgmentType-wrap {
+  margin-top: 25px;
+}
+.lodgment-type-radio {
+  margin: 10px;
+  margin-bottom: 20px;
+}
+.lodgment-radio {
+  margin-bottom: 20px;
+  margin: 10px;
+}
+.lodgment-list-reset-btn {
+  width: 100%;
+  border: none;
 }
