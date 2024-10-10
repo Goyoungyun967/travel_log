@@ -191,7 +191,7 @@ const SellerChart = () => {
   return (
     <>
       <div className="admin-page-title">
-        <h3>판매자 매출</h3>
+        <h3>판매자 정보</h3>
       </div>
       <div className="chart-select-box">
         <FormControl style={{ width: "200px" }}>

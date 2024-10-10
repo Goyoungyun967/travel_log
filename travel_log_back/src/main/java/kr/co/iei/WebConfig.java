@@ -34,7 +34,7 @@ public class WebConfig implements WebMvcConfigurer{
 
 		// 1 대 1 문의 사진
 		registry.addResourceHandler("/inq/inquiry/**")
-				.addResourceLocations("file:///"+root+"/inq/inquiry/");
+				.addResourceLocations("file:///"+root+"/inquiry/");
 
 				
 		//bard 첨부파일

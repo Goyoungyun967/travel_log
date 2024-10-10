@@ -88,15 +88,25 @@
   	</update>
   	
   	<select id="bookingAvailable" resultType="bookingAvailable">	
-		SELECT count(*) AS booking_count,
-		       (SELECT r.room_max_capacity
-		        FROM room r 
-		        WHERE r.room_no = b.room_no) AS room_count
-		FROM booking b
-		WHERE start_date <![CDATA[<]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') 
-		  AND end_date > TO_DATE(#{startDate}, 'YYYY-MM-DD')
-		  AND room_no=#{roomNo}
-		GROUP BY b.room_no
+		 SELECT 
+		    NVL(b.booking_count, 0) AS booking_count,
+		    NVL(r.room_max_capacity, 0) AS room_count
+		FROM 
+		    (SELECT 
+		         room_no, COUNT(*) AS booking_count
+		     FROM 
+		         booking
+		     WHERE 
+				start_date <![CDATA[<]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') 
+				AND end_date > TO_DATE(#{startDate}, 'YYYY-MM-DD')
+				AND room_no=#{roomNo}
+		     GROUP BY 
+		         room_no) b
+		RIGHT JOIN 
+		    room r ON b.room_no = r.room_no
+		WHERE 
+		    r.room_no = #{roomNo} 	
+ 
   	</select>
 
 </mapper>

@@ -126,7 +126,7 @@ const MemberChart = () => {
   return (
     <>
       <div className="admin-page-title">
-        <h3>회원 이용 관리</h3>
+        <h3>회원 이용 정보</h3>
       </div>
       <div className="enroll-chart">
         <button
@@ -153,7 +153,6 @@ const MemberChart = () => {
               offset: 17,
               position: "top",
             }}
-            domain={[0, (dataMax) => Math.floor(dataMax * 1.5)]}
           />
           <Tooltip />
           <Legend />
@@ -185,7 +184,6 @@ const MemberChart = () => {
               offset: 17,
               position: "top",
             }}
-            domain={[0, (dataMax) => Math.floor(dataMax * 1.5)]}
           />
           <Tooltip />
           <Legend />
