@@ -103,9 +103,9 @@ const AdminMain = () => {
         </div>
         */}
         <div className="mcd-menu-wrap">
-          <div class="admin-menu-container">
+          <div className="admin-menu-container">
             <nav>
-              <ul class="mcd-menu">
+              <ul className="mcd-menu">
                 <li>
                   <NavLink to="memberChart">
                     <strong>회원</strong>
