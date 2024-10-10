@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import FavoriteIcon from "@mui/icons-material/Favorite"; // 채워진 하트
 import { useParams } from "react-router-dom";
 import CommentReportModal from "./CommentReportModal";
+import Swal from "sweetalert2";
 
 const BoardComment = ({ board }) => {
   const backServer = process.env.REACT_APP_BACK_SERVER; // 백엔드 서버 주소
@@ -49,29 +50,31 @@ const BoardComment = ({ board }) => {
 
   // 댓글 제출 핸들러
   const handleCommentSubmit = () => {
-    if (commentValue.trim() !== "") {
-      const form = new FormData();
-      form.append("commentContent", commentValue.trim());
-      form.append("commentWriter", loginNickname);
-      form.append("boardNo", board.boardNo);
+    if (checkReport()) {
+      if (commentValue.trim() !== "") {
+        const form = new FormData();
+        form.append("commentContent", commentValue.trim());
+        form.append("commentWriter", loginNickname);
+        form.append("boardNo", board.boardNo);
 
-      axios
-        .post(`${backServer}/board/insertComment`, form, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((res) => {
-          // 댓글 추가 후 목록을 다시 불러옴
-          console.log(res.data);
-          setCommentList((prevComments) => [...prevComments, res.data]);
-          setCommentValue(""); // 입력 필드 초기화
-        })
-        .catch((err) => {
-          console.error("댓글 추가 실패:", err);
-        });
-    } else {
-      alert("댓글 내용을 입력하세요.");
+        axios
+          .post(`${backServer}/board/insertComment`, form, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((res) => {
+            // 댓글 추가 후 목록을 다시 불러옴
+            console.log(res.data);
+            setCommentList((prevComments) => [...prevComments, res.data]);
+            setCommentValue(""); // 입력 필드 초기화
+          })
+          .catch((err) => {
+            console.error("댓글 추가 실패:", err);
+          });
+      } else {
+        alert("댓글 내용을 입력하세요.");
+      }
     }
   };
 
@@ -154,7 +157,25 @@ const BoardComment = ({ board }) => {
   if (loading) {
     return <p>로딩 중...</p>; // 로딩 상태 표시
   }
-
+  const checkReport = () => {
+    if (loginNo !== -1) {
+      axios
+        .get(`${backServer}/member/report/${loginNo}`)
+        .then((res) => {
+          if (res.data !== "") {
+            Swal.fire({
+              title: "댓글 작성 제한",
+              text: `제한 기간 : ${res.data.startDate} ~ ${res.data.endDate}`,
+              icon: "warning",
+            });
+            return false;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
   return (
     <div className="board-comment-section">
       <h3>댓글</h3>

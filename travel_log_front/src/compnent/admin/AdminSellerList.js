@@ -96,10 +96,11 @@ const AdminSellerList = () => {
               )}
               판매자번호
             </th>
-            <th width={"30%"}>사업자번호</th>
+            <th width={"20%"}>사업자번호</th>
+            <th width={"20%"}>사업자명</th>
             <th width={"15%"}>대표자명</th>
-            <th width={"20%"}>가입일</th>
-            <th width={"15%"}>승인상태</th>
+            <th width={"15%"}>가입일</th>
+            <th width={"10%"}>승인상태</th>
           </tr>
         </thead>
         <tbody>
@@ -135,6 +136,7 @@ const AdminSellerList = () => {
                 </td>
                 <td>{seller.businessNo}</td>
                 <td>{seller.representativeName}</td>
+                <td>{seller.businessName}</td>
                 <td>{seller.enrollDate}</td>
                 <td>{seller.sellerApp === 0 ? <>{"가입대기"}</> : "승인"}</td>
               </tr>

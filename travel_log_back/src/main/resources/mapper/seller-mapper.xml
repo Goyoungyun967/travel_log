@@ -27,7 +27,7 @@
 	</select>
 	
 	<select id="selectSellerList" resultType="seller">
-		select * from (select rownum as rnum, s.* from (select seller_no,business_no,representative_name,to_char(enroll_date,'yyyy-mm-dd') as enroll_date,seller_app from seller where seller_app=#{sellerApp})s) where rnum between #{start} and #{end}
+		select * from (select rownum as rnum, s.* from (select seller_no,business_no,representative_name,business_name,to_char(enroll_date,'yyyy-mm-dd') as enroll_date,seller_app from seller where seller_app=#{sellerApp})s) where rnum between #{start} and #{end}
 	</select>
 	
 	<update id="updateSellerApp">
