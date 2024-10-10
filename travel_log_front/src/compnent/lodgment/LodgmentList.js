@@ -158,7 +158,7 @@ const LodgmentList = () => {
       return;
     }
     if (totalPage === reqPage) {
-      //setReqPage(1);
+      setReqPage(1);
     }
     axios
       .get(`${BackServer}/lodgment/searchLodgment`, {
