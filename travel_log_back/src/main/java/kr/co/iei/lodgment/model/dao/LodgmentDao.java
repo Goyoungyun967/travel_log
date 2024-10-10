@@ -2,6 +2,7 @@ package kr.co.iei.lodgment.model.dao;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -86,5 +87,16 @@ public interface LodgmentDao {
 	//List selectGetAllReviewImg(int lodgmentNo);
 
 	//List<RoomDTO> getRoomInfoList(int lodgmentNo, String startDate, String endDate, int guset);
+	
+	
+
+	//리뷰신고
+	int getReviewReportListCount();
+
+	List getReviewReportList(Map<String, Object> m);
+
+	int deleteReviewReport(int reviewNo);
+
+	List getReviewFile(int reviewNo);
 	
 }

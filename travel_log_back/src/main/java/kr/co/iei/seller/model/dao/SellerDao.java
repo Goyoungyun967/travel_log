@@ -31,4 +31,28 @@ public interface SellerDao {
 	//admin용 sellerList조회
 	List selectSellerList(Map<String, Object> m);
 	
+	//판매자 차트
+	List getSellerList();
+
+	List getSellerListSales(Map<String, Object> map);
+
+	List getSellerSales(int sellerNo);
+
+	List getSellerSalesGender(int sellerNo);
+
+	List getSellerSalesAge(int sellerNo);
+
+	List getSellerSalesList();
+	
+	//정산
+	List<SellerDTO> selectSellerSales();
+
+	int insertSellerStm(SellerDTO sellerDTO);
+
+	List getSellerStmList(Map<String, Object> m);
+
+	int getSellerStmCount(int status);
+
+	int updateStm(int[] stmNum);
+	
 }

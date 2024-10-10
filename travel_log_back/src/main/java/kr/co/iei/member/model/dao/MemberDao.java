@@ -55,7 +55,13 @@ public interface MemberDao {
 	int checkNickname(String memberNickname);
 
 	MemberReportDTO getMemberReport(int memberNo);
+	
+	//회원 이용 차트
+	List getLodgmentResionData();
 
+	List getLodgmentResionSearchMemberData(String region);
+
+	List getLodgmentResionMemberData();
 
 
 }
