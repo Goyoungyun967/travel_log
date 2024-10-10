@@ -36,8 +36,6 @@ const SellerLodgmentList = () => {
   // 판매자 메인
   return (
     <div className="contanier seller-lodgment-list">
-      {/* {isLogin? 현재 로그인이 되어있으면 으로 처리해야함 - 일단 임시로 1로 처리*/}
-
       {lodgmentList.length !== 0 ? (
         <>
           {isLogin ? (
@@ -90,7 +88,7 @@ const ListItem = (props) => {
   console.log(list);
   return (
     <>
-      {list.lodgmentDelete === 0 ? (
+      {list.lodgmentDelete === 0 ? ( // 0이면 등록 대기 중인 숙소
         <div className="seller-lg-list-item seller-admin-check">
           <p className="seller-check-p">등록 대기 중</p>
           <div className="seller-item-img">

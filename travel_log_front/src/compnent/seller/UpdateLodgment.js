@@ -12,10 +12,11 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import { useRecoilState } from "recoil";
-import { sellerLoginNoState } from "../utils/RecoilData";
+import { memberLevelState, sellerLoginNoState } from "../utils/RecoilData";
 
 const UpdateLodgment = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
   const navigate = useNavigate();
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
@@ -102,7 +103,7 @@ const UpdateLodgment = () => {
 
   return (
     <div className="contanier insert-lodgment">
-      {lodgmentList.sellerNo === loginNo ? (
+      {lodgmentList.sellerNo === loginNo || memberLevel === 1 ? (
         <form
           onSubmit={(e) => {
             e.preventDefault();

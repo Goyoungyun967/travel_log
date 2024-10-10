@@ -11,11 +11,12 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import { sellerLoginNoState } from "../utils/RecoilData";
+import { memberLevelState, sellerLoginNoState } from "../utils/RecoilData";
 import { useRecoilState } from "recoil";
 
 const RoomView = () => {
   const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
+  const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const params = useParams();
@@ -87,7 +88,7 @@ const RoomView = () => {
 
   return (
     <>
-      {lodgmentInfo.sellerNo === loginNo ? (
+      {lodgmentInfo.sellerNo === loginNo || memberLevel === 1 ? (
         <div className="seller-room-wrap">
           <h3>객실 정보</h3>
           <div className="hotel-info">
