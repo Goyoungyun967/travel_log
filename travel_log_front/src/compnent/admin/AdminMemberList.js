@@ -49,7 +49,7 @@ const AdminMemberList = () => {
               setReqPage(1);
             }}
           >
-            <FormControlLabel value={0} control={<Radio />} label="번호순" />
+            <FormControlLabel value={0} control={<Radio />} label="가입순" />
             <FormControlLabel
               value={1}
               control={<Radio />}

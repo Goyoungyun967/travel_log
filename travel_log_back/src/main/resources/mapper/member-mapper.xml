@@ -93,7 +93,7 @@
 	</select>
 	
 	<select id="getAdminMemberList" resultType="member">
-		select * from(select rownum as rnum,m2.* from (select member_no,member_id,member_nickname,member_level,to_char(enroll_date,'yyyy-mm-dd') as enroll_date,nvl((select count(*) from board_report where member_no=m.member_no and report_type=2),0)+nvl((select count(*) from comment_report where member_no=m.member_no and comment_report_type=2),0) as report_count,nvl((select count(*) from member_report where member_no=m.member_no and end_date <![CDATA[>]]> sysdate),0) as member_state from member m order by 
+		select * from(select rownum as rnum,m2.* from (select member_no,member_id,member_nickname,member_level,to_char(enroll_date,'yyyy-mm-dd') as enroll_date,nvl((select count(*) from board_report where member_no=m.member_no and report_type=2),0)+nvl((select count(*) from comment_report where member_no=m.member_no and comment_report_type=2),0) as report_count,nvl((select count(*) from member_report where member_no=m.member_no and end_date <![CDATA[>]]> sysdate),0) as member_state from member m order by enroll_date desc, 
 		<if test="type==1">
 			report_count,	
 		</if>
@@ -113,7 +113,7 @@
 	<select id="checkNickname" resultType="int">
 		select count(*) from member where member_nickname=#{memberNickname}
 	</select>
-	
+
 	<select id="getMemberReport" resultType="memberReport">
 		select member_no,to_char(start_date,'yyyy-mm-dd hh24:mi') as start_date,to_char(end_date,'yyyy-mm-dd hh24:mi') as end_date from member_report where member_no=#{memberNo} and end_date > sysdate
 	</select>

@@ -30,6 +30,15 @@ public class BookingController {
 	private BookingService bookingService;
 	
 	@Operation(summary="숙소 예약", description = "숙소 결제 정보 저장")
+	@PostMapping (value = "/comfirm") //requestBody 는 한개의 객체만 가능 여러개 사용 못함 
+	public ResponseEntity<Integer> bookingComfirm(@RequestBody BookingDTO bookingInfo){
+		//System.out.println(updatedBookingInfo);
+		int result = bookingService.bookingComfirm(bookingInfo);
+			return ResponseEntity.ok(result);			
+	
+	}
+	
+	@Operation(summary="숙소 예약", description = "숙소 결제 정보 저장")
 	@PostMapping  //requestBody 는 한개의 객체만 가능 여러개 사용 못함 
 	public ResponseEntity<Integer> insertBooking(@RequestBody BookingDTO updatedBookingInfo){
 		//System.out.println(updatedBookingInfo);
@@ -50,22 +59,24 @@ public class BookingController {
 	@Operation(summary="숙소 예약 취소", description = "예약번호, 가격, 취소사유 (+기타사유)로 취소로 수정 ")
 	@PatchMapping
 	public ResponseEntity<Boolean> getPortoneimpuid(@RequestBody BookingCancelDTO cancelData){
-		String portoneimpuid = bookingService.getPortoneimpuid(cancelData);
-		String accessToken = "";
-		try {
-			 accessToken = bookingService.getAccessToken();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try {
-			bookingService.refundRequest(portoneimpuid, accessToken);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		int result = bookingService.bookingCancelUpdate(cancelData);
+		if(result == 2) {
+			String portoneimpuid = bookingService.getPortoneimpuid(cancelData);
+			String accessToken = "";
+			try {
+				 accessToken = bookingService.getAccessToken();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try {
+				bookingService.refundRequest(portoneimpuid, accessToken);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return ResponseEntity.ok(2 == result);			
 	}
 	
