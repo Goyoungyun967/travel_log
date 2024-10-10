@@ -111,19 +111,34 @@ const AccompanyComment = (accompany) => {
   };
 
   // 댓글 삭제 핸들러
+  // 댓글 삭제 핸들러
   const handleCommentDelete = (commentNo) => {
-    console.log(commentNo);
-    axios
-      .delete(`${backServer}/board/deleteComment/${commentNo}`)
-      .then(() => {
-        setCommentList((prevComments) =>
-          prevComments.filter((comment) => comment.commentNo !== commentNo)
-        ); // 댓글 목록에서 삭제
-      })
-      .catch((error) => {
-        console.error("댓글 삭제 실패:", error);
-        alert("댓글 삭제에 실패했습니다. 다시 시도해 주세요.");
-      });
+    Swal.fire({
+      title: "댓글을 삭제하시겠습니까?",
+      text: "삭제는 확인 버튼을 클릭하세요.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // 사용자가 확인 버튼을 클릭했을 때 삭제 요청
+        axios
+          .delete(`${backServer}/board/deleteComment/${commentNo}`)
+          .then(() => {
+            setCommentList((prevComments) =>
+              prevComments.filter((comment) => comment.commentNo !== commentNo)
+            ); // 댓글 목록에서 삭제
+            Swal.fire("댓글이 삭제되었습니다!", "", "success");
+          })
+          .catch((error) => {
+            console.error("댓글 삭제 실패:", error);
+            Swal.fire("댓글 삭제 실패!", "다시 시도해 주세요.", "error");
+          });
+      } else {
+        Swal.fire("댓글 삭제가 취소되었습니다.", "", "info"); // 삭제 취소 알림
+      }
+    });
   };
 
   // 댓글 좋아요 핸들러
