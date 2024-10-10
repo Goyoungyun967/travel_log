@@ -57,7 +57,9 @@ public class BookingDTO {
 	private int roomPrice;
 	@Schema(description = "호텔 이미지", type="string")
 	private String lodgmentImg;
-
-
+	@Schema(description = "리뷰 여부", type="int")
+	private int reviewCount;
+	@Schema(description = "호텔 번호", type="int")
+	private int lodgmentNo;
 }
 

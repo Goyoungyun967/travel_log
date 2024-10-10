@@ -193,7 +193,8 @@ const SearchBar = (props) => {
                             onChange={onChange}
                             startDate={startDate}
                             endDate={endDate}
-                            minDate={startDay}
+                            minDate={new Date(Date.now() + 86400000)}
+                            maxDate={new Date(Date.now() + 180 * 86400000)}
                             selectsRange
                             inline
                           />

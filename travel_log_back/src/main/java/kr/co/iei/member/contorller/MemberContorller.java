@@ -197,10 +197,14 @@ public class MemberContorller {
 	
 	@GetMapping(value="/sendIdEmail/{memberEmail}")
 	public ResponseEntity<String> searchIdEmail(@PathVariable String memberEmail) {
-		System.out.println(memberEmail);
+		
 		String userId = memberService.searchIdEmail(memberEmail);
-		System.out.println(userId);
-		String emailContent = "안녕하세요, 아이디는: "+userId+"입니다";
+		
+		String emailContent = "<h1>안녕하세요 .트레블로그입니다. </h1>" 
+			      +"<h3>"+memberEmail+" 로 등록된 "+"</h3>"
+				  +"<h3>아이디는 [<span style='color:red;'>"
+				  + userId
+				  +"</span>]입니다.</h3>";
 		 try {
 		        emailSender.sendMail("아이디 찾기", memberEmail, emailContent);
 		        return ResponseEntity.ok("아이디가 이메일로 전송되었습니다.");
@@ -209,6 +213,14 @@ public class MemberContorller {
 		                             .body("이메일 발송 중 문제가 발생했습니다: " + e.getMessage());
 		    }
 	}
+	
+	@PatchMapping(value="searchPw")
+	public ResponseEntity<Integer> searchPw(@RequestBody MemberDTO member){
+		System.out.println(member);
+		int result = memberService.searchPw(member);
+		return ResponseEntity.ok(result);
+	}
+	
 }
 	
 	

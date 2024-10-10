@@ -24,4 +24,6 @@ public class MemberDTO {
 	private int memberLevel;
 	private String memberNickname;
 	private String memberImage;
+	private int memberState;
+	private int reportCount;
 }

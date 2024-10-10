@@ -126,7 +126,7 @@ const AdminSellerStm = () => {
                 <td>{stm.businessName}</td>
                 <td>{stm.stmPrice + "원"}</td>
                 <td>{stm.stmDate}</td>
-                <td>{stm.stmState === 0 ? "미처리" : "정산완료"}</td>
+                <td>{stm.stmState === 0 ? "정산대기" : "정산완료"}</td>
               </tr>
             );
           })}

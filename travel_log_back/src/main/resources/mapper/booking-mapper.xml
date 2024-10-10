@@ -28,6 +28,7 @@
 	select * from
 		(select rownum as rnum, b.* from
     		(select	
+    			book_no,
         		room_no,
         		lodgment_name,
         		status,
@@ -38,16 +39,19 @@
 	</select>
 	
 	<select id="getBookingInfo">
-		select lpad(b.book_no,6,0) book_no, b.member_id, b.start_date, b.end_date, b.status,
+		select b.book_no, b.member_id, b.start_date, b.end_date, b.status,
 		      b.guest_count , b.guest_name, b.guest_phone, b.guest_request, to_char(b.payment_date,'YYYY-MM-DD HH24:mi:SS') payment_date,
 			(select lodgment_name from lodgment_storage ls 
-			join room r using (lodgment_no) where room_no=b.book_no) lodgment_name,
+			join room r using (lodgment_no) where room_no=b.room_no) lodgment_name,
+			(select lodgment_no from lodgment_storage ls 
+			join room r using (lodgment_no) where room_no=b.room_no) lodgment_no,
 			(select lodgment_addr from lodgment_storage ls 
-			join room r using (lodgment_no) where room_no=b.book_no) lodgment_addr,
+			join room r using (lodgment_no) where room_no=b.room_no) lodgment_addr,
 			(select room_name from room r where room_no=b.room_no) room_name,
 			(select room_price from room r where room_no=b.room_no) room_price,
 			(select lodgment_img_path from lodgment_storage ls 
-			join room r using (lodgment_no) where room_no=b.room_no) lodgment_img
+			join room r using (lodgment_no) where room_no=b.room_no) lodgment_img,
+			(select count(*) from lodgment_review  lr where lr.book_no=b.book_no) review_count
 		from 
 			booking b
 		where 
@@ -74,4 +78,25 @@
   			sysdate
   		)
   	</insert>
+  	
+  	<select id="selectAllBookingList" resultType="booking">
+  		select * from booking
+  	</select>
+  	
+  	<update id="updateBookingStatus">
+  		update booking set status = 2 where book_no=#{bookNo} and status=1 and (sysdate > to_date(#{endDate},'YYYY-MM-DD'))
+  	</update>
+  	
+  	<select id="bookingAvailable" resultType="bookingAvailable">	
+		SELECT count(*) AS booking_count,
+		       (SELECT r.room_max_capacity
+		        FROM room r 
+		        WHERE r.room_no = b.room_no) AS room_count
+		FROM booking b
+		WHERE start_date <![CDATA[<]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') 
+		  AND end_date > TO_DATE(#{startDate}, 'YYYY-MM-DD')
+		  AND room_no=#{roomNo}
+		GROUP BY b.room_no
+  	</select>
+
 </mapper>

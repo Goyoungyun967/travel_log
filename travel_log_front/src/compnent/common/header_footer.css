@@ -23,6 +23,13 @@
   --line3: #eaeced;
   --line4: #f6f6f6;
   --line5: #f8f9fa;
+
+  /*판매자 임시 컬러*/
+  --seller1: #1860c3;
+  --seller2: #3d80cb;
+  --seller3: #71a9db;
+  --seller4: #ffbf6b;
+  --seller5: #ffd6b3;
 }
 * {
   margin: 0;
@@ -175,4 +182,51 @@ a {
   margin: 30px auto;
   flex: 1;
   justify-content: center;
+}
+
+/* main slider */
+.main-sileder-wrap > .swiper {
+  padding: 0 !important;
+}
+.main-sileder-wrap .slider-image {
+  width: 100%; /* 슬라이드의 폭에 맞게 설정 */
+  height: 600px; /* 원하는 높이 설정 */
+  object-fit: cover; /* 비율을 유지하면서 잘라냄 */
+}
+/* .main-sileder-wrap .swiper-slide > img {
+  width: 100%;
+} */
+
+.main-search-bar {
+  position: absolute;
+  top: 38%;
+  left: 28%;
+  z-index: 2 !important;
+}
+.main-search-bar .lodgment-table-wrap {
+  padding: 20px;
+  background-color: var(--main2);
+}
+
+.swiper {
+  width: 100%;
+  max-width: 1200px;
+  padding: 30px 20px !important;
+}
+.main-board-list-wrap .swiper-slide {
+  width: 280px !important;
+}
+
+/*------ 판매자 메인 구역 ------*/
+.Seller-Main-List {
+  display: flex;
+  width: 1200px;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+}
+.Seller-Main-List > .seller-lodgment-list {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
 }

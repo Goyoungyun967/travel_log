@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.iei.admin.model.servcie.AdminService;
 import kr.co.iei.faq.model.dto.FaqDTO;
+import kr.co.iei.member.model.dto.MemberDTO;
 import kr.co.iei.seller.model.dto.SellerDTO;
 
 
@@ -172,10 +173,10 @@ public class AdminController {
 		List list = adminService.getBoardReport(boardNo);
 		return ResponseEntity.ok(list);
 	}
-	@DeleteMapping(value="/board/report")
-	public ResponseEntity<Boolean> deleteBoardReport(@RequestBody int[] reportNo){
+	@DeleteMapping(value="/board/report/{reportNo}")
+	public ResponseEntity<Integer> deleteBoardReport(@PathVariable int reportNo){
 		int result = adminService.deleteBoardReport(reportNo);
-		return ResponseEntity.ok(result == reportNo.length);
+		return ResponseEntity.ok(result);
 	}
 	
 	@GetMapping(value="/comment/report/list/{reqPage}")
@@ -188,10 +189,10 @@ public class AdminController {
 		List list = adminService.getCommentReport(commentNo);
 		return ResponseEntity.ok(list);
 	}
-	@DeleteMapping(value="/comment/report")
-	public ResponseEntity<Boolean> deleteCommentReport(@RequestBody int[] reportNo){
+	@DeleteMapping(value="/comment/report/{reportNo}")
+	public ResponseEntity<Integer> deleteCommentReport(@PathVariable int reportNo){
 		int result = adminService.deleteCommentReport(reportNo);
-		return ResponseEntity.ok(result == reportNo.length);
+		return ResponseEntity.ok(result);
 	}
 	@GetMapping(value="/review/report/list/{reqPage}")
 	public ResponseEntity<Map> getReviewReportList(@PathVariable int reqPage){
@@ -199,8 +200,23 @@ public class AdminController {
 		return ResponseEntity.ok(map);
 	}
 	@DeleteMapping(value="/review/report/{reviewNo}")
-	public ResponseEntity<Integer> deleteReviewReport(@RequestBody int reviewNo){
+	public ResponseEntity<Integer> deleteReviewReport(@PathVariable int reviewNo){
 		int result = adminService.deleteReviewReport(reviewNo);
+		return ResponseEntity.ok(result);
+	}
+	@GetMapping(value="/member/list/{reqPage}/{type}")
+	public ResponseEntity<Map> getAdminMemberList(@PathVariable int reqPage, @PathVariable int type){
+		Map map = adminService.getAdminMemberList(reqPage,type);
+		return ResponseEntity.ok(map);
+	}
+	@PostMapping(value="/member/report")
+	public ResponseEntity<Integer> insertMemberReport(@RequestBody MemberDTO member){
+		int result = adminService.insertMemberReport(member);
+		return ResponseEntity.ok(result);
+	}
+	@PatchMapping(value="/member")
+	public ResponseEntity<Integer> updateMemberLevel(@RequestBody MemberDTO member){
+		int result = adminService.updateMemberLevel(member);
 		return ResponseEntity.ok(result);
 	}
 }

@@ -5,20 +5,16 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.iei.booking.model.dto.BookingAvailavleDTO;
 import kr.co.iei.booking.model.dto.BookingCancelDTO;
 import kr.co.iei.booking.model.dto.BookingDTO;
-import kr.co.iei.util.PageInfo;
 
 @Mapper
 public interface BookingDao {
 
 	int insertBooking(BookingDTO bookingInfo);
 
-
-
-
 	int totalCount();
-
 
 	int myBookingTotalCount(int memberNo);
 
@@ -32,10 +28,11 @@ public interface BookingDao {
 
 	int insertBookCancel(BookingCancelDTO cancelData);
 
+	List<BookingDTO> selectAllBookingList();
 
-	
+	int updateBookingStatus(BookingDTO booking);
 
-
+	BookingAvailavleDTO bookingAvailable(BookingDTO bookingInfo);
 
 
 }

@@ -113,8 +113,6 @@ public class MemberService {
 	
 	public int checkPw(MemberDTO member) {
 		MemberDTO m =memberDao.selectOneMember(member.getMemberNo());
-		System.out.println(member);
-		System.out.println(m);
 		if(m!=null && encoder.matches(member.getMemberPw(),m.getMemberPw())) {
 			return 1;
 		}
@@ -195,5 +193,14 @@ public class MemberService {
 	public String searchIdEmail(String memberEmail) {
 		String userId = memberDao.searchIdEmail(memberEmail);
 		return userId;
+	}
+	
+	@Transactional
+	public int searchPw(MemberDTO member) {
+		String encPw = encoder.encode(member.getMemberPw());
+		System.out.println(encPw);
+		member.setMemberPw(encPw);
+		int result = memberDao.searchPw(member);
+		return result;
 	}
 }

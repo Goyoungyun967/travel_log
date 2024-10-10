@@ -78,6 +78,8 @@ public interface LodgmentDao {
 
 	List<LodgmentReviewFileDTO> selectReviewFile(int[] delImgFileNo);
 
+	int deleteReview(int reviewNo);
+
 	//List selectGetAllReviewImg(int lodgmentNo);
 
 	//List<RoomDTO> getRoomInfoList(int lodgmentNo, String startDate, String endDate, int guset);

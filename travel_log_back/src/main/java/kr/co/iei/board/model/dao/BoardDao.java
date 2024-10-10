@@ -29,7 +29,7 @@ public interface BoardDao {
 
 	int insertBoardFile(BoardFileDTO boardFile);
 
-	BoardDTO selectOneBoard(int boardNo,int memberNo);
+	BoardDTO selectOneBoard(int boardNo);
 
 	BoardFileDTO getBoardFile(int boardFileNo);
 

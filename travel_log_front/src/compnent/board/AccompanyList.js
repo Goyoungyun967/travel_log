@@ -254,6 +254,9 @@ const AccompanyItem = (props) => {
                     className="board-preview-thumb"
                   />
                 </div>
+                <div className="board-preview-text">
+                  {accompany.boardContent}
+                </div>
               </div>
             </div>
           </div>

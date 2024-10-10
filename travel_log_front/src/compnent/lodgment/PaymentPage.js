@@ -167,7 +167,15 @@ const PaymentPage = () => {
             .post(`${BackServer}/booking`, updatedBookingInfo)
             .then((res) => {
               console.log(res);
-              if (res.data !== null) {
+              if (res.data === -1) {
+                Swal.fire({
+                  title: "예약 가능한 방이 없습니다.",
+                  text: "다시 검색해주세요.",
+                  icon: "info",
+                  confirmButtonText: "확인",
+                });
+                navigate(`/lodgment/lodgmentList`);
+              } else if (res.data !== null) {
                 navigate(`/lodgment/bookingInfo`, {
                   state: { bookNo: res.data },
                 });

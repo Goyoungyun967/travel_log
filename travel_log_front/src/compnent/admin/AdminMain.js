@@ -9,6 +9,8 @@ import MemberChart from "./MemberChart";
 import AdminSellerStm from "./SellerStm";
 import AdminLodgmentList from "./AdminLodgmentList";
 import ReviewReportList from "./ReviewReportList";
+import BoardReportList from "./BoardReportList";
+import AdminMemberList from "./AdminMemberList";
 
 const AdminMain = () => {
   const changeMenu = (e) => {
@@ -84,7 +86,7 @@ const AdminMain = () => {
                   </NavLink>
                   <ul>
                     <li>
-                      <NavLink to="1">회원 관리</NavLink>
+                      <NavLink to="memberList">회원 관리</NavLink>
                     </li>
                     <li>
                       <NavLink to="memberChart">회원 이용 관리</NavLink>
@@ -122,7 +124,7 @@ const AdminMain = () => {
                       <NavLink to="reviewReportList">리뷰 신고 처리</NavLink>
                     </li>
                     <li>
-                      <NavLink to="2">게시글 신고 처리</NavLink>
+                      <NavLink to="boardReportList">게시글 신고 처리</NavLink>
                     </li>
                   </ul>
                 </li>
@@ -140,6 +142,8 @@ const AdminMain = () => {
             <Route path="sellerStm" element={<AdminSellerStm />} />
             <Route path="lodgmentList" element={<AdminLodgmentList />} />
             <Route path="reviewReportList" element={<ReviewReportList />} />
+            <Route path="boardReportList" element={<BoardReportList />} />
+            <Route path="memberList" element={<AdminMemberList />} />
           </Routes>
         </div>
       </div>

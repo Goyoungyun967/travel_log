@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -19,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import kr.co.iei.booking.model.dao.BookingDao;
+import kr.co.iei.booking.model.dto.BookingAvailavleDTO;
 import kr.co.iei.booking.model.dto.BookingCancelDTO;
 import kr.co.iei.booking.model.dto.BookingDTO;
 import kr.co.iei.member.model.dao.MemberDao;
@@ -33,10 +35,13 @@ public class BookingService {
 	@Transactional
 	public int insertBooking(BookingDTO bookingInfo) {
 		String memberId = memberDao.getMemberId(bookingInfo.getMemberNo());
-		//System.out.println(memberId);
-		bookingInfo.setMemberId(memberId);
-		int result = bookingDao.insertBooking(bookingInfo);
-		return bookingInfo.getBookNo();
+		BookingAvailavleDTO bookingAvailable = bookingDao.bookingAvailable(bookingInfo);
+		if(bookingAvailable.getBookingCount() >= bookingAvailable.getRoomCount()) {
+			bookingInfo.setMemberId(memberId);
+			int result = bookingDao.insertBooking(bookingInfo);
+			return bookingInfo.getBookNo();			
+		}
+		return -1;
 	}
 
 	public BookingDTO getBookingInfo(int bookNo) {
@@ -47,10 +52,6 @@ public class BookingService {
 
 	public String getPortoneimpuid(BookingCancelDTO cancelData) {
 		String portoneimpuid = bookingDao.getPortoneimpuid(cancelData);
-		System.out.println("portoneimpuid : "+cancelData);
-		System.out.println("portoneimpuid : "+portoneimpuid);
-	
-
 		return portoneimpuid;
 	}
 	
@@ -141,5 +142,20 @@ public class BookingService {
 				result += bookingDao.insertBookCancel(cancelData);
 			}
 			return result;
+		}
+		
+		//이용완료 확인
+		@Transactional
+		public void checkOutStm() {
+			List<BookingDTO> bookingList = bookingDao.selectAllBookingList();
+			int result = 0;
+			System.out.println(bookingList);
+			for (BookingDTO booking : bookingList) {
+				if(booking.getStatus() == 1) {
+					result = bookingDao.updateBookingStatus(booking);
+				}
+			}
+			System.out.println(result);
+			
 		}
 }

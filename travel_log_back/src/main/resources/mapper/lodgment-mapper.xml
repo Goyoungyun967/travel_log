@@ -51,7 +51,9 @@
 		update lodgment_storage set
 			lodgment_name=#{lodgmentName},
 			lodgment_addr=#{lodgmentAddr},
-			lodgment_img_path=#{lodgmentImgPath},
+			<if test="lodgmentImgPath!='no'">			
+				lodgment_img_path=#{lodgmentImgPath},
+			</if>
 			lodgment_notice=#{lodgmentNotice},
 			lodgment_check_in=#{lodgmentCheckIn},
 			lodgment_check_out=#{lodgmentCheckOut}
@@ -454,7 +456,7 @@
 	 
 	 <!-- 판매자 홍텔 리뷰 댓글 삭제(삭제이지만 null로 처리하면 되기 때문에 update) -->
 	 <update id="delUpComment">
-	 	update Lodgmet_review set seller_comment=null where review_no=#{reviewNo}
+	 	update LODGMENT_REVIEW set seller_comment=null where review_no=#{reviewNo}
 	 </update>
 	 
 	 <!-- 판매자 객실 수정 -->

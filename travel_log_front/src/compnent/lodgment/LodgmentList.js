@@ -11,6 +11,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import axios from "axios";
 import Swal from "sweetalert2";
+import {
+  lodgmentState,
+  guestState,
+  startDateState,
+  endDateState,
+} from "../utils/RecoilData";
+import { useRecoilState } from "recoil";
 
 const LodgmentList = () => {
   const navigate = useNavigate();
@@ -25,11 +32,10 @@ const LodgmentList = () => {
   const startDay = dayjs().add(1, "day").toDate();
   const endDay = dayjs().add(2, "day").toDate();
 
-  //state 에 정보가 있을경우 정보 기입 / 없으면 기본값 설정
-  const [lodgment, setLodgment] = useState(state?.lodgment || "");
-  const [guest, setGuest] = useState(state?.guest || 2);
-  const [startDate, setStartDate] = useState(state?.startDate || startDay);
-  const [endDate, setEndDate] = useState(state?.endDate || endDay);
+  const [lodgment, setLodgment] = useRecoilState(lodgmentState);
+  const [guest, setGuest] = useRecoilState(guestState);
+  const [startDate, setStartDate] = useRecoilState(startDateState);
+  const [endDate, setEndDate] = useRecoilState(endDateState);
 
   //숙박 종류 검색
   //0:  전체 검색, 1: 호텔,  2: 모텔, 3: 펜션풀빌라, 4:게스트하우스, 5:캠핑
@@ -92,12 +98,6 @@ const LodgmentList = () => {
 
   //값이 변하면 lodgment 검색
   useEffect(() => {
-    //메인에서 들어오지 않을 경우
-    if (state !== null) {
-      lodgmentSearchBtn();
-    } else {
-      return;
-    }
     lodgmentSearchBtn();
   }, [value, starValue, radioBtn, lodgmentType, selectedServiceTags, reqPage]);
 
@@ -106,7 +106,7 @@ const LodgmentList = () => {
     setReqPage(1);
     if (lodgment === "") {
       Swal.fire({
-        icon: "error",
+        icon: "info",
         title: "여행지, 숙소를 입력해주세요.",
         confirmButtonText: "확인",
       });
@@ -148,6 +148,15 @@ const LodgmentList = () => {
   };
   //console.log(lodgmentDetailInfo); axios 안에서는 랜더링이 돌고 값이 들어가기 때문에 확인하려면 밖에서
 
+  //리셋버튼
+  const handleReset = () => {
+    setValue([0, 500000]); // 가격 범위 초기화
+    setStarValue(0); // 호텔 성급 초기화
+    setLodgmentType(0); // 숙박 종류 초기화
+    setRadioBtn(0); // 정렬 기준 초기화
+    setSelectedServiceTags([]); // 선택된 서비스 태그 초기화
+    setReqPage(1); // 페이지 번호 초기화
+  };
   useEffect(() => {
     const handleScroll = () => {
       //현재브라우저창의 높이   현재 스크롤 위치   페이지 전체 높이
@@ -296,11 +305,14 @@ const LodgmentList = () => {
                   />
                 </RadioGroup>
               </div>
+              <div className="">
+                <button onClick={handleReset}>리셋</button>
+              </div>
             </div>
           </div>
         </div>
         <div className="lodgment-info-wrap">
-          <LegdmentInfo
+          <LogdmentInfo
             lodgment={lodgment}
             lodgmentDetailInfo={lodgmentDetailInfo}
             navigate={navigate}
@@ -316,7 +328,7 @@ const LodgmentList = () => {
   );
 };
 
-const LegdmentInfo = (props) => {
+const LogdmentInfo = (props) => {
   const {
     lodgment,
     lodgmentDetailInfo,
@@ -340,9 +352,11 @@ const LegdmentInfo = (props) => {
                 key={info.lodgmentNo}
                 className="lodgment-card"
                 onClick={() =>
-                  navigate(
-                    `/lodgment/lodgmentDetail/${info.lodgmentNo}/${startDate}/${endDate}/${guest}`
-                  )
+                  navigate(`/lodgment/lodgmentDetail`, {
+                    state: {
+                      lodgmentNo: info.lodgmentNo,
+                    },
+                  })
                 }
               >
                 <img

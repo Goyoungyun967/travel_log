@@ -67,77 +67,93 @@ const InsertRoom = () => {
   // 보내기
   const writeRoom = () => {
     const backServer = process.env.REACT_APP_BACK_SERVER;
+
+    const nameRegex = /^.{1,15}$/; // 객실 이름: 1자 이상 15자 이하로..!
+    const numberRegex = /^[1-9][0-9]*$/; // 인원, 상품 수 : 1 이상의 숫자만 입력..!
+    const contentRegex = /^.{1,1000}$/; // 공지사항: 1자 이상 1000자 이하..!
     // 모든 필드의 입력값 확인
-    if (!roomName) {
-      alert("숙소명을 입력해 주세요.");
-      return;
-    }
-    if (!maxCapa) {
-      alert("최대 인원을 입력해 주세요.");
-      return;
-    }
-    if (!roomNum) {
-      alert("상품 수 를 입력해 주세요.");
-      return;
-    }
-    if (!roomPrice) {
-      alert("상품 가격을 입력해 주세요.");
-      return;
-    }
-    if (!boardContent) {
-      alert("내용을 입력해 주세요.");
-      return;
-    }
-    if (boardContent.length > 1000) {
-      alert("내용은 1000자 이내로 입력해 주세요.");
+    if (!nameRegex.test(roomName)) {
+      Swal.fire({
+        title: "객실명을 다시 입력해주세요",
+        text: "1~15 이하로 작성해주세요",
+        icon: "error",
+      });
       return;
     }
 
-    if (
-      roomName !== "" &&
-      roomNum !== 0 &&
-      roomPrice !== 0 &&
-      boardContent !== "" &&
-      maxCapa !== 0
-    ) {
-      const form = new FormData();
-      form.append("lodgmentNo", lodgmentNo);
-      form.append("roomQua", roomNum);
-      form.append("roomName", roomName);
-      form.append("roomPrice", roomPrice);
-      form.append("roomInfo", boardContent);
-      form.append("roomMaxCapacity", maxCapa);
-      // 첨부파일 추가한 경우에만 추가(첨부파일은 여러개가 같은  name으로 전송)
-      for (let i = 0; i < roomFile.length; i++) {
-        form.append("roomFile", roomFile[i]);
-      }
-      for (let i = 0; i < hashTag.length; i++) {
-        form.append("serviceTag", hashTag[i]);
-      }
-      axios
-        .post(`${backServer}/seller/insertRoom`, form, {
-          headers: {
-            contentType: "multipart/form-data",
-            processData: false,
-          },
-        })
-        .then((res) => {
-          console.log("res-", res);
-          if (res.data) {
-            navigate(`/seller/lodgmentView/${lodgmentNo}`);
-            console.log(form);
-          } else {
-            Swal.fire({
-              title: "에러가 발생했습니다.",
-              text: "원인을 찾으세요",
-              icon: "error",
-            });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    if (!numberRegex.test(maxCapa)) {
+      Swal.fire({
+        title: "최대 인원을 다시 입력해주세요",
+        icon: "error",
+      });
+      return;
     }
+
+    if (!numberRegex.test(roomNum)) {
+      Swal.fire({
+        title: "상품 수를 다시 입력해주세요",
+        icon: "error",
+      });
+      return;
+    }
+
+    if (!numberRegex.test(roomPrice)) {
+      Swal.fire({
+        title: "상품 가격을 다시 입력해주세요",
+        icon: "error",
+      });
+      return;
+    }
+
+    if (!contentRegex.test(boardContent)) {
+      Swal.fire({
+        title: "공지사항을 다시 입력해주세요",
+        icon: "error",
+      });
+      return;
+    }
+
+    const form = new FormData();
+    form.append("lodgmentNo", lodgmentNo);
+    form.append("roomQua", roomNum);
+    form.append("roomName", roomName);
+    form.append("roomPrice", roomPrice);
+    form.append("roomInfo", boardContent);
+    form.append("roomMaxCapacity", maxCapa);
+    // 첨부파일 추가한 경우에만 추가(첨부파일은 여러개가 같은  name으로 전송)
+    for (let i = 0; i < roomFile.length; i++) {
+      form.append("roomFile", roomFile[i]);
+    }
+    for (let i = 0; i < hashTag.length; i++) {
+      form.append("serviceTag", hashTag[i]);
+    }
+    axios
+      .post(`${backServer}/seller/insertRoom`, form, {
+        headers: {
+          contentType: "multipart/form-data",
+          processData: false,
+        },
+      })
+      .then((res) => {
+        console.log("res-", res);
+        if (res.data) {
+          Swal.fire({
+            title: "객실 등록 완료",
+            icon: "success",
+          });
+          navigate(`/seller/lodgmentView/${lodgmentNo}`);
+          console.log(form);
+        } else {
+          Swal.fire({
+            title: "문제가 발생했습니다.",
+            text: "나중에 다시 시도해주십시오",
+            icon: "error",
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

@@ -11,10 +11,7 @@ const LodgmentMain = () => {
   return (
     <Routes>
       <Route path="lodgmentList" element={<LodgmentList />} />
-      <Route
-        path="lodgmentDetail/:lodgmentInfo/:startDate/:endDate/:guest"
-        element={<LodgmentDetail />}
-      />
+      <Route path="lodgmentDetail" element={<LodgmentDetail />} />
       <Route path="paymentPage" element={<PaymentPage />} />
       <Route path="reviewWrite" element={<LodgmentReviewWirte />} />
       <Route path="bookingInfo" element={<BookingInfo />} />
