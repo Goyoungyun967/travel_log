@@ -30,9 +30,19 @@
   padding: 10px;
   color: #ccc;
 }
-.photo {
+.photo_add > .photo {
   display: flex;
   flex-direction: column;
+}
+.photo_add > .photo > .p_arr {
+  height: 120px;
+  margin-bottom: 10px;
+}
+.photo_add > .photo > .p_arr > .photoArr > img {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+  padding: 5px;
 }
 .addBtn {
   font-size: 15px;
@@ -131,4 +141,20 @@
 
 .photoArr:hover .delete-icon {
   display: block; /* 이미지 위에 마우스를 올리면 보이도록 설정 */
+}
+
+.seller-admin-check {
+  position: relative;
+}
+.seller-check-p {
+  width: 250px;
+  height: 300px;
+  text-align: center;
+  line-height: 300px;
+  font-weight: bold;
+  font-size: 30px;
+  display: block;
+  color: #333;
+  background-color: rgba(0, 0, 0, 0.1);
+  position: absolute;
 }
