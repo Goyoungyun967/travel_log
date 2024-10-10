@@ -346,9 +346,35 @@ public class BoardController {
 		}
 		return  ResponseEntity.ok(false);
 	}
-  	
-  	
+  	//서치
+  @PostMapping("/Search")
+  public ResponseEntity<?> searchArea(@RequestBody Map<String, String> requestData) {
+      String area = requestData.get("area");
+      System.out.println("선택된 지역: " + area);
 
+      // DB에서 boardArea로 검색
+      List<BoardDTO> searchResults = boardService.searchByArea(area);
+
+      if (searchResults.isEmpty()) {
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 지역에 대한 검색 결과가 없습니다.");
+      } else {
+          return ResponseEntity.ok(searchResults);
+      }
+  }
+  @PostMapping("/accompaySearch")
+  public ResponseEntity<?> accompaySearchArea(@RequestBody Map<String, String> requestData) {
+      String area = requestData.get("area");
+      System.out.println("선택된 지역: " + area);
+
+      // DB에서 boardArea로 검색
+      List<BoardDTO> searchResults = boardService.accompaySearch(area);
+
+      if (searchResults.isEmpty()) {
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 지역에 대한 검색 결과가 없습니다.");
+      } else {
+          return ResponseEntity.ok(searchResults);
+      }
+  }
   	
 
     

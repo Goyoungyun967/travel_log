@@ -83,7 +83,6 @@ const BoardList = () => {
     axios
       .get(`${backServer}/board/boardList/1/${reqPage}`)
       .then((res) => {
-        console.log(res.data.list);
         setBoardList(res.data.list); // 일반 게시글
         setPi(res.data.pi);
         setIsLike(res.data.list.isLike);
@@ -131,6 +130,21 @@ const BoardList = () => {
         });
     }
   };
+  const handleAreaSelect = (selectedArea) => {
+    setSearchInput(selectedArea.title); // 선택된 검색어로 입력 필드 업데이트
+    setDropdownOpen(false); // 드롭다운 닫기
+
+    // 선택된 지역 정보를 백엔드로 전송
+    axios
+      .post(`${backServer}/board/Search`, { area: selectedArea.title })
+      .then((res) => {
+        setBoardList(res.data);
+        // 결과에 따른 후속 처리
+      })
+      .catch((error) => {
+        console.error("지역 검색 실패:", error);
+      });
+  };
   return (
     <div className="board-list-wrap">
       <div className="search-box-wrap">
@@ -148,14 +162,13 @@ const BoardList = () => {
         {dropdownOpen && (
           // 드롭다운 열림 여부에 따라 목록 표시
           <ul className="boardArea-popup">
-            {areaSearch.map((search, i) => (
-              <SearchList
-                key={i}
-                search={search} // 검색 목록 아이템 전달
-                setSearchInput={setSearchInput} // 선택 시 검색어 필드 업데이트
-                setDropdownOpen={setDropdownOpen} // 선택 시 드롭다운 닫기
-              />
-            ))}
+            {areaSearch
+              .filter((search) => search.title.includes(searchInput)) // 입력된 검색어와 일치하는 항목 필터링
+              .map((search, i) => (
+                <li key={i} onClick={() => handleAreaSelect(search)}>
+                  {search.title}
+                </li>
+              ))}
           </ul>
         )}
       </div>
@@ -327,7 +340,7 @@ const AccompanyItem = (props) => {
               <div className="memberId-age-gender text-min">
                 <span>{accompany.memberNickname}-</span>
                 <span>{accompany.memberAge}살-</span>
-                <span>{accompany.memberGender}</span>
+                <span>{accompany.memberGender === "m" ? "남" : "여"}</span>
               </div>
               <div className="area text-min">{accompany.boardArea}</div>
             </div>
@@ -384,7 +397,6 @@ const BoardItem = (props) => {
   const memberNickname = props.loginNickname;
   const isLogin = props.isLogin;
   const navigate = useNavigate();
-  console.log(board.isLike);
 
   //작성 시간
   const now = new Date();
@@ -411,9 +423,7 @@ const BoardItem = (props) => {
 
   //좋아요
   const likeClick = () => {
-    console.log(board.isLike);
     if (board.isLike === 1) {
-      console.log("del" + isLike);
       // 좋아요 취소 요청
       axios
         .delete(`${backServer}/board/unlike/${board.boardNo}/${memberNo}`)

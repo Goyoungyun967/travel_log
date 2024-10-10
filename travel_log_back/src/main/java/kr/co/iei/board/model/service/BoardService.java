@@ -319,7 +319,15 @@ public class BoardService {
 		return null;
 	}
 
+//서치
+	 public List<BoardDTO> searchByArea(String area) {
+	        return boardDao.selectBoardByArea(area);
+	    }
 
+
+	public List<BoardDTO> accompaySearch(String area) {
+		return boardDao.accompaySearch(area);
+	}
 
 	
 }

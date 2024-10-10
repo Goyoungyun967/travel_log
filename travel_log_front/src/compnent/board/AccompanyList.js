@@ -29,10 +29,33 @@ const AccompanyList = () => {
   const [loginNickname] = useRecoilState(loginNicknameState);
   const [isLogin] = useRecoilState(isLoginState);
 
-  const scrollContainerRef = useRef(null);
-  const isMouseDownRef = useRef(false);
-  const startXRef = useRef(0);
-  const scrollLeftRef = useRef(0);
+  const [areaSearch, setAreaSearch] = useState([
+    { title: "서울" },
+    { title: "경기" },
+    { title: "부산" },
+    { title: "대구" },
+    { title: "인천" },
+    { title: "대전" },
+    { title: "광주" },
+    { title: "울산" },
+    { title: "세종" },
+    { title: "강원" },
+    { title: "충북" },
+    { title: "충남" },
+    { title: "경북" },
+    { title: "경남" },
+    { title: "전북" },
+    { title: "전북" },
+    { title: "제주" },
+  ]);
+  const [accompanyType, setAccompanyType] = useState([
+    { accompany_tag_no: 1, accompany_type: "부분 동행" },
+    { accompany_tag_no: 2, accompany_type: "숙박 공유" },
+    { accompany_tag_no: 3, accompany_type: "전체 동행" },
+    { accompany_tag_no: 4, accompany_type: "투어 동행" },
+    { accompany_tag_no: 5, accompany_type: "식사 동행" },
+    { accompany_tag_no: 6, accompany_type: "공동 구매" },
+  ]);
 
   useEffect(() => {
     axios
@@ -63,6 +86,22 @@ const AccompanyList = () => {
     setSearchInput(value);
     setDropdownOpen(value.length > 0);
   };
+  //검색 기능
+  const handleAreaSelect = (selectedArea) => {
+    setSearchInput(selectedArea.title); // 선택된 검색어로 입력 필드 업데이트
+    setDropdownOpen(false); // 드롭다운 닫기
+
+    // 선택된 지역 정보를 백엔드로 전송
+    axios
+      .post(`${backServer}/board/accompaySearch`, { area: selectedArea.title })
+      .then((res) => {
+        setBoardList(res.data);
+        // 결과에 따른 후속 처리
+      })
+      .catch((error) => {
+        console.error("지역 검색 실패:", error);
+      });
+  };
 
   return (
     <div className="board-list-wrap">
@@ -75,9 +114,21 @@ const AccompanyList = () => {
           className="area-search-input"
           type="text"
           placeholder="지역검색"
-          value={searchInput}
-          onChange={boardAreaChange}
+          value={searchInput} // 입력된 검색어
+          onChange={boardAreaChange} // 입력값 변경 시 호출
         />
+        {dropdownOpen && (
+          // 드롭다운 열림 여부에 따라 목록 표시
+          <ul className="boardArea-popup">
+            {areaSearch
+              .filter((search) => search.title.includes(searchInput)) // 입력된 검색어와 일치하는 항목 필터링
+              .map((search, i) => (
+                <li key={i} onClick={() => handleAreaSelect(search)}>
+                  {search.title}
+                </li>
+              ))}
+          </ul>
+        )}
       </div>
 
       <div className="board-preview-container">
@@ -117,7 +168,6 @@ const AccompanyItem = (props) => {
   const navigate = useNavigate();
   const loginNickname = props.loginNickname;
   const isLogin = props.isLogin;
-  console.log(accompany.boardContent);
 
   //작성 시간
   const now = new Date();
@@ -138,7 +188,6 @@ const AccompanyItem = (props) => {
   else if (hours > 0) timeString = `${hours}시간 전`;
   else if (minutes > 0) timeString = `${minutes}분 전`;
   else timeString = `방금전`;
-  console.log(accompany.memberImage);
   return (
     <>
       {isLogin ? (

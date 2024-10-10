@@ -122,6 +122,10 @@ public interface BoardDao {
 	List getCommentReport(int commentNo);
 
 	int deleteCommentReport(int reportNo);
+	//서치
+	List<BoardDTO> selectBoardByArea(String area);
+
+	List<BoardDTO> accompaySearch(String area);
 	
 
 

@@ -454,7 +454,15 @@
   	delete from comment_report where comment_report_no=#{reportNo}
   </delete>
 		
+		<select id="selectBoardByArea" resultType="board">
+		    SELECT * FROM board
+		    WHERE board_area = #{area} and board_Type=1
+		</select>
 		
+		<select id="accompaySearch" resultType="board">
+		    SELECT * FROM board
+		    WHERE board_area = #{area} and board_Type=2
+		</select>
 	
   
 </mapper>

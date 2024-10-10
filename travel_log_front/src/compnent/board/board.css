@@ -305,6 +305,7 @@ props/*글자 사이즈*/
   width: 99%;
 }
 .accompany-write {
+  text-decoration: none;
   cursor: pointer;
   height: 50px;
   background-color: #40a1c7;
