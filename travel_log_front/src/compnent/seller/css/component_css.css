@@ -42,3 +42,56 @@
   height: 80px;
   object-fit: cover;
 }
+.AddLodgmentBtn {
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  border: none;
+  border-radius: 10px;
+  background-color: transparent;
+}
+.colorYesLg {
+  background-color: var(--seller2);
+  color: var(--seller4);
+}
+.colorYesLg:hover {
+  opacity: 0.5;
+}
+.colorNoLg {
+  background-color: var(--seller4);
+  color: var(--seller5);
+}
+.colorNoLg:hover {
+  opacity: 0.5;
+}
+
+.AddRoomBtnInsert {
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  border: none;
+
+  border-radius: 10px;
+  background-color: var(--seller2);
+  color: var(--seller4);
+}
+
+.AddRoomBtnInsert:hover {
+  opacity: 0.5;
+}
+
+.inqBtnInsert {
+  display: block;
+  width: 100px;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--seller2);
+  color: var(--seller4);
+  text-decoration: none;
+}
+.inqBtnInsert:hover {
+  opacity: 0.5;
+}

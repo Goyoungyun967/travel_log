@@ -271,7 +271,7 @@ const InsertRoom = () => {
                     </div>
                   </div>
                 </div>
-                <button type="submit" className="btn primary">
+                <button type="submit" className="AddRoomBtnInsert">
                   등록 완료
                 </button>
               </div>

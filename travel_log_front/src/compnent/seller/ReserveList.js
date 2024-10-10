@@ -33,7 +33,6 @@ const ReserveList = () => {
           <>
             <h3>예약 조회</h3>
             <SellerReserveList list={reserveList} />
-            <BookingChart sellerLoginNo={loginNo} />
           </>
         ) : (
           <>

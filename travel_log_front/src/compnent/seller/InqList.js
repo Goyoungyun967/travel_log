@@ -31,7 +31,7 @@ const InqList = () => {
           <>
             <h3>내가 쓴 문의 조회</h3>
             <div className="inq-btn-wrap">
-              <Link to={`/inquiryWrite`} className="inq-btn">
+              <Link to={`/inquiryWrite`} className="inqBtnInsert">
                 문의 하기
               </Link>
             </div>
