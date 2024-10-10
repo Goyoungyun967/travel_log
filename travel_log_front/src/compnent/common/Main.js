@@ -119,7 +119,7 @@ const Main = () => {
               ))}
             </Swiper>
           </div>
-          <div className="main-chart-zone">
+          <div className="main-scharts-zone">
             {sellerLoginNo !== -1 && (
               <BookingChart sellerLoginNo={sellerLoginNo} />
             )}
