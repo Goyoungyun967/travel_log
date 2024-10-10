@@ -18,32 +18,22 @@ const UpdateRoom = () => {
   // 조회해온 파일 목록을 화면에 보여주기 위한 state
   //const [fileList, setFileList] = useState([]);
   const [lodgmentList, setLodgmentList] = useState([]);
-  console.log("lllllllllllllllll", lodgmentList);
   // 객실 이름
   const [roomName, setRoomName] = useState("");
-  console.log("roomName-", roomName);
   // 상품 수
   const [roomNum, setRoomNum] = useState(0);
-  console.log("roomNum-", roomNum);
   // 객실 가격
   const [roomPrice, setRoomPrice] = useState(0);
-  console.log("roomPrice-", roomPrice);
   // 공지사항
   const [boardContent, setBoardContent] = useState("");
-  console.log("boardContent-", boardContent);
   // 첨부파일 (배열[])
   const [roomFile, setRoomFile] = useState([]);
   const [delRoomFileNo, setDelRoomFileNo] = useState([]); // 지울 파일 번호
   const [upFile, setUpFile] = useState([]); // 추가될 파일
-  console.log("delRoomFileNo-", delRoomFileNo);
-  console.log("roomFile-", roomFile);
-  console.log("upFile-", upFile);
   // 해시태그
   const [hashTag, setHashTag] = useState([]);
-  console.log("hashTag-", hashTag);
   // 최대인원수
   const [maxCapa, setMaxCapa] = useState(0);
-  console.log("maxPaca-", maxCapa);
   const [showImg, setShowImg] = useState([]);
   const [sellerNo, setSellerNo] = useState(0);
 
@@ -55,7 +45,6 @@ const UpdateRoom = () => {
     axios
       .get(`${backServer}/seller/roomView/${lodgmentNo}/${roomNo}`)
       .then((res) => {
-        console.log("r", res);
         setLodgmentList(res.data);
         setRoomFile(res.data.room.fileList);
         setRoomName(res.data.room.roomName);
@@ -67,9 +56,7 @@ const UpdateRoom = () => {
         setShowImg(res.data.room.fileList);
         setSellerNo(res.data.lodgment.sellerNo);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
   const UpdateRoom = () => {
@@ -146,10 +133,8 @@ const UpdateRoom = () => {
         },
       })
       .then((res) => {
-        console.log("res-", res);
         if (res.data) {
           navigate(`/seller/lodgmentView/${lodgmentNo}`);
-          console.log(form);
         } else {
           Swal.fire({
             title: "에러가 발생했습니다.",
@@ -158,14 +143,12 @@ const UpdateRoom = () => {
           });
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   return (
     <>
-      {sellerNo === loginNo || memberLevel === 1 ? (
+      {sellerNo === loginNo ? (
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -384,7 +367,6 @@ const FileInfo = (props) => {
 // 해시태그
 const HashTap = (props) => {
   const hashTag = props.hashTag || []; // hashTag가 undefined일 경우 빈 배열로 초기화
-  console.log("ghhhhhh", hashTag);
   const setHashTag = props.setHashTag;
 
   // 서비스 태그

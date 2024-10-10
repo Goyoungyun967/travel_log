@@ -27,13 +27,10 @@ const Comment = (props) => {
     sellerText,
     setSellerText,
   } = props;
-  console.log("review - ", reviewList);
-  console.log("reviewArr - ", reviewList.length);
   const [textComment, setTextComment] = useState(false);
   const [viewTextComment, setViewTextComment] = useState(false);
   const [viewUpdateTextComment, setViewUpdateTextComment] = useState(false);
   const [view, setView] = useState(false);
-  console.log(view);
   // 답글 달기 눌렀을 때!
   const addComment = (reviewNo) => {
     setTextComment((prev) => ({
@@ -79,15 +76,12 @@ const Comment = (props) => {
             },
           })
           .then((res) => {
-            console.log("rrrr", res);
             if (res.data !== 0) {
               setSellerText("ok");
               setView(true); // 작성 완료를 누르면 textarea사라지고 타이포 나오게
             }
           })
-          .catch((err) => {
-            console.log(err);
-          });
+          .catch((err) => {});
       }
     });
   };
@@ -101,7 +95,6 @@ const Comment = (props) => {
       }}
     >
       {reviewList.map((review, i) => {
-        console.log("review - ", review);
         return (
           <Card variant="outlined" key={i}>
             <CardContent>
@@ -198,9 +191,7 @@ const TextForm = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const { lodgmentNo, setReviewList, reqPage, setSellerText } = props;
-  console.log("text", text);
   const { reviewNo } = props;
-  console.log("asdfadsf", reviewNo);
   return (
     <Box
       sx={{
@@ -236,15 +227,12 @@ const TextForm = (props) => {
               },
             })
             .then((res) => {
-              console.log("rrrr", res);
               if (res.data !== 0) {
                 setSellerText("ok");
                 setView(true); // 작성 완료를 누르면 textarea사라지고 타이포 나오게
               }
             })
-            .catch((err) => {
-              console.log(err);
-            });
+            .catch((err) => {});
         }}
         style={{ display: "flex", alignItems: "center", width: "100%" }}
       >
@@ -320,7 +308,6 @@ const QnaComment = (props) => {
 
   const [textComment, setTextComment] = useState(false);
   const [viewTextComment, setViewTextComment] = useState(false);
-  console.log("sellerComment", sellerComment);
   // 판매자 답글이 있으면 답글 보기 없으면 답글 달기
   const addComment = (roomQnaNo) => {
     setTextComment((prev) => ({
@@ -347,10 +334,7 @@ const QnaComment = (props) => {
         }}
       >
         {qnaList.map((qna, i) => {
-          console.log("qna - ", qna);
           const qnaListArr = qna.commentList;
-          console.log("qnaList - ", qnaListArr);
-          console.log(`${i} - ${qnaListArr.length}`);
           const dateString = qna.qnaDate;
           const formattedDate = dayjs(dateString).format("YYYY-MM-DD");
           return (
@@ -446,7 +430,6 @@ const TextQna = (props) => {
   const { setSellerText, sellerComment, setSellerComment, qnaNo } = props;
   const [oneComment, setOneComment] = useState(""); // 상태를 같이 관리하니까 여러 input에 한 번에 쳐져서 개별로 관리.,..
   const backServer = process.env.REACT_APP_BACK_SERVER;
-  console.log("one", oneComment);
   const navigate = useNavigate();
   return (
     <Box
@@ -496,15 +479,12 @@ const TextQna = (props) => {
                   },
                 })
                 .then((res) => {
-                  console.log(res);
                   if (res.data !== 0) {
                     setSellerText("ok");
                     setOneComment("");
                   }
                 })
-                .catch((err) => {
-                  console.log(err);
-                });
+                .catch((err) => {});
             }
           });
         }}

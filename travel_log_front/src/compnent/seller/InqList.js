@@ -9,7 +9,6 @@ import { sellerLoginNoState } from "../utils/RecoilData";
 const InqList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [inqList, setInqList] = useState([]);
-  console.log("iiiiiiiii", inqList.length === 0);
   const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
   useEffect(() => {
     axios
@@ -17,12 +16,9 @@ const InqList = () => {
         params: { loginNo: loginNo },
       })
       .then((res) => {
-        console.log(res);
         setInqList(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [loginNo]);
   return (
     <>

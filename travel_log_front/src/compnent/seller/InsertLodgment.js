@@ -22,7 +22,6 @@ const InsertLodgment = () => {
   const [isReadOnly, setIsReadOnly] = useState(false); // 추가된 상태
 
   const [hotelInof, sethotelInfo] = useState({});
-  console.log(hotelInof);
   const [boardContent, setBoardContent] = useState(
     "<h5><strong>숙소 정보</strong></h5><p><br></p><p><br></p><p><br></p><p><br></p><h5><strong>주차장 정보</strong></h5>"
   );
@@ -93,9 +92,7 @@ const InsertLodgment = () => {
       .then((res) => {
         setHotelList(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   // 주소
@@ -119,8 +116,6 @@ const InsertLodgment = () => {
     checkOut,
     boardContent,
   };
-  console.log("보내는 주소", address);
-  console.log("보여지는 주소", inputAddr);
 
   return (
     <div className="contanier insert-lodgment">
@@ -184,7 +179,6 @@ const InsertLodgment = () => {
                 },
               })
               .then((res) => {
-                console.log(res);
                 if (res.data) {
                   Swal.fire({
                     title: "등록 완료",
@@ -192,7 +186,6 @@ const InsertLodgment = () => {
                     icon: "success",
                   });
                   navigate(`/seller/list`);
-                  console.log(form);
                 } else {
                   Swal.fire({
                     title: "문제가 발생했습니다.",
@@ -201,9 +194,7 @@ const InsertLodgment = () => {
                   });
                 }
               })
-              .catch((err) => {
-                console.log(err);
-              });
+              .catch((err) => {});
           }
         }}
       >

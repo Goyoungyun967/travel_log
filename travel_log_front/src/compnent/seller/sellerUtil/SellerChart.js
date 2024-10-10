@@ -10,7 +10,6 @@ import {
 
 const SellerChart = (props) => {
   const stmInfo = props.stmInfo;
-  console.log(stmInfo);
   //   const data = [
   //     { name: "Page A", uv: 4000 },
   //     { name: "Page B", uv: 3000 },
