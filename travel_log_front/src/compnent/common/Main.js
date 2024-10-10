@@ -142,7 +142,7 @@ const Main = () => {
             className="main-board-list-wrap"
           >
             <div className="main-board-name  flex-spbetw">
-              <span>여행 게시판</span>
+              <span>여행 포스트</span>
               <span className="board-next" onClick={handleMoreClick}>
                 {/* onClick={handleMoreClick} */}
                 더보기 <ArrowForwardIcon style={{ paddingBottom: "4px" }} />
