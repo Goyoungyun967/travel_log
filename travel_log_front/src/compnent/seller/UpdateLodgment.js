@@ -21,7 +21,7 @@ const UpdateLodgment = () => {
   const lodgmentNo = params.lodgmentNo;
   const [lodgmentList, setLodgmentList] = useState({}); // 숙소 정보
   console.log("숙소", lodgmentList);
-
+  const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
   //호텔 명
   const [hotelName, setHotelName] = useState("");
   // 호텔 타입 저장
@@ -33,10 +33,8 @@ const UpdateLodgment = () => {
   const [inputAddr, setInputAddr] = useState(""); // input에 들어갈 주소 (보내지는 않음)
   // 호텔 성급 저장
   const [lodgmentStar, setLodgmentStar] = useState(0); //---------
-  console.log(lodgmentStar);
   // back으로 보내는 이미지
   const [lodgmentImg, setLodgmentImg] = useState(null);
-  console.log("back lodgmentImg - ", lodgmentImg);
   // 호텔 check-in / check-out
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
@@ -44,7 +42,6 @@ const UpdateLodgment = () => {
   const [boardContent, setBoardContent] = useState("");
   // 미리보기용 이미지
   const [viewImg, setViewImg] = useState(null);
-  console.log("viewImg - ", viewImg);
   const [upImg, setUpImg] = useState(null);
 
   //   console.log("미리보기 이미지", viewImg);
@@ -105,259 +102,263 @@ const UpdateLodgment = () => {
 
   return (
     <div className="contanier insert-lodgment">
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          const nameRegex = /^.{1,30}$/; // 호텔 이름 1글자 이상 30자까지만
-          const contentRegex = /^.{1,1000}$/; // 공지사항 1글자 이상 1000글자까지만
+      {lodgmentList.sellerNo === loginNo ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const nameRegex = /^.{1,30}$/; // 호텔 이름 1글자 이상 30자까지만
+            const contentRegex = /^.{1,1000}$/; // 공지사항 1글자 이상 1000글자까지만
 
-          // 각각의 조건을 개별적으로 확인
-          if (!nameRegex.test(hotelName)) {
-            Swal.fire({
-              title: "숙소 이름을 다시 적어주세요",
-              text: "1글자 이상 30글자 이하",
-              icon: "error",
-            });
-          } else if (checkIn === null) {
-            Swal.fire({
-              title: "체크인 날짜를 선택해주세요.",
-              icon: "error",
-            });
-          } else if (checkOut === null) {
-            Swal.fire({
-              title: "체크아웃 날짜를 선택해주세요.",
-              icon: "error",
-            });
-          } else if (address === "") {
-            Swal.fire({
-              title: "주소를 다시 입력해주세요",
-              icon: "error",
-            });
-          } else if (!contentRegex.test(boardContent)) {
-            Swal.fire({
-              title: "공지사항을 다시 입력해주세요",
-              text: "1글자 이상 1000글자 이하",
-              icon: "error",
-            });
-          } else {
-            const form = new FormData();
-            form.append("lodgmentName", hotelName);
-            form.append("lodgmentAddr", address);
-            form.append("lodgmentTypeNo", lodgmentType);
-            form.append("lodgmentNo", lodgmentNo);
-            form.append("lodgmentStarGrade", lodgmentStar);
-            form.append("lodgmentCheckIn", checkIn);
-            form.append("lodgmentCheckOut", checkOut);
-            form.append("lodgmentNotice", boardContent);
-
-            if (lodgmentImg !== null) {
-              // 썸네일 있을 수도 있고 없을 수도 있음 => 첨부된 경우에만 추가
-              form.append("lodgmentImg", lodgmentImg);
-            }
-
-            axios
-              .patch(`${backServer}/seller/updateLodgment`, form, {
-                headers: {
-                  contentType: "multipart/form-data",
-                  processData: false,
-                },
-              })
-              .then((res) => {
-                console.log(res);
-                if (res.data) {
-                  Swal.fire({
-                    title: "수정 완료",
-                    icon: "success",
-                  });
-                  navigate(`/seller/list`);
-                  console.log(form);
-                } else {
-                  Swal.fire({
-                    title: "문제가 발생했습니다.",
-                    text: "다시 시도해주십시오",
-                    icon: "error",
-                  });
-                }
-              })
-              .catch((err) => {
-                console.log(err);
+            // 각각의 조건을 개별적으로 확인
+            if (!nameRegex.test(hotelName)) {
+              Swal.fire({
+                title: "숙소 이름을 다시 적어주세요",
+                text: "1글자 이상 30글자 이하",
+                icon: "error",
               });
-          }
-        }}
-      >
-        <div className="box-wrap box-radius">
-          <div className="box">
-            <div className="box-img">
-              {viewImg ? ( // 미리보기용 이미지
-                <img
-                  src={viewImg}
-                  onClick={() => {
-                    lodgmentImgRef.current.click();
-                  }}
-                />
-              ) : upImg ? ( // 조회해온 이미지
-                <img
-                  src={`${backServer}/seller/lodgment/${upImg}`}
-                  onClick={() => {
-                    lodgmentImgRef.current.click();
-                  }}
-                />
-              ) : (
-                <img
-                  src="/image/default_img.png"
-                  onClick={() => {
-                    lodgmentImgRef.current.click();
-                  }}
-                ></img>
-              )}
-            </div>
-            <input
-              ref={lodgmentImgRef}
-              type="file"
-              accept="image/*"
-              style={{ display: "none" }}
-              onChange={changeLodgmentImg}
-            ></input>
-          </div>
+            } else if (checkIn === null) {
+              Swal.fire({
+                title: "체크인 날짜를 선택해주세요.",
+                icon: "error",
+              });
+            } else if (checkOut === null) {
+              Swal.fire({
+                title: "체크아웃 날짜를 선택해주세요.",
+                icon: "error",
+              });
+            } else if (address === "") {
+              Swal.fire({
+                title: "주소를 다시 입력해주세요",
+                icon: "error",
+              });
+            } else if (!contentRegex.test(boardContent)) {
+              Swal.fire({
+                title: "공지사항을 다시 입력해주세요",
+                text: "1글자 이상 1000글자 이하",
+                icon: "error",
+              });
+            } else {
+              const form = new FormData();
+              form.append("lodgmentName", hotelName);
+              form.append("lodgmentAddr", address);
+              form.append("lodgmentTypeNo", lodgmentType);
+              form.append("lodgmentNo", lodgmentNo);
+              form.append("lodgmentStarGrade", lodgmentStar);
+              form.append("lodgmentCheckIn", checkIn);
+              form.append("lodgmentCheckOut", checkOut);
+              form.append("lodgmentNotice", boardContent);
 
-          <div className="box">
-            <div className="input-wrap insert-lodgment-item">
-              <div className="input-item">
-                <div className="input-title">
-                  <label htmlFor="lodgmentName">숙소명</label>
-                </div>
-                <div className="input">
-                  <input
-                    type="text"
-                    id="lodgmentName"
-                    value={hotelName}
-                    onChange={(e) => setHotelName(e.target.value)}
+              if (lodgmentImg !== null) {
+                // 썸네일 있을 수도 있고 없을 수도 있음 => 첨부된 경우에만 추가
+                form.append("lodgmentImg", lodgmentImg);
+              }
+
+              axios
+                .patch(`${backServer}/seller/updateLodgment`, form, {
+                  headers: {
+                    contentType: "multipart/form-data",
+                    processData: false,
+                  },
+                })
+                .then((res) => {
+                  console.log(res);
+                  if (res.data) {
+                    Swal.fire({
+                      title: "수정 완료",
+                      icon: "success",
+                    });
+                    navigate(`/seller/list`);
+                    console.log(form);
+                  } else {
+                    Swal.fire({
+                      title: "문제가 발생했습니다.",
+                      text: "다시 시도해주십시오",
+                      icon: "error",
+                    });
+                  }
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
+          }}
+        >
+          <div className="box-wrap box-radius">
+            <div className="box">
+              <div className="box-img">
+                {viewImg ? ( // 미리보기용 이미지
+                  <img
+                    src={viewImg}
+                    onClick={() => {
+                      lodgmentImgRef.current.click();
+                    }}
                   />
-                </div>
+                ) : upImg ? ( // 조회해온 이미지
+                  <img
+                    src={`${backServer}/seller/lodgment/${upImg}`}
+                    onClick={() => {
+                      lodgmentImgRef.current.click();
+                    }}
+                  />
+                ) : (
+                  <img
+                    src="/image/default_img.png"
+                    onClick={() => {
+                      lodgmentImgRef.current.click();
+                    }}
+                  ></img>
+                )}
               </div>
-              <div className="input-item">
-                <div className="addr-api">
-                  <div className="addr-block">
-                    <div className="addr-api-input">
-                      <div className="addr-flex-wrap">
-                        <label htmlFor="addrText">주소</label>
-                        <div className="addr-search-api">
-                          <ModalAddr
-                            setAddress={setAddress}
-                            setInputAddr={setInputAddr}
-                          />
+              <input
+                ref={lodgmentImgRef}
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={changeLodgmentImg}
+              ></input>
+            </div>
+
+            <div className="box">
+              <div className="input-wrap insert-lodgment-item">
+                <div className="input-item">
+                  <div className="input-title">
+                    <label htmlFor="lodgmentName">숙소명</label>
+                  </div>
+                  <div className="input">
+                    <input
+                      type="text"
+                      id="lodgmentName"
+                      value={hotelName}
+                      onChange={(e) => setHotelName(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="input-item">
+                  <div className="addr-api">
+                    <div className="addr-block">
+                      <div className="addr-api-input">
+                        <div className="addr-flex-wrap">
+                          <label htmlFor="addrText">주소</label>
+                          <div className="addr-search-api">
+                            <ModalAddr
+                              setAddress={setAddress}
+                              setInputAddr={setInputAddr}
+                            />
+                          </div>
                         </div>
+                        <input
+                          type="text"
+                          id="addrText"
+                          value={inputAddr}
+                          readOnly
+                          onChange={(e) => setInputAddr(e.target.value)}
+                        />
                       </div>
-                      <input
-                        type="text"
-                        id="addrText"
-                        value={inputAddr}
-                        readOnly
-                        onChange={(e) => setInputAddr(e.target.value)}
-                      />
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="input-item">
-                <div className="input-title">
-                  <label htmlFor="checkIn">체크인</label>
-                </div>
-                <div className="input">
-                  <input
-                    type="time"
-                    id="checkIn"
-                    value={checkIn}
-                    onChange={(e) => setCheckIn(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="input-item">
-                <div className="input-title">
-                  <label htmlFor="checkOut">체크아웃</label>
-                </div>
-                <div className="input">
-                  <input
-                    type="time"
-                    id="checkOut"
-                    value={checkOut}
-                    onChange={(e) => setCheckOut(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="lodgment-type">
-                <div className="input-title">
-                  <label htmlFor="lodgmentType">숙소 타입</label>
-                </div>
-                <div className="input">
-                  <label>
+                <div className="input-item">
+                  <div className="input-title">
+                    <label htmlFor="checkIn">체크인</label>
+                  </div>
+                  <div className="input">
                     <input
-                      type="radio"
-                      name="lodgmentType"
-                      value={1}
-                      checked={lodgmentType === 1}
-                      onChange={lodgmentTypeChange}
+                      type="time"
+                      id="checkIn"
+                      value={checkIn}
+                      onChange={(e) => setCheckIn(e.target.value)}
                     />
-                    호텔
-                  </label>
-                  <label>
+                  </div>
+                </div>
+                <div className="input-item">
+                  <div className="input-title">
+                    <label htmlFor="checkOut">체크아웃</label>
+                  </div>
+                  <div className="input">
                     <input
-                      type="radio"
-                      name="lodgmentType"
-                      value={2}
-                      checked={lodgmentType === 2}
-                      onChange={lodgmentTypeChange}
+                      type="time"
+                      id="checkOut"
+                      value={checkOut}
+                      onChange={(e) => setCheckOut(e.target.value)}
                     />
-                    모텔
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="lodgmentType"
-                      value={3}
-                      checked={lodgmentType === 3}
-                      onChange={lodgmentTypeChange}
-                    />
-                    펜션/풀빌라
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="lodgmentType"
-                      value={4}
-                      checked={lodgmentType === 4}
-                      onChange={lodgmentTypeChange}
-                    />
-                    게스트하우스
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="lodgmentType"
-                      value={5}
-                      checked={lodgmentType === 5}
-                      onChange={lodgmentTypeChange}
-                    />
-                    캠핑
-                  </label>
+                  </div>
+                </div>
+                <div className="lodgment-type">
+                  <div className="input-title">
+                    <label htmlFor="lodgmentType">숙소 타입</label>
+                  </div>
+                  <div className="input">
+                    <label>
+                      <input
+                        type="radio"
+                        name="lodgmentType"
+                        value={1}
+                        checked={lodgmentType === 1}
+                        onChange={lodgmentTypeChange}
+                      />
+                      호텔
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="lodgmentType"
+                        value={2}
+                        checked={lodgmentType === 2}
+                        onChange={lodgmentTypeChange}
+                      />
+                      모텔
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="lodgmentType"
+                        value={3}
+                        checked={lodgmentType === 3}
+                        onChange={lodgmentTypeChange}
+                      />
+                      펜션/풀빌라
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="lodgmentType"
+                        value={4}
+                        checked={lodgmentType === 4}
+                        onChange={lodgmentTypeChange}
+                      />
+                      게스트하우스
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="lodgmentType"
+                        value={5}
+                        checked={lodgmentType === 5}
+                        onChange={lodgmentTypeChange}
+                      />
+                      캠핑
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="box box-notice">
-            <h3>공지사항</h3>
-            <div className="editor">
-              <UqillEditor
-                boardContent={boardContent}
-                setBoardContent={setBoardContent}
-              />
+            <div className="box box-notice">
+              <h3>공지사항</h3>
+              <div className="editor">
+                <UqillEditor
+                  boardContent={boardContent}
+                  setBoardContent={setBoardContent}
+                />
+              </div>
             </div>
+            <button type="submit" className="insertLodgmentBtn">
+              등록하기
+            </button>
           </div>
-          <button type="submit" className="insertLodgmentBtn btn primary">
-            등록하기
-          </button>
-        </div>
-      </form>
+        </form>
+      ) : (
+        <p>"다시 로그인 해주세요"</p>
+      )}
     </div>
   );
 };

@@ -18,13 +18,17 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { sellerLoginNoState } from "../utils/RecoilData";
+import { useRecoilState } from "recoil";
 
 const LodgmentView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
+  const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
   const [lodgmentList, setLodgmentList] = useState({}); // 숙소 정보
+  console.log("lodList : -", lodgmentList);
   const [roomList, setRoomList] = useState([]); // 객실 리스트
 
   // 리뷰 관련
@@ -147,36 +151,46 @@ const LodgmentView = () => {
           </div>
 
           <div className="sellerBtnZone">
-            <Link
-              to={`/seller/updateLodgment/${lodgmentList.lodgmentNo}`}
-              className="sellerUpdateLodgment"
-            >
-              호텔 수정
-            </Link>
-            <button
-              type="button"
-              onClick={deleteLodgment}
-              className="sellerDelLodgment"
-            >
-              호텔 삭제
-            </button>
+            {lodgmentList.sellerNo === loginNo ? (
+              <>
+                <Link
+                  to={`/seller/updateLodgment/${lodgmentList.lodgmentNo}`}
+                  className="sellerUpdateLodgment"
+                >
+                  호텔 수정
+                </Link>
+                <button
+                  type="button"
+                  onClick={deleteLodgment}
+                  className="sellerDelLodgment"
+                >
+                  호텔 삭제
+                </button>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>
       <div className="item-sc-wrap">
         {roomList.length !== 0 ? (
           <>
-            <Link
-              to={`/seller/insertRoom/${lodgmentList.lodgmentNo}`}
-              className="sellerInsertRoomBtn"
-            >
-              객실 등록
-            </Link>
+            {lodgmentList.sellerNo === loginNo ? (
+              <Link
+                to={`/seller/insertRoom/${lodgmentList.lodgmentNo}`}
+                className="sellerInsertRoomBtn"
+              >
+                객실 등록
+              </Link>
+            ) : (
+              ""
+            )}
+
             <div className="lrv-wrap">
               <h4>객실 정보</h4>
               <div className="room-arr">
                 {roomList.map((room, i) => {
-                  console.log("room-", room);
                   return <RoomItem key={"room - " + i} room={room} />;
                 })}
               </div>
@@ -185,12 +199,16 @@ const LodgmentView = () => {
         ) : (
           <div className="noRoomListAlret">
             <p>등록된 숙소가 없습니다 등록하시겠습니까?</p>
-            <Link
-              to={`/seller/insertRoom/${lodgmentList.lodgmentNo}`}
-              className="sellerInsertRoomBtn noRoomList"
-            >
-              객실 등록 하기
-            </Link>
+            {lodgmentList.sellerNo === loginNo ? (
+              <Link
+                to={`/seller/insertRoom/${lodgmentList.lodgmentNo}`}
+                className="sellerInsertRoomBtn noRoomList"
+              >
+                객실 등록 하기
+              </Link>
+            ) : (
+              ""
+            )}
           </div>
         )}
       </div>
@@ -200,14 +218,22 @@ const LodgmentView = () => {
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               <Tab label="지도" value="1" />
               <Tab label="숙소 공지사항" value="2" />
-              <Tab label="리뷰" value="3" />
-              <Tab
-                label="숙소 문의"
-                value="4"
-                onClick={() => {
-                  setAlign(1);
-                }}
-              />
+              {lodgmentList.sellerNo === loginNo ? (
+                <Tab label="리뷰" value="3" />
+              ) : (
+                ""
+              )}
+              {lodgmentList.sellerNo === loginNo ? (
+                <Tab
+                  label="숙소 문의"
+                  value="4"
+                  onClick={() => {
+                    setAlign(1);
+                  }}
+                />
+              ) : (
+                ""
+              )}
             </TabList>
           </Box>
           <TabPanel value="1">

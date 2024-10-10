@@ -28,11 +28,11 @@
   /* --seller1: #1860c3; */
   /* --seller2: #3d80cb; */
   /* --seller3: #71a9db; */
-  --seller1: #0d6efd;
-  --seller2: #0d6efd;
-  --seller3: #71a9db;
-  --seller4: #ffbf6b;
-  --seller5: #ffd6b3;
+  --seller1: #3071f2;
+  --seller2: #2e83f2;
+  --seller3: #79baf2;
+  --seller4: #f2f2f2;
+  --seller5: #0d0d0d;
 }
 * {
   margin: 0;
