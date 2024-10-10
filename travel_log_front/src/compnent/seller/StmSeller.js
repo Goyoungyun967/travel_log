@@ -12,21 +12,17 @@ const StmSeller = () => {
   const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [stmInfo, setStmInfo] = useState([]);
-  console.log("stmInfo - ", stmInfo);
 
   const [startDate, setStartDate] = useState(); // 날짜 선택해서 search할 때, 찾기 시작할 날
   const [endDate, setEndDate] = useState(new Date()); // 날짜 선택해서 search할 때, 마지막 날
   const [search, setSearch] = useState(false);
-  console.log("search 0 - ", search);
 
   useEffect(() => {
     const form = new FormData();
     form.append("sellerNo", loginNo);
-    console.log(startDate);
     axios
       .post(`${backServer}/seller/stm`, form)
       .then((res) => {
-        console.log("r", res);
         setStmInfo(res.data);
 
         // 날짜 배열 만들기
@@ -40,9 +36,7 @@ const StmSeller = () => {
           setStartDate(minDate);
         }
       })
-      .catch((err) => {
-        console.log(err);
-      })
+      .catch((err) => {})
       .finally(() => {
         setSearch(false); // API 호출 후 search를 false로 설정
       });
@@ -66,12 +60,9 @@ const StmSeller = () => {
     axios
       .post(`${backServer}/seller/searchDate`, form)
       .then((res) => {
-        console.log(res);
         setStmInfo(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
   return (
     <div className="stm-box-wrap">

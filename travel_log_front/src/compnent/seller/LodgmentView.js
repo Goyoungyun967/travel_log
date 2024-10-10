@@ -29,7 +29,6 @@ const LodgmentView = () => {
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
   const [lodgmentList, setLodgmentList] = useState({}); // 숙소 정보
-  console.log("lodList : -", lodgmentList);
   const [roomList, setRoomList] = useState([]); // 객실 리스트
 
   // 리뷰 관련
@@ -49,18 +48,15 @@ const LodgmentView = () => {
   // 필터 검색
   const [align, setAlign] = useState(1);
 
-  console.log(reviewList);
   useEffect(() => {
     axios
       .get(
         `${backServer}/seller/lodgmentView/${lodgmentNo}/${reqPage}/${reqPageQ}/${align}`
       )
       .then((res) => {
-        console.log("lodgment res", res);
         // 호텔 삭제하고 뒤로가기를 누르면 호텔 정보가 null값이 되어서 오류가 뜸
         // 호텔 정보가 null값이면 호텔 리스트로 이동하게 함
         if (res.data.lodgment !== null) {
-          console.log("lod", res);
           setLodgmentList(res.data.lodgment);
           setRoomList(res.data.list);
           setReviewList(res.data.review);
@@ -73,9 +69,7 @@ const LodgmentView = () => {
           navigate("/seller/list");
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [reqPage, sellerText, reqPageQ, align]);
 
   // 삭제지만.. 1(보여지는거) => 0으로 바뀌게 해야하므로 패치 사용
@@ -94,7 +88,6 @@ const LodgmentView = () => {
             params: { lodgmentNo: lodgmentNo },
           })
           .then((res) => {
-            console.log(res);
             if (res.data !== 0) {
               navigate("/seller/list");
             }
@@ -177,7 +170,7 @@ const LodgmentView = () => {
       <div className="item-sc-wrap">
         {roomList.length !== 0 ? (
           <>
-            {lodgmentList.sellerNo === loginNo || memberLevel === 1 ? (
+            {lodgmentList.sellerNo === loginNo ? (
               <Link
                 to={`/seller/insertRoom/${lodgmentList.lodgmentNo}`}
                 className="sellerInsertRoomBtn"
@@ -200,7 +193,7 @@ const LodgmentView = () => {
         ) : (
           <div className="noRoomListAlret">
             <p>등록된 숙소가 없습니다 등록하시겠습니까?</p>
-            {lodgmentList.sellerNo === loginNo || memberLevel === 1 ? (
+            {lodgmentList.sellerNo === loginNo ? (
               <Link
                 to={`/seller/insertRoom/${lodgmentList.lodgmentNo}`}
                 className="sellerInsertRoomBtn noRoomList"
@@ -219,12 +212,12 @@ const LodgmentView = () => {
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               <Tab label="지도" value="1" />
               <Tab label="숙소 공지사항" value="2" />
-              {lodgmentList.sellerNo === loginNo || memberLevel === 1 ? (
+              {lodgmentList.sellerNo === loginNo ? (
                 <Tab label="리뷰" value="3" />
               ) : (
                 ""
               )}
-              {lodgmentList.sellerNo === loginNo || memberLevel === 1 ? (
+              {lodgmentList.sellerNo === loginNo ? (
                 <Tab
                   label="숙소 문의"
                   value="4"
@@ -301,8 +294,6 @@ const RoomItem = (props) => {
   const navigate = useNavigate();
   const room = props.room;
   const fileList = room.fileList[0];
-  console.log("room - ", room);
-  console.log(fileList);
 
   return (
     <div

@@ -21,7 +21,6 @@ const UpdateLodgment = () => {
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
   const [lodgmentList, setLodgmentList] = useState({}); // 숙소 정보
-  console.log("숙소", lodgmentList);
   const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
   //호텔 명
   const [hotelName, setHotelName] = useState("");
@@ -45,25 +44,20 @@ const UpdateLodgment = () => {
   const [viewImg, setViewImg] = useState(null);
   const [upImg, setUpImg] = useState(null);
 
-  //   console.log("미리보기 이미지", viewImg);
   const lodgmentImgRef = useRef(null);
 
   // 선택된 호텔 타입의 value 값을 저장
   const lodgmentTypeChange = (e) => {
     setLodgmentType(Number(e.target.value));
   };
-  console.log("보내는 주소", address);
-  console.log("보여지는 주소", inputAddr);
 
   useEffect(() => {
     axios
       .get(`${backServer}/seller/lodgmentView/${lodgmentNo}`)
       .then((res) => {
-        console.log("lodgment res", res);
         // 호텔 삭제하고 뒤로가기를 누르면 호텔 정보가 null값이 되어서 오류가 뜸
         // 호텔 정보가 null값이면 호텔 리스트로 이동하게 함
         if (res.data.lodgment !== null) {
-          console.log("lod", res);
           setLodgmentList(res.data);
           setHotelName(res.data.lodgmentName); // 숙소 이름
           setLodgmentType(res.data.lodgmentTypeNo); // 숙소 타입
@@ -78,9 +72,7 @@ const UpdateLodgment = () => {
           navigate("/seller/list");
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
   const changeLodgmentImg = (e) => {
     //요소들이 겹쳐있는 상태에서 해당 요소를 선택할 때는 currentTarget(target을사용하면 여러요소가 한번에 선택)
@@ -103,7 +95,7 @@ const UpdateLodgment = () => {
 
   return (
     <div className="contanier insert-lodgment">
-      {lodgmentList.sellerNo === loginNo || memberLevel === 1 ? (
+      {lodgmentList.sellerNo === loginNo ? (
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -162,14 +154,12 @@ const UpdateLodgment = () => {
                   },
                 })
                 .then((res) => {
-                  console.log(res);
                   if (res.data) {
                     Swal.fire({
                       title: "수정 완료",
                       icon: "success",
                     });
                     navigate(`/seller/list`);
-                    console.log(form);
                   } else {
                     Swal.fire({
                       title: "문제가 발생했습니다.",
@@ -178,9 +168,7 @@ const UpdateLodgment = () => {
                     });
                   }
                 })
-                .catch((err) => {
-                  console.log(err);
-                });
+                .catch((err) => {});
             }
           }}
         >

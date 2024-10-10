@@ -13,12 +13,9 @@ const SellerInfo = () => {
     axios
       .get(`${backServer}/seller/sellerInfo`)
       .then((res) => {
-        console.log(res);
         setSellerInfo(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [loginNo]);
 
   return (

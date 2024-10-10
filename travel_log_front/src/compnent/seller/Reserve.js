@@ -7,7 +7,6 @@ const Reserve = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [bookInfo, setBookInfo] = useState({});
   const [guestRequest, setGuestRequest] = useState();
-  console.log(bookInfo);
   const { bookNo } = useParams();
   // startDate를 Date 객체로 변환
   //   const endDate = new Date(bookInfo.endDate).toISOString().split("T")[0];
@@ -16,13 +15,10 @@ const Reserve = () => {
     axios
       .get(`${backServer}/seller/reserve/${bookNo}`)
       .then((res) => {
-        console.log(res);
         setBookInfo(res.data);
         setGuestRequest(res.data.guestRequest);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
   return (

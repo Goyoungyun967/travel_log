@@ -33,9 +33,7 @@ const InqView = () => {
             : null
         );
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [inqNo, backServer]);
 
   return (
