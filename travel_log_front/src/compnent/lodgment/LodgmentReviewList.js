@@ -160,14 +160,14 @@ const LodgmentReviewUpdate = (props) => {
         {availableReview && (
           <>
             <div className="review-no-comment">
-              예약 가능한 리뷰가 있습니다. 리뷰를 작성하러 가기
+              예약 가능한 리뷰가 있습니다.
               <button
                 className="review-btn"
                 onClick={() => {
                   navigate(`/member/mypage/myReservation`);
                 }}
               >
-                리뷰 작성
+                리뷰 쓰기
               </button>
             </div>
           </>

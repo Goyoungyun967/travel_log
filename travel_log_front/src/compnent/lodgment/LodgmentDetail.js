@@ -11,7 +11,6 @@ import axios from "axios";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import {
   loginNoState,
-  lodgmentState,
   guestState,
   startDateState,
   endDateState,
@@ -72,7 +71,7 @@ const LodgmentDetail = () => {
               Swal.fire({
                 icon: "info",
                 title: "로그인 페이지로 이동하겠습니까?",
-                showCancelButton: false,
+                showCancelButton: true,
                 confirmButtonText: "예",
                 cancelButtonText: "아니오",
               }).then((res) => {
@@ -102,8 +101,8 @@ const LodgmentDetail = () => {
                     )
                     .then((res) => {
                       // 응답 데이터의 프로퍼티 접근 수정
-                      console.log("성공 되는곳");
-                      console.log(res);
+                      // console.log("성공 되는곳");
+                      // console.log(res);
 
                       if (res.data === 1) {
                         setResult((prev) => !prev);
@@ -152,8 +151,8 @@ const LodgmentDetail = () => {
                     )
                     .then((res) => {
                       // 응답 데이터의 프로퍼티 접근 수정
-                      console.log("취소 되는곳");
-                      console.log(res);
+                      // console.log("취소 되는곳");
+                      //console.log(res);
                       if (res.data === 1) {
                         setResult((prev) => !prev);
                         Swal.fire({
@@ -238,7 +237,6 @@ const LodgmentDetail = () => {
             roomSearchList={roomSearchList}
             startDate={startDate}
             endDate={endDate}
-            guest={guest}
             lodgmentInfo={lodgmentInfo}
           />
         </div>

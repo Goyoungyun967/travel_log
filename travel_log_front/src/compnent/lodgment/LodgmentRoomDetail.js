@@ -4,17 +4,11 @@ import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useRecoilState } from "recoil";
-import { loginNoState } from "../utils/RecoilData";
+import { loginNoState, guestState } from "../utils/RecoilData";
 
 const LodgmentRoomDetail = (props) => {
   const navigate = useNavigate();
-  const {
-    roomSearchList = [],
-    startDate,
-    endDate,
-    guest,
-    lodgmentInfo,
-  } = props; // 기본값을 빈 배열로 설정
+  const { roomSearchList = [], startDate, endDate, lodgmentInfo } = props; // 기본값을 빈 배열로 설정
   const BackServer = process.env.REACT_APP_BACK_SERVER;
   const checkIn = format(new Date(startDate), "yyyy-MM-dd");
   const checkOut = format(new Date(endDate), "yyyy-MM-dd");
@@ -42,7 +36,7 @@ const LodgmentRoomDetail = (props) => {
       }).then((res) => {
         if (res.isConfirmed) {
           navigate("/lodgment/paymentPage", {
-            state: { room, guest, checkIn, checkOut, lodgmentInfo },
+            state: { room, guestState, checkIn, checkOut, lodgmentInfo },
           });
         }
       });

@@ -278,7 +278,7 @@ const MemberChart = () => {
           <CartesianGrid stroke="#f5f5f5" />
           <Bar dataKey="남성" barSize={20} fill="#413ea0" />
           <Bar dataKey="여성" barSize={20} fill="#ff8e99" />
-          <Line type="monotone" dataKey="총이용자" stroke="#ff7300" />
+          <Bar dataKey="총이용자" barSize={20} fill="#ff7300" />
         </ComposedChart>
       </div>
     </>

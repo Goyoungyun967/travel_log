@@ -50,7 +50,7 @@ public class LodgmentService {
 	//숙소 리스트 
 	public Map getLodgmentList(int reqPage, String lodgment, String startDate, String endDate,
 		 int guest, int minPrice, int maxPrice, int[] selectedServiceTagsArry, int starValue, int order, int lodgmentType) {
-		 int limit = 10;  //한페이지당 열개 
+		 int limit = 2;  //한페이지당 열개 
 	     int start = (reqPage - 1) * limit +1; // 1~      11    21
 	     int end = reqPage*limit; //                ~10    ~20    ~30           
 	     List<SearchLodgmentDTO> list = lodgmentDao.getLodgmentList

@@ -104,13 +104,14 @@ const SellerChart = () => {
             newChartData[index].작년 = item.sales;
             newChartData[index].작년총매출 = item.sum;
           }
-          if (i === res.data.length - 1 && index !== 11) {
-            for (let j = 0; j < newChartData.length - index; j++) {
-              if (Number(item.date.substr(2, 2)) === year) {
-                newChartData[j + index].올해총매출 = item.sum;
-              } else {
-                newChartData[j + index].작년총매출 = item.sum;
-              }
+        });
+        newChartData.forEach((data, index) => {
+          if (index !== 0) {
+            if (data.올해총매출 === 0) {
+              data.올해총매출 = newChartData[index - 1].올해총매출;
+            }
+            if (data.작년총매출 === 0) {
+              data.작년총매출 = newChartData[index - 1].작년총매출;
             }
           }
         });
@@ -191,7 +192,7 @@ const SellerChart = () => {
   return (
     <>
       <div className="admin-page-title">
-        <h3>판매자 정보</h3>
+        <h3>판매자 매출 정보</h3>
       </div>
       <div className="chart-select-box">
         <FormControl style={{ width: "200px" }}>

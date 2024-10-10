@@ -496,7 +496,7 @@
 	</select>
 	
 	<!-- 해당 숙소 문의 리스트 -->
-	<select id="selectInquireList" resultType="lodgmentMemberInquire">
+	<select id="selectInquireList" resultMap="getQnaComment">
 		select 
 			* 
 		from 
@@ -516,6 +516,17 @@
 			b) 
 		where 
 			rnum between #{start} and #{end}
+	</select>
+	<resultMap type="lodgmentMemberInquire" id="getQnaComment">
+		<result column="room_qna_no" property="roomQnaNo" />
+		<collection property="list"
+			select="selectQnaComment" column="room_qna_no"
+			javaType="java.util.List" ofType="lodgmentMemberInquire" />
+	</resultMap>
+	<!-- 맵 사용 : selectOneReviewFileList -->
+	<select id="selectQnaComment" parameterType="list"
+		resultType="qnaComment">
+		select * from qna_comment where room_qna_no = #{roomQnaNo}
 	</select>
 	
 	<delete id="deleteInquire">
