@@ -209,11 +209,11 @@ public class MemberService {
 	public int checkNickname(String memberNickname) {
 		int result = memberDao.checkNickname(memberNickname);
 		return result;
-
+	}
 	public MemberReportDTO getMemberReport(int memberNo) {
 		MemberReportDTO memberReport = memberDao.getMemberReport(memberNo);
 		return memberReport;
 
 	}
-}
+
 }

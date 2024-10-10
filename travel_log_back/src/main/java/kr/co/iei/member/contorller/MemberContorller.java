@@ -227,7 +227,7 @@ public class MemberContorller {
 		int result = memberService.checkNickname(memberNickname);
 		
 		return ResponseEntity.ok(result);
-
+	}
 	@GetMapping(value="/report/{memberNo}")
 	public ResponseEntity<MemberReportDTO> getMemberReport(@PathVariable int memberNo){
 		MemberReportDTO memberReport = memberService.getMemberReport(memberNo);
@@ -235,7 +235,7 @@ public class MemberContorller {
 
 	}
 }
-}
+
 	
 	
 	
