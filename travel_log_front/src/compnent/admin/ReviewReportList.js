@@ -133,9 +133,9 @@ const ReviewReportList = () => {
             );
           })}
         </div>
-        <div className="review-pagenavie-wrap">
-          <PageNavi reqPage={reqPage} setReqPage={setReqPage} pi={pi} />
-        </div>
+      </div>
+      <div className="admin-page-navi">
+        <PageNavi reqPage={reqPage} setReqPage={setReqPage} pi={pi} />
       </div>
     </>
   );

@@ -67,7 +67,7 @@ const AdminMemberList = () => {
             <th width={"15%"}>가입일</th>
             <th width={"10%"}>신고수</th>
             <th width={"20%"}>종류</th>
-            <th width={"15%"}>정지상태</th>
+            <th width={"15%"}>상태</th>
           </tr>
         </thead>
         <tbody>
@@ -97,9 +97,11 @@ const AdminMemberList = () => {
                   if (res.data > 0) {
                     Swal.fire({
                       title: "활동 정지 완료",
-                      text: "회원 활동 정지 처리가 완료 되었습니다.",
+                      text: "게시글 작성 정지 처리 되었습니다.",
                       icon: "success",
                     });
+                    member.memberState = 1;
+                    setMemberList([...memberList]);
                   }
                 })
                 .catch((err) => {
@@ -133,8 +135,10 @@ const AdminMemberList = () => {
                   {member.memberState === 1 ? (
                     "활동정지"
                   ) : (
-                    <div className="report-delete-btn">
-                      <button onClick={insertMemberReport}>정지하기</button>
+                    <div className="admin-btn">
+                      <button className="first" onClick={insertMemberReport}>
+                        정지하기
+                      </button>
                     </div>
                   )}
                 </td>

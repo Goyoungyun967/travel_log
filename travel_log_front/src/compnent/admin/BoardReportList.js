@@ -108,7 +108,9 @@ const BoardReportList = () => {
           setState={setState}
         />
       </Modal>
-      <PageNavi reqPage={reqPage} setReqPage={setReqPage} pi={pi} />
+      <div className="admin-page-navi">
+        <PageNavi reqPage={reqPage} setReqPage={setReqPage} pi={pi} />
+      </div>
     </>
   );
 };
