@@ -395,8 +395,8 @@ public class SellerService {
 		return result;
 	}
 
-	public BookingInfoDTO selectBooking(int loginNo) {
-		BookingInfoDTO booking = sellerLodgmentDao.selectBooking(loginNo);
+	public List selectBooking(int loginNo) {
+		List booking = sellerLodgmentDao.selectBooking(loginNo);
 		return booking;
 	}
 
