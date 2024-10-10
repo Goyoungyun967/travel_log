@@ -111,6 +111,26 @@ const BoardList = () => {
     navigate("/board/accompanyList");
   };
 
+  const checkReport = () => {
+    if (loginNo !== -1) {
+      axios
+        .get(`${backServer}/member/report/${loginNo}`)
+        .then((res) => {
+          if (res.data !== "") {
+            Swal.fire({
+              title: "게시글 작성 제한",
+              text: `제한 기간 : ${res.data.startDate} ~ ${res.data.endDate}`,
+              icon: "warning",
+            }).then(() => {
+              navigate("/board/list");
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
   return (
     <div className="board-list-wrap">
       <div className="search-box-wrap">
@@ -206,10 +226,18 @@ const BoardList = () => {
         <PageNavi pi={pi} reqPage={reqPage} setReqPage={setReqPage} />
       </div> */}
       <div className="write-box">
-        <Link to="/board/AccompanyWrite" className="accompany-write sub-item">
+        <Link
+          to="/board/AccompanyWrite"
+          className="accompany-write sub-item"
+          onClick={checkReport}
+        >
           동행 게시판 글 작성
         </Link>
-        <Link to="/board/boardWrite" className="board-write sub-item">
+        <Link
+          to="/board/boardWrite"
+          className="board-write sub-item"
+          onClick={checkReport}
+        >
           여행 게시판 글 작성
         </Link>
       </div>

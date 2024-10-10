@@ -38,7 +38,7 @@ const InquiryWrite = () => {
     } else if (refreshToken && memberLevel === 1) {
       navigate("/admin/inquiryList");
     }
-  }, []);
+  }, [memberLevel]);
   const addInquiryFile = (e) => {
     const files = e.target.files;
     const fileArr = new Array();

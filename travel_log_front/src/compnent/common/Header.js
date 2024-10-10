@@ -157,7 +157,7 @@ const Header = (props) => {
                         <Nav.Link
                           href={
                             memberLevel === 1
-                              ? "/admin"
+                              ? "/admin/memberChart"
                               : memberLevel === 4
                               ? "/seller/sellerInfo"
                               : "/member/mypage"
@@ -166,6 +166,8 @@ const Header = (props) => {
                         >
                           {memberLevel === 4
                             ? loginBusinessName
+                            : memberLevel === 1
+                            ? "관리자"
                             : loginNickname}
                         </Nav.Link>
                         <Nav.Link
