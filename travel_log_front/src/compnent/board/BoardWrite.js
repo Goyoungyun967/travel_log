@@ -44,7 +44,7 @@ const BoardWrite = () => {
   const inputContent = (e) => {
     setBoardContent(e.target.value);
   };
-
+  console.log(thumbnail);
   const writeBoard = () => {
     const titleRegex = /^.{1,20}$/; // 제목: 1~20글자
     const contentRegex = /^.{1,1000}$/; // 글 내용: 1~1000글자
@@ -70,16 +70,7 @@ const BoardWrite = () => {
         icon: "warning",
       });
     }
-
-    // area 유효성 검사
-    if (!selectedArea) {
-      isValid = false;
-      Swal.fire({
-        title: "지역 유효성 검사 실패",
-        text: "지역을 선택해야 합니다.",
-        icon: "warning",
-      });
-    }
+    console.log(thumbnail);
 
     // 유효성 검사가 통과하면 게시글 작성 진행
     if (isValid) {

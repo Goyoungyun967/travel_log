@@ -25,8 +25,11 @@
   --line5: #f8f9fa;
 
   /*판매자 임시 컬러*/
-  --seller1: #1860c3;
-  --seller2: #3d80cb;
+  /* --seller1: #1860c3; */
+  /* --seller2: #3d80cb; */
+  /* --seller3: #71a9db; */
+  --seller1: #0d6efd;
+  --seller2: #0d6efd;
   --seller3: #71a9db;
   --seller4: #ffbf6b;
   --seller5: #ffd6b3;

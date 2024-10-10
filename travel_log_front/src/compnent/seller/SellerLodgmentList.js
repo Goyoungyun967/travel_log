@@ -90,37 +90,67 @@ const ListItem = (props) => {
   console.log(list);
   return (
     <>
-      <div
-        className="seller-lg-list-item"
-        onClick={() => {
-          navigate(`/seller/lodgmentView/${list.lodgmentNo}`);
-        }}
-      >
-        <div className="seller-item-img">
-          <img
-            src={
-              list.lodgmentImgPath
-                ? `${backServer}/seller/lodgment/${list.lodgmentImgPath}`
-                : "/image/lodgment_default_img.png"
-            }
-            style={{ width: "230px" }}
-          />
-        </div>
-        <div className="item-tx">
-          <p className="lodgment-addr">{list.lodgmentAddr}</p>
-          <div className="lodgment-star">
-            {list.lodgmentStarGrade === 0 ? (
-              "등록되지 않은 숙소"
-            ) : (
-              <>
-                <span>{list.lodgmentStarGrade}</span>
-                <span>성급</span>
-              </>
-            )}
+      {list.lodgmentDelete === 0 ? (
+        <div className="seller-lg-list-item seller-admin-check">
+          <p className="seller-check-p">등록 대기 중</p>
+          <div className="seller-item-img">
+            <img
+              src={
+                list.lodgmentImgPath
+                  ? `${backServer}/seller/lodgment/${list.lodgmentImgPath}`
+                  : "/image/lodgment_default_img.png"
+              }
+              style={{ width: "230px" }}
+            />
           </div>
-          <h3 className="lodgment-title">{list.lodgmentName}</h3>
+          <div className="item-tx">
+            <p className="lodgment-addr">{list.lodgmentAddr}</p>
+            <div className="lodgment-star">
+              {list.lodgmentStarGrade === 0 ? (
+                "등급 미정 숙소"
+              ) : (
+                <>
+                  <span>{list.lodgmentStarGrade}</span>
+                  <span>성급</span>
+                </>
+              )}
+            </div>
+            <h3 className="lodgment-title">{list.lodgmentName}</h3>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div
+          className="seller-lg-list-item"
+          onClick={() => {
+            navigate(`/seller/lodgmentView/${list.lodgmentNo}`);
+          }}
+        >
+          <div className="seller-item-img">
+            <img
+              src={
+                list.lodgmentImgPath
+                  ? `${backServer}/seller/lodgment/${list.lodgmentImgPath}`
+                  : "/image/lodgment_default_img.png"
+              }
+              style={{ width: "230px" }}
+            />
+          </div>
+          <div className="item-tx">
+            <p className="lodgment-addr">{list.lodgmentAddr}</p>
+            <div className="lodgment-star">
+              {list.lodgmentStarGrade === 0 ? (
+                "등급 미정 숙소"
+              ) : (
+                <>
+                  <span>{list.lodgmentStarGrade}</span>
+                  <span>성급</span>
+                </>
+              )}
+            </div>
+            <h3 className="lodgment-title">{list.lodgmentName}</h3>
+          </div>
+        </div>
+      )}
     </>
   );
 };

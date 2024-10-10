@@ -78,50 +78,15 @@ const BoardList = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
-  //스크롤
-  // const handleMouseDown = (e) => {
-  //   isMouseDownRef.current = true;
-  //   startXRef.current = e.pageX - scrollContainerRef.current.offsetLeft;
-  //   scrollLeftRef.current = scrollContainerRef.current.scrollLeft;
-  // };
-
-  // const handleMouseLeave = () => {
-  //   isMouseDownRef.current = false;
-  // };
-
-  // const handleMouseUp = () => {
-  //   isMouseDownRef.current = false;
-  // };
-
-  // const handleMouseMove = (e) => {
-  //   if (!isMouseDownRef.current) return;
-  //   e.preventDefault();
-  //   const x = e.pageX - scrollContainerRef.current.offsetLeft;
-  //   const walk = (x - startXRef.current) * 2; // 조정값 (속도)
-  //   scrollContainerRef.current.scrollLeft = scrollLeftRef.current - walk;
-  // };
-
-  // useEffect(() => {
-  //   const container = scrollContainerRef.current;
-  //   container.addEventListener("mousedown", handleMouseDown);
-  //   container.addEventListener("mouseleave", handleMouseLeave);
-  //   container.addEventListener("mouseup", handleMouseUp);
-  //   container.addEventListener("mousemove", handleMouseMove);
-
-  //   return () => {
-  //     container.removeEventListener("mousedown", handleMouseDown);
-  //     container.removeEventListener("mouseleave", handleMouseLeave);
-  //     container.removeEventListener("mouseup", handleMouseUp);
-  //     container.removeEventListener("mousemove", handleMouseMove);
-  //   };
-  // }, []);
   //일반게시판 가져오기
   useEffect(() => {
     axios
       .get(`${backServer}/board/boardList/1/${reqPage}`)
       .then((res) => {
+        console.log(res.data.list);
         setBoardList(res.data.list); // 일반 게시글
         setPi(res.data.pi);
+        setIsLike(res.data.list.isLike);
       })
       .catch((err) => {
         console.log(err);
@@ -198,7 +163,7 @@ const BoardList = () => {
       <div className="area-box">{/* 지역*/}</div>
       <div className="board-preview-container">
         <div className="board-page-title flex-spbetw">
-          <span>최신 여행 동행</span>
+          <span>동행 게시판</span>
           <span className="board-next" onClick={handleMoreClick}>
             {/* onClick={handleMoreClick} */}
             더보기 <ArrowForwardIcon style={{ paddingBottom: "4px" }} />
@@ -239,7 +204,7 @@ const BoardList = () => {
           {/* </div> */}
         </Swiper>
         <div className="board-page-title flex-spbetw">
-          <span>최신 여행 게시판</span>
+          <span>여행 포스터</span>
         </div>
         <div className="board-preview-wrap height-box">
           {boardList.map((board, i) => (
@@ -306,10 +271,8 @@ const AccompanyItem = (props) => {
   const navigate = useNavigate();
   //작성 시간
   const now = new Date();
-  console.log(now);
   const regDate = new Date(accompany.regDate);
   const time = now - regDate;
-  console.log(regDate);
   const seconds = Math.floor(time / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
@@ -325,7 +288,6 @@ const AccompanyItem = (props) => {
   else if (hours > 0) timeString = `${hours}시간 전`;
   else if (minutes > 0) timeString = `${minutes}분 전`;
   else timeString = `방금전`;
-  console.log(isLogin);
   return (
     <>
       {isLogin ? (
@@ -350,6 +312,7 @@ const AccompanyItem = (props) => {
         >
           <div className="board-preview-thumb">
             <img
+              className="img-ovj-fit"
               style={{ height: "100%" }}
               src={
                 accompany.boardThumb
@@ -384,6 +347,7 @@ const AccompanyItem = (props) => {
         >
           <div className="board-preview-thumb">
             <img
+              className="img-ovj-fit"
               style={{ height: "100%" }}
               src={
                 accompany.boardThumb
@@ -417,9 +381,10 @@ const BoardItem = (props) => {
   const setIsLike = props.setIsLike;
   const likeCount = props.likeCount;
   const setLikeCount = props.setLikeCount;
-  const loginNickname = props.loginNickname;
+  const memberNickname = props.loginNickname;
   const isLogin = props.isLogin;
   const navigate = useNavigate();
+  console.log(board.isLike);
 
   //작성 시간
   const now = new Date();
@@ -445,17 +410,16 @@ const BoardItem = (props) => {
   ///${encodeURIComponent(timeString)
 
   //좋아요
-  console.log(isLike);
-
   const likeClick = () => {
-    if (isLike === 1) {
+    console.log(board.isLike);
+    if (board.isLike === 1) {
+      console.log("del" + isLike);
       // 좋아요 취소 요청
       axios
         .delete(`${backServer}/board/unlike/${board.boardNo}/${memberNo}`)
         .then((res) => {
-          console.log(res);
           setLikeCount((prevCount) => prevCount - 1); // 좋아요 수 감소
-          setIsLike(0); // 좋아요 상태 변경 (0으로 설정)
+          setIsLike(res); // 좋아요 상태 변경 (0으로 설정)
         })
         .catch((err) => {
           console.error("좋아요 취소 중 오류 발생:", err);
@@ -465,9 +429,8 @@ const BoardItem = (props) => {
       axios
         .post(`${backServer}/board/like/${board.boardNo}/${memberNo}`)
         .then((res) => {
-          console.log(res);
           setLikeCount((prevCount) => prevCount + 1); // 좋아요 수 증가
-          setIsLike(1); // 좋아요 상태 변경 (1로 설정)
+          setIsLike(res); // 좋아요 상태 변경 (1로 설정)
         })
         .catch((err) => {
           console.error("좋아요 요청 중 오류 발생:", err);

@@ -117,13 +117,12 @@ const AccompanyItem = (props) => {
   const navigate = useNavigate();
   const loginNickname = props.loginNickname;
   const isLogin = props.isLogin;
+  console.log(accompany.boardContent);
 
   //작성 시간
   const now = new Date();
-  console.log(now);
   const regDate = new Date(accompany.regDate);
   const time = now - regDate;
-  console.log(regDate);
   const seconds = Math.floor(time / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
@@ -139,7 +138,6 @@ const AccompanyItem = (props) => {
   else if (hours > 0) timeString = `${hours}시간 전`;
   else if (minutes > 0) timeString = `${minutes}분 전`;
   else timeString = `방금전`;
-  console.log(timeString);
 
   return (
     <>
@@ -186,6 +184,7 @@ const AccompanyItem = (props) => {
             <div className="board-preview-content">
               <div className="board-preview-title">
                 {accompany.boardTitle}
+
                 <div className="boardList-preview-thumb">
                   <img
                     src={
@@ -196,6 +195,25 @@ const AccompanyItem = (props) => {
                     className="board-preview-thumb"
                   />
                 </div>
+              </div>
+              <div
+                className="accompany-content-text"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    accompany.boardContent.length > 10
+                      ? accompany.boardContent.slice(0, 10) + "..."
+                      : accompany.boardContent,
+                }}
+              ></div>
+              <div className="accompany-type">
+                <span>
+                  동행 기간 : {accompany.startDay.split(" ")[0]} ~{"  "}
+                  {accompany.endDay.split(" ")[0]}{" "}
+                </span>
+                <span>
+                  {" "}
+                  동행 유형 : {accompany.accompanyTypes.split(",").join(" / ")}
+                </span>
               </div>
             </div>
           </div>
@@ -243,7 +261,8 @@ const AccompanyItem = (props) => {
             </div>
             <div className="board-preview-content">
               <div className="board-preview-title">
-                {accompany.boardTitle}
+                <span>{accompany.boardTitle}</span>
+
                 <div className="boardList-preview-thumb">
                   <img
                     src={
@@ -254,9 +273,25 @@ const AccompanyItem = (props) => {
                     className="board-preview-thumb"
                   />
                 </div>
-                <div className="board-preview-text">
-                  {accompany.boardContent}
-                </div>
+              </div>
+              <div
+                className="accompany-content-text"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    accompany.boardContent.length > 10
+                      ? accompany.boardContent.slice(0, 10) + "..."
+                      : accompany.boardContent,
+                }}
+              ></div>
+              <div className="accompany-date-type">
+                <span>
+                  동행 기간 : {accompany.startDay.split(" ")[0]} ~{"  "}
+                  {accompany.endDay.split(" ")[0]}{" "}
+                </span>
+                <span>
+                  {" "}
+                  동행 유형 : {accompany.accompanyTypes.split(",").join(" / ")}
+                </span>
               </div>
             </div>
           </div>

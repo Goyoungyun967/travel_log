@@ -25,7 +25,6 @@ const BoardFrm = (props) => {
 
   const delBoardFileNo = props.delBoardFileNo;
   const setDelBoardFileNo = props.setDelBoardFileNo;
-  console.log(delBoardFileNo);
 
   const thumbnailRef = useRef(null);
   //썸네일 미리보기용 state(데이터 전송을 안할꺼임)
@@ -51,7 +50,6 @@ const BoardFrm = (props) => {
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
         setBoardImg(reader.result);
-        console.log();
       };
     } else {
       setThumbnail(null);
@@ -74,9 +72,7 @@ const BoardFrm = (props) => {
     setBoardFile([...boardFile, ...fileArr]);
     setShowBoardFile([...showBoardFile, ...filenameArr]);
   };
-  console.log(boardThumb);
-  console.log(boardFile);
-  console.log(showBoardFile);
+
   return (
     <div>
       <div className="board-info-wrap">
