@@ -220,12 +220,22 @@ public class MemberContorller {
 		int result = memberService.searchPw(member);
 		return ResponseEntity.ok(result);
 	}
+
+	
+	@GetMapping(value="/memberNickname/{memberNickname}/check-nickname")
+	public ResponseEntity<Integer> checkNickname(@PathVariable String memberNickname){
+		int result = memberService.checkNickname(memberNickname);
+		
+		return ResponseEntity.ok(result);
+	}
 	@GetMapping(value="/report/{memberNo}")
 	public ResponseEntity<MemberReportDTO> getMemberReport(@PathVariable int memberNo){
 		MemberReportDTO memberReport = memberService.getMemberReport(memberNo);
 		return ResponseEntity.ok(memberReport);
+
 	}
 }
+
 	
 	
 	

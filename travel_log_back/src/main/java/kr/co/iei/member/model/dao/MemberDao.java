@@ -27,7 +27,6 @@ public interface MemberDao {
 
 	MemberDTO selectOneUser(int memberNo);
 
-
 	int updateMember(MemberDTO member);
 
 	int changePw(MemberDTO member);
@@ -52,6 +51,9 @@ public interface MemberDao {
 
 	int updateMemberLevel(MemberDTO member);
 
+
+	int checkNickname(String memberNickname);
+
 	MemberReportDTO getMemberReport(int memberNo);
 	
 	//회원 이용 차트
@@ -60,5 +62,6 @@ public interface MemberDao {
 	List getLodgmentResionSearchMemberData(String region);
 
 	List getLodgmentResionMemberData();
+
 
 }

@@ -25,7 +25,10 @@ const Login = () => {
   const [sellerLoginNo, setSellerLoginNo] = useRecoilState(sellerLoginNoState);
   const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
   const [member, setMember] = useState({ memberId: "", memberPw: "" });
-  const [seller, setSeller] = useState({ businessNo: "", sellerPw: "" });
+  const [seller, setSeller] = useState({
+    businessNo: "",
+    sellerPw: "",
+  });
   const navigate = useNavigate();
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const changeMember = (e) => {
@@ -35,7 +38,19 @@ const Login = () => {
 
   const changeSeller = (e) => {
     const name = e.target.name;
-    setSeller({ ...seller, [name]: e.target.value });
+    let value = e.target.value;
+
+    // 사업자번호 입력 시 숫자만 남기고 제거
+    if (name === "businessNo") {
+      value = value.replace(/[^0-9]/g, ""); // 숫자 외의 문자 제거
+    }
+
+    // 사업자번호가 10자리를 초과하지 않도록 제한
+    if (name === "businessNo" && value.length > 10) {
+      value = value.slice(0, 10);
+    }
+
+    setSeller({ ...seller, [name]: value });
   };
   const [type, setType] = useState(true);
   const changeType = (e) => {
@@ -43,35 +58,44 @@ const Login = () => {
   };
   //seller 로그인
   const sellerLogin = () => {
-    if (seller.businessNo == "" || seller.sellerPw === "") {
+    if (seller.businessNo === "" || seller.sellerPw === "") {
       Swal.fire({
         text: "아이디 또는 비밀번호를 입력하세요",
         icon: "info",
       });
       return;
     }
-    console.log(seller.businessNo);
-    console.log(seller.sellerPw);
     axios
       .post(`${backServer}/seller/login`, seller)
       .then((res) => {
-        console.log(res);
-        setSellerLoginNo(res.data.sellerNo);
-        setLoginBusinessName(res.data.businessName);
-        setMemberLevel(4);
-        //로그인 이후 axios 요청 시 발급받은 토큰값을 자동으로 axios에 추가하는 설정
-        axios.defaults.headers.common["Authorization"] = res.data.accessToken;
-        //로그인 상태를 지속적으로 유지시키기위해 발급받은 refreshToken을 브라우저에 저장
-        window.localStorage.setItem(
-          "sellerRefreshToken",
-          res.data.refreshToken
-        );
-        navigate("/");
+        console.log(res.data);
+
+        if (res.data.sellerApp === 0) {
+          Swal.fire({
+            title: "승인 대기중",
+            icon: "warning",
+            text: "가입 승인 확인 후 로그인시켜드리겠습니다.",
+          });
+          return; // 로그인 진행 중단
+        } else if (res.data.sellerApp === 1) {
+          // sellerApp이 1일 때 로그인 진행
+          setSellerLoginNo(res.data.sellerNo);
+          setLoginBusinessName(res.data.businessName);
+          setMemberLevel(4);
+
+          // 로그인 이후 axios 요청 시 발급받은 토큰값을 자동으로 axios에 추가하는 설정
+          axios.defaults.headers.common["Authorization"] = res.data.accessToken;
+          window.localStorage.setItem(
+            "sellerRefreshToken",
+            res.data.refreshToken
+          );
+          navigate("/");
+        }
       })
       .catch((err) => {
         console.log(err);
         Swal.fire({
-          text: "아이디 또는 비밀번호 확인해주세요22222",
+          text: "아이디 또는 비밀번호 확인해주세요",
           icon: "warning",
         });
       });

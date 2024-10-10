@@ -180,7 +180,7 @@ const LodgmentDetail = () => {
               });
             }}
           >
-            <FavoriteIcon sx={{ fontSize: 40 }} />
+            <FavoriteIcon sx={{ fontSize: 40, color: "red" }} />
           </div>
         ) : (
           "머징"

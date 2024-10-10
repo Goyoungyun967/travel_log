@@ -92,12 +92,18 @@ public interface SellerLodgmentDao {
 
 	int delUpComment(LodgmentReviewDTO ld);
 
+	List selectBooking(int loginNo);
+	
 	//상품 게시글 관리
 	int getAdminLodgmentCount(int lodgmentDelete);
 
 	List getAdminLodgmentList(Map<String, Object> m);
 
 	int updateLodgmentDelete(int[] lodgmentNo);
+
+
+	
+
 	
 
 }

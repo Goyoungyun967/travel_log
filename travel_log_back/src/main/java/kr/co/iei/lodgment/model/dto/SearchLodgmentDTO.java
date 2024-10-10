@@ -37,5 +37,5 @@ public class SearchLodgmentDTO {
 	private int roomPrice;
 	@Schema(description = "총 별점 ",type="int")
 	private int avgRating;
-	
+
 }

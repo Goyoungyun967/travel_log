@@ -48,7 +48,7 @@ public class LodgmentService {
 
 	//reqPage 작업도 같이 해서 보냄 
 	//숙소 리스트 
-	public List<SearchLodgmentDTO> getLodgmentList(int reqPage, String lodgment, String startDate, String endDate,
+	public Map getLodgmentList(int reqPage, String lodgment, String startDate, String endDate,
 		 int guest, int minPrice, int maxPrice, int[] selectedServiceTagsArry, int starValue, int order, int lodgmentType) {
 		 int limit = 10;  //한페이지당 열개 
 	     int start = (reqPage - 1) * limit +1; // 1~      11    21
@@ -56,10 +56,16 @@ public class LodgmentService {
 	     List<SearchLodgmentDTO> list = lodgmentDao.getLodgmentList
 	    		 (start, end, lodgment, startDate.substring(0, 10), endDate.substring(0, 10), guest,
 	    				 minPrice, maxPrice, selectedServiceTagsArry, starValue, order, lodgmentType);
-
-       //System.out.println(minPrice);
+	     int totalCount = lodgmentDao.getTotalPage(start, end, lodgment, startDate.substring(0, 10), endDate.substring(0, 10), guest,
+				 minPrice, maxPrice, selectedServiceTagsArry, starValue, order, lodgmentType);
+	     Map<String, Object> map = new HashMap<String, Object>();
+	     int totalPage = (int)Math.ceil(totalCount/(double)limit);
+	 	map.put("list", list);
+		map.put("totalPage", totalPage);
+       
+		//System.out.println("totalPage"+totalPage);
        //System.out.println(maxPrice);
-		return list;
+		return map;
 	}
 	
 	//상세페이지 방 정보 불러오기 

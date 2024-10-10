@@ -245,10 +245,18 @@ const InsertLodgment = () => {
           <div className="Q">
             <h3>찾으시는 호텔이 있으신가요?</h3>
             <p>기존에 있는 호텔로 등록하지 않으면 성급은 0으로 작성됩니다.</p>
-            <button type="button" className="btn primary" onClick={yesHotel}>
+            <button
+              type="button"
+              className="AddLodgmentBtn colorYesLg"
+              onClick={yesHotel}
+            >
               YES
             </button>
-            <button className="btn primary" onClick={noHotel}>
+            <button
+              type="button"
+              className="AddLodgmentBtn colorYesNo"
+              onClick={noHotel}
+            >
               No
             </button>
             <div
@@ -277,6 +285,7 @@ const InsertLodgment = () => {
                       setLodgmentNo={setLodgmentNo}
                       setLodgmentStar={setLodgmentStar}
                       setIsReadOnly={setIsReadOnly}
+                      setInputAddr={setInputAddr}
                       hotel={hotel}
                     />
                   );
@@ -427,7 +436,7 @@ const InsertLodgment = () => {
               />
             </div>
           </div>
-          <button type="submit" className="insertLodgmentBtn btn primary">
+          <button type="submit" className="insertLodgmentBtn">
             등록하기
           </button>
         </div>
@@ -446,12 +455,14 @@ const SearchHotelList = (props) => {
   const setLodgmentNo = props.setLodgmentNo;
   const setAddress = props.setAddress;
   const setIsReadOnly = props.setIsReadOnly;
+  const setInputAddr = props.setInputAddr;
   const inputHotelInfo = () => {
     sethotelInof(hotel);
     setAddress(hotel.xlodgmentAddr);
     setHotelName(hotel.xlodgmentName);
     setLodgmentNo(hotel.xlodgmentNo);
     setLodgmentStar(hotel.xlodgmentStarGrade);
+    setInputAddr(hotel.xlodgmentAddr);
     setLodgmentType(1);
     setIsReadOnly(true); // 기존호텔에서 검색한건 readOnly로 바꾸어줌
   };

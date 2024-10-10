@@ -498,6 +498,10 @@
 		insert into qna_comment values(QNA_COMMENT_SEQ.NEXTVAL, #{roomQnaNo}, #{comContent})
 	</insert>
 	
+	<!-- 예약정보 조회 -->
+	<select id="selectBooking" resultType="bookingInfo">
+		select * from booking where seller_no=#{loginNo}
+	</select>
 	
 	<!-- 상품 게시글 관리 -->
   <select id="getAdminLodgmentCount" resultType="int">
@@ -509,4 +513,5 @@
   <update id="updateLodgmentDelete">
 		update lodgment_storage set lodgment_delete=1 where lodgment_no in <foreach collection="array" item="lodgmentNo" open="(" close=")" separator=",">#{lodgmentNo}</foreach>
   </update>
+
 </mapper>
