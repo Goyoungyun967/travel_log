@@ -18,7 +18,7 @@ const SellerLodgmentList = () => {
   console.log("rrrrrr", lodgmentList.length);
   const isLogin = useRecoilValue(isSellerLoginState);
   const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
-  console.log(loginNo);
+  console.log("loginNo-", loginNo);
   useEffect(() => {
     axios
       .post(`${backServer}/seller/lodgmentList`, null, {

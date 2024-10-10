@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { SellerReserveList } from "./sellerUtil/RowList";
 import { useRecoilState } from "recoil";
 import { sellerLoginNoState } from "../utils/RecoilData";
+import BookingChart from "./sellerUtil/BookingChart";
 
 const ReserveList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -32,6 +33,7 @@ const ReserveList = () => {
           <>
             <h3>예약 조회</h3>
             <SellerReserveList list={reserveList} />
+            <BookingChart sellerLoginNo={loginNo} />
           </>
         ) : (
           <>

@@ -4,8 +4,11 @@ import axios from "axios";
 import UqillEditor from "../utils/UqillEditor";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useRecoilState } from "recoil";
+import { sellerLoginNoState } from "../utils/RecoilData";
 
 const InsertRoom = () => {
+  const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const params = useParams();
@@ -158,120 +161,126 @@ const InsertRoom = () => {
 
   return (
     <>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          writeRoom();
-        }}
-      >
-        <div className="room_box-wrap room_box-radius">
-          <div className="room_box">
-            <div className="hotel_info">
-              <div className="image">
-                <img
-                  src={
-                    lodgmentList.lodgmentImgPath
-                      ? `${backServer}/seller/lodgment/${lodgmentList.lodgmentImgPath}`
-                      : "/image/lodgment_default_img.png"
-                  }
-                />
-              </div>
-              <div className="lod_title">
-                <h2>{lodgmentList.lodgmentName}</h2>
-                <br />
-                <p>{lodgmentList.lodgmentAddr}</p>
-                <span>{lodgmentList.lodgmentStarGrade} 성급</span>
+      {lodgmentList.sellerNo === loginNo ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            writeRoom();
+          }}
+        >
+          <div className="room_box-wrap room_box-radius">
+            <div className="room_box">
+              <div className="hotel_info">
+                <div className="image">
+                  <img
+                    src={
+                      lodgmentList.lodgmentImgPath
+                        ? `${backServer}/seller/lodgment/${lodgmentList.lodgmentImgPath}`
+                        : "/image/lodgment_default_img.png"
+                    }
+                  />
+                </div>
+                <div className="lod_title">
+                  <h2>{lodgmentList.lodgmentName}</h2>
+                  <br />
+                  <p>{lodgmentList.lodgmentAddr}</p>
+                  <span>{lodgmentList.lodgmentStarGrade} 성급</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="room_box">
-            <h5>사진은 최대 5개만 등록 가능합니다.</h5>
-            <div className="photo_add">
-              <FileInfo roomFile={roomFile} setRoomFile={setRoomFile} />
-            </div>
-            <div className="room_info_add">
-              <div className="inroom-input-wrap">
-                <div className="input-fr-wrap">
-                  <HashTap setHashTag={setHashTag} />
-                  <div className="input-sc-wrap">
-                    <div className="input-item">
-                      <div className="input-title">
-                        <label htmlFor="roomName">객실 이름</label>
+            <div className="room_box">
+              <h5>사진은 최대 5개만 등록 가능합니다.</h5>
+              <div className="photo_add">
+                <FileInfo roomFile={roomFile} setRoomFile={setRoomFile} />
+              </div>
+              <div className="room_info_add">
+                <div className="inroom-input-wrap">
+                  <div className="input-fr-wrap">
+                    <HashTap setHashTag={setHashTag} />
+                    <div className="input-sc-wrap">
+                      <div className="input-item">
+                        <div className="input-title">
+                          <label htmlFor="roomName">객실 이름</label>
+                        </div>
+                        <div className="input room_name">
+                          <input
+                            type="text"
+                            id="roomName"
+                            value={roomName}
+                            // 여기서 숫자 검사
+                            onChange={(e) => setRoomName(e.target.value)}
+                          />
+                        </div>
                       </div>
-                      <div className="input room_name">
-                        <input
-                          type="text"
-                          id="roomName"
-                          value={roomName}
-                          // 여기서 숫자 검사
-                          onChange={(e) => setRoomName(e.target.value)}
-                        />
+                      <div className="input-item">
+                        <div className="input-title">
+                          <label htmlFor="maxCapacity">최대인원수</label>
+                        </div>
+                        <div className="input">
+                          <input
+                            type="number"
+                            id="maxCapacity"
+                            min={0}
+                            max={100}
+                            value={maxCapa === 0 ? "" : maxCapa}
+                            onChange={(e) => setMaxCapa(Number(e.target.value))}
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="input-item">
-                      <div className="input-title">
-                        <label htmlFor="maxCapacity">최대인원수</label>
+                      <div className="input-item">
+                        <div className="input-title">
+                          <label htmlFor="roomNum">상품수</label>
+                        </div>
+                        <div className="input">
+                          <input
+                            type="number"
+                            id="roomNum"
+                            min={0}
+                            max={1000}
+                            value={roomNum === 0 ? "" : roomNum}
+                            onChange={(e) => setRoomNum(Number(e.target.value))}
+                          />
+                        </div>
                       </div>
-                      <div className="input">
-                        <input
-                          type="number"
-                          id="maxCapacity"
-                          min={0}
-                          max={100}
-                          value={maxCapa === 0 ? "" : maxCapa}
-                          onChange={(e) => setMaxCapa(Number(e.target.value))}
-                        />
-                      </div>
-                    </div>
-                    <div className="input-item">
-                      <div className="input-title">
-                        <label htmlFor="roomNum">상품수</label>
-                      </div>
-                      <div className="input">
-                        <input
-                          type="number"
-                          id="roomNum"
-                          min={0}
-                          max={1000}
-                          value={roomNum === 0 ? "" : roomNum}
-                          onChange={(e) => setRoomNum(Number(e.target.value))}
-                        />
-                      </div>
-                    </div>
-                    <div className="input-item">
-                      <div className="input-title">
-                        <label htmlFor="roomPrice">상품 가격</label>
-                      </div>
-                      <div className="input room_price">
-                        <input
-                          type="number"
-                          id="roomPrice"
-                          min={0}
-                          max={10000000000}
-                          value={roomPrice === 0 ? "" : roomPrice}
-                          onChange={(e) => setRoomPrice(Number(e.target.value))}
-                        />
+                      <div className="input-item">
+                        <div className="input-title">
+                          <label htmlFor="roomPrice">상품 가격</label>
+                        </div>
+                        <div className="input room_price">
+                          <input
+                            type="number"
+                            id="roomPrice"
+                            min={0}
+                            max={10000000000}
+                            value={roomPrice === 0 ? "" : roomPrice}
+                            onChange={(e) =>
+                              setRoomPrice(Number(e.target.value))
+                            }
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="box box-notice">
-                  <h3>공지사항</h3>
-                  <div className="editor">
-                    <UqillEditor
-                      boardContent={boardContent}
-                      setBoardContent={setBoardContent}
-                    />
+                  <div className="box box-notice">
+                    <h3>공지사항</h3>
+                    <div className="editor">
+                      <UqillEditor
+                        boardContent={boardContent}
+                        setBoardContent={setBoardContent}
+                      />
+                    </div>
                   </div>
                 </div>
+                <button type="submit" className="btn primary">
+                  등록 완료
+                </button>
               </div>
-              <button type="submit" className="btn primary">
-                등록 완료
-              </button>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+      ) : (
+        "다시 로그인 해주세요"
+      )}
     </>
   );
 };
