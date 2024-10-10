@@ -11,7 +11,7 @@
   position: absolute;
   width: 40px;
   height: 40px;
-  background-color: var(--gray7);
+  background-color: rgba(192, 192, 192, 0.5);
   border-radius: 50%;
   right: 0; /* 오른쪽 끝으로 이동 */
   margin-top: 10px;

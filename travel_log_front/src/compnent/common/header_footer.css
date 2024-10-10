@@ -31,6 +31,12 @@
   --seller4: #ffbf6b;
   --seller5: #ffd6b3;
 }
+
+@font-face {
+  font-family: "PC_Regular";
+  font-weight: normal;
+  src: url("/src/fonts/PyeongChang-Regular.ttf") format("truetype");
+}
 * {
   margin: 0;
   padding: 0;

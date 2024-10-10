@@ -11,6 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import axios from "axios";
 import Swal from "sweetalert2";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import {
   lodgmentState,
   guestState,
@@ -56,6 +57,8 @@ const LodgmentList = () => {
     { serviceTagNo: "" },
     { serviceTagType: "" },
   ]);
+  // 별도의 페이지 변수 추가
+  const [currentReqPage, setCurrentReqPage] = useState(1);
   useEffect(() => {
     axios
       .get(`${BackServer}/lodgment/service`)
@@ -71,7 +74,6 @@ const LodgmentList = () => {
   //
   const searchRef = useRef(null);
 
-  const [showScrollToTopButton, setShowScrollToTopButton] = useState(false);
   //서비스 태그 선택되면 값 저장
   const handleServiceTagClick = (service) => {
     setSelectedServiceTags((prev) => {
@@ -96,14 +98,59 @@ const LodgmentList = () => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
+  //총 페이지
+  const [totalPage, setTotalPage] = useState(0);
+
   //값이 변하면 lodgment 검색
   useEffect(() => {
-    lodgmentSearchBtn();
-  }, [value, starValue, radioBtn, lodgmentType, selectedServiceTags, reqPage]);
+    if (reqPage !== totalPage) {
+      lodgmentSearchBtn();
+    }
+    setReqPage(1); // 페이지 번호 초기화
+  }, [value, starValue, radioBtn, lodgmentType, selectedServiceTags]);
 
+  //console.log(lodgmentDetailInfo); //axios 안에서는 랜더링이 돌고 값이 들어가기 때문에 확인하려면 밖에서
+  console.log("reqPage : " + reqPage);
+  console.log("totalPage : " + totalPage);
+  //리셋버튼
+  const handleReset = () => {
+    setValue([0, 500000]); // 가격 범위 초기화
+    setStarValue(0); // 호텔 성급 초기화
+    setLodgmentType(0); // 숙박 종류 초기화
+    setRadioBtn(0); // 정렬 기준 초기화
+    setSelectedServiceTags([]); // 선택된 서비스 태그 초기화
+    setReqPage(1); // 페이지 번호 초기화
+  };
+
+  //무한 스크롤 하단 내려오면 reqPage 바뀜
+  useEffect(() => {
+    const handleScroll = () => {
+      //현재브라우저창의 높이   현재 스크롤 위치   페이지 전체 높이
+      //페이지의 하단에 도달했는지 조건문
+
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        //reqPage 상태 변수 증가
+        if (Number(reqPage) != Number(totalPage)) {
+          setReqPage(Number(reqPage) + 1);
+          return;
+        }
+      }
+    };
+    //스크롤 이벤트가 발생할때마다 hendleScroll 함수 호출
+    window.addEventListener("scroll", handleScroll);
+    //이전에 등록한 이벤트 리스너 제거, 메모리 누수 방지
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [totalPage, reqPage]);
+
+  useEffect(() => {
+    if (totalPage >= reqPage) {
+      lodgmentSearchBtn();
+    }
+  }, [reqPage]);
   //숙소 검색 누르면 작동
   const lodgmentSearchBtn = () => {
-    setReqPage(1);
+    console.log("여긴 안바꾸미? " + reqPage);
+
     if (lodgment === "") {
       Swal.fire({
         icon: "info",
@@ -131,51 +178,18 @@ const LodgmentList = () => {
       .then((res) => {
         console.log(res);
         if (reqPage === 1) {
-          setLodgmentDetailInfo(res.data);
+          setLodgmentDetailInfo(res.data.list);
+          setTotalPage(res.data.totalPage);
         } else {
-          setLodgmentDetailInfo((prev) => [...prev, ...res.data]);
-        }
-
-        if (res.data.length < 10) {
-          setShowScrollToTopButton(true);
-        } else {
-          setShowScrollToTopButton(false);
+          setLodgmentDetailInfo((prev) => [...prev, ...res.data.list]);
         }
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  //console.log(lodgmentDetailInfo); axios 안에서는 랜더링이 돌고 값이 들어가기 때문에 확인하려면 밖에서
-
-  //리셋버튼
-  const handleReset = () => {
-    setValue([0, 500000]); // 가격 범위 초기화
-    setStarValue(0); // 호텔 성급 초기화
-    setLodgmentType(0); // 숙박 종류 초기화
-    setRadioBtn(0); // 정렬 기준 초기화
-    setSelectedServiceTags([]); // 선택된 서비스 태그 초기화
-    setReqPage(1); // 페이지 번호 초기화
-  };
-  useEffect(() => {
-    const handleScroll = () => {
-      //현재브라우저창의 높이   현재 스크롤 위치   페이지 전체 높이
-      //페이지의 하단에 도달했는지 조건문
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-        //reqPage 상태 변수 증가
-        setReqPage((prevPage) => prevPage + 1);
-      } else if (lodgmentDetailInfo.length < reqPage * 10) {
-        return;
-      }
-    };
-    //스크롤 이벤트가 발생할때마다 hendleScroll 함수 호출
-    window.addEventListener("scroll", handleScroll);
-    //이전에 등록한 이벤트 리스너 제거, 메모리 누수 방지
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
-    <section className="section">
+    <section className="section lodgmentlist-wrap">
       <div className="lodgment-wrap-input">
         <SearchBar
           lodgment={lodgment}
@@ -192,6 +206,11 @@ const LodgmentList = () => {
       </div>
       <div className="lodgment-search-wrap">
         <div className="etc-search-wrap">
+          <div className="lodgment-list-reset">
+            <button className="lodgment-list-reset-btn" onClick={handleReset}>
+              필터 초기화
+            </button>
+          </div>
           <div className="choose-price-wrap">
             <div className="price-text-wrap">
               <div className="lodgment-info-text">가격</div>
@@ -307,11 +326,6 @@ const LodgmentList = () => {
               </RadioGroup>
             </div>
           </div>
-          <div className="lodgment-list-reset">
-            <button className="lodgment-list-reset-btn" onClick={handleReset}>
-              필터 초기화
-            </button>
-          </div>
         </div>
         <div className="lodgment-info-wrap">
           <LogdmentInfo
@@ -319,10 +333,11 @@ const LodgmentList = () => {
             lodgmentDetailInfo={lodgmentDetailInfo}
             navigate={navigate}
             BackServer={BackServer}
-            showScrollToTopButton={showScrollToTopButton}
             startDate={startDate}
             endDate={endDate}
             guest={guest}
+            reqPage={reqPage}
+            totalPage={totalPage}
           />
         </div>
       </div>
@@ -336,10 +351,11 @@ const LogdmentInfo = (props) => {
     lodgmentDetailInfo,
     navigate,
     BackServer,
-    showScrollToTopButton,
     startDate,
     endDate,
     guest,
+    reqPage,
+    totalPage,
   } = props;
 
   return (
@@ -417,9 +433,12 @@ const LogdmentInfo = (props) => {
           )}
         </div>
       )}
-      {showScrollToTopButton && (
-        <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-          위로가기
+      {reqPage === totalPage && (
+        <button
+          className="lodgment-top-move"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
+          <ArrowUpwardIcon />
         </button>
       )}
     </div>

@@ -12,6 +12,7 @@
   margin-left: 10px;
   margin-bottom: 20px;
 }
+
 .etc-search-wrap {
   width: 20%;
 }
@@ -110,8 +111,10 @@
   background-color: var(--gray6); /* 호버 시 배경색 변화 */
 }
 .selected {
-  background-color: #1976d2; /* 선택된 색상 */
+  background-color: var(--seller2); /* 선택된 색상 */
   color: white; /* 선택된 텍스트 색상 */
+  border: none;
+  box-sizing: border-box;
 }
 
 .lodgment-type-select-btn {
@@ -140,6 +143,7 @@
   transition: background-color 0.3s ease, transform 0.3s ease;
   cursor: pointer; /* 카드에 마우스 커서 추가 */
   margin-bottom: 20px; /* 카드 간격 추가 */
+  box-sizing: border-box;
 }
 .lodgment-card-container {
   width: 100%;
@@ -219,4 +223,13 @@
 .lodgment-list-reset-btn {
   width: 100%;
   border: none;
+}
+.lodgment-list-reset-btn:hover {
+  background-color: var(--seller3);
+}
+.lodgment-top-move {
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
 }

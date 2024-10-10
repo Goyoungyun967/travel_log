@@ -158,13 +158,141 @@
 		) b
 		)
 		WHERE rnum BETWEEN #{start} AND #{end}
-	
 
+	</select>
 	
 	
 		
+	<select id="getTotalPage" resultType="int">
+	SELECT count(*)
+	FROM 
+	(
+	    SELECT DISTINCT 
+	        ls.lodgment_name, 
+	        ls.lodgment_no, 
+	        ls.lodgment_addr, 
+	        ls.lodgment_star_grade, 
+	        ls.lodgment_img_path,
+	        ls.lodgment_check_in, 
+	        ls.lodgment_check_out,
+	        ls.lodgment_type_no,
+	        (SELECT MIN(rm.room_price) 
+	            FROM room rm 
+	            JOIN lodgment_storage ls2 ON rm.lodgment_no = ls2.lodgment_no 
+	            WHERE ls2.lodgment_no = ls.lodgment_no
+	            <choose>
+					<when test="minPrice != 0 and maxPrice == 500000">
+						and rm.room_price >= #{minPrice}
+					</when>
+					<when test="minPrice ==0 and maxPrice != 500000">
+						and rm.room_price <![CDATA[<]]>= #{maxPrice}
+					</when>
+					<when test="minPrice !=0 and maxPrice != 500000">
+						and (rm.room_price between #{minPrice} and #{maxPrice})
+					</when>
+				</choose>
+	            ) AS room_price,
+	        (SELECT FLOOR(AVG(lr.rating))  
+	            FROM lodgment_review lr
+	            WHERE lr.lodgment_no = ls.lodgment_no) AS avg_rating,
+	        (SELECT MIN(rm.room_max_capacity) 
+	            FROM room rm 
+	            JOIN lodgment_storage ls2 ON rm.lodgment_no = ls2.lodgment_no 
+	            WHERE ls2.lodgment_no = ls.lodgment_no AND room_max_capacity >= 2) AS room_max_capacity
+	    FROM 
+	        lodgment_storage ls
+	    JOIN 
+	        room r ON ls.lodgment_no = r.lodgment_no
+	    LEFT JOIN
+	        booking b ON r.room_no = b.room_no AND (b.start_date <![CDATA[<]]> TO_DATE(#{endDate},'YYYY-MM-DD') AND b.end_date > TO_DATE(#{startDate},'YYYY-MM-DD'))
+	    WHERE 
+	        r.room_max_capacity > #{guest} 
+	        AND ls.lodgment_delete = 1
+	        AND r.room_qua > (SELECT COUNT(*) 
+	                          FROM booking 
+	                          WHERE (start_date <![CDATA[<]]> TO_DATE(#{endDate},'YYYY-MM-DD') AND end_date > TO_DATE(#{startDate},'YYYY-MM-DD')) AND room_no = r.room_no)
+		<if test="selectedServiceTagsArry[0] != 100">
+			AND r.room_no IN (
+			SELECT room_no
+			FROM room
+			join room_service_tag using
+			(room_no)
+			WHERE service_tag_no IN
+			<foreach item="tag" index="index"
+				collection="selectedServiceTagsArry" open="(" separator=","
+				close=")">
+				#{tag}
+			</foreach>
+			group by room_no
+			)
+		</if>
+		<if test="lodgmentType > 0">
+			and ls.lodgment_type_no =
+			<choose>
+				<when test="lodgmentType == 1">
+					1
+				</when>
+				<when test="lodgmentType == 2">
+					2
+				</when>
+				<when test="lodgmentType == 3">
+					3
+				</when>
+				<when test="lodgmentType == 4">
+					4
+				</when>
+				<when test="lodgmentType == 5">
+					5
+				</when>
+			</choose>
+		</if>
+		<if test="starValue > 0">
+			AND ls.lodgment_star_grade = #{starValue}
+		</if>
+		<choose>
+			<when test="minPrice !=0 and maxPrice == 500000">
+				AND r.room_price >= #{minPrice}
+			</when>
+			<when test="minPrice ==0 and maxPrice != 500000">
+				AND r.room_price <![CDATA[<]]>=
+				#{maxPrice}
+			</when>
+			<when test="minPrice !=0 and maxPrice != 500000">
+				AND r.room_price >= #{minPrice}
+				AND r.room_price <![CDATA[<]]>=
+				#{maxPrice}
+			</when>
+		</choose>
+				and r.room_max_capacity >= #{guest}
+				and	(ls.lodgment_name LIKE '%' || #{lodgment} || '%' OR ls.lodgment_addr
+		LIKE '%' || #{lodgment} || '%')
+		GROUP BY
+		ls.lodgment_no, ls.lodgment_name, ls.lodgment_addr,
+		ls.lodgment_star_grade,
+		ls.lodgment_img_path, ls.lodgment_check_in,
+		ls.lodgment_check_out,
+		r.room_no, r.room_name, room_price,
+		room_max_capacity, ls.lodgment_type_no
+		<if test="order > 0">
+			ORDER BY
+			<choose>
+				<when test="order == 1">
+					room_price ASC
+				</when>
+				<when test="order == 2">
+					room_price DESC
+				</when>
+				<when test="order == 3">
+					avg_rating ASC
+				</when>
+				<otherwise>
+					room_price ASC
+				</otherwise>
+			</choose>
+		</if>
+		) b
 	</select>
-
+	
 	<select id="getLodgmentInfo" resultType="lodgmentDetail">
 		select * from
 		lodgment_storage where lodgment_no=${lodgmentNo}
