@@ -59,6 +59,8 @@
 }
 .lodgment-loom-table {
   width: 100%;
+  border-collapse: separate; /* 패딩이 적용되도록 설정 */
+  border-spacing: 0 10px; /* 행 사이의 공간 */
 }
 .lodgment-loom-type-img {
   width: 100%;
@@ -75,21 +77,23 @@
   margin-bottom: 100px;
 }
 .sroom-detail-btn2 {
-  width: 100%;
+  margin-right: 25px;
+  width: 90%;
   border-radius: 15px;
   background-color: var(--gray6);
   border: none;
   cursor: not-allowed;
 }
 .room-detail-btn {
-  width: 100%;
+  margin-right: 25px;
+  width: 90%;
   border-radius: 15px;
-  background-color: var(--gray6);
+  background-color: var(--seller3);
   border: none;
   transition: background-color 0.3s;
 }
 .room-detail-btn:hover {
-  background-color: var(--main1);
+  opacity: 0.5;
 }
 
 .review-btn {

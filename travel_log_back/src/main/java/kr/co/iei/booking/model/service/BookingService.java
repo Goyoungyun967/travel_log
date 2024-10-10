@@ -35,13 +35,10 @@ public class BookingService {
 	@Transactional
 	public int insertBooking(BookingDTO bookingInfo) {
 		String memberId = memberDao.getMemberId(bookingInfo.getMemberNo());
-		BookingAvailavleDTO bookingAvailable = bookingDao.bookingAvailable(bookingInfo);
-		if(bookingAvailable.getBookingCount() >= bookingAvailable.getRoomCount()) {
-			bookingInfo.setMemberId(memberId);
-			int result = bookingDao.insertBooking(bookingInfo);
-			return bookingInfo.getBookNo();			
-		}
-		return -1;
+		bookingInfo.setMemberId(memberId);
+		int result = bookingDao.insertBooking(bookingInfo);
+		return bookingInfo.getBookNo();			
+
 	}
 
 	public BookingDTO getBookingInfo(int bookNo) {
@@ -157,5 +154,17 @@ public class BookingService {
 			}
 			System.out.println(result);
 			
+		}
+
+		public int bookingComfirm(BookingDTO updatedBookingInfo) {
+			System.out.println(updatedBookingInfo);
+			BookingAvailavleDTO bookingAvailable = bookingDao.bookingAvailable(updatedBookingInfo);
+			System.out.println(bookingAvailable.getBookingCount());
+			System.out.println(bookingAvailable.getRoomCount());
+			//1 4
+			if(bookingAvailable.getBookingCount() <= bookingAvailable.getRoomCount()) {
+				return 1;			
+			}
+			return -1;
 		}
 }

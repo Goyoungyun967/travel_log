@@ -7,6 +7,7 @@ import axios from "axios";
 import { loginNoState } from "../utils/RecoilData";
 import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
+import { guestState, startDateState, endDateState } from "../utils/RecoilData";
 
 const PaymentPage = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
@@ -14,10 +15,13 @@ const PaymentPage = () => {
   console.log(loginNo);
   const { state } = useLocation();
   const navigate = useNavigate();
-  //console.log(state);
+  console.log(state);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  const [guest] = useRecoilState(guestState);
+  const [startDate] = useRecoilState(startDateState);
+  const [endDate] = useRecoilState(endDateState);
 
   useEffect(() => {
     // 외부 스크립트 로드 함수
@@ -48,7 +52,7 @@ const PaymentPage = () => {
     guestName: "",
     guestPhone: "",
     guestRequest: "",
-    uestCount: state.guest,
+    uestCount: guest,
     startDate: state.checkIn,
     endDate: state.checkOut,
     roomNo: state.room.roomNo,
@@ -57,6 +61,7 @@ const PaymentPage = () => {
     portoneimpuid: "",
   });
   console.log("book : " + bookingInfo.memberNo);
+  console.log("room : " + bookingInfo.roomNo);
 
   //console.log(bookingInfo);
   // 투숙객 정보 입력 변환
@@ -98,15 +103,24 @@ const PaymentPage = () => {
   //checkIn, checkOut 시간 계산
   const checkInClock =
     " " +
-    state.lodgmentInfo.lodgmentCheckIn.slice(0, 2) +
+    (state.lodgmentInfo.lodgmentCheckIn
+      ? state.lodgmentInfo.lodgmentCheckIn.slice(0, 2)
+      : "00") +
     "시 " +
-    state.lodgmentInfo.lodgmentCheckIn.slice(3, 5) +
+    (state.lodgmentInfo.lodgmentCheckIn
+      ? state.lodgmentInfo.lodgmentCheckIn.slice(3, 5)
+      : "00") +
     "분";
+
   const checkOutClock =
     " " +
-    state.lodgmentInfo.lodgmentCheckOut.slice(0, 2) +
+    (state.lodgmentInfo.lodgmentCheckOut
+      ? state.lodgmentInfo.lodgmentCheckOut.slice(0, 2)
+      : "00") +
     "시 " +
-    state.lodgmentInfo.lodgmentCheckOut.slice(3, 5) +
+    (state.lodgmentInfo.lodgmentCheckOut
+      ? state.lodgmentInfo.lodgmentCheckOut.slice(3, 5)
+      : "00") +
     "분";
 
   const nights = Math.ceil(
@@ -127,6 +141,7 @@ const PaymentPage = () => {
 
   // 서버에 결제 정보를 전달
   const payBtn = async () => {
+    // 투숙객 정보가 입력되었는지 확인
     if (bookingInfo.guestName === "" || bookingInfo.guestPhone === "") {
       Swal.fire({
         title: "투수객 정보를 입력해주세요.",
@@ -137,58 +152,97 @@ const PaymentPage = () => {
       return;
     }
 
-    //window.IMP.init("imp17705812"); // 이 값은 계정 고유번호이므로 고정
-    window.IMP.request_pay(
-      {
-        //pg: "tosspayments",
-        //pg: "kakaopay.TC0ONETIME",
-        pg: "html5_inicis.INIpayTest", //테스트 시 html5_inicis.INIpayTest 기재
-        pay_method: "card",
-        merchant_uid: "order_no_" + crypto.randomUUID(), //상점에서 생성한 고유 주문번호
-        name: productName,
-        amount: totalPrice,
-        // buyer_email: "test@portone.io",
-        // buyer_name: "구매자이름",
-        // buyer_tel: "010-1234-5678", //필수 파라미터 입니다.
-        // buyer_addr: "서울특별시 강남구 삼성동",
-        // buyer_postcode: "123-456",
-      },
-      (rsp) => {
-        //console.log(rsp);
-        if (rsp.success) {
-          // 결제 성공 시 서버에 요청
-          const updatedBookingInfo = {
-            ...bookingInfo,
-            portoneimpuid: rsp.merchant_uid,
-            memberNo: loginNo,
-          };
-          //console.log(updatedBookingInfo);
-          axios
-            .post(`${BackServer}/booking`, updatedBookingInfo)
-            .then((res) => {
-              console.log(res);
-              if (res.data === -1) {
+    try {
+      // 예약 가능한 방이 있는지 확인
+      const res = await axios.post(
+        `${BackServer}/booking/comfirm`,
+        bookingInfo
+      );
+      console.log(res);
+      // 예약 가능한 방이 없을 경우
+      if (res.data === -1) {
+        Swal.fire({
+          title: "예약 가능한 방이 없습니다.",
+          text: "다시 검색해주세요.",
+          icon: "info",
+          confirmButtonText: "확인",
+        });
+        navigate(`/lodgment/lodgmentList`);
+        return;
+      }
+
+      // 결제 요청
+      window.IMP.request_pay(
+        {
+          pg: "html5_inicis.INIpayTest", // 테스트 시 html5_inicis.INIpayTest 기재
+          pay_method: "card",
+          merchant_uid: "order_no_" + crypto.randomUUID(), // 상점에서 생성한 고유 주문번호
+          name: productName,
+          amount: totalPrice,
+        },
+        async (rsp) => {
+          // 결제 성공 시 처리
+          if (rsp.success) {
+            const updatedBookingInfo = {
+              ...bookingInfo,
+              portoneimpuid: rsp.merchant_uid,
+              memberNo: loginNo,
+            };
+
+            try {
+              // 서버에 예약 정보 전달
+              const bookingRes = await axios.post(
+                `${BackServer}/booking`,
+                updatedBookingInfo
+              );
+              console.log(bookingRes);
+              // 서버 오류 처리
+              if (bookingRes.data === -1) {
                 Swal.fire({
-                  title: "예약 가능한 방이 없습니다.",
-                  text: "다시 검색해주세요.",
+                  title: "서버 오류.",
+                  text: "관리자에게 문의해주세요.",
                   icon: "info",
                   confirmButtonText: "확인",
                 });
                 navigate(`/lodgment/lodgmentList`);
-              } else if (res.data !== null) {
+              } else if (bookingRes.data !== null) {
+                // 예약 정보 페이지로 이동
                 navigate(`/lodgment/bookingInfo`, {
-                  state: { bookNo: res.data },
+                  state: { bookNo: bookingRes.data },
                 });
               }
-            })
-            .catch((error) => {
-              // 에러 발생 시 처리
+            } catch (error) {
+              console.log(error);
+              // 예약 오류 처리
+              Swal.fire({
+                title: "예약 오류.",
+                text: "관리자에게 문의해주세요.",
+                icon: "error",
+                confirmButtonText: "확인",
+              });
+            }
+          } else {
+            // 결제 실패 처리
+            console.error("Payment failed:", rsp);
+            Swal.fire({
+              title: "결제 실패",
+              text: "결제에 실패했습니다. 다시 시도해주세요.",
+              icon: "error",
+              confirmButtonText: "확인",
             });
-        } else {
-          // 에러발생시
+          }
         }
-      }
-    );
+      );
+    } catch (error) {
+      console.error("Error during payment process:", error);
+      // 예약 확인 오류 처리
+      Swal.fire({
+        title: "예약 확인 오류",
+        text: "예약 확인 중 오류가 발생했습니다. 다시 시도해주세요.",
+        icon: "error",
+        confirmButtonText: "확인",
+      });
+    }
   };
 
   return (

@@ -217,7 +217,7 @@ const LodgmentDetail = () => {
                 )}
               </td>
               <td className="member-rating" width={"50%"}>
-                평점
+                <span>평점 {lodgmentInfo.avgRating} </span>
               </td>
             </tr>
             <tr>
