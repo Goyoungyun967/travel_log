@@ -80,7 +80,7 @@ const AccompanyWrite = () => {
   const writeBoard = () => {
     let isValid = true; // 유효성 검사를 위한 플래그
 
-    const titleRegex = /^.{1,20}$/; // 제목: 1~20글자
+    const titleRegex = /^.{1,15}$/; // 제목: 1~20글자
     const contentRegex = /^.{1,1000}$/; // 내용: 1~1000글자
 
     // 제목 유효성 검사

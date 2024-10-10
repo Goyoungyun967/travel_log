@@ -194,6 +194,7 @@ const BoardItem = (props) => {
   const isLogin = props.isLogin;
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
+  console.log(board);
 
   const now = new Date();
   console.log(now);
@@ -215,7 +216,7 @@ const BoardItem = (props) => {
   else if (hours > 0) timeString = `${hours}시간 전`;
   else if (minutes > 0) timeString = `${minutes}분 전`;
   else timeString = `방금전`;
-  console.log(isLogin);
+  console.log(board.boardThumb);
 
   return (
     <>

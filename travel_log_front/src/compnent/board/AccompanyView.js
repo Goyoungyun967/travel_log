@@ -13,6 +13,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack"; //뒤로가기 모양
 import dayjs from "dayjs";
 import AccompanyComment from "./AccompanyComment";
 import ReportModal from "./ReportModal";
+import Swal from "sweetalert2";
 
 const AccompanyView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -45,17 +46,35 @@ const AccompanyView = () => {
   }, []);
 
   const deleteBoard = () => {
-    axios
-      .delete(`${backServer}/board/delete/${boardNo}`)
-      .then((res) => {
-        console.log(res);
-        if (res.data === 1) {
-          navigate("/board/list");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    Swal.fire({
+      title: "삭제하시겠습니까?",
+      text: "삭제는 확인 버튼을 클릭하세요.",
+      icon: "warning",
+      showCancelButton: true, // 취소 버튼 표시
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // 사용자가 확인 버튼을 클릭했을 때 삭제 요청
+        axios
+          .delete(`${backServer}/board/delete/${boardNo}`)
+          .then((res) => {
+            console.log(res);
+            if (res.data === 1) {
+              Swal.fire("삭제되었습니다!", "", "success");
+              navigate("/board/AccompanyList"); // 삭제 후 페이지 이동
+            } else {
+              Swal.fire("삭제 실패!", "다시 시도해주세요.", "error");
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            Swal.fire("삭제 중 오류 발생!", "문제를 해결해주세요.", "error");
+          });
+      } else {
+        Swal.fire("삭제가 취소되었습니다.", "", "info"); // 삭제 취소 알림
+      }
+    });
   };
   console.log(accompany);
   // accompanyContent가 쉼표로 분리된 배열로 변환
@@ -154,35 +173,45 @@ const AccompanyView = () => {
               </Carousel>
             </div>
           </div>
-
           <div
             className="board-view-text-wrap"
             dangerouslySetInnerHTML={{ __html: accompany.boardContent }}
           />
-          <div className="accompany-day-wrap">
-            <div className="accompany-day">
-              <span>동행 기간 : </span>
-              <span>
-                {accompany.startDay
-                  ? dayjs(accompany.startDay).format("YYYY-MM-DD")
-                  : ""}
-                부터~
-                {accompany.endDay
-                  ? dayjs(accompany.endDay).format("YYYY-MM-DD")
-                  : ""}
-                까지 총 {accompany.accompanyDate}일
-              </span>
-            </div>
-          </div>
-          <div className="accompany-date-wrap">
-            <div className="accompany-date-list">
-              {accompanyContents &&
-                accompanyContents.map((item) => (
-                  <div key={item.day}>
-                    <strong>{item.day}일: </strong>
-                    {item.description}
+          <div className="board-view-date-wrap">
+            <div className="accompany-day-wrap">
+              <div className="accompany-day">
+                <span>동행 기간 : </span>
+                <span>
+                  {accompany.startDay
+                    ? dayjs(accompany.startDay).format("YYYY-MM-DD")
+                    : ""}
+                  ~
+                  {accompany.endDay
+                    ? dayjs(accompany.endDay).format("YYYY-MM-DD")
+                    : ""}
+                  {"  "}총 {accompany.accompanyDate}일
+                </span>
+              </div>
+              <div className="accompany-type-wrap">
+                {accompany.accompanyTypeTags.map((tag) => (
+                  <div key={tag.accompanyTagNo} className="accompany-type-item">
+                    {tag.accompanyType}
                   </div>
                 ))}
+              </div>
+            </div>
+            <div className="accompany-date-wrap">
+              <div className="accompany-date-list">
+                {accompanyContents &&
+                  accompanyContents.map((item) => (
+                    <div
+                      key={item.day}
+                      className="accompany-content-text-border"
+                    >
+                      <strong>{item.day}일차 : </strong> {item.description}
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
         </div>
