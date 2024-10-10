@@ -210,7 +210,7 @@ a {
 .main-search-bar {
   width: 850px;
   position: absolute;
-  top: 45%;
+  top: 51%;
   left: 50%;
   z-index: 2 !important;
   transform: translate(-50%, -50%);
