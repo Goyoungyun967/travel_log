@@ -9,6 +9,7 @@ import {
   isLoginState,
   loginNicknameState,
   memberLevelState,
+  sellerLoginNoState,
 } from "../utils/RecoilData";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward"; //화살표
 import img1 from "./main/img1.jpg";
@@ -27,6 +28,7 @@ import {
 } from "../utils/RecoilData";
 import SellerLodgmentList from "../seller/SellerLodgmentList";
 import StmSeller from "../seller/StmSeller";
+import BookingChart from "../seller/sellerUtil/BookingChart";
 
 const Main = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -68,6 +70,9 @@ const Main = () => {
 
   // 멤버 레벨
   const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
+  const [sellerLoginNo, setSellerLoginNo] = useRecoilState(sellerLoginNoState); // sellerNO 가져오기
+
+  console.log("sellerLoginNo - ", sellerLoginNo);
   console.log(memberLevel);
   //일반게시판 가져오기
   useEffect(() => {
@@ -161,6 +166,11 @@ const Main = () => {
               endDay={endDay}
               onClick={lodgementSearchBtn}
             />
+          </div>
+          <div className="main-chart-zone">
+            {sellerLoginNo !== -1 && (
+              <BookingChart sellerLoginNo={sellerLoginNo} />
+            )}
           </div>
           {/*게시판 출력 */}
           <div

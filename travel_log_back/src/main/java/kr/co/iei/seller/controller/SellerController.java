@@ -359,8 +359,9 @@ public class SellerController {
 	
 	// 차트 추가 (예약 현황)
 	@Operation(summary = "예약 조회", description = "예약 현황")
-	@GetMapping(value="/bookingInfo")
-	public ResponseEntity<BookingInfoDTO> selectBooking(@RequestParam int loginNo){
+	@GetMapping(value="/bookingInfo/{loginNo}")
+	public ResponseEntity<BookingInfoDTO> selectBooking(@PathVariable int loginNo){
+		System.out.println(loginNo);
 		BookingInfoDTO booking = sellerService.selectBooking(loginNo);
 		return ResponseEntity.ok(booking);
 	}
