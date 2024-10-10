@@ -67,7 +67,6 @@ public class SellerController {
 	@Operation(summary="기존 호텔 검색", description="호텔 등록시 호텔 이름이나 주소를 입력하면 기존에 저장되어있는 호텔 정보 select (호텔 번호, 이름, 주소, 등급)")
 	@GetMapping(value="/xlsxLodgment/{searchInput}") // 판매자가 
 	public ResponseEntity<List> selectXlsxHotelInfo(@PathVariable String searchInput){
-		System.out.println(searchInput);
 		List list = sellerService.selectXlsxHotelInfo(searchInput);
 		return ResponseEntity.ok(list);
 	}
@@ -76,7 +75,6 @@ public class SellerController {
 	@Operation(summary = "호텔 등록", description = "호텔 등록()")
 	@PostMapping
 	public ResponseEntity<Integer> insertLodgment(@ModelAttribute LodgmentStorageDTO ls, @ModelAttribute MultipartFile lodgmentImg){
-		System.out.println(ls);
 		 if (lodgmentImg != null) {
 		        // 이미지 처리 로직
 		        String savepath = root + "/seller/lodgment/";
@@ -98,8 +96,6 @@ public class SellerController {
 	@Operation(summary = "호텔 수정", description = "호텔 번호 받아서 수정")
 	@PatchMapping(value="/updateLodgment")
 	public ResponseEntity<Integer> updateLodgment(@ModelAttribute LodgmentStorageDTO ls, @ModelAttribute MultipartFile lodgmentImg){
-		System.out.println("ls : "+ls);
-		System.out.println("lodgmentImg : "+lodgmentImg);
 		if(lodgmentImg != null){
             // 업로드 위치임
             String savepath = root+"/seller/lodgment/";
@@ -150,8 +146,6 @@ public class SellerController {
 //	// 객실 등록
 	@PostMapping(value="/insertRoom")
 	public ResponseEntity<Boolean> insertRoom(@ModelAttribute RoomDTO room, @ModelAttribute MultipartFile[] roomFile){
-		System.out.println(room);
-		System.out.println(roomFile);
 		List<RoomFileDTO> roomFileList = new ArrayList<RoomFileDTO>();
 		if(roomFile != null) {
 			String savepath = root+"/seller/room/";
@@ -164,7 +158,6 @@ public class SellerController {
 			}
 		}
 		int result = sellerService.insertRoom(room, roomFileList);
-		System.out.println(result);
 		return ResponseEntity.ok(result!=0+roomFileList.size());
 	}
 	
@@ -186,7 +179,6 @@ public class SellerController {
             }
         }
         List<RoomFileDTO> delFileList = sellerService.updateRoom(room, roomFileList);
-        System.out.println(delFileList);
         if(delFileList != null){
             String savepath = root+"/seller/room/";
             for(RoomFileDTO deleteFile : delFileList){
@@ -232,7 +224,6 @@ public class SellerController {
 	//seller-join 형묵
 	@PostMapping(value="/sellerJoin")
 	public ResponseEntity<Integer> sellerjoin(@RequestBody SellerDTO seller){
-		 System.out.println("수신된 seller 데이터: " + seller);  // 로그 확인
 		int result = sellerService.insertSeller(seller);
 		if(result > 0) {
 			return ResponseEntity.ok(result);
@@ -284,7 +275,6 @@ public class SellerController {
 	@Operation(summary="판매자 예약 리스트", description="판매자 예약 리스트 판매자 번호 받아서 조회")
 	@PostMapping(value="/reserveList")
 	public ResponseEntity<List> searchBookList(@RequestParam int loginNo){
-		System.out.println(loginNo);
 		List list = sellerService.selectReserveList(loginNo);
 		return ResponseEntity.ok(list);
 	}
@@ -293,7 +283,6 @@ public class SellerController {
 	@Operation(summary = "예약 상세", description = "예약 정보 출력(호텔 이름 + 객실 이름 + 예약 정보")
 	@GetMapping(value="/reserve/{bookNo}")
 	public ResponseEntity<BookingInfoDTO> bookInfo(@PathVariable int bookNo){
-		System.out.println("gg");
 		BookingInfoDTO bid = sellerService.bookInfo(bookNo);
 		return ResponseEntity.ok(bid);
 	}
@@ -302,7 +291,6 @@ public class SellerController {
 	@Operation(summary = "호텔 삭제", description = "호텔 삭제(완전 삭제가 아니라 1에서 0으로 update)")
 	@PatchMapping(value="/delLodgment")
 	public ResponseEntity<Integer> delUpLodgment(@RequestParam int lodgmentNo){
-		System.out.println(lodgmentNo);
 		int result = sellerService.delUpLodgment(lodgmentNo);
 		return ResponseEntity.ok(result);
 	}
@@ -311,7 +299,6 @@ public class SellerController {
 	@Operation(summary = "객실 삭제", description = "객실 삭제(완전 삭제가 아니라 1에서 0으로 update)")
 	@PatchMapping(value="/delRoom")
 	public ResponseEntity<Integer> delUpRoom(@RequestParam int roomNo){
-		System.out.println(roomNo);
 		int result = sellerService.delUpRoom(roomNo);
 		return ResponseEntity.ok(result);
 	}
@@ -320,7 +307,6 @@ public class SellerController {
 	@Operation(summary = "호텔 리뷰 댓글", description = "리뷰 댓글 update랑 reviewNo 가져와서 씀")
 	@PatchMapping(value="/addComment")
 	public ResponseEntity<Integer> addComment(LodgmentReviewDTO ld){
-		System.out.println(ld);
 		int result = sellerService.updateComment(ld);
 		return ResponseEntity.ok(result);
 	}
@@ -362,7 +348,6 @@ public class SellerController {
 	@Operation(summary = "예약 조회", description = "예약 현황")
 	@GetMapping(value="/bookingInfo/{loginNo}")
 	public ResponseEntity<List> selectBooking(@PathVariable int loginNo){
-		System.out.println(loginNo);
 		List booking = sellerService.selectBooking(loginNo);
 		return ResponseEntity.ok(booking);
 	}

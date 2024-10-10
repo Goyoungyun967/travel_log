@@ -11,9 +11,7 @@ const SearchDate = (props) => {
           <DatePicker
             selected={startDate}
             onChange={(date) => {
-              console.log(1);
               setStartDate(date);
-              console.log(date);
             }}
             selectedStart
             startDate={startDate}

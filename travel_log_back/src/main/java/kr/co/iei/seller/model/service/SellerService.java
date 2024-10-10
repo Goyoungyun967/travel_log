@@ -143,7 +143,6 @@ public class SellerService {
 		List<RoomQnaDTO> qna = sellerLodgmentDao.selectQna(lodgmentNo, piQ.getStart(), piQ.getEnd(),align);
 		
 		
-		System.out.println(qna);
 
 		map.put("lodgment", ls); // 호텔 정보
 		
@@ -151,8 +150,6 @@ public class SellerService {
 		
 		map.put("review", review); // 리뷰 정보
 		map.put("pi", pi); // 리뷰 페이징
-		System.out.println("review - "+review);
-		System.out.println("pi - "+pi);
 		
 		map.put("qna", qna); // 문의 정보
 		map.put("piQ", piQ); // 문의 페이징
@@ -182,7 +179,6 @@ public class SellerService {
 	@Transactional
 	public int insertRoom(RoomDTO room, List<RoomFileDTO> roomFileList) {
 		int result = sellerLodgmentDao.insertRoom(room);
-		System.out.println(room);
 		for (RoomFileDTO roomFile : roomFileList) {
 			roomFile.setRoomNo(room.getRoomNo());
 			result += sellerLodgmentDao.insertRoomFile(roomFile);
@@ -233,11 +229,8 @@ public class SellerService {
             for(RoomFileDTO roomFile : roomFileList){
                 result += sellerLodgmentDao.insertRoomFile(roomFile);
             }
-            System.out.println("3 : "+room.getDelRoomFileNo());
             //삭제한 파일이 없으면 1 + boardFileList.size 만 한거고 삭제한 파일이 있으면 그 삭제한 파일의 길이까지 같이 더한 거임
             int updateTotal = room.getDelRoomFileNo() == null ? 1 + roomFileList.size() : 1 + roomFileList.size() + room.getDelRoomFileNo().length;
-            System.out.println(result);
-            System.out.println(updateTotal);
             if(result == updateTotal){
                 return delFileList;
             }
@@ -287,7 +280,6 @@ public class SellerService {
 	// 형묵 seller-login 완
 	public LoginSellerDTO login(SellerDTO seller) {
 		SellerDTO s = sellerDao.selectLoginSeller(seller.getBusinessNo());
-		System.out.println(s);
 		if (s != null && encoder.matches(seller.getSellerPw(), s.getSellerPw())) {
 			String accessToken = sellerJwtUtils.createAccessToken(s.getSellerNo());
 			String refreshToken = sellerJwtUtils.createRefreshToken(s.getSellerNo());
@@ -335,7 +327,6 @@ public class SellerService {
 //	}
 	public List selectReserveList(int loginNo) {
 		List list = sellerLodgmentDao.selectReserve(loginNo);
-		System.out.println("list" + list);
 		return list;
 	}
 
@@ -350,8 +341,6 @@ public class SellerService {
 	public int delUpLodgment(int lodgmentNo) {
 		// 지우려는 호텔의 객실까지 모두 0으로 전환 update
 		int result = sellerLodgmentDao.delUpLodgmentRoom(lodgmentNo);
-		System.out.println(lodgmentNo);
-		System.out.println(result);
 		if (result > 0) {
 			result += sellerLodgmentDao.delUpLodgment(lodgmentNo);
 			return result;

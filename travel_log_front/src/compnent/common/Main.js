@@ -68,7 +68,6 @@ const Main = () => {
 
   // 멤버 레벨
   const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
-  console.log(memberLevel);
   //일반게시판 가져오기
   useEffect(() => {
     axios

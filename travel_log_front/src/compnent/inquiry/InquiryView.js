@@ -11,6 +11,7 @@ const InquiryView = () => {
   const inquiryNo = useParams().inquiryNo;
   const [inquiry, setInquiry] = useState(null);
   const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
+  const [state, setState] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     axios
@@ -23,7 +24,7 @@ const InquiryView = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [state]);
   const [inquiryReplyContent, setInquiryReplyContent] = useState("");
   const fileDown = (file) => {
     axios
@@ -47,25 +48,32 @@ const InquiryView = () => {
       });
   };
   const writeInquiryReply = () => {
-    axios
-      .post(`${backServer}/inquiry/inquiryReply`, {
-        inquiryNo: inquiry.inquiryNo,
-        inquiryReplyContent,
-      })
-      .then((res) => {
-        if (res.data > 0) {
-          Swal.fire({
-            title: "문의 답변 완료",
-            text: "답변이 완료 되었습니다.",
-            icon: "success",
-          }).then(() => {
-            navigate(`/admin/inquiryView/${inquiry.inquiryNo}`);
-          });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
+    if (inquiryReplyContent !== "") {
+      axios
+        .post(`${backServer}/inquiry/inquiryReply`, {
+          inquiryNo: inquiry.inquiryNo,
+          inquiryReplyContent,
+        })
+        .then((res) => {
+          if (res.data > 0) {
+            Swal.fire({
+              title: "문의 답변 완료",
+              text: "답변이 완료 되었습니다.",
+              icon: "success",
+            });
+            setState(!state);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      Swal.fire({
+        title: "작성 불가",
+        text: "내용을 입력하세요",
+        icon: "info",
       });
+    }
   };
   return inquiry ? (
     <div className="inquiry-view-wrap">
@@ -143,7 +151,7 @@ const InquiryView = () => {
               width={"100%"}
             />
           ) : (
-            "답변 없다"
+            ""
           )}
           {inquiry.inquiryReply ? (
             ""

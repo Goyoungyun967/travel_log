@@ -23,7 +23,6 @@ const RoomView = () => {
   const lodgmentNo = params.lodgmentNo;
   const roomNo = params.roomNo;
   const [lodgmentInfo, setlodgmentInfo] = useState({}); // 호텔 정보
-  console.log("ddsfasdfa", lodgmentInfo);
   const [roomInfo, setRoomInfo] = useState({}); // 객실 정보 + 파일 + 해시태그
   const [roomFile, setRoomFile] = useState([]); // 객실 이미지
   const [serviceTag, setServiceTag] = useState([]);
@@ -36,12 +35,10 @@ const RoomView = () => {
   };
 
   // 객실 상세
-  console.log(roomInfo);
   useEffect(() => {
     axios
       .get(`${backServer}/seller/roomView/${lodgmentNo}/${roomNo}`)
       .then((res) => {
-        console.log("r", res);
         setlodgmentInfo(res.data.lodgment);
         // 객실 삭제하고 뒤로가기를 누르면 객실 정보가 null값이 되어서 오류가 뜸
         // 객실 정보가 null값이면 호텔 상세로 이동하게 함
@@ -53,9 +50,7 @@ const RoomView = () => {
           navigate(`/seller/lodgmentView/${lodgmentNo}`);
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
   // 객실 삭제
@@ -74,21 +69,18 @@ const RoomView = () => {
             params: { roomNo: roomNo },
           })
           .then((res) => {
-            console.log(res);
             if (res.data !== 0) {
               navigate(`/seller/lodgmentView/${lodgmentNo}`);
             }
           })
-          .catch((err) => {
-            console.error(err);
-          });
+          .catch((err) => {});
       }
     });
   };
 
   return (
     <>
-      {lodgmentInfo.sellerNo === loginNo || memberLevel === 1 ? (
+      {lodgmentInfo.sellerNo === loginNo ? (
         <div className="seller-room-wrap">
           <h3>객실 정보</h3>
           <div className="hotel-info">
@@ -185,7 +177,6 @@ const RoomView = () => {
 
 const ServiceTags = (props) => {
   const serviceTag = props.serviceTag;
-  console.log(serviceTag);
   return (
     <div className="service-tags">
       {serviceTag.map((tag, index) => (

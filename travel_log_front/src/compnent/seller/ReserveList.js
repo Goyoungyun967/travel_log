@@ -11,7 +11,6 @@ import BookingChart from "./sellerUtil/BookingChart";
 const ReserveList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [reserveList, setReserveList] = useState([]);
-  console.log(reserveList.length);
   const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState); // 리코일에서 판매자 번호 줍줍
   useEffect(() => {
     axios
@@ -19,12 +18,9 @@ const ReserveList = () => {
         params: { loginNo: loginNo },
       })
       .then((res) => {
-        console.log(res);
         setReserveList(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [loginNo]);
   return (
     <>
