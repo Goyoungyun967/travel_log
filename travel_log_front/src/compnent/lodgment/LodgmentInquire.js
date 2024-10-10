@@ -151,6 +151,14 @@ const LodgmentInquire = (pros) => {
                         : "비공개 글입니다."
                       : inquire.qnaContent}
                   </p>
+                  {inquire.list &&
+                    inquire.list.map((inquire, i) => {
+                      return (
+                        <p key={`inquire${i}`}>
+                          ㄴ판매자 : {inquire.comContent}
+                        </p>
+                      );
+                    })}
                 </div>
                 <div>
                   {inquire.memberNo === loginNo && (

@@ -57,8 +57,6 @@ const LodgmentList = () => {
     { serviceTagNo: "" },
     { serviceTagType: "" },
   ]);
-  // 별도의 페이지 변수 추가
-  const [currentReqPage, setCurrentReqPage] = useState(1);
   useEffect(() => {
     axios
       .get(`${BackServer}/lodgment/service`)
@@ -143,7 +141,7 @@ const LodgmentList = () => {
   }, [totalPage, reqPage]);
 
   useEffect(() => {
-    if (totalPage >= reqPage) {
+    if (totalPage != reqPage) {
       lodgmentSearchBtn();
     }
   }, [reqPage]);
@@ -158,6 +156,9 @@ const LodgmentList = () => {
         confirmButtonText: "확인",
       });
       return;
+    }
+    if (totalPage === reqPage) {
+      //setReqPage(1);
     }
     axios
       .get(`${BackServer}/lodgment/searchLodgment`, {
@@ -179,7 +180,7 @@ const LodgmentList = () => {
         console.log(res);
         if (reqPage === 1) {
           setLodgmentDetailInfo(res.data.list);
-          setTotalPage(res.data.totalPage);
+          setTotalPage(res.data.totalPage + 1);
         } else {
           setLodgmentDetailInfo((prev) => [...prev, ...res.data.list]);
         }

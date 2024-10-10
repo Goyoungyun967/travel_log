@@ -225,7 +225,7 @@ const ReviewUpdate = () => {
       </div>
       <div className="lodgment-review-btn-wrap">
         <button className="lodgment-review-write-btn" onClick={insertReview}>
-          리뷰작성
+          리뷰수정
         </button>
       </div>
     </div>

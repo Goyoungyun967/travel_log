@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.type.Alias;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import kr.co.iei.seller.model.dto.QnaComment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,4 +30,6 @@ public class LodgmentMemberInquireDTO {
 	private String qnaDate;
 	@Schema(description = "댓글 단 멤버 아이디",type="String")
 	private String memberId;
+	@Schema(description = "판매자 대댓글",type="qnaComment")
+	private List<QnaComment> list ;
 }

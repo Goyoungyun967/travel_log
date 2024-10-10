@@ -42,7 +42,7 @@ const LodgmentReviewWirte = () => {
 
     const totalFiles = reviewImg.length + files.length;
     //이미지는 5개까지 저장 가능
-    if (totalFiles > 6) {
+    if (totalFiles > 5) {
       Swal.fire({
         text: "이미지는 5개까지 등록 가능합니다.",
       });
