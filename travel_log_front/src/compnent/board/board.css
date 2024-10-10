@@ -304,6 +304,7 @@ props/*글자 사이즈*/
   transition: background-color 0.3s, transform 0.2s;
 }
 .board-write {
+  text-decoration: none; /* 밑줄 제거 */
   cursor: pointer;
   height: 50px;
   background-color: #a111a0;
@@ -392,6 +393,7 @@ props/*글자 사이즈*/
   font-size: 16px; /* 글자 크기 */
   cursor: pointer; /* 포인터 커서 */
   transition: all 0.3s; /* 배경색 전환 효과 */
+  text-decoration: none;
 }
 
 .boardWrite-btn:hover {
