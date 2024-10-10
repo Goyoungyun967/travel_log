@@ -26,7 +26,6 @@ public interface MemberDao {
 
 	MemberDTO selectOneUser(int memberNo);
 
-
 	int updateMember(MemberDTO member);
 
 	int changePw(MemberDTO member);
@@ -50,6 +49,8 @@ public interface MemberDao {
 	int insertMemberReport(MemberDTO member);
 
 	int updateMemberLevel(MemberDTO member);
+
+	int checkNickname(String memberNickname);
 
 
 }

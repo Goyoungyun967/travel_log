@@ -4,6 +4,7 @@ import { useRecoilState } from "recoil";
 import { isLoginState, loginNoState } from "../utils/RecoilData";
 import { useNavigate } from "react-router-dom";
 import PageNavi from "../utils/PageNavi";
+import MemberPageNavi from "./MemberPageNavi";
 
 const MyReservation = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -44,8 +45,8 @@ const MyReservation = () => {
           })}
         </tbody>
       </table>
-      <div className="board-paging-wrap">
-        <PageNavi pi={pi} reqPage={reqPage} setReqPage={setReqPage} />
+      <div className="mk-paging-wrap">
+        <MemberPageNavi pi={pi} reqPage={reqPage} setReqPage={setReqPage} />
       </div>
     </div>
   );

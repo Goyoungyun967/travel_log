@@ -41,6 +41,7 @@ const MemberJoin = () => {
   const [verificationCode, setVerificationCode] = useState(""); // 입력한 인증 코드
   const [sentCode, setSentCode] = useState(""); // 발송된 인증 코드
   const [isVerificationCompleted, setIsVerificationCompleted] = useState(false); // 이메일 성공상태
+  const [nicknameCheck, setNicknameCheck] = useState(0); // 0: 입력 안 함, 1: 사용 가능, 2: 사용 불가
 
   const checkId = () => {
     //아이디 유효성 검사
@@ -110,6 +111,14 @@ const MemberJoin = () => {
       return;
     }
     if (idCheck === 1 && pwMessage.current.classList.contains("valid")) {
+      if (nicknameCheck !== 1) {
+        Swal.fire({
+          title: "누락된 정보가 있습니다.",
+          icon: "warning",
+          text: "아이디, 비밀번호, 닉네임의 상태를 확인해주세요.",
+        });
+        return;
+      }
       member.memberEmail = member.memberEmailId + "@" + member.memberEmail;
       const fullAddress = member.memberAddr + " " + member.memberAddrDetail;
       member.memberAddr = fullAddress;
@@ -195,6 +204,27 @@ const MemberJoin = () => {
     return () => clearInterval(timerId);
   }, [timer, isTimerExpired]);
 
+  const checkNickname = () => {
+    const nicknameReg = /^[가-힣a-zA-Z0-9]{2,10}$/;
+    if (!nicknameReg.test(member.memberNickname)) {
+      setNicknameCheck(2); // 유효성 검사 실패
+    } else {
+      axios
+        .get(
+          `${backServer}/member/memberNickname/${member.memberNickname}/check-nickname`
+        )
+        .then((res) => {
+          if (res.data === 1) {
+            setNicknameCheck(2); // 중복
+          } else if (res.data === 0) {
+            setNicknameCheck(1); // 사용 가능
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
   return (
     <section className="join-content">
       <div className="member-join">일반회원가입</div>
@@ -264,9 +294,25 @@ const MemberJoin = () => {
           id="memberNickname"
           value={member.memberNickname}
           onChange={changeMember}
+          onBlur={checkNickname} // 포커스 아웃 시 닉네임 체크
         ></input>
       </div>
-
+      <p
+        className={
+          "nicknameCheck-msg" +
+          (nicknameCheck === 0
+            ? ""
+            : nicknameCheck === 1
+            ? " valid"
+            : " invalid")
+        }
+      >
+        {nicknameCheck === 0
+          ? ""
+          : nicknameCheck === 1
+          ? "사용 가능한 닉네임입니다."
+          : "이미 사용 중인 닉네임입니다."}
+      </p>
       <div className="join-wrap">
         <label htmlFor="memberGender">성별</label>
 

@@ -12,4 +12,5 @@ public class LoginSellerDTO {
 	private String refreshToken;
 	private int sellerNo;
 	private String businessName;
+	private int sellerApp;
 }

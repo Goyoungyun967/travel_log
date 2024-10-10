@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import PageNavi from "../utils/PageNavi";
 import { useNavigate } from "react-router-dom";
+import MemberPageNavi from "./MemberPageNavi";
 
 const MyComment = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -44,7 +45,9 @@ const MyComment = () => {
           })}
         </tbody>
       </table>
-      <PageNavi pi={pi} reqPage={reqPage} setReqPage={setReqPage} />
+      <div className="mk-paging-wrap">
+        <MemberPageNavi pi={pi} reqPage={reqPage} setReqPage={setReqPage} />
+      </div>
     </div>
   );
 };

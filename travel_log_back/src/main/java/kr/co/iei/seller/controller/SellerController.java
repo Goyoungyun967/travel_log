@@ -115,9 +115,9 @@ public class SellerController {
 	// public ResponseEntity<판매자DTO> selectOneSeller(@RequestHeader("Authorization") String token){ => 토큰 사용해서 조회
 //	@Operation(summary = "판매자 정보 조회", description = "판매자 정보 출력")
 	@GetMapping
-	public ResponseEntity<MemberDTO> selectOneSeller(@RequestBody int sellerNo){
-		MemberDTO member = sellerService.selectOneSeller(sellerNo);
-		return ResponseEntity.ok(member); // 판매자 DTO가 없으므로 일단 멤버로 대체
+	public ResponseEntity<SellerDTO> selectOneSeller(@RequestBody int sellerNo){
+		SellerDTO seller = sellerService.selectOneSeller(sellerNo);
+		return ResponseEntity.ok(seller); // 판매자 DTO가 없으므로 일단 멤버로 대체
 	}
 	
 	// 호텔 상세
@@ -251,6 +251,7 @@ public class SellerController {
 	@PostMapping(value="/login")
 	public ResponseEntity<LoginSellerDTO> login(@RequestBody SellerDTO seller){
 		LoginSellerDTO loginSeller = sellerService.login(seller);
+		
 		if(loginSeller != null) {
 			return ResponseEntity.ok(loginSeller);
 		}else {

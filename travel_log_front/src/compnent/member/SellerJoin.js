@@ -144,9 +144,9 @@ const SellerJoin = () => {
           navigate("/login");
 
           Swal.fire({
-            title: "회원가입을 축하합니다 ! ",
-            icon: "success",
-            text: "어세오세요!",
+            title: " 가입 대기 ",
+            icon: "warning",
+            text: "검토 후 가입승인 하겠습니다 !",
           });
         })
         .catch((err) => {

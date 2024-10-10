@@ -12,9 +12,9 @@
 		insert into seller values(seller_seq.nextval,#{businessNo},#{representativeName},#{sellerPhone},#{bankName},#{accountNumber},sysdate,0,#{sellerPw},#{businessName})
     </insert>
     
-    <!-- 형묵 seller 사실뭐하는건진 잘 모름 일단함-->
+    <!-- 형묵 seller 로그인같음-->
     <select id="selectLoginSeller" resultType="seller">
-    	select seller_no,seller_pw,business_name from seller where business_no=#{businessNo}
+    	select seller_no,seller_pw,business_name,seller_app from seller where business_no=#{businessNo}
     </select>
 
     <!-- 형묵 seller refresh하는부분 -->

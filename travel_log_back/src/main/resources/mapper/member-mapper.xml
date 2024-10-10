@@ -102,6 +102,9 @@
 	</insert>
 	<update id="updateMemberLevel">
 		update member set member_level=#{memberLevel} where member_no=#{memberNo}
-
 	</update>
+	
+	<select id="checkNickname" resultType="int">
+		select count(*) from member where member_nickname=#{memberNickname}
+	</select>
 </mapper>

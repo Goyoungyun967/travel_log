@@ -221,6 +221,12 @@ public class MemberContorller {
 		return ResponseEntity.ok(result);
 	}
 	
+	@GetMapping(value="/memberNickname/{memberNickname}/check-nickname")
+	public ResponseEntity<Integer> checkNickname(@PathVariable String memberNickname){
+		int result = memberService.checkNickname(memberNickname);
+		
+		return ResponseEntity.ok(result);
+	}
 }
 	
 	

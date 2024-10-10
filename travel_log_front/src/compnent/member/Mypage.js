@@ -136,8 +136,9 @@ const Mypage = () => {
           <Link to="myComment" className="my-comment-zone">
             나의 문의글
           </Link>
-          <Link to="DeleteMember" className="my-delete-zone">
-            로고
+          <Link to="/" className="my-delete-zone">
+            <img className="my-page-logo" src="/image/logo.png" alt="로고" />{" "}
+            {/* public/image/logo.png 경로 */}
           </Link>
         </div>
       </div>

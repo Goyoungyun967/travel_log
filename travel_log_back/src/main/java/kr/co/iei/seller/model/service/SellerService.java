@@ -94,7 +94,7 @@ public class SellerService {
 	}
 
 	// 판매자 정보 조회
-	public MemberDTO selectOneSeller(int sellerNo) {
+	public SellerDTO selectOneSeller(int sellerNo) {
 		// SellerDTO로 바꿔야함
 		return null;
 	}
@@ -296,6 +296,7 @@ public class SellerService {
 			loginSeller.setRefreshToken(refreshToken);
 			loginSeller.setSellerNo(s.getSellerNo());
 			loginSeller.setBusinessName(s.getBusinessName());
+			loginSeller.setSellerApp(s.getSellerApp());
 			return loginSeller;
 		}
 		return null;

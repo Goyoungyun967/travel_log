@@ -203,4 +203,9 @@ public class MemberService {
 		int result = memberDao.searchPw(member);
 		return result;
 	}
+
+	public int checkNickname(String memberNickname) {
+		int result = memberDao.checkNickname(memberNickname);
+		return result;
+	}
 }
