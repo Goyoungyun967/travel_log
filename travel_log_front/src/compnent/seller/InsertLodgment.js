@@ -285,6 +285,7 @@ const InsertLodgment = () => {
                       setLodgmentNo={setLodgmentNo}
                       setLodgmentStar={setLodgmentStar}
                       setIsReadOnly={setIsReadOnly}
+                      setInputAddr={setInputAddr}
                       hotel={hotel}
                     />
                   );
@@ -454,12 +455,14 @@ const SearchHotelList = (props) => {
   const setLodgmentNo = props.setLodgmentNo;
   const setAddress = props.setAddress;
   const setIsReadOnly = props.setIsReadOnly;
+  const setInputAddr = props.setInputAddr;
   const inputHotelInfo = () => {
     sethotelInof(hotel);
     setAddress(hotel.xlodgmentAddr);
     setHotelName(hotel.xlodgmentName);
     setLodgmentNo(hotel.xlodgmentNo);
     setLodgmentStar(hotel.xlodgmentStarGrade);
+    setInputAddr(hotel.xlodgmentAddr);
     setLodgmentType(1);
     setIsReadOnly(true); // 기존호텔에서 검색한건 readOnly로 바꾸어줌
   };

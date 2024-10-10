@@ -497,4 +497,9 @@
 	<insert id="insertSellerComment">
 		insert into qna_comment values(QNA_COMMENT_SEQ.NEXTVAL, #{roomQnaNo}, #{comContent})
 	</insert>
+	
+	<!-- 예약정보 조회 -->
+	<select id="selectBooking" resultType="bookingInfo">
+		select * from booking where seller_no=#{loginNo}
+	</select>
 </mapper>

@@ -357,7 +357,7 @@ const UpdateLodgment = () => {
           </div>
         </form>
       ) : (
-        <p>"다시 로그인 해주세요"</p>
+        <p>다시 로그인 해주세요</p>
       )}
     </div>
   );

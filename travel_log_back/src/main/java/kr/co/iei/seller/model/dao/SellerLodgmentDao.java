@@ -91,6 +91,8 @@ public interface SellerLodgmentDao {
 
 	int delUpComment(LodgmentReviewDTO ld);
 
+	BookingInfoDTO selectBooking(int loginNo);
+
 	
 	
 

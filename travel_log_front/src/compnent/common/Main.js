@@ -89,6 +89,32 @@ const Main = () => {
     <>
       {memberLevel === 4 ? ( // 4 : 판매자 zone
         <div className="Seller-Main-List">
+          <div className="main-sileder-wrap">
+            <Swiper
+              key="main-slider"
+              modules={[Autoplay]}
+              speed={1000}
+              slidesPerView={1}
+              spaceBetween={0}
+              grabCursor={true}
+              loop={true}
+              autoplay={{
+                delay: 2500,
+              }}
+            >
+              {images.map((img, i) => (
+                <SwiperSlide key={"img-" + i}>
+                  <img
+                    className="slider-image"
+                    style={{ width: "100%", height: "300px" }}
+                    src={img}
+                    alt={`Main slide ${i + 1}`}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+
           <div className="seller-lodgment-list">
             <SellerLodgmentList />
           </div>
