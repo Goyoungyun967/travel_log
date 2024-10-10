@@ -125,6 +125,9 @@ const MemberChart = () => {
   }, [region]);
   return (
     <>
+      <div className="admin-page-title">
+        <h3>회원 이용 관리</h3>
+      </div>
       <div className="enroll-chart">
         <button
           className="excel-down"

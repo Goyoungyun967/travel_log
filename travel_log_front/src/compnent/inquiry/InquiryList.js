@@ -31,6 +31,9 @@ const InquiryList = () => {
   }, [reqPage, type, state]);
   return inquiryList ? (
     <>
+      <div className="admin-page-title">
+        <h3>1대1 문의 처리</h3>
+      </div>
       <div className="admin-search-box">
         <FormControl>
           <FormLabel id="type">사용자</FormLabel>

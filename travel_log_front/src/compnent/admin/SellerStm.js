@@ -50,6 +50,9 @@ const AdminSellerStm = () => {
   };
   return stmList ? (
     <>
+      <div className="admin-page-title">
+        <h3>판매자 정산</h3>
+      </div>
       <div className="admin-search-box">
         <FormControl>
           <FormLabel id="type">정산처리여부</FormLabel>
