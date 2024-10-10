@@ -56,11 +56,12 @@
   border-radius: 10px;
   text-align: center;
   line-height: 40px;
+  text-decoration: none;
   cursor: pointer;
-  background-color: var(--seller1);
+  background-color: var(--seller2);
   font-weight: bold;
-  color: var(--seller3) !important;
+  color: var(--seller4);
 }
 .sellerListLgBtn:hover {
-  background-color: var(--seller2);
+  background-color: var(--seller1);
 }

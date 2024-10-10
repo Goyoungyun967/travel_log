@@ -51,6 +51,9 @@ const BoardReportList = () => {
   }, [reqPage, type, state]);
   return (
     <>
+      <div className="admin-page-title">
+        <h3>게시글 신고 처리</h3>
+      </div>
       <div className="admin-search-box">
         <FormControl>
           <FormLabel id="type">항목</FormLabel>
@@ -60,7 +63,7 @@ const BoardReportList = () => {
             defaultValue={0}
             name="radio-buttons-group"
             onChange={(e) => {
-              setType(e.target.value);
+              setType(Number(e.target.value));
               setReqPage(1);
             }}
           >
@@ -105,7 +108,9 @@ const BoardReportList = () => {
           setState={setState}
         />
       </Modal>
-      <PageNavi reqPage={reqPage} setReqPage={setReqPage} pi={pi} />
+      <div className="admin-page-navi">
+        <PageNavi reqPage={reqPage} setReqPage={setReqPage} pi={pi} />
+      </div>
     </>
   );
 };

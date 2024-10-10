@@ -105,16 +105,30 @@ public class BoardService {
 //	좋아요 
 	@Transactional
 	public int likeBoard(int boardNo, int memberNo) {
-		int likeCount = boardDao.selectLikeBoard(boardNo,memberNo);
-		int result =  boardDao.insertLikeBoard(memberNo,boardNo);
-			return result;
+		int isLike = boardDao.selectLikeBoard(boardNo,memberNo);
+		if(isLike == 0) {
+			int result =  boardDao.insertLikeBoard(memberNo,boardNo);
+			if(result>0) {
+				return isLike;
+			}else {
+				return 0;
+			}
+		}
+			return 0;
 	}
 //	좋아요 삭제
 	@Transactional
 	public int unlikeBoard(int boardNo, int memberNo) {
-		int likeCount = boardDao.selectLikeBoard(boardNo,memberNo);
-		int result = boardDao.deleteUnlikeBoard(memberNo,boardNo);
-		return result;
+		int isLike = boardDao.selectLikeBoard(boardNo,memberNo);
+		if(isLike ==1){
+			int result = boardDao.deleteUnlikeBoard(memberNo,boardNo);
+			if(result>0) {
+				return isLike;
+			}else {
+				return 0;
+			}
+		}
+		return 0;
 	}
 	
 	// 댓글 목록 조회
@@ -147,7 +161,7 @@ public class BoardService {
 	//댓글 좋아요 
 	public int likeComment(int memberNo,int commentNo) {
 		int likeCount = boardDao.selectLikeComment(memberNo,commentNo);
-		if(likeCount==0) {
+		if(likeCount ==0) {
 			int result = boardDao.insertLikeComment(memberNo,commentNo);
 			if(result>0) {
 				return likeCount;

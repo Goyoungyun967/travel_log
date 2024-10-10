@@ -7,6 +7,7 @@ import BoardFrm from "./BoardFrm";
 import { Quill } from "react-quill";
 import BoardUqillEditor from "../utils/BoardUqillEditor";
 import { loginNoState } from "../utils/RecoilData";
+import Swal from "sweetalert2";
 const BoardUpdate = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const params = useParams();
@@ -68,7 +69,41 @@ const BoardUpdate = () => {
   }, []);
   console.log(boardFile);
   const updateBoard = () => {
-    if (boardTitle !== "" && boardContent !== "") {
+    const titleRegex = /^.{1,20}$/; // 제목: 1~20글자
+    const contentRegex = /^.{1,1000}$/; // 글 내용: 1~1000글자
+
+    let isValid = true; // 유효성 검사를 위한 플래그
+
+    // 제목 유효성 검사
+    if (!titleRegex.test(boardTitle)) {
+      isValid = false;
+      Swal.fire({
+        title: "제목 유효성 검사 실패",
+        text: "제목은 1~20글자 사이여야 합니다.",
+        icon: "warning",
+      });
+    }
+
+    // 글 내용 유효성 검사
+    if (!contentRegex.test(boardContent) && boardContent != null) {
+      isValid = false;
+      Swal.fire({
+        title: "내용 유효성 검사 실패",
+        text: "내용은 1~1000글자 사이여야 합니다.",
+        icon: "warning",
+      });
+    }
+
+    // area 유효성 검사
+    if (!selectedArea) {
+      isValid = false;
+      Swal.fire({
+        title: "지역 유효성 검사 실패",
+        text: "지역을 선택해야 합니다.",
+        icon: "warning",
+      });
+    }
+    if (isValid) {
       const form = new FormData();
       form.append("boardTitle", boardTitle);
       form.append("boardContent", boardContent);
@@ -91,6 +126,12 @@ const BoardUpdate = () => {
         .then((res) => {
           if (res.data) {
             navigate(`/board/list/`);
+          } else {
+            Swal.fire({
+              title: "제목,내용은 필수 항목입니다.",
+              text: "제목과 내용을 입력해주세요.",
+              icon: "error",
+            });
           }
         })
         .catch((err) => {

@@ -69,14 +69,15 @@ public class BoardController {
 	@PostMapping
 	public ResponseEntity<Boolean> insertBoard(
 			@ModelAttribute BoardDTO board,
-			@ModelAttribute MultipartFile thumnail,
+			@ModelAttribute MultipartFile thumbnail,
 			@ModelAttribute MultipartFile[] boardFile){
 		
-		System.out.println(board);
+		System.out.println("asd"+board);
+		System.out.println("asdsss"+thumbnail);
 		//썸네일 처리
-		if(thumnail != null) {
+		if(thumbnail != null) {
 			String savepath = root+"/board/thumb/";
-			String filepath = fileUtils.upload(savepath,thumnail);
+			String filepath = fileUtils.upload(savepath,thumbnail);
 			board.setBoardThumb(filepath);
 		}
 		List<BoardFileDTO> boardFileList = new ArrayList<BoardFileDTO>();
@@ -178,14 +179,19 @@ public class BoardController {
 	//좋아요 
 	@PostMapping(value = "like/{boardNo}/{memberNo}")
 	public ResponseEntity<Integer> likeBoard(@PathVariable int boardNo,@PathVariable int memberNo){
+		System.out.println("like1:"+boardNo);
+		System.out.println("like2:"+memberNo);
 		int result = boardService.likeBoard(boardNo,memberNo); 
-	
+		System.out.println(result);
 		return ResponseEntity.ok(result);
 	}
 	// 좋아요 취소
     @DeleteMapping("/unlike/{boardNo}/{memberNo}")
     public ResponseEntity<Integer> unlikeBoard(@PathVariable int boardNo, @PathVariable int memberNo) {
+    	System.out.println("unlike1:"+boardNo);
+		System.out.println("unlike2:"+memberNo);
         int result = boardService.unlikeBoard(boardNo, memberNo); // 좋아요 취소 처리
+        System.out.println(result);
         return ResponseEntity.ok(result); // 처리 결과 반환 (1: 성공, 0: 실패)
     }
     
@@ -268,12 +274,12 @@ public class BoardController {
 
   //동행 게시판 등록
   	@PostMapping("/insertAccompany")
-  		public ResponseEntity<Boolean> insertAccompany(@ModelAttribute BoardAccompanyDTO boardAccompany , @ModelAttribute MultipartFile thumnail, @ModelAttribute MultipartFile[] boardFile){
+  		public ResponseEntity<Boolean> insertAccompany(@ModelAttribute BoardAccompanyDTO boardAccompany , @ModelAttribute MultipartFile thumbnail, @ModelAttribute MultipartFile[] boardFile){
   		
   		
-  		if(thumnail != null) {
+  		if(thumbnail != null) {
 			String savepath = root+"/board/thumb/";
-			String filepath = fileUtils.upload(savepath,thumnail);
+			String filepath = fileUtils.upload(savepath,thumbnail);
 			boardAccompany.setBoardThumb(filepath);
 		}
   		

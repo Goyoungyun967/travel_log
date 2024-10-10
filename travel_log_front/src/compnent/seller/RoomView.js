@@ -11,14 +11,18 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import { sellerLoginNoState } from "../utils/RecoilData";
+import { useRecoilState } from "recoil";
 
 const RoomView = () => {
+  const [loginNo, setLoginNo] = useRecoilState(sellerLoginNoState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const params = useParams();
   const lodgmentNo = params.lodgmentNo;
   const roomNo = params.roomNo;
   const [lodgmentInfo, setlodgmentInfo] = useState({}); // 호텔 정보
+  console.log("ddsfasdfa", lodgmentInfo);
   const [roomInfo, setRoomInfo] = useState({}); // 객실 정보 + 파일 + 해시태그
   const [roomFile, setRoomFile] = useState([]); // 객실 이미지
   const [serviceTag, setServiceTag] = useState([]);
@@ -83,91 +87,97 @@ const RoomView = () => {
 
   return (
     <>
-      <div className="seller-room-wrap">
-        <h3>객실 정보</h3>
-        <div className="hotel-info">
-          <div className="image">
-            <SlideImg
-              roomFile={roomFile}
-              imgsize={"seller-lodgmentView-custom-image"}
-            />
+      {lodgmentInfo.sellerNo === loginNo ? (
+        <div className="seller-room-wrap">
+          <h3>객실 정보</h3>
+          <div className="hotel-info">
+            <div className="image">
+              <SlideImg
+                roomFile={roomFile}
+                imgsize={"seller-lodgmentView-custom-image"}
+              />
+            </div>
+            <div className="room-item-wrap">
+              <div className="room-item">
+                <h5>숙소명</h5>
+                <span>{lodgmentInfo.lodgmentName}</span>
+              </div>
+              <div className="room-item">
+                <h5>객실명</h5>
+                <span>{roomInfo.roomName}</span>
+              </div>
+              <div className="room-item">
+                <h5>1박 가격</h5>
+                <span>{roomInfo.roomPrice} 원</span>
+              </div>
+              <div className="room-item">
+                <h5>수량</h5>
+                <span>{roomInfo.roomQua}</span>
+              </div>
+              <div className="room-item">
+                <h5>객실 최대 인원</h5>
+                <span>{roomInfo.roomMaxCapacity}</span>
+              </div>
+              <div className="room-item">
+                <h5>체크인 ~ 체크아웃</h5>
+                <span>
+                  {lodgmentInfo.lodgmentCheckIn} ~{" "}
+                  {lodgmentInfo.lodgmentCheckOut}
+                </span>
+              </div>
+              <div className="room-item">
+                <ServiceTags serviceTag={serviceTag} />
+              </div>
+            </div>
           </div>
-          <div className="room-item-wrap">
-            <div className="room-item">
-              <h5>숙소명</h5>
-              <span>{lodgmentInfo.lodgmentName}</span>
-            </div>
-            <div className="room-item">
-              <h5>객실명</h5>
-              <span>{roomInfo.roomName}</span>
-            </div>
-            <div className="room-item">
-              <h5>1박 가격</h5>
-              <span>{roomInfo.roomPrice} 원</span>
-            </div>
-            <div className="room-item">
-              <h5>수량</h5>
-              <span>{roomInfo.roomQua}</span>
-            </div>
-            <div className="room-item">
-              <h5>객실 최대 인원</h5>
-              <span>{roomInfo.roomMaxCapacity}</span>
-            </div>
-            <div className="room-item">
-              <h5>체크인 ~ 체크아웃</h5>
-              <span>
-                {lodgmentInfo.lodgmentCheckIn} ~ {lodgmentInfo.lodgmentCheckOut}
-              </span>
-            </div>
-            <div className="room-item">
-              <ServiceTags serviceTag={serviceTag} />
-            </div>
+          <div className="seller-room-sc-wrap">
+            <Box sx={{ width: "100%", typography: "body1" }}>
+              <TabContext value={value}>
+                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                  <TabList
+                    onChange={handleChange}
+                    aria-label="lab API tabs example"
+                  >
+                    <Tab label="숙소 위치" value="1" />
+                    <Tab label="공지사항" value="2" />
+                  </TabList>
+                </Box>
+                <TabPanel value="1">
+                  <KakaoMap lodgmentAddr={lodgmentInfo.lodgmentAddr} />
+                </TabPanel>
+                <TabPanel value="2">
+                  <div className="item-notice">
+                    <h3>공지사항</h3>
+                    <div
+                      className="ql-editor notice-ed"
+                      dangerouslySetInnerHTML={{ __html: roomInfo.roomInfo }}
+                    />
+                  </div>
+                </TabPanel>
+              </TabContext>
+            </Box>
           </div>
-        </div>
-        <div className="seller-room-sc-wrap">
-          <Box sx={{ width: "100%", typography: "body1" }}>
-            <TabContext value={value}>
-              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <TabList
-                  onChange={handleChange}
-                  aria-label="lab API tabs example"
-                >
-                  <Tab label="숙소 위치" value="1" />
-                  <Tab label="공지사항" value="2" />
-                </TabList>
-              </Box>
-              <TabPanel value="1">
-                <KakaoMap lodgmentAddr={lodgmentInfo.lodgmentAddr} />
-              </TabPanel>
-              <TabPanel value="2">
-                <div className="item-notice">
-                  <h3>공지사항</h3>
-                  <div
-                    className="ql-editor notice-ed"
-                    dangerouslySetInnerHTML={{ __html: roomInfo.roomInfo }}
-                  />
-                </div>
-              </TabPanel>
-            </TabContext>
-          </Box>
-        </div>
 
-        <div className="seller-btn-div">
-          <div className="seller-update-btn">
-            <Link
-              to={`/seller/updateRoom/${lodgmentNo}/${roomInfo.roomNo}`}
-              className="s-btn"
-            >
-              객실 수정
-            </Link>
-          </div>
-          <div className="seller-del-btn">
-            <button type="button" onClick={deleteRoom}>
-              객실 삭제
-            </button>
+          <div className="seller-btn-div">
+            <div className="seller-update-btn">
+              <Link
+                to={`/seller/updateRoom/${lodgmentNo}/${roomInfo.roomNo}`}
+                className="s-btn"
+                style={{ color: "#f2f2f2", textDecoration: "none" }}
+              >
+                객실 수정
+              </Link>
+            </div>
+            <div className="seller-room-del-btn">
+              <button type="button" onClick={deleteRoom}>
+                객실 삭제
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        "본인만 확인 가능"
+      )}
     </>
   );
 };
