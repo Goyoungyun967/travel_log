@@ -56,7 +56,7 @@
 					</when>
 				</choose>
 	            ) AS room_price,
-	        (SELECT FLOOR(AVG(lr.rating)) AS avg_rating 
+	        (SELECT FLOOR(AVG(lr.rating))  
 	            FROM lodgment_review lr
 	            WHERE lr.lodgment_no = ls.lodgment_no) AS avg_rating,
 	        (SELECT MIN(rm.room_max_capacity) 

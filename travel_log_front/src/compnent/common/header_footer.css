@@ -39,8 +39,8 @@
 }
 
 a {
-  color: inherit !important; /* 부모 색상으로 설정 (강제) */
-  text-decoration: none !important; /* 언더라인 제거 (강제) */
+  color: inherit; /* 부모 색상으로 설정 (강제) */
+  text-decoration: none; /* 언더라인 제거 (강제) */
 }
 .wrap {
   min-height: 121vh;
@@ -198,9 +198,10 @@ a {
 } */
 
 .main-search-bar {
+  width: 100%;
   position: absolute;
   top: 38%;
-  left: 28%;
+  left: 50%;
   z-index: 2 !important;
 }
 .main-search-bar .lodgment-table-wrap {
