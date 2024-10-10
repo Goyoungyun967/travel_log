@@ -14,7 +14,7 @@ const ReviewUpdate = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const { state } = useLocation();
   const [loginNo] = useRecoilState(loginNoState);
-  const reviewNo = 31;
+  const reviewNo = state.reviewNo;
   const navigate = useNavigate();
   const [value, setValue] = useState(0);
 

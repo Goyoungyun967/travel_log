@@ -100,6 +100,7 @@
 				start_date <![CDATA[<]]> TO_DATE(#{endDate}, 'YYYY-MM-DD') 
 				AND end_date > TO_DATE(#{startDate}, 'YYYY-MM-DD')
 				AND room_no=#{roomNo}
+				and status = 1
 		     GROUP BY 
 		         room_no) b
 		RIGHT JOIN 

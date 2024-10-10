@@ -9,6 +9,7 @@
 
 .lodgment-inquire-btn {
   margin: 0 10px; /* 버튼 간의 여백 */
+  border-radius: 15px;
   width: 200px;
   border: 1px solid #ccc;
   padding: 10px 15px;
@@ -20,9 +21,9 @@
 }
 
 .lodgment-inquire-btn:hover {
-  background-color: navy;
+  background-color: var(--seller3);
   color: white;
-  border: 1px solid navy; /* border 색상을 호버 시에도 변경하여 크기 영향 방지 */
+  border: 1px solid var(--seller3); /* border 색상을 호버 시에도 변경하여 크기 영향 방지 */
 }
 
 .lodgment-user-inquire-member-wrap {
@@ -131,4 +132,13 @@
 }
 .lodgment-inquire-del-btn {
   cursor: pointer;
+}
+.lodgmnetInquire-del-span {
+  cursor: pointer;
+  transition: color 0.3s, text-decoration 0.3s; /* 부드러운 전환 효과 추가 */
+}
+
+.lodgmnetInquire-del-span:hover {
+  text-decoration: underline; /* 줄을 추가 */
+  color: rgba(0, 0, 0, 0.9); /* 글씨를 살짝 연하게 */
 }

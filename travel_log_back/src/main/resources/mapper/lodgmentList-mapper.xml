@@ -295,7 +295,7 @@
 	
 	<select id="getLodgmentInfo" resultType="lodgmentDetail">
 		select 
-		lodgment_addr, lodgment_check_in,lodgment_check_out
+		lodgment_addr, lodgment_check_in,lodgment_check_out,
 		lodgment_img_path,lodgment_name,lodgment_no,
 		lodgment_notice,lodgment_star_grade,lodgment_type_no,
 		seller_no, 
@@ -415,9 +415,10 @@
 	<select id="selectReviewList" resultMap="getReviewFile">
 		SELECT
 		review_no, member_id, member_no, review_content, rating, start_date,total_like_count,like_count ,report_count
+		,SELLER_COMMENT
 		FROM (
 		SELECT rownum AS rnum, lr.review_no, lr.member_no, lr.review_content,
-		lr.rating, b.book_no, b.start_date, b.end_date, m.member_id,
+		lr.rating, b.book_no, b.start_date, b.end_date, m.member_id, lr.SELLER_COMMENT,
         (select count(*) from lodgment_review_like where review_no=lr.review_no) total_like_count,
         (select count(*) from lodgment_review_like where member_no=#{loginNo} and review_no=lr.review_no) like_count,
         (select count(*) from lodgment_review_REPORT where member_no=#{loginNo} and review_no=lr.review_no) report_count

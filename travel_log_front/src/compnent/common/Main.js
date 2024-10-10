@@ -9,7 +9,6 @@ import {
   isLoginState,
   loginNicknameState,
   memberLevelState,
-  sellerLoginNoState,
 } from "../utils/RecoilData";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward"; //화살표
 import img1 from "./main/img1.jpg";
@@ -28,7 +27,6 @@ import {
 } from "../utils/RecoilData";
 import SellerLodgmentList from "../seller/SellerLodgmentList";
 import StmSeller from "../seller/StmSeller";
-import BookingChart from "../seller/sellerUtil/BookingChart";
 
 const Main = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -70,9 +68,6 @@ const Main = () => {
 
   // 멤버 레벨
   const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
-  const [sellerLoginNo, setSellerLoginNo] = useRecoilState(sellerLoginNoState); // sellerNO 가져오기
-
-  console.log("sellerLoginNo - ", sellerLoginNo);
   console.log(memberLevel);
   //일반게시판 가져오기
   useEffect(() => {
@@ -94,36 +89,6 @@ const Main = () => {
     <>
       {memberLevel === 4 ? ( // 4 : 판매자 zone
         <div className="Seller-Main-List">
-          <div className="main-sileder-wrap">
-            <Swiper
-              key="main-slider"
-              modules={[Autoplay]}
-              speed={1000}
-              slidesPerView={1}
-              spaceBetween={0}
-              grabCursor={true}
-              loop={true}
-              autoplay={{
-                delay: 2500,
-              }}
-            >
-              {images.map((img, i) => (
-                <SwiperSlide key={"img-" + i}>
-                  <img
-                    className="slider-image"
-                    style={{ width: "100%", height: "300px" }}
-                    src={img}
-                    alt={`Main slide ${i + 1}`}
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-          <div className="main-scharts-zone">
-            {sellerLoginNo !== -1 && (
-              <BookingChart sellerLoginNo={sellerLoginNo} />
-            )}
-          </div>
           <div className="seller-lodgment-list">
             <SellerLodgmentList />
           </div>
@@ -171,14 +136,13 @@ const Main = () => {
               onClick={lodgementSearchBtn}
             />
           </div>
-
           {/*게시판 출력 */}
           <div
             style={{ maxWidth: "1000px", margin: "150px auto" }}
             className="main-board-list-wrap"
           >
             <div className="main-board-name  flex-spbetw">
-              <span>여행 포스트</span>
+              <span>여행 게시판</span>
               <span className="board-next" onClick={handleMoreClick}>
                 {/* onClick={handleMoreClick} */}
                 더보기 <ArrowForwardIcon style={{ paddingBottom: "4px" }} />
@@ -230,30 +194,6 @@ const BoardItem = (props) => {
   const isLogin = props.isLogin;
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
-  console.log(board);
-
-  const now = new Date();
-  console.log(now);
-  const regDate = new Date(board.regDate);
-  const time = now - regDate;
-  console.log(regDate);
-  const seconds = Math.floor(time / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-  const months = Math.floor(days / 30.44);
-  const years = Math.floor(months / 12);
-
-  // 시간 포맷
-  let timeString = "";
-  if (years > 0) timeString = `${years}년 전`;
-  else if (months > 0) timeString = `${months}달 전`;
-  else if (days > 0) timeString = `${days}일 전`;
-  else if (hours > 0) timeString = `${hours}시간 전`;
-  else if (minutes > 0) timeString = `${minutes}분 전`;
-  else timeString = `방금전`;
-  console.log(board.boardThumb);
-
   return (
     <>
       {isLogin ? (
@@ -270,7 +210,8 @@ const BoardItem = (props) => {
               });
 
             navigate(
-              `/board/view/${board.boardNo}/${encodeURIComponent(timeString)}`
+              `/board/AccompanyView/${board.boardNo}
+              )}`
             );
           }}
         >

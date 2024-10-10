@@ -134,7 +134,8 @@ public class BookingService {
 		//환불
 		@Transactional
 		public int bookingCancelUpdate(BookingCancelDTO cancelData) {
-			int result =bookingDao.updateBooking(cancelData);
+			int result = 0; 
+			result =bookingDao.updateBooking(cancelData);
 			if(result == 1) {
 				result += bookingDao.insertBookCancel(cancelData);
 			}

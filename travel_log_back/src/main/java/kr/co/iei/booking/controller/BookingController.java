@@ -59,22 +59,24 @@ public class BookingController {
 	@Operation(summary="숙소 예약 취소", description = "예약번호, 가격, 취소사유 (+기타사유)로 취소로 수정 ")
 	@PatchMapping
 	public ResponseEntity<Boolean> getPortoneimpuid(@RequestBody BookingCancelDTO cancelData){
-		String portoneimpuid = bookingService.getPortoneimpuid(cancelData);
-		String accessToken = "";
-		try {
-			 accessToken = bookingService.getAccessToken();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try {
-			bookingService.refundRequest(portoneimpuid, accessToken);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		int result = bookingService.bookingCancelUpdate(cancelData);
+		if(result == 2) {
+			String portoneimpuid = bookingService.getPortoneimpuid(cancelData);
+			String accessToken = "";
+			try {
+				 accessToken = bookingService.getAccessToken();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try {
+				bookingService.refundRequest(portoneimpuid, accessToken);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return ResponseEntity.ok(2 == result);			
 	}
 	

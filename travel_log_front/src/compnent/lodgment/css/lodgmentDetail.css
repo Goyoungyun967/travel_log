@@ -62,6 +62,10 @@
   border-collapse: separate; /* 패딩이 적용되도록 설정 */
   border-spacing: 0 10px; /* 행 사이의 공간 */
 }
+.lodgment-detail-info th,
+.lodgment-detail-info td {
+  padding: 10px; /* 각 셀의 패딩 추가 */
+}
 .lodgment-loom-type-img {
   width: 100%;
 }

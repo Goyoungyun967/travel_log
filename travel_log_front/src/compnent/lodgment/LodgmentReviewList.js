@@ -47,7 +47,7 @@ const LodgmentReviewUpdate = (props) => {
         `${backServer}/lodgment/reviewList/${lodgmentNo}/${reqPage}/${loginNo}`
       )
       .then((res) => {
-        //console.log(res);
+        console.log(res);
         setPi(res.data.pi);
         setAvailableReview(res.data.availableReview);
         setViewReview(res.data.list);
@@ -127,7 +127,7 @@ const LodgmentReviewUpdate = (props) => {
         selectedReason,
       })
       .then((res) => {
-        console.log("dd" + res);
+        // console.log("dd" + res);
         setSuccess(!success);
         setOpenModal(false);
         setSelectedReason("");
@@ -205,6 +205,10 @@ const LodgmentReviewUpdate = (props) => {
                       dangerouslySetInnerHTML={{ __html: review.reviewContent }}
                     ></span>
                   </div>
+
+                  {review.sellerComment && (
+                    <div>ㄴ판매자 코멘트 : {review.sellerComment}</div>
+                  )}
                   <div className="review-text-area">
                     <span>
                       {review.likeCount === 0 ? (
