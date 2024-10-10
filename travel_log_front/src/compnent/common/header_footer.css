@@ -39,8 +39,8 @@
 }
 
 a {
-  color: inherit !important; /* 부모 색상으로 설정 (강제) */
-  text-decoration: none !important; /* 언더라인 제거 (강제) */
+  color: inherit; /* 부모 색상으로 설정 (강제) */
+  text-decoration: none; /* 언더라인 제거 (강제) */
 }
 .wrap {
   min-height: 121vh;
@@ -62,6 +62,7 @@ a {
   margin: 0 auto;
   display: flex;
   align-items: center;
+  justify-content: center;
   border-bottom: 2px solid #ccc;
 }
 .header a {
@@ -183,7 +184,7 @@ a {
   flex: 1;
   justify-content: center;
 }
-
+/*메인*/
 /* main slider */
 .main-sileder-wrap > .swiper {
   padding: 0 !important;
@@ -198,9 +199,10 @@ a {
 } */
 
 .main-search-bar {
+  width: 800px;
   position: absolute;
   top: 38%;
-  left: 28%;
+  left: 30%;
   z-index: 2 !important;
 }
 .main-search-bar .lodgment-table-wrap {
@@ -229,4 +231,15 @@ a {
   display: flex;
   justify-content: center;
   margin: 0 auto;
+}
+
+.seller-custom-nav-link {
+  font-weight: normal; /* 기본 폰트 굵기 */
+  text-align: center;
+  display: inline-block;
+  transition: font-weight 0.2s ease; /* 폰트 굵기가 부드럽게 변하도록 전환 효과 추가 */
+}
+
+.seller-custom-nav-link:hover {
+  font-weight: bold; /* 커서를 올렸을 때 폰트 굵기 */
 }

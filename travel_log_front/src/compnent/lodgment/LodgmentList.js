@@ -279,36 +279,38 @@ const LodgmentList = () => {
                 <FormControlLabel value="5" control={<Radio />} label="캠핑" />
               </RadioGroup>
             </div>
-            <div className="radio-lodgment-wrap">
-              <div className="lodgment-info-text">정렬기준</div>
-              <div className="lodgment-radio">
-                <RadioGroup
-                  aria-labelledby="demo-controlled-radio-buttons-group"
-                  name="controlled-radio-buttons-group"
-                  value={radioBtn}
-                  onChange={(e) => setRadioBtn(e.target.value)}
-                >
-                  <FormControlLabel
-                    value="1"
-                    control={<Radio />}
-                    label="낮은가격순"
-                  />
-                  <FormControlLabel
-                    value="2"
-                    control={<Radio />}
-                    label="높은 가격순"
-                  />
-                  <FormControlLabel
-                    value="3"
-                    control={<Radio />}
-                    label="인기순"
-                  />
-                </RadioGroup>
-              </div>
-              <div className="">
-                <button onClick={handleReset}>리셋</button>
-              </div>
+          </div>
+          <div className="radio-lodgment-wrap">
+            <div className="lodgment-info-text">정렬기준</div>
+            <div className="lodgment-radio">
+              <RadioGroup
+                aria-labelledby="demo-controlled-radio-buttons-group"
+                name="controlled-radio-buttons-group"
+                value={radioBtn}
+                onChange={(e) => setRadioBtn(e.target.value)}
+              >
+                <FormControlLabel
+                  value="1"
+                  control={<Radio />}
+                  label="낮은가격순"
+                />
+                <FormControlLabel
+                  value="2"
+                  control={<Radio />}
+                  label="높은 가격순"
+                />
+                <FormControlLabel
+                  value="3"
+                  control={<Radio />}
+                  label="인기순"
+                />
+              </RadioGroup>
             </div>
+          </div>
+          <div className="lodgment-list-reset">
+            <button className="lodgment-list-reset-btn" onClick={handleReset}>
+              필터 초기화
+            </button>
           </div>
         </div>
         <div className="lodgment-info-wrap">
@@ -396,12 +398,6 @@ const LogdmentInfo = (props) => {
                     ""
                   )}
 
-                  <p className="lodgment-checkin">
-                    체크인: {info.lodgmentCheckIn}
-                  </p>
-                  <p className="lodgment-checkin">
-                    체크아웃: {info.lodgmentCheckOut}
-                  </p>
                   {info.lodgmentNotice && (
                     <p className="lodgment-notice">{info.lodgmentNotice}</p>
                   )}

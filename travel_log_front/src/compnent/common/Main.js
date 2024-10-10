@@ -194,6 +194,29 @@ const BoardItem = (props) => {
   const isLogin = props.isLogin;
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
+
+  const now = new Date();
+  console.log(now);
+  const regDate = new Date(board.regDate);
+  const time = now - regDate;
+  console.log(regDate);
+  const seconds = Math.floor(time / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const months = Math.floor(days / 30.44);
+  const years = Math.floor(months / 12);
+
+  // 시간 포맷
+  let timeString = "";
+  if (years > 0) timeString = `${years}년 전`;
+  else if (months > 0) timeString = `${months}달 전`;
+  else if (days > 0) timeString = `${days}일 전`;
+  else if (hours > 0) timeString = `${hours}시간 전`;
+  else if (minutes > 0) timeString = `${minutes}분 전`;
+  else timeString = `방금전`;
+  console.log(isLogin);
+
   return (
     <>
       {isLogin ? (
@@ -210,8 +233,7 @@ const BoardItem = (props) => {
               });
 
             navigate(
-              `/board/AccompanyView/${board.boardNo}
-              )}`
+              `/board/view/${board.boardNo}/${encodeURIComponent(timeString)}`
             );
           }}
         >

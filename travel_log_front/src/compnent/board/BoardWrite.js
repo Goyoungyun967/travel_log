@@ -46,26 +46,63 @@ const BoardWrite = () => {
   };
 
   const writeBoard = () => {
-    if (boardTitle !== "" && boardContent !== "") {
+    const titleRegex = /^.{1,20}$/; // 제목: 1~20글자
+    const contentRegex = /^.{1,1000}$/; // 글 내용: 1~1000글자
+
+    let isValid = true; // 유효성 검사를 위한 플래그
+
+    // 제목 유효성 검사
+    if (!titleRegex.test(boardTitle)) {
+      isValid = false;
+      Swal.fire({
+        title: "제목 유효성 검사 실패",
+        text: "제목은 1~20글자 사이여야 합니다.",
+        icon: "warning",
+      });
+    }
+
+    // 글 내용 유효성 검사
+    if (!contentRegex.test(boardContent) && boardContent != null) {
+      isValid = false;
+      Swal.fire({
+        title: "내용 유효성 검사 실패",
+        text: "내용은 1~1000글자 사이여야 합니다.",
+        icon: "warning",
+      });
+    }
+
+    // area 유효성 검사
+    if (!selectedArea) {
+      isValid = false;
+      Swal.fire({
+        title: "지역 유효성 검사 실패",
+        text: "지역을 선택해야 합니다.",
+        icon: "warning",
+      });
+    }
+
+    // 유효성 검사가 통과하면 게시글 작성 진행
+    if (isValid) {
       const form = new FormData();
       form.append("boardTitle", boardTitle);
       form.append("boardContent", boardContent);
       form.append("boardArea", selectedArea);
       form.append("memberNo", loginNo);
-      //썸네일이 첨부된 경우에만 추가
-      console.log(selectedArea);
+
+      // 썸네일이 첨부된 경우에만 추가
       if (thumbnail !== null) {
-        form.append("thumnail", thumbnail);
-        console.log(thumbnail);
+        form.append("thumbnail", thumbnail);
       }
-      //첨부파일도 추가한 경우에만 추가 (첨부파일은 여러개가 같은 name으로 전송)
+
+      // 첨부파일도 추가한 경우에만 추가
       for (let i = 0; i < boardFile.length; i++) {
         form.append("boardFile", boardFile[i]);
       }
+
       axios
         .post(`${backServer}/board`, form, {
           headers: {
-            contentType: "multipart/form-data",
+            "Content-Type": "multipart/form-data",
             processData: false,
           },
         })
@@ -75,8 +112,8 @@ const BoardWrite = () => {
             navigate("/board/list");
           } else {
             Swal.fire({
-              title: "에러",
-              text: "원인찾아",
+              title: "제목,내용은 필수 항목입니다.",
+              text: "제목과 내용을 입력해주세요.",
               icon: "error",
             });
           }
@@ -86,6 +123,7 @@ const BoardWrite = () => {
         });
     }
   };
+
   return (
     <div className="write-content-wrap">
       <div className="write-page-title">여행 게시글 작성</div>

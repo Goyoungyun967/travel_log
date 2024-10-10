@@ -10,9 +10,11 @@ import "react-datepicker/dist/react-datepicker.css"; // 달력 css
 import { format } from "date-fns";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
   const lodgment = props.lodgment;
   const setLodgment = props.setLodgment;
   const guest = props.guest;
@@ -32,7 +34,6 @@ const SearchBar = (props) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [guestDropdownOpen, setGuestDropdownOpen] = useState(false);
   const [dateDropdownOpen, setDateDropdownOpen] = useState(false);
-  //console.log(lodgmentSearchName);
   const onChange = (dates) => {
     const [start, end] = dates;
     setStartDate(start);
@@ -48,14 +49,10 @@ const SearchBar = (props) => {
         confirmButtonText: "확인",
       });
     }
-    //console.log(start);
-    //console.log(end);
-    //console.log(end - start);
   };
 
   const formattedStartDate = startDate ? format(startDate, "yyyy-MM-dd") : "";
   const formattedEndDate = endDate ? format(endDate, "yyyy-MM-dd") : "";
-  //console.log(startDate);
   const lodgmentChange = (e) => {
     const value = e.target.value;
     setLodgment(value.trim());
@@ -65,10 +62,15 @@ const SearchBar = (props) => {
         .then((res) => {
           setLodgmentSearch(res.data.list || []);
           setLodgmentSearchName(res.data.name || []);
-          //console.log(res);
         })
         .catch((err) => {
-          //console.log("Error fetching lodgment data:", err);
+          Swal.fire({
+            icon: "error",
+            title: "서버 에러.",
+            text: "잠시후에 다시 시도해주세요.",
+            confirmButtonText: "확인",
+          });
+          navigate(`/`);
         });
     }
 

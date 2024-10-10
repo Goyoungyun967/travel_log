@@ -523,7 +523,11 @@ const BoardItem = (props) => {
             >
               <Col xs={2} md={2} style={{ padding: 0 }}>
                 <Image
-                  src="/image/board_default_img.png"
+                  src={
+                    board.memberImage
+                      ? `${backServer}/member/profile/${board.memberImage}`
+                      : "/image/lodgment_default_img.png"
+                  }
                   className="member-img-circle"
                   roundedCircle
                 />
@@ -571,7 +575,7 @@ const BoardItem = (props) => {
             </>
           )}
         </div>
-        <div className="board-keep sub-item-right">
+        {/* <div className="board-keep sub-item-right">
           {board.keepCount === 0 ? (
             "저장"
           ) : (
@@ -579,7 +583,7 @@ const BoardItem = (props) => {
               <SaveIcon /> {board.keepCount}
             </>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );

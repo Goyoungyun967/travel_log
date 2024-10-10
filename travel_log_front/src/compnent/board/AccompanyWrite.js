@@ -78,7 +78,70 @@ const AccompanyWrite = () => {
   // 빽으로 보내줘야하는것들 제목,기본 글,지역, 동행날짜 , 동행지역? ,동행내용
   console.log(accompanyContent);
   const writeBoard = () => {
-    if (boardTitle !== "" && boardContent !== "") {
+    let isValid = true; // 유효성 검사를 위한 플래그
+
+    const titleRegex = /^.{1,20}$/; // 제목: 1~20글자
+    const contentRegex = /^.{1,1000}$/; // 내용: 1~1000글자
+
+    // 제목 유효성 검사
+    if (!titleRegex.test(boardTitle)) {
+      isValid = false;
+      Swal.fire({
+        title: "제목을 입력해주세요.",
+        text: "제목은 1~20글자 사이여야 합니다.",
+        icon: "warning",
+      });
+    }
+
+    // 내용 유효성 검사
+    if (!contentRegex.test(boardContent)) {
+      isValid = false;
+      Swal.fire({
+        title: "글내용을 입력해주세요.",
+        text: "내용은 1~1000글자 사이여야 합니다.",
+        icon: "warning",
+      });
+    }
+    // 지역 유효성 검사
+    if (!selectedArea) {
+      isValid = false;
+      Swal.fire({
+        title: "지역을 선택해주세요.",
+        text: "지역을 선택해야 합니다.",
+        icon: "warning",
+      });
+    }
+
+    // 동행 지역 유효성 검사
+    if (!accompanyArea) {
+      isValid = false;
+      Swal.fire({
+        title: "동행 지역선택해주세요",
+        text: "동행 지역을 선택해야 합니다.",
+        icon: "warning",
+      });
+    }
+
+    // 시작일과 종료일 유효성 검사
+    if (!startDate || !endDate) {
+      isValid = false;
+      Swal.fire({
+        title: "동행 날짜를 입력해주세요",
+        text: "시작일과 종료일을 다 입력해야 합니다.",
+        icon: "warning",
+      });
+    }
+    if (!selectedType) {
+      isValid = false;
+      Swal.fire({
+        title: "동행 유형을 입력해주세요",
+        text: "동행 유형을 하나 이상 선택해주세요.",
+        icon: "warning",
+      });
+    }
+
+    // 모든 유효성 검사가 통과하면 게시글 작성 진행
+    if (isValid) {
       const form = new FormData();
       form.append("boardTitle", boardTitle);
       form.append("boardContent", boardContent);
@@ -86,25 +149,26 @@ const AccompanyWrite = () => {
       form.append("memberNo", loginNo);
       form.append("accompanyDate", daysDifference);
       form.append("accompanyContent", accompanyContent.join("&*&"));
-      form.append("accompanyTagNo ", selectedType);
+      form.append("accompanyTagNo", selectedType);
       form.append("accompanyArea", accompanyArea);
       form.append("startDay", dayjs(startDate).format("YYYY-MM-DD"));
       form.append("endDay", dayjs(endDate).format("YYYY-MM-DD"));
 
-      //썸네일이 첨부된 경우에만 추가
-      console.log(selectedArea);
+      // 썸네일이 첨부된 경우에만 추가
       if (thumbnail !== null) {
-        form.append("thumnail", thumbnail);
+        form.append("thumbnail", thumbnail);
         console.log(thumbnail);
       }
-      //첨부파일도 추가한 경우에만 추가 (첨부파일은 여러개가 같은 name으로 전송)
+
+      // 첨부파일도 추가한 경우에만 추가
       for (let i = 0; i < boardFile.length; i++) {
         form.append("boardFile", boardFile[i]);
       }
+
       axios
         .post(`${backServer}/board/insertAccompany`, form, {
           headers: {
-            contentType: "multipart/form-data",
+            "Content-Type": "multipart/form-data", // 대문자로 수정
             processData: false,
           },
         })
@@ -115,13 +179,14 @@ const AccompanyWrite = () => {
         .catch((err) => {
           console.log(err);
           Swal.fire({
-            title: "에러",
-            text: "원인찾아",
+            title: "글을 마저 입력해주세요",
+            text: "제목,동행일정,지역,동행유형은 필수항목입니다.",
             icon: "error",
           });
         });
     }
   };
+
   return (
     <div className="write-content-wrap">
       <div className="write-page-title">동행 게시글 작성</div>
