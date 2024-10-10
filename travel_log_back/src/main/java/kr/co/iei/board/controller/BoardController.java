@@ -71,9 +71,6 @@ public class BoardController {
 			@ModelAttribute BoardDTO board,
 			@ModelAttribute MultipartFile thumbnail,
 			@ModelAttribute MultipartFile[] boardFile){
-		
-		System.out.println("asd"+board);
-		System.out.println("asdsss"+thumbnail);
 		//썸네일 처리
 		if(thumbnail != null) {
 			String savepath = root+"/board/thumb/";
