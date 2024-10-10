@@ -119,7 +119,11 @@ const Main = () => {
               ))}
             </Swiper>
           </div>
-
+          <div className="main-chart-zone">
+            {sellerLoginNo !== -1 && (
+              <BookingChart sellerLoginNo={sellerLoginNo} />
+            )}
+          </div>
           <div className="seller-lodgment-list">
             <SellerLodgmentList />
           </div>
@@ -167,11 +171,7 @@ const Main = () => {
               onClick={lodgementSearchBtn}
             />
           </div>
-          <div className="main-chart-zone">
-            {sellerLoginNo !== -1 && (
-              <BookingChart sellerLoginNo={sellerLoginNo} />
-            )}
-          </div>
+
           {/*게시판 출력 */}
           <div
             style={{ maxWidth: "1000px", margin: "150px auto" }}
