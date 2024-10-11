@@ -24,7 +24,7 @@ const LodgmentInquire = (pros) => {
         setViewInquire(res.data.list);
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
   }, [loginNo, reqPage, success]);
 
@@ -57,11 +57,11 @@ const LodgmentInquire = (pros) => {
     axios
       .post(`${backServer}/lodgment/memberInquire`, form)
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setSuccess(!success);
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
 
     Swal.fire({ text: "문의 등록 완료!" });
@@ -187,10 +187,10 @@ const LodgmentInquire = (pros) => {
                                     text: "질문이 성공적으로 삭제되었습니다.",
                                   });
                                 }
-                                console.log(res);
+                                //console.log(res);
                               })
                               .catch((err) => {
-                                console.log(err);
+                                //console.log(err);
                                 Swal.fire({
                                   icon: "error",
                                   title: "삭제 실패",

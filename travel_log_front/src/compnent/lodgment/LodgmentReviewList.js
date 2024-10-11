@@ -47,13 +47,13 @@ const LodgmentReviewUpdate = (props) => {
         `${backServer}/lodgment/reviewList/${lodgmentNo}/${reqPage}/${loginNo}`
       )
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setPi(res.data.pi);
         setAvailableReview(res.data.availableReview);
         setViewReview(res.data.list);
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
   }, [loginNo, reqPage, success]);
 
@@ -79,7 +79,7 @@ const LodgmentReviewUpdate = (props) => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 
@@ -133,7 +133,7 @@ const LodgmentReviewUpdate = (props) => {
         setSelectedReason("");
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
         setOpenModal(false);
       });
   };
@@ -291,7 +291,7 @@ const LodgmentReviewUpdate = (props) => {
                   {review.memberNo === loginNo && (
                     <div
                       onClick={() => {
-                        console.log("수정하기 클릭됨"); // 확인용 로그
+                        //console.log("수정하기 클릭됨"); // 확인용 로그
                         navigate(`/lodgment/reviewUpdate`, {
                           state: { reviewNo: review.reviewNo },
                         });

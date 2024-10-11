@@ -24,12 +24,12 @@ const ReviewUpdate = () => {
   const [fileList, setFileList] = useState([]);
   //기존 파일이 삭제가 될 경우 배열에 저장
   const [delImgFileNo, setDelImgFileNo] = useState([]);
-  console.log(delImgFileNo);
+  //console.log(delImgFileNo);
   useEffect(() => {
     axios
       .get(`${backServer}/lodgment/getReview/${reviewNo}`)
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setReviewContent(res.data.reviewContent);
         setFileList(res.data.fileList);
         setValue(res.data.rating);
@@ -113,7 +113,7 @@ const ReviewUpdate = () => {
     }
     for (let i = 0; i < delImgFileNo.length; i++) {
       form.append("delImgFileNo", delImgFileNo[i]);
-      console.log(delImgFileNo[i]);
+      // console.log(delImgFileNo[i]);
     }
     axios
       .patch(`${backServer}/lodgment/reviewUpdate`, form, {
@@ -123,7 +123,7 @@ const ReviewUpdate = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data) {
           Swal.fire({
             text: "리뷰 등록이 완료되었습니다.",
@@ -134,7 +134,7 @@ const ReviewUpdate = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         Swal.fire({
           text: "서버 오류.",
           icon: "error", // 오류 아이콘 추가
