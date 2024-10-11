@@ -111,11 +111,11 @@ const LodgmentDetailMap = (props) => {
         setsLodgmentLongitude(longitude);
         setLodgmentLatitude(latitude);
       } else {
-        console.log("주소를 찾을 수 없습니다.");
+        //console.log("주소를 찾을 수 없습니다.");
       }
     })
     .catch((error) => {
-      console.error("API 호출 오류:", error);
+      //console.error("API 호출 오류:", error);
     });
   useEffect(() => {
     axios
