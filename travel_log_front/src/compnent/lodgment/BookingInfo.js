@@ -161,10 +161,10 @@ const BookingInfo = () => {
                 {bookingInfo.roomName}
               </span>
             </div>
-            <div class="booking-item">
+            <div class="booking-item lodgment-info-wrap">
               <div className="booking-lodgment-map-wrap">
                 <div>
-                  <span class="booking-label">숙소 주소:</span>
+                  <span class="booking-label"></span>
                   <span class="booking-value" id="lodgmentAddr">
                     {bookingInfo.lodgmentAddr}
                   </span>
