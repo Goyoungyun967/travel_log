@@ -18,7 +18,7 @@ const LodgmentReviewWirte = () => {
   const lodgmentNo = state?.lodgmentNo;
   const [value, setValue] = useState(0);
   const bookNo = state.bookNo;
-  console.log(bookNo);
+  //e.log(bookNo);
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, false] }],
@@ -33,12 +33,12 @@ const LodgmentReviewWirte = () => {
   const [showReviewImg, setShowReviewImg] = useState([]);
   //리뷰 보내기 저장
   const [reviewImg, setReviewImg] = useState([]);
-  console.log(reviewImg);
+  // console.log(reviewImg);
   const [reviewContent, setReviewContent] = useState("");
   //사진 등록시 작동할 함수
   function addBoardFile(e) {
     const files = e.currentTarget.files;
-    console.log(files);
+    //console.log(files);
 
     const totalFiles = reviewImg.length + files.length;
     //이미지는 5개까지 저장 가능
@@ -105,7 +105,7 @@ const LodgmentReviewWirte = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         if (res.data) {
           Swal.fire({
             text: "리뷰 등록이 완료되었습니다.",
@@ -116,7 +116,7 @@ const LodgmentReviewWirte = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
         Swal.fire({
           text: "서버 오류.",
           icon: "error", // 오류 아이콘 추가
