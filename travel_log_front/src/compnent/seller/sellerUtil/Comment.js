@@ -105,7 +105,12 @@ const Comment = (props) => {
               <Typography component="div">
                 <ReviewStar star={review.rating} />
               </Typography>
-              <Typography component="div">{review.reviewContent}</Typography>
+
+              <Typography component="div">
+                <div
+                  dangerouslySetInnerHTML={{ __html: review.reviewContent }}
+                ></div>
+              </Typography>
               <Typography component="div">
                 {review.sellerComment === null ? (
                   <>

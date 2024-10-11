@@ -12,10 +12,10 @@ import { guestState, startDateState, endDateState } from "../utils/RecoilData";
 const PaymentPage = () => {
   const BackServer = process.env.REACT_APP_BACK_SERVER;
   const [loginNo] = useRecoilState(loginNoState);
-  console.log(loginNo);
+  //console.log(loginNo);
   const { state } = useLocation();
   const navigate = useNavigate();
-  console.log(state);
+  //console.log(state);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -60,8 +60,8 @@ const PaymentPage = () => {
     memberNo: "",
     portoneimpuid: "",
   });
-  console.log("book : " + bookingInfo.memberNo);
-  console.log("room : " + bookingInfo.roomNo);
+  // console.log("book : " + bookingInfo.memberNo);
+  //console.log("room : " + bookingInfo.roomNo);
 
   //console.log(bookingInfo);
   // 투숙객 정보 입력 변환
@@ -158,7 +158,7 @@ const PaymentPage = () => {
         `${BackServer}/booking/comfirm`,
         bookingInfo
       );
-      console.log(res);
+      //console.log(res);
       // 예약 가능한 방이 없을 경우
       if (res.data === -1) {
         Swal.fire({
@@ -195,7 +195,7 @@ const PaymentPage = () => {
                 `${BackServer}/booking`,
                 updatedBookingInfo
               );
-              console.log(bookingRes);
+              // console.log(bookingRes);
               // 서버 오류 처리
               if (bookingRes.data === -1) {
                 Swal.fire({
@@ -212,7 +212,7 @@ const PaymentPage = () => {
                 });
               }
             } catch (error) {
-              console.log(error);
+              //console.log(error);
               // 예약 오류 처리
               Swal.fire({
                 title: "예약 오류.",
@@ -223,7 +223,7 @@ const PaymentPage = () => {
             }
           } else {
             // 결제 실패 처리
-            console.error("Payment failed:", rsp);
+            // console.error("Payment failed:", rsp);
             Swal.fire({
               title: "결제 실패",
               text: "결제에 실패했습니다. 다시 시도해주세요.",
