@@ -21,17 +21,17 @@ const BookingInfo = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const bookNo = state.bookNo;
   //const bookNo = 21;
-  console.log("state : " + state);
+  // console.log("state : " + state);
   const [bookingInfo, setBookingInfo] = useState([]);
   useEffect(() => {
     axios
       .get(`${backServer}/booking/${bookNo}`)
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setBookingInfo(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
   }, []);
   const bookNoInfo = String(bookingInfo.bookNo).padStart(8, "0");
@@ -40,10 +40,10 @@ const BookingInfo = () => {
     axios
       .post(`${backServer}/booking/cancel`)
       .then((res) => {
-        console.log(res);
+        //console.log(res);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 
@@ -236,7 +236,7 @@ const CancleModal = (pros) => {
     axios
       .patch(`${backServer}/booking`, cancelData)
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         // 추가 작업: 모달 닫기, 알림 표시 등
         handleCloseModal();
         if (!res.data) {
@@ -250,7 +250,7 @@ const CancleModal = (pros) => {
         }
       })
       .catch((err) => {
-        console.error("예약 취소 실패:", err);
+        //console.error("예약 취소 실패:", err);
       });
   };
 

@@ -108,8 +108,8 @@ const LodgmentList = () => {
   }, [value, starValue, radioBtn, lodgmentType, selectedServiceTags]);
 
   //console.log(lodgmentDetailInfo); //axios 안에서는 랜더링이 돌고 값이 들어가기 때문에 확인하려면 밖에서
-  console.log("reqPage : " + reqPage);
-  console.log("totalPage : " + totalPage);
+  //console.log("reqPage : " + reqPage);
+  //console.log("totalPage : " + totalPage);
   //리셋버튼
   const handleReset = () => {
     setValue([0, 500000]); // 가격 범위 초기화
@@ -147,7 +147,7 @@ const LodgmentList = () => {
   }, [reqPage]);
   //숙소 검색 누르면 작동
   const lodgmentSearchBtn = () => {
-    console.log("여긴 안바꾸미? " + reqPage);
+    //console.log("여긴 안바꾸미? " + reqPage);
 
     if (lodgment === "") {
       Swal.fire({
@@ -177,7 +177,7 @@ const LodgmentList = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         if (reqPage === 1) {
           setLodgmentDetailInfo(res.data.list);
           setTotalPage(res.data.totalPage + 1);
@@ -186,7 +186,7 @@ const LodgmentList = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
   };
   return (

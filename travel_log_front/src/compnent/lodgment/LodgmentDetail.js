@@ -44,20 +44,20 @@ const LodgmentDetail = () => {
   const formattedStartDate = format(new Date(startDate), "yyyy-MM-dd");
   const formattedEndDate = format(new Date(endDate), "yyyy-MM-dd");
 
-  console.log("loginNo" + loginNo);
+  //console.log("loginNo" + loginNo);
   useEffect(() => {
     axios
       .get(
         `${BackServer}/lodgment/roomInfo/${lodgmentNo}/${formattedStartDate}/${formattedEndDate}/${loginNo}`
       )
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setLodgmentInfo(res.data.lodgmentInfo);
         setRoomSearchList(res.data.lodgmentInfo.roomSearchList);
         sestLodgmentCollection(res.data.lodgmentCollection);
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
   }, [loginNo, result]);
   //console.log("roomSearchList" + roomSearchList[0].roomNo);
@@ -120,7 +120,7 @@ const LodgmentDetail = () => {
                       }
                     })
                     .catch((err) => {
-                      console.error(err);
+                      // console.error(err);
                       Swal.fire({
                         icon: "error",
                         title: "서버 오류",
@@ -168,7 +168,7 @@ const LodgmentDetail = () => {
                       }
                     })
                     .catch((err) => {
-                      console.error(err);
+                      //console.error(err);
                       Swal.fire({
                         icon: "error",
                         title: "서버 오류",
