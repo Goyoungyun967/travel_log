@@ -42,7 +42,7 @@ const LodgmentDetailMapPayment = (props) => {
       });
     });
   return (
-    <div>
+    <div className="payment-wrap-div">
       <Map
         level={6}
         center={{ lat: lodgmentLatitude, lng: lodgmentLongitude }}
