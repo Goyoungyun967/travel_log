@@ -55,7 +55,7 @@ const BoardWrite = () => {
     if (!titleRegex.test(boardTitle)) {
       isValid = false;
       Swal.fire({
-        title: "제목 유효성 검사 실패",
+        title: "제목을 제대로 입력해주세요",
         text: "제목은 1~20글자 사이여야 합니다.",
         icon: "warning",
       });
@@ -65,12 +65,11 @@ const BoardWrite = () => {
     if (!contentRegex.test(boardContent) && boardContent != null) {
       isValid = false;
       Swal.fire({
-        title: "내용 유효성 검사 실패",
+        title: "내용을 제대로 입력해주세요",
         text: "내용은 1~1000글자 사이여야 합니다.",
         icon: "warning",
       });
     }
-    console.log(thumbnail);
 
     // 유효성 검사가 통과하면 게시글 작성 진행
     if (isValid) {

@@ -249,15 +249,12 @@
 				select max(board_no) from board
 			</selectKey>
 		</insert>
-		
-		
 		<insert id="insertAccompanyType">
 			insert into accompany_tag values(#{accompanyTagNo},#{boardNo})
 			<selectKey resultType="int" keyProperty="boardNo" order="AFTER">
 				select max(board_no) from board
 			</selectKey>
 		</insert>
-			
 		<insert id="insertAccompany">
 			insert into board_accompany values
 			(board_accompany_seq.nextval, #{accompanyDate}, #{accompanyArea}, #{accompanyContent}, #{boardNo}, #{startDay}, #{endDay})
@@ -265,6 +262,8 @@
 				select max(board_no) from board
 			</selectKey>
 		</insert>
+		
+		
 		
 		<select id="getReviewList">
 			select * from lodgment_review where review_no=#{lodgmentNo}

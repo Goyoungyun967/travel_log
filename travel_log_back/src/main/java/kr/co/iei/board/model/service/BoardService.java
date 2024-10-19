@@ -83,7 +83,6 @@ public class BoardService {
 	@Transactional
 	public List<BoardFileDTO> updateBoard(BoardDTO board, List<BoardFileDTO> boardFileList) {
 		int result = boardDao.updateBoard(board);
-		System.out.println(1);
 		if(result>0) {
 			List<BoardFileDTO> delFileList = new ArrayList<BoardFileDTO>();
 			if(board.getDelBoardFileNo() != null) {
@@ -279,16 +278,12 @@ public class BoardService {
 //	동행수정
 	@Transactional
 	public List<BoardFileDTO> updateBoardAccompany(BoardAccompanyDTO boardAccompany, List<BoardFileDTO> boardFileList) {
-					System.out.println(boardAccompany);
 					int result = boardDao.updateBoardAccompany(boardAccompany);
-					System.out.println(boardAccompany);
 					if(result>0) {
 						List<BoardFileDTO> delFileList = new ArrayList<BoardFileDTO>();
 						if(boardAccompany.getDelBoardFileNo() != null) {
 							delFileList = boardDao.selectBoardFile(boardAccompany.getDelBoardFileNo());
-							System.out.println(2);
 							result += boardDao.deleteBoardFile(boardAccompany.getDelBoardFileNo());
-							System.out.println(3);
 						}
 						for(BoardFileDTO boardFile : boardFileList) {
 							result += boardDao.insertBoardFile(boardFile);

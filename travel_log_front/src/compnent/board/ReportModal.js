@@ -4,9 +4,9 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 const ReportModal = ({ boardNo, memberNo, isOpen, onClose }) => {
+  const backServer = process.env.REACT_APP_BACK_SERVER; // 백엔드 서버 주소
   const [reportType, setReportType] = useState("");
   const [reportContent, setReportContent] = useState("");
-  const backServer = process.env.REACT_APP_BACK_SERVER; // 백엔드 서버 주소
 
   const handleReportSubmit = () => {
     if (reportType) {

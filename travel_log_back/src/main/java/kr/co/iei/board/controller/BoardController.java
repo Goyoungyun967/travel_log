@@ -101,7 +101,6 @@ public class BoardController {
 	//안할수도 있음{첨부파일 저장하기}
 	@GetMapping(value = "/file/{boardFileNo}")
 	public ResponseEntity<Resource> filedown(@PathVariable int boardFileNo) throws FileNotFoundException{
-		System.out.println(boardFileNo);
 		BoardFileDTO boardFile = boardService.getBoardFile(boardFileNo);
 		String savepath = root+"/board/";
 		File file = new File(savepath+boardFile.getFilepath());
@@ -139,9 +138,6 @@ public class BoardController {
 	//게시판 수정
 	@PatchMapping
 	public ResponseEntity<Boolean> updateBoard(@ModelAttribute BoardDTO board , @ModelAttribute MultipartFile thumbnail,@ModelAttribute MultipartFile[] boardFile){
-		System.out.println(board);
-		System.out.println(thumbnail);
-		System.out.println(boardFile);
 		if(thumbnail != null) {
 			String savepath = root+"/board/thumb/";
 			String filepath = fileUtils.upload(savepath, thumbnail);
@@ -176,19 +172,13 @@ public class BoardController {
 	//좋아요 
 	@PostMapping(value = "like/{boardNo}/{memberNo}")
 	public ResponseEntity<Integer> likeBoard(@PathVariable int boardNo,@PathVariable int memberNo){
-		System.out.println("like1:"+boardNo);
-		System.out.println("like2:"+memberNo);
 		int result = boardService.likeBoard(boardNo,memberNo); 
-		System.out.println(result);
 		return ResponseEntity.ok(result);
 	}
 	// 좋아요 취소
     @DeleteMapping("/unlike/{boardNo}/{memberNo}")
     public ResponseEntity<Integer> unlikeBoard(@PathVariable int boardNo, @PathVariable int memberNo) {
-    	System.out.println("unlike1:"+boardNo);
-		System.out.println("unlike2:"+memberNo);
         int result = boardService.unlikeBoard(boardNo, memberNo); // 좋아요 취소 처리
-        System.out.println(result);
         return ResponseEntity.ok(result); // 처리 결과 반환 (1: 성공, 0: 실패)
     }
     
@@ -197,10 +187,8 @@ public class BoardController {
     @GetMapping("/commentList/{boardNo}")
     public ResponseEntity<List<BoardCommentDTO>> getCommentList(@PathVariable int boardNo) {
         List<BoardCommentDTO> comments = boardService.getCommentList(boardNo);
-        System.out.println(comments);
         return ResponseEntity.ok(comments);
     }
-
     // 댓글 추가
     @PostMapping("/insertComment")
     public ResponseEntity<BoardCommentDTO> addComment(@ModelAttribute BoardCommentDTO comment
@@ -211,13 +199,11 @@ public class BoardController {
     	    }
         boolean isAdded = boardService.addComment(comment);
         if (isAdded) {
-        	System.out.println(comment);
             return ResponseEntity.ok(comment); // 댓글이 추가되었을 때
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 추가 실패 시
         }
     }
-
     // 댓글 수정
     @PatchMapping("/editComment/{commentNo}")
     public ResponseEntity<Boolean> editComment(@PathVariable int commentNo, @RequestBody Map<String, String> request) {
@@ -246,7 +232,7 @@ public class BoardController {
           int result = boardService.unlikeComment(memberNo, commentNo); // 좋아요 취소 처리
           return ResponseEntity.ok(result); // 처리 결과 반환 (1: 성공, 0: 실패)
       }
-    //게시판신고고
+    //게시판신고
       @PostMapping("/report")
   		public ResponseEntity<Boolean> insertReport(@RequestBody BoardReportDTO report){
     	  int ressult = boardService.insertReport(report);
@@ -308,7 +294,6 @@ public class BoardController {
   	//동행 게시판 상세보기 
   	@GetMapping(value = "/accompanyNo/{boardNo}")
   	public ResponseEntity<BoardAccompanyDTO> selectOneBoardAccompany(@PathVariable int boardNo){
-  		System.out.println(boardNo);
   		BoardAccompanyDTO accompany = boardService.selectOneBoardAccompany(boardNo);
   		return ResponseEntity.ok(accompany);
   	}
@@ -316,7 +301,6 @@ public class BoardController {
   	//동행 게시판 수정
   @PatchMapping(value = "/AccompanyUpdate")
 	public ResponseEntity<Boolean> updateBoard(@ModelAttribute BoardAccompanyDTO boardAccompany , @ModelAttribute MultipartFile thumbnail,@ModelAttribute MultipartFile[] boardFile){
-		System.out.println(boardAccompany);
 	  if(thumbnail != null) {
 			String savepath = root+"/board/thumb/";
 			String filepath = fileUtils.upload(savepath, thumbnail);
@@ -350,7 +334,6 @@ public class BoardController {
   @PostMapping("/Search")
   public ResponseEntity<?> searchArea(@RequestBody Map<String, String> requestData) {
       String area = requestData.get("area");
-      System.out.println("선택된 지역: " + area);
 
       // DB에서 boardArea로 검색
       List<BoardDTO> searchResults = boardService.searchByArea(area);
@@ -364,7 +347,6 @@ public class BoardController {
   @PostMapping("/accompaySearch")
   public ResponseEntity<?> accompaySearchArea(@RequestBody Map<String, String> requestData) {
       String area = requestData.get("area");
-      System.out.println("선택된 지역: " + area);
 
       // DB에서 boardArea로 검색
       List<BoardDTO> searchResults = boardService.accompaySearch(area);

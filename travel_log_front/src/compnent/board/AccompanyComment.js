@@ -20,7 +20,6 @@ const AccompanyComment = (accompany) => {
   const { isLike: isLikeParam, likeCount: likeCountParam } = useParams();
   const [likeCount, setLikeCount] = useState(Number(likeCountParam));
   const [isLike, setIsLike] = useState(Number(isLikeParam));
-  console.log(accompany.accompany.boardNo);
   //모달창 관련
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -36,7 +35,6 @@ const AccompanyComment = (accompany) => {
           ...comment,
           commentDate: dayjs(comment.commentDate).format("YYYY-MM-DD"), // 'YYYY-MM-DD' 형식으로 포맷
         }));
-        console.log(commentsWithFormattedDate); // 포맷된 날짜 확인
         setCommentList(commentsWithFormattedDate);
       })
       .catch((error) => {
@@ -65,7 +63,6 @@ const AccompanyComment = (accompany) => {
             })
             .then((res) => {
               // 댓글 추가 후 목록을 다시 불러옴
-              console.log(res.data);
               setCommentList((prevComments) => [...prevComments, res.data]);
               setCommentValue(""); // 입력 필드 초기화
             })
